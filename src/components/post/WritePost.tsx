@@ -1,11 +1,60 @@
-export default function WritePost() {
+import { useState } from "react";
+
+export default function WritePost({ channelId }: { channelId: string }) {
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [tag, setTag] = useState("");
+
+  // const titleRef = useRef<HTMLTextAreaElement | null>(null);
+  // const contentRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const changeTitleHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTitle(e.target.value);
+  };
+  const changeContentHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(e.target.value);
+  };
+  const changeTagHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTag(e.target.value);
+  };
+
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const json = {
+      title: title,
+      content: content,
+      tag: tag,
+    };
+
+    const formData = new FormData();
+    formData.append(
+      "request",
+      new Blob(
+        [
+          JSON.stringify({
+            title: JSON.stringify(json),
+            image: null,
+            channelId: channelId,
+          }),
+        ],
+        { type: "application/json" }
+      )
+    );
+
+    // axios
+  };
+
   return (
     <>
       <div className="w-[999px] h-[766px] rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)]">
-        <form>
+        <form onSubmit={(e) => submitHandler(e)}>
           <textarea
             id="title"
             name="title"
+            // ref={titleRef}
+            value={title}
+            onChange={(e) => changeTitleHandler(e)}
             placeholder="제목"
             className="w-full h-[96px] text-[35px] px-[32px] py-[22px] resize-none outline-none"
           />
@@ -14,6 +63,9 @@ export default function WritePost() {
           <textarea
             id="content"
             name="content"
+            // ref={contentRef}
+            value={content}
+            onChange={(e) => changeContentHandler(e)}
             placeholder="내용"
             className="w-full h-[560px] text-[30px] px-[38px] py-[7px] resize-none outline-none"
           />
@@ -27,6 +79,8 @@ export default function WritePost() {
                 id="tag"
                 name="tag"
                 type="text"
+                value={tag}
+                onChange={(e) => changeTagHandler(e)}
                 placeholder="태그를 입력해 주세요"
                 className="outline-none"
               />
