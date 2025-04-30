@@ -28,19 +28,25 @@ export default function WritePost({ channelId }: { channelId: string }) {
     };
 
     const formData = new FormData();
+    // formData.append(
+    //   "request",
+    //   new Blob(
+    //     [
+    //       JSON.stringify({
+    //         title: JSON.stringify(json),
+    //         image: null,
+    //         channelId: channelId,
+    //       }),
+    //     ],
+    //     { type: "application/json" }
+    //   )
+    // );
     formData.append(
-      "request",
-      new Blob(
-        [
-          JSON.stringify({
-            title: JSON.stringify(json),
-            image: null,
-            channelId: channelId,
-          }),
-        ],
-        { type: "application/json" }
-      )
+      "title",
+      new Blob([JSON.stringify(json)], { type: "application/json" })
     );
+    // formData.append("image", );
+    formData.append("channelId", channelId);
 
     // axios
   };

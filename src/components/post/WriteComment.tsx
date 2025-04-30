@@ -10,18 +10,20 @@ export default function WriteComment({ postId }: { postId: string }) {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append(
-      "request",
-      new Blob(
-        [
-          JSON.stringify({
-            postId: postId,
-            comment: comment,
-          }),
-        ],
-        { type: "application/json" }
-      )
-    );
+    // formData.append(
+    //   "request",
+    //   new Blob(
+    //     [
+    //       JSON.stringify({
+    //         postId: postId,
+    //         comment: comment,
+    //       }),
+    //     ],
+    //     { type: "application/json" }
+    //   )
+    // );
+    formData.append("postId", postId);
+    formData.append("comment", comment);
 
     // axios
   };
