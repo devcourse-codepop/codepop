@@ -39,7 +39,7 @@ export default function WriteComment({
 
   return (
     <>
-      <div className="w-[999px] h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)]">
+      <div className="max-w-[999px] h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)]">
         <form onSubmit={(e) => submitHandler(e)}>
           <textarea
             id="comment"
@@ -47,14 +47,14 @@ export default function WriteComment({
             value={comment}
             onChange={(e) => changeCommentHandler(e)}
             placeholder="댓글을 작성해 주세요"
-            className="w-full h-[77px] text-xl p-[22px] resize-none outline-none"
+            className="w-full h-[57px] text-xl p-[22px] resize-none outline-none"
           />
-          <div className="w-full h-[30px] relative">
-            <div className="inline-block absolute right-[133px] bottom-[11px]">
+          <div className="w-full h-[50px] flex justify-end items-center">
+            <div className="pr-[33px]">
               {channelId === "1" && <CodeEditIcon />}
               <ImageIcon />
             </div>
-            <div className="inline-block absolute right-[10px] bottom-[10px]">
+            <div className="pr-[10px]">
               <Button value="댓글 달기" className="button-style3" />
             </div>
           </div>
