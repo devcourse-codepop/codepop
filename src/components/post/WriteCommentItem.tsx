@@ -39,7 +39,7 @@ export default function WriteCommentItem({
 
   return (
     <>
-      <div className="max-w-[999px] h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)]">
+      <div className="w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)]">
         <form onSubmit={(e) => submitHandler(e)}>
           <textarea
             id="comment"
