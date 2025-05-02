@@ -3,9 +3,10 @@ import codeEditIcon from "../../assets/CodeEditIcon.svg";
 export default function CodeEditIcon() {
   return (
     <>
-      <div className="flex p-4 gap-3">
-        <img src={codeEditIcon} />
-      </div>
+      <img
+        src={codeEditIcon}
+        className="w-[23px] h-[23px] inline-block mr-6 cursor-pointer"
+      />
     </>
   );
 }
