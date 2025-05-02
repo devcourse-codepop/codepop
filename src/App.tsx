@@ -14,9 +14,9 @@ import MembeerBox from "./components/sidebar/MemberBox";
 import Notification from "./components/notification/Notification";
 import LikeComment from "./components/reaction/LikeComment";
 import SearchPost from "./components/post/SearchPost";
-import PostList from "./components/post/PostList";
-import WriteComment from "./components/post/WriteComment";
-import WritePost from "./components/post/WritePost";
+import PostListItem from "./components/post/PostListItem";
+import WriteCommentItem from "./components/post/WriteCommentItem";
+import WritePostItem from "./components/post/WritePostItem";
 
 export default function App() {
   const json = {
@@ -52,11 +52,11 @@ export default function App() {
       <MembeerBox />
       <SearchPost />
 
-      <WriteComment channelId="1" postId="1" />
+      <WriteCommentItem channelId="1" postId="1" />
       <hr className="my-[50px]" />
-      <WritePost channelId="3" />
+      <WritePostItem channelId="3" />
       <hr className="my-[50px]" />
-      <PostList title={json} updatedAt="2025.04.29" />
+      <PostListItem title={json} updatedAt="2025.04.29" />
     </>
   );
 }

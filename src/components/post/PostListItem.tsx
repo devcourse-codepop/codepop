@@ -1,7 +1,7 @@
 import Avatar from "../avatar/Avatar";
 import LikeComment from "../reaction/LikeComment";
 
-export default function PostList({
+export default function PostListItem({
   title,
   updatedAt,
 }: {

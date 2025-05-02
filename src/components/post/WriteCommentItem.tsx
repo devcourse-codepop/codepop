@@ -3,7 +3,7 @@ import Button from "../common/Button";
 import ImageIcon from "../icon/ImageIcon";
 import CodeEditIcon from "../icon/CodeEditIcon";
 
-export default function WriteComment({
+export default function WriteCommentItem({
   channelId,
   postId,
 }: {

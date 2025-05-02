@@ -4,7 +4,7 @@ import ImageIcon from "../icon/ImageIcon";
 import CodeEditIcon from "../icon/CodeEditIcon";
 import VoteIcon from "../icon/VoteIcon";
 
-export default function WritePost({ channelId }: { channelId: string }) {
+export default function WritePostItem({ channelId }: { channelId: string }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   // const [tag, setTag] = useState("");
