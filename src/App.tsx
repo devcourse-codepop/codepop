@@ -1,19 +1,19 @@
-import Avatar from './components/avatar/Avatar';
-import PostBtn from './components/btn/PostBtn';
-import VoteBtn from './components/btn/VoteBtn';
-import ChannelName from './components/channel/ChannelName';
-import ChannelBox from './components/sidebar/ChannelBox';
-import Button from './components/common/Button';
-import Input from './components/common/Input';
-import DropSort from './components/post/DropSort';
-import Header from './components/header/Header';
-import BoldIcon from './components/icon/BoldIcon';
-import CodeEditIcon from './components/icon/CodeEditIcon';
-import ImageIcon from './components/icon/ImageIcon';
-import MembeerBox from './components/sidebar/MemberBox';
-import Notification from './components/notification/Notification';
-import LikeComment from './components/reaction/LikeComment';
-import SearchPost from './components/post/SearchPost';
+import Avatar from "./components/avatar/Avatar";
+import PostBtn from "./components/btn/PostBtn";
+import VoteBtn from "./components/btn/VoteBtn";
+import ChannelName from "./components/channel/ChannelName";
+import ChannelBox from "./components/sidebar/ChannelBox";
+import Button from "./components/common/Button";
+import Input from "./components/common/Input";
+import DropSort from "./components/post/DropSort";
+import Header from "./components/header/Header";
+import BoldIcon from "./components/icon/BoldIcon";
+import CodeEditIcon from "./components/icon/CodeEditIcon";
+import ImageIcon from "./components/icon/ImageIcon";
+import MembeerBox from "./components/sidebar/MemberBox";
+import Notification from "./components/notification/Notification";
+import LikeComment from "./components/reaction/LikeComment";
+import SearchPost from "./components/post/SearchPost";
 import PostList from "./components/post/PostList";
 import WriteComment from "./components/post/WriteComment";
 import WritePost from "./components/post/WritePost";
@@ -52,9 +52,9 @@ export default function App() {
       <MembeerBox />
       <SearchPost />
 
-      <WriteComment postId="1" />
+      <WriteComment channelId="1" postId="1" />
       <hr className="my-[50px]" />
-      <WritePost channelId="1" />
+      <WritePost channelId="3" />
       <hr className="my-[50px]" />
       <PostList title={json} updatedAt="2025.04.29" />
     </>
