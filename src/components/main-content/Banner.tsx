@@ -29,7 +29,7 @@ export default function Banner() {
 
   return (
     <>
-      <div className="w-full h-[380px] relative overflow-hidden rounded-[10px] bg-white mb-[30px]">
+      <div className="w-full h-[370px] relative overflow-hidden rounded-[10px] bg-white mb-[30px]">
         <Swiper
           className="!w-full !h-full"
           modules={[Autoplay, Navigation, Pagination, A11y]}
@@ -48,13 +48,25 @@ export default function Banner() {
           }}
         >
           <SwiperSlide>
-            <img src={banner1} alt="메인 배너 1" className="object-cover" />
+            <img
+              src={banner1}
+              alt="메인 배너 1"
+              className="min-w-full min-h-full"
+            />
           </SwiperSlide>
           <SwiperSlide>
-            <img src={banner2} alt="메인 배너 2" className="object-cover" />
+            <img
+              src={banner2}
+              alt="메인 배너 2"
+              className="min-w-full min-h-full"
+            />
           </SwiperSlide>
           <SwiperSlide>
-            <img src={banner3} alt="메인 배너 2" className="object-cover" />
+            <img
+              src={banner3}
+              alt="메인 배너 2"
+              className="min-w-full min-h-full"
+            />
           </SwiperSlide>
         </Swiper>
         <div className="swiper-remote">

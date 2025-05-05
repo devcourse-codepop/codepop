@@ -24,12 +24,39 @@
 .swiper-pagination-bullet.swiper-pagination-bullet-active {
   background: #5aabeb;
 }
-
-.tab-content > div {
+.tab-content a {
   min-width: 0;
+  width: 100%;
+}
+.tab-content a > div {
+  width: 100%;
   box-shadow: none;
   border: 1px solid #b3b3b3;
+  padding: 15px 20px;
+  height: 260px;
 }
-.tab-content > div hr {
-  width: auto;
+.tab-content a > div > div {
+  padding: 0;
+  height: auto;
+}
+.tab-content a > div > div .flex.items-center.gap-4.p-4 {
+  padding: 0;
+  margin-bottom: 16px;
+}
+.tab-content a > div > .relative {
+  padding: 0 10px 30px;
+}
+.tab-content a > div .relative > .left-\[55px\] {
+  position: static;
+  margin-bottom: 25px;
+}
+.tab-content a > div hr {
+  width: 100%;
+  margin: 0;
+}
+.tab-content a > div .h-\[59px\] {
+  height: auto;
+}
+.tab-content a > div .h-\[59px\] > div {
+  padding: 10px;
 }
