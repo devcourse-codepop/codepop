@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 import { login } from '../../api/auth/login';
 import { emailRegex, passwordRegex } from '../../utils/validators';
+import { AxiosError } from 'axios';
 
 export default function Login() {
   // const navigate = useNavigate();
@@ -74,19 +75,31 @@ export default function Login() {
       setPasswordError('');
     }
 
+    console.clear();
+    setEmailError('');
+    setPasswordError('');
     try {
       const res = await login(email, password);
       const token = res.data.token;
       storeLogin(token);
+      // navigate('/');
     } catch (err) {
-      alert('회원가입 실패');
-      console.error(err);
-    }
-  };
-  const logout = useAuthStore((state) => state.logout);
+      const error = err as AxiosError;
 
-  const handleLogout = () => {
-    logout();
+      if (error.response?.status === 400) {
+        const message = error.response.data as string;
+        if (
+          message.toLowerCase().includes('email') &&
+          message.toLowerCase().includes('password') &&
+          message.includes('match')
+        ) {
+          setEmailError('이메일이 올바르지 않습니다.');
+          setPasswordError('비밀번호가 올바르지 않습니다.');
+        } else {
+          console.error(err);
+        }
+      }
+    }
   };
 
   return (
@@ -149,12 +162,6 @@ export default function Login() {
           value="Log In"
           className="button-style1"
           onClick={handleSubmit}
-        />
-
-        <Button
-          value="Log out"
-          className="button-style1"
-          onClick={handleLogout}
         />
       </form>
     </div>
