@@ -3,9 +3,10 @@ import voteIcon from "../../assets/VoteIcon.svg";
 export default function VoteIcon() {
   return (
     <>
-      <div className="w-6 h-6 flex items-center justify-center">
-        <img src={voteIcon} />
-      </div>
+      <img
+        src={voteIcon}
+        className="w-[30px] h-[30px] inline-block mr-6 cursor-pointer"
+      />
     </>
   );
 }

@@ -62,6 +62,9 @@ export default function CreateCodePost() {
             <Button
               value="완료"
               className="button-style2 absolute bottom-[15px] right-[20px]"
+              onClick={(e) => {
+                e.preventDefault();
+              }}
             />
           </div>
         </div>

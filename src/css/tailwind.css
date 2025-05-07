@@ -1,16 +1,16 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @layer components {
   .button-style1 {
     @apply w-[500px] h-[86px] text-white bg-[#1E293B] text-[23px] rounded-[10px] cursor-pointer;
   }
   .button-style2 {
-    @apply w-[126px] h-[50px] text-white bg-[#1E293B] text-[15px] rounded-[10px] cursor-pointer font-medium;
+    @apply w-[126px] h-[50px] text-white bg-[#1E293B] text-[15px] rounded-[5px] cursor-pointer font-normal;
   }
   .button-style3 {
-    @apply w-[100px] h-[30px] text-white bg-[#1E293B] text-[15px] rounded-[10px] cursor-pointer font-medium;
+    @apply w-[100px] h-[30px] text-white bg-[#1E293B] text-[15px] rounded-[5px] cursor-pointer font-normal;
   }
   .input-style1 {
-    @apply w-[500px] h-[86px] bg-[#ffffff] text-[23px] rounded-[10px] px-10;
+    @apply w-[500px] h-[86px] bg-[#ffffff] rounded-[10px] px-5 pt-5 text-[20px];
   }
 }
