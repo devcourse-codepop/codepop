@@ -1,62 +1,46 @@
-import Avatar from './components/avatar/Avatar';
-import PostBtn from './components/btn/PostBtn';
-import VoteBtn from './components/btn/VoteBtn';
-import ChannelName from './components/channel/ChannelName';
-import ChannelBox from './components/sidebar/ChannelBox';
-import Button from './components/common/Button';
-import Input from './components/common/Input';
-import DropSort from './components/post/DropSort';
-import Header from './components/header/Header';
-import BoldIcon from './components/icon/BoldIcon';
-import CodeEditIcon from './components/icon/CodeEditIcon';
-import ImageIcon from './components/icon/ImageIcon';
-import MembeerBox from './components/sidebar/MemberBox';
-import Notification from './components/notification/Notification';
-import LikeComment from './components/reaction/LikeComment';
-import SearchPost from './components/post/SearchPost';
-import PostList from "./components/post/PostList";
-import WriteComment from "./components/post/WriteComment";
-import WritePost from "./components/post/WritePost";
+import { useEffect } from 'react';
+import { useAuthStore } from './stores/authStore';
+import { axiosInstance } from './api/axios';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import Login from './pages/login/Login';
+import SignUp from './pages/signup/SignUp';
 
 export default function App() {
-  const json = {
-    title: "이건 뭘까요,,?",
-    content:
-      "어디부터가 오류일까요..? 도와주십쇼 !!!!!! 왜 실행되는지 모르겠습니다 ㅠㅠ",
-    tag: "JavaScript",
-  };
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const setUser = useAuthStore((state) => state.setUser);
+
+  useEffect(() => {
+    if (accessToken) {
+      axiosInstance
+        .get('/auth-user')
+        .then((res) => {
+          setUser(res.data);
+        })
+        .catch(() => {
+          useAuthStore.getState().logout();
+        });
+    }
+  });
   return (
     <>
-      <Avatar
-        name="사용자"
-        email="user123@gmail.com"
-        image="../src/assets/images/avatar.svg"
-      />
-      <ChannelName
-        subtitle='"골라봐"'
-        title="선택의 갈림길에서 함께 답을 찾는 채널"
-      />
-      <LikeComment likeCount={12} commentCount={10} />
-      <PostBtn />
-      <VoteBtn />
-      <Button value="LogIn" className="button-style1" />
-      <Input type="email" placeholder="Email" className="input-style1" />
+      <Routes>
+        <Route path="/" element={<Navigate to="/signup" />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
 
-      <Header />
-      <BoldIcon />
-      <CodeEditIcon />
-      <ImageIcon />
-      <Notification />
-      <ChannelBox />
-      <DropSort />
-      <MembeerBox />
-      <SearchPost />
+      {/* <Routes>
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
 
-      <WriteComment postId="1" />
-      <hr className="my-[50px]" />
-      <WritePost channelId="1" />
-      <hr className="my-[50px]" />
-      <PostList title={json} updatedAt="2025.04.29" />
+        <Route path="/" element={<SignUp />} />
+        <Route path="channel/:channelId" element={<SignUp />} />
+        <Route path="channel/:channelId/post/:postId" element={<SignUp />} />
+        <Route path="channel/:channelId/write" element={<SignUp />} />
+        <Route path="channel/:channelId/update/:postId" element={<SignUp />} />
+
+        <Route path="*" element={<SignUp />} />
+      </Routes> */}
     </>
   );
 }
