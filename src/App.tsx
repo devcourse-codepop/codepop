@@ -33,6 +33,7 @@ export default function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
 
+
         <Route path="/" element={<SignUp />} />
         <Route path="channel/:channelId" element={<SignUp />} />
         <Route path="channel/:channelId/post/:postId" element={<SignUp />} />
