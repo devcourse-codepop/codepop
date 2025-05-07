@@ -11,6 +11,7 @@ import {
   fullNameRegex,
   passwordRegex,
 } from '../../utils/validators';
+import { AxiosError } from 'axios';
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -114,13 +115,26 @@ export default function SignUp() {
       setConfirmPasswordError('');
     }
 
+    console.clear();
+    setEmailError('');
     try {
       await signup(fullName, email, password);
       alert('회원가입 성공');
       navigate('/login');
     } catch (err) {
-      alert('회원가입 실패');
-      console.error(err);
+      const error = err as AxiosError;
+
+      if (error.response?.status === 400) {
+        const message = error.response.data as string;
+        if (
+          message.toLowerCase().includes('email') &&
+          message.includes('used')
+        ) {
+          setEmailError('이미 사용 중인 이메일입니다.');
+        } else {
+          console.error(err);
+        }
+      }
     }
   };
 
