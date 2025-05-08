@@ -2,15 +2,9 @@ import Avatar from '../avatar/Avatar';
 import LikeComment from '../reaction/LikeComment';
 import { Post } from '../../types';
 import dayjs from 'dayjs';
-import { useState } from 'react';
 
 export default function PostListItem(props: Post) {
   const { _id, title, image, author, likes, comments, updatedAt } = props;
-
-  const [isLiking, setIsLiking] = useState(false);
-  const clickLikeHandler = () => {
-    setIsLiking(!isLiking);
-  };
 
   const getDatetimeFormat = () => {
     const date = dayjs(updatedAt);
@@ -28,10 +22,10 @@ export default function PostListItem(props: Post) {
           />
         </div>
         <div className="flex flex-col">
-          <div className="pt-[19px] px-[55px] pb-[12px] text-[20px] font-semibold">
+          <div className="pt-[19px] px-[55px] pb-[12px] text-[18px] font-semibold">
             {JSON.parse(title).title}
           </div>
-          <div className="pt-[11px] px-[55px] pb-[23px] text-[15px] font-normal">
+          <div className="pt-[11px] px-[55px] pb-[23px] text-[15px] font-normal opacity-70">
             {JSON.parse(title).content}
           </div>
           {image && (
@@ -49,8 +43,6 @@ export default function PostListItem(props: Post) {
             likeCount={likes.length}
             commentCount={comments.length}
             postId={_id}
-            isLiking={isLiking}
-            clickLikeHandler={clickLikeHandler}
             likes={likes}
           />
         </div>

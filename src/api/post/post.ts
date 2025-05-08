@@ -10,8 +10,8 @@ export const postLikes = (postId: string) => {
   });
 };
 
-export const deleteLikes = (postId: string) => {
-  return axiosInstance.delete('/likes/create', {
-    id: postId,
+export const deleteLikes = (likeId: string) => {
+  return axiosInstance.delete('/likes/delete', {
+    id: likeId,
   });
 };
