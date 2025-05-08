@@ -40,14 +40,12 @@ export default function SignUp() {
     return fullNameRegex.test(fullName);
   };
 
-  const handleUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFullName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setFullName(value);
 
-    if (fullNameError) {
-      if (value && fullNameRegex.test(value)) {
-        setFullNameError('');
-      }
+    if (value && fullNameError) {
+      setFullNameError('');
     }
   };
 
@@ -55,10 +53,8 @@ export default function SignUp() {
     const value = e.target.value;
     setEmail(value);
 
-    if (emailError) {
-      if (value && emailRegex.test(value)) {
-        setEmailError('');
-      }
+    if (value && emailError) {
+      setEmailError('');
     }
   };
 
@@ -66,60 +62,27 @@ export default function SignUp() {
     const value = e.target.value;
     setPassword(value);
 
-    if (passwordError) {
-      if (value && passwordRegex.test(value)) {
-        setPasswordError('');
-      }
+    if (value && passwordError) {
+      setPasswordError('');
+    }
+  };
+
+  const handleConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setConfirmPassword(value);
+
+    if (value && confirmPasswordError) {
+      setConfirmPasswordError('');
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!fullName) {
-      setFullNameError('이름은 필수 입력 항목입니다.');
-      return;
-    } else if (!validateUsername(fullName)) {
-      setFullNameError('이름은 특수문자 없이 10글자 이하로 입력해주세요.');
-      return;
-    } else {
-      setFullNameError('');
-    }
-
-    if (!email) {
-      setEmailError('이메일은 필수 입력 항목입니다.');
-      return;
-    } else if (!validateEmail(email)) {
-      setEmailError('이메일 형식을 확인해주세요.');
-      return;
-    } else {
-      setEmailError('');
-    }
-
-    if (!password) {
-      setPasswordError('비밀번호는 필수 입력 항목입니다.');
-      return;
-    } else if (!validatePassword(password)) {
-      setPasswordError(
-        '비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.'
-      );
-      return;
-    } else {
-      setPasswordError('');
-    }
-
-    if (password !== confirmPassword) {
-      setConfirmPasswordError('비밀번호가 일치하지 않습니다.');
-      return;
-    } else {
-      setConfirmPasswordError('');
-    }
-
-    console.clear();
-    setEmailError('');
+    // console.clear();
+    // setEmailError('');
     try {
       await signup(fullName, email, password);
-      alert('회원가입 성공');
       navigate('/login');
     } catch (err) {
       const error = err as AxiosError;
@@ -149,7 +112,20 @@ export default function SignUp() {
               value={fullName}
               type="email"
               label="Username"
-              onChange={handleUsername}
+              onChange={handleFullName}
+              onBlur={() => {
+                if (!fullName) {
+                  setFullNameError('이름은 필수 입력 항목입니다.');
+                  return;
+                } else if (!validateUsername(fullName)) {
+                  setFullNameError(
+                    '이름은 특수문자 없이 10글자 이하로 입력해주세요.'
+                  );
+                  return;
+                } else {
+                  setFullNameError('');
+                }
+              }}
             />
             {fullName && (
               <img
@@ -175,7 +151,19 @@ export default function SignUp() {
               type="email"
               label="Email"
               onChange={handleEmail}
+              onBlur={() => {
+                if (!email) {
+                  setEmailError('이메일은 필수 입력 항목입니다.');
+                  return;
+                } else if (!validateEmail(email)) {
+                  setEmailError('이메일 형식을 확인해주세요.');
+                  return;
+                } else {
+                  setEmailError('');
+                }
+              }}
             />
+
             {email && (
               <img
                 src={Delete}
@@ -188,7 +176,6 @@ export default function SignUp() {
               />
             )}
           </div>
-
           <p className="text-sm text-red-500 pt-1 px-2 h-2.5">
             {emailError || '\u00A0'}
           </p>
@@ -201,6 +188,19 @@ export default function SignUp() {
               type="password"
               label="Password"
               onChange={handlePassword}
+              onBlur={() => {
+                if (!password) {
+                  setPasswordError('비밀번호는 필수 입력 항목입니다.');
+                  return;
+                } else if (!validatePassword(password)) {
+                  setPasswordError(
+                    '비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.'
+                  );
+                  return;
+                } else {
+                  setPasswordError('');
+                }
+              }}
             />
 
             {password && (
@@ -227,9 +227,14 @@ export default function SignUp() {
               value={confirmPassword}
               type="password"
               label="Confirm Password"
-              onChange={(e) => {
-                setConfirmPassword(e.target.value);
-                setConfirmPasswordError('');
+              onChange={handleConfirmPassword}
+              onBlur={() => {
+                if (password !== confirmPassword) {
+                  setConfirmPasswordError('비밀번호가 일치하지 않습니다.');
+                  return;
+                } else {
+                  setConfirmPasswordError('');
+                }
               }}
             />
 
