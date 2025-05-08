@@ -4,14 +4,14 @@ import logo from '../../assets/images/header/logo.svg';
 import Delete from '../../assets/images/input-delete/input-delete.svg';
 
 import { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { login } from '../../api/auth/login';
 import { emailRegex, passwordRegex } from '../../utils/validators';
 import { AxiosError } from 'axios';
 
 export default function Login() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const storeLogin = useAuthStore((state) => state.login);
 
   const [email, setEmail] = useState('');
@@ -56,7 +56,7 @@ export default function Login() {
       const res = await login(email, password);
       const token = res.data.token;
       storeLogin(token);
-      // navigate('/');
+      navigate('/');
     } catch (err) {
       const error = err as AxiosError;
 
