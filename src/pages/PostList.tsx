@@ -1,8 +1,5 @@
 import ChannelName from '../components/channel/ChannelName';
-// import Header from '../components/header/Header';
-// import DropSort from '../components/post/DropSort';
 import PostListItem from '../components/post/PostListItem';
-// import SearchPost from '../components/post/SearchPost';
 import ChannelBox from '../components/sidebar/ChannelBox';
 import MemberBox from '../components/sidebar/MemberBox';
 import postBtn from '../assets/PostBtn.svg';
@@ -10,9 +7,10 @@ import { useEffect, useState } from 'react';
 import { Search } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { getPostList } from '../api/post/post';
-import { usePostStore } from '../store/postStore';
+import { usePostStore } from '../stores/postStore';
 import { axiosInstance } from '../api/axios';
 import { Post } from '../types';
+import dayjs from 'dayjs';
 
 export default function PostList() {
   const params = useParams();
@@ -30,6 +28,11 @@ export default function PostList() {
   const [select, setSelect] = useState('recent');
   const changeSelectHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelect(e.target.value);
+  };
+
+  const getDatetimeFormat = (update: string): string => {
+    const date = dayjs(update);
+    return date.format('YYYY-MM-DD');
   };
 
   // 임시
@@ -129,7 +132,7 @@ export default function PostList() {
       </div> */}
       {/* h-[calc(100vh-100px)] */}
       <div className="flex mx-[60px] relative ">
-        <div className="flex flex-col gap-[50px] pb-[60px]">
+        <div className="flex flex-col gap-[30px] pb-[60px]">
           <ChannelBox channelId={String(channel)} />
           <MemberBox />
           {/* <div className="">
@@ -137,13 +140,9 @@ export default function PostList() {
           </div> */}
         </div>
         <div className="w-full ml-[50px] ">
-          <div className="flex justify-between items-end pb-5">
+          <div className="flex justify-between items-end pb-[30px]">
             <div>
-              <ChannelName
-                subtitle='"이거 왜 되지?"'
-                title="미스터리 코드 공유 채널"
-                channelId="1"
-              />
+              <ChannelName channelId={String(channel)} />
             </div>
             <div className="flex gap-2.5">
               {/* <SearchPost /> */}
@@ -169,17 +168,31 @@ export default function PostList() {
             </div>
           </div>
           {/* max-h-[640px] */}
-          <div className="flex flex-col gap-[50px] max-h-[605px] overflow-auto">
-            {select === 'recent' &&
-              postListItem.map(function (item) {
-                if (
-                  JSON.parse(item.title).title.includes(input) ||
-                  JSON.parse(item.title).content.includes(input)
+          <div className="flex flex-col gap-[30px] max-h-[605px] overflow-auto">
+            {postListItem.length === 0 && (
+              <div className="flex flex-col justify-center items-center text-lg font-bold pt-16">
+                <div>아직 게시글이 없습니다!</div>
+                <div>새로운 게시글을 작성해 보세요!</div>
+              </div>
+            )}
+            {postListItem.length !== 0 &&
+              select === 'recent' &&
+              [...postListItem]
+                .sort(
+                  (a, b) =>
+                    new Date(getDatetimeFormat(b.updatedAt)).getTime() -
+                    new Date(getDatetimeFormat(a.updatedAt)).getTime()
                 )
-                  return <PostListItem key={item._id} {...item} />;
-              })}
-            {select === 'popular' &&
-              postListItem
+                .map(function (item) {
+                  if (
+                    JSON.parse(item.title).title.includes(input) ||
+                    JSON.parse(item.title).content.includes(input)
+                  )
+                    return <PostListItem key={item._id} {...item} />;
+                })}
+            {postListItem.length !== 0 &&
+              select === 'popular' &&
+              [...postListItem]
                 .sort((a, b) => b.likes.length - a.likes.length)
                 .map(function (item) {
                   if (
