@@ -48,6 +48,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
       banned: true,
       isOnline: true,
     };
+    localStorage.setItem('id', userData._id);
     set({ user });
   },
 }));
