@@ -6,7 +6,7 @@ import postBtn from '../assets/PostBtn.svg';
 import { useEffect, useState } from 'react';
 import { Search } from 'lucide-react';
 import { useParams } from 'react-router-dom';
-import { getPostList } from '../api/post/post';
+import { getPostList, getSearchPostList } from '../api/post/post';
 import { usePostStore } from '../stores/postStore';
 import { axiosInstance } from '../api/axios';
 import { Post } from '../types';
@@ -111,6 +111,27 @@ export default function PostList() {
   //   }
   // };
 
+  const filteringItem = (data: Post[]) => {
+    const temp = [];
+    for (const item of postListItem) {
+      for (const res of data) {
+        if (item._id === res._id) {
+          temp.push(item);
+        }
+      }
+    }
+    setPostListItem(temp);
+  };
+
+  const clickSearchHandler = async () => {
+    try {
+      const { data } = await getSearchPostList(input);
+      filteringItem(data);
+    } catch (e) {
+      console.log(e instanceof Error && e.message);
+    }
+  };
+
   const getPostListItem = async () => {
     try {
       const { data } = await getPostList(channelIdList[Number(channel) - 1]);
@@ -154,7 +175,10 @@ export default function PostList() {
                   placeholder="검색"
                   className="flex-grow text-[11px] outline-none placeholder-[#989898]"
                 />
-                <Search className="w-[19.94px] h-[19.94px] text-[#86879C]" />
+                <Search
+                  className="w-[19.94px] h-[19.94px] text-[#86879C] cursor-pointer"
+                  onClick={clickSearchHandler}
+                />
               </div>
               {/* <DropSort /> */}
               <select
@@ -170,12 +194,12 @@ export default function PostList() {
           {/* max-h-[640px] */}
           <div className="flex flex-col gap-[30px] max-h-[605px] overflow-auto">
             {postListItem.length === 0 && (
-              <div className="flex flex-col justify-center items-center text-lg font-bold pt-16">
-                <div>아직 게시글이 없습니다!</div>
+              <div className="flex flex-col justify-center items-center gap-5 text-lg font-bold pt-16">
+                <div>게시글이 없습니다!</div>
                 <div>새로운 게시글을 작성해 보세요!</div>
               </div>
             )}
-            {postListItem.length !== 0 &&
+            {/* {postListItem.length !== 0 &&
               select === 'recent' &&
               [...postListItem]
                 .sort(
@@ -200,7 +224,21 @@ export default function PostList() {
                     JSON.parse(item.title).content.includes(input)
                   )
                     return <PostListItem key={item._id} {...item} />;
-                })}
+                })} */}
+            {postListItem.length !== 0 &&
+              select === 'recent' &&
+              [...postListItem]
+                .sort(
+                  (a, b) =>
+                    new Date(getDatetimeFormat(b.updatedAt)).getTime() -
+                    new Date(getDatetimeFormat(a.updatedAt)).getTime()
+                )
+                .map((item) => <PostListItem key={item._id} {...item} />)}
+            {postListItem.length !== 0 &&
+              select === 'popular' &&
+              [...postListItem]
+                .sort((a, b) => b.likes.length - a.likes.length)
+                .map((item) => <PostListItem key={item._id} {...item} />)}
           </div>
         </div>
         <div className="absolute right-[-30px] bottom-7 cursor-pointer">

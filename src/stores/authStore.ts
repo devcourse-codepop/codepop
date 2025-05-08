@@ -19,6 +19,7 @@ interface AuthStore {
   login: (accessToken: string) => void;
   logout: () => void;
   setUser: (user: User) => void;
+  resetUser: () => void; // 추가
 }
 
 const storeToken = sessionStorage.getItem('token');
@@ -51,5 +52,21 @@ export const useAuthStore = create<AuthStore>((set) => ({
       isOnline: true,
     };
     set({ user, isLoading: false });
+    //set((state) => ({ ...state, user, isLoading: false }));
+  },
+
+  // 추가
+  resetUser: () => {
+    const user = {
+      _id: '',
+      fullName: '',
+      email: '',
+      coverImage: '',
+      role: '',
+      emailVerified: false,
+      banned: false,
+      isOnline: false,
+    };
+    set({ user, isLoading: true });
   },
 }));

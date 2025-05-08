@@ -2,18 +2,31 @@ import Avatar from '../avatar/Avatar';
 import LikeComment from '../reaction/LikeComment';
 import { Post } from '../../types';
 import dayjs from 'dayjs';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export default function PostListItem(props: Post) {
   const { _id, title, image, author, likes, comments, updatedAt } = props;
+
+  const params = useParams();
+  const channel = params.channelId;
+
+  const navigate = useNavigate();
 
   const getDatetimeFormat = () => {
     const date = dayjs(updatedAt);
     return date.format('YYYY.MM.DD');
   };
 
+  const clickPostHandler = () => {
+    navigate(`/channel/${channel}/post/${_id}`);
+  };
+
   return (
     <>
-      <div className="w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] cursor-pointer relative">
+      <div
+        className="w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] cursor-pointer relative"
+        onClick={clickPostHandler}
+      >
         <div className="flex justify-between h-[85px] pl-3 pt-2.5">
           <Avatar
             name={author.fullName}

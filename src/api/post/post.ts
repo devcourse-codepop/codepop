@@ -12,6 +12,10 @@ export const postLikes = (postId: string) => {
 
 export const deleteLikes = (likeId: string) => {
   return axiosInstance.delete('/likes/delete', {
-    id: likeId,
+    data: { id: likeId },
   });
+};
+
+export const getSearchPostList = (value: string) => {
+  return axiosInstance.get(`/search/all/${value}`);
 };
