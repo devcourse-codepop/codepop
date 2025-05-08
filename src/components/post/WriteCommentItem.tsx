@@ -1,7 +1,7 @@
-import { useState } from "react";
-import Button from "../common/Button";
-import ImageIcon from "../icon/ImageIcon";
-import CodeEditIcon from "../icon/CodeEditIcon";
+import { useState } from 'react';
+import Button from '../common/Button';
+import ImageIcon from '../icon/ImageIcon';
+import CodeEditIcon from '../icon/CodeEditIcon';
 
 export default function WriteCommentItem({
   channelId,
@@ -10,7 +10,7 @@ export default function WriteCommentItem({
   channelId: string;
   postId: string;
 }) {
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState('');
   const changeCommentHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
   };
@@ -31,8 +31,8 @@ export default function WriteCommentItem({
     //     { type: "application/json" }
     //   )
     // );
-    formData.append("postId", postId);
-    formData.append("comment", comment);
+    formData.append('postId', postId);
+    formData.append('comment', comment);
 
     // axios
   };
@@ -47,11 +47,11 @@ export default function WriteCommentItem({
             value={comment}
             onChange={(e) => changeCommentHandler(e)}
             placeholder="댓글을 작성해 주세요"
-            className="w-full h-[57px] text-xl p-[22px] resize-none outline-none"
+            className="w-full h-[57px] text-lg p-[22px] resize-none outline-none"
           />
           <div className="w-full h-[50px] flex justify-end items-center">
             <div className="pr-[33px]">
-              {channelId === "1" && <CodeEditIcon />}
+              {channelId === '1' && <CodeEditIcon />}
               <ImageIcon />
             </div>
             <div className="pr-[10px]">
