@@ -1,17 +1,36 @@
-import { Route, Routes } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useAuthStore } from './stores/authStore';
+import { axiosInstance } from './api/axios';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import Login from './pages/login/Login';
+import SignUp from './pages/signup/SignUp';
 import Header from './components/header/Header';
 import PostList from './pages/PostList';
 import PostDetail from './pages/PostDetail';
 
 export default function App() {
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const setUser = useAuthStore((state) => state.setUser);
+
+  useEffect(() => {
+    if (accessToken) {
+      axiosInstance
+        .get('/auth-user')
+        .then((res) => {
+          setUser(res.data);
+        })
+        .catch(() => {
+          useAuthStore.getState().logout();
+        });
+    }
+  });
   return (
     <>
       <Header />
       <Routes>
-        <Route path="/" element="" />
-
-        <Route path="/login" element="" />
-        <Route path="/signup" element="" />
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
 
         <Route path="mypage" element="" />
         <Route path="mypage/edit" element="" />

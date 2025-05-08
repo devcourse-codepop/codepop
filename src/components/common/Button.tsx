@@ -1,13 +1,15 @@
 export default function Button({
   className,
   value,
+  onClick,
 }: {
   className: string;
   value: string;
+  onClick?: (e: React.FormEvent) => void;
 }) {
   return (
     <>
-      <button className={className} type="submit">
+      <button className={className} type="submit" onClick={onClick}>
         {value}
       </button>
     </>
