@@ -22,6 +22,8 @@ export default function App() {
         .catch(() => {
           useAuthStore.getState().logout();
         });
+    } else {
+      useAuthStore.setState({ isLoading: false });
     }
   });
   return (
