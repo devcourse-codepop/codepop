@@ -1,24 +1,10 @@
-<<<<<<< HEAD
-
-import CreateCodePost from "./pages/CreateCodePost";
-// import CreateSetPost from "./pages/CreateSetPost";
-// import CreateVotePost from "./pages/CreateVotePost";
-
-export default function App() {
-  return (
-    <>
-      <div className="max-w-[1440px] w-auto">
-        <CreateCodePost />
-        {/* <CreateSetPost />
-        <CreateVotePost /> */}
-      </div>
-=======
-import { useEffect } from 'react';
-import { useAuthStore } from './stores/authStore';
-import { axiosInstance } from './api/axios';
-import { Navigate, Route, Routes } from 'react-router-dom';
-import Login from './pages/login/Login';
-import SignUp from './pages/signup/SignUp';
+import { useEffect } from "react";
+import { useAuthStore } from "./stores/authStore";
+import { axiosInstance } from "./api/axios";
+import { Navigate, Route, Routes } from "react-router-dom";
+import Login from "./pages/login/Login";
+import SignUp from "./pages/signup/SignUp";
+import CreateCodePost from "./pages/write/CreateCodePost";
 
 export default function App() {
   const accessToken = useAuthStore((state) => state.accessToken);
@@ -27,7 +13,7 @@ export default function App() {
   useEffect(() => {
     if (accessToken) {
       axiosInstance
-        .get('/auth-user')
+        .get("/auth-user")
         .then((res) => {
           setUser(res.data);
         })
@@ -39,6 +25,7 @@ export default function App() {
   return (
     <>
       <Routes>
+        <Route path="/channel/:channelId/write" element={<CreateCodePost />} />
         <Route path="/" element={<Navigate to="/signup" />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
@@ -52,12 +39,11 @@ export default function App() {
         <Route path="/" element={<SignUp />} />
         <Route path="channel/:channelId" element={<SignUp />} />
         <Route path="channel/:channelId/post/:postId" element={<SignUp />} />
-        <Route path="channel/:channelId/write" element={<SignUp />} />
+        
         <Route path="channel/:channelId/update/:postId" element={<SignUp />} />
 
         <Route path="*" element={<SignUp />} />
       </Routes> */}
->>>>>>> origin/dev
     </>
   );
 }

@@ -1,6 +1,6 @@
-import ChannelName from "../components/channel/ChannelName";
-import Button from "../components/common/Button";
-import ImageIcon from "../components/icon/ImageIcon";
+import ChannelName from "../../components/channel/ChannelName";
+import Button from "../../components/common/Button";
+import ImageIcon from "../../components/icon/ImageIcon";
 
 export default function CreateSetPost() {
   return (

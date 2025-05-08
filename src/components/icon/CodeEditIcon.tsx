@@ -5,7 +5,7 @@ export default function CodeEditIcon() {
     <>
       <img
         src={codeEditIcon}
-        className="w-[30px] h-[30px] inline-block cursor-pointer"
+        className="w-[30px] h-[30px] inline-block cursor-pointer  p-1"
       />
     </>
   );

@@ -1,15 +1,22 @@
+// components/editor/Editor.tsx
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import EditorToolbar from "./EditorToolbar";
 import "../../css/editor.css";
-// import "./editor.css"; // Tailwind 기반 커스텀 스타일용
+// import { useEffect } from "react";
 
-export default function Editor() {
+interface Props {
+  onChange: (html: string) => void;
+}
+
+export default function Editor({ onChange }: Props) {
   const editor = useEditor({
     extensions: [StarterKit, Image],
-
     content: "<p>내용을 입력하세요...</p>",
+    onUpdate({ editor }) {
+      onChange(editor.getHTML());
+    },
   });
 
   return (

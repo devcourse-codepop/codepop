@@ -48,7 +48,7 @@ export default function Poll() {
       {options.map((opt) => (
         <button
           key={opt.id}
-          className="w-full border p-2 mb-2 rounded hover:bg-blue-50"
+          className="w-full border p-2 mb-2 rounded"
           onClick={() => handleVote(opt.id)}
         >
           {opt.text}

@@ -2,8 +2,9 @@ import boldIcon from "../../assets/BoldIcon.svg";
 
 export default function BoldIcon() {
   return (
-    <div className="w-6 h-6 flex items-center justify-center">
-      <img src={boldIcon} />
-    </div>
+    <img
+      src={boldIcon}
+      className="w-[30px] h-[30px] inline-block cursor-pointer p-1"
+    />
   );
 }

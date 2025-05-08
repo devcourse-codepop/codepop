@@ -1,7 +1,7 @@
-import ChannelName from "../components/channel/ChannelName";
-import Button from "../components/common/Button";
-import ImageIcon from "../components/icon/ImageIcon";
-import VoteIcon from "../components/icon/VoteIcon";
+import ChannelName from "../../components/channel/ChannelName";
+import Button from "../../components/common/Button";
+import ImageIcon from "../../components/icon/ImageIcon";
+import VoteIcon from "../../components/icon/VoteIcon";
 
 export default function CreateVotePost() {
   return (
