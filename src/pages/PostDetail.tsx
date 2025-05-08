@@ -1,5 +1,5 @@
+import { useParams } from 'react-router-dom';
 import ChannelName from '../components/channel/ChannelName';
-// import Header from '../components/header/Header';
 import PostDetailItem from '../components/post/PostDetailItem';
 import WriteCommentItem from '../components/post/WriteCommentItem';
 import ChannelBox from '../components/sidebar/ChannelBox';
@@ -12,6 +12,9 @@ export default function PostDetail({
   channelId: string;
   postId: string;
 }) {
+  const params = useParams();
+  const channel = params.channelId;
+
   const json = {
     title: '이건 뭘까요,,?',
     content:
@@ -33,11 +36,7 @@ export default function PostDetail({
         </div>
         <div className="w-full ml-[50px]">
           <div className="flex justify-between items-end pb-5">
-            <ChannelName
-              subtitle='"이거 왜 되지?"'
-              title="미스터리 코드 공유 채널"
-              channelId="1"
-            />
+            <ChannelName channelId={String(channel)} />
           </div>
           {/* max-h-[640px] */}
           <div className="flex flex-col gap-[50px] max-h-[605px] overflow-auto">

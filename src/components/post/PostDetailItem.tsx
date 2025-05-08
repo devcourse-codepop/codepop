@@ -1,5 +1,5 @@
 import Avatar from '../avatar/Avatar';
-import LikeComment from '../reaction/LikeComment';
+//import LikeComment from '../reaction/LikeComment';
 import voteBtn from '../../assets/VoteBtn.svg';
 import menuIcon from '../../assets/MenuIcon.svg';
 import { useState } from 'react';
