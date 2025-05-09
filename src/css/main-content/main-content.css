@@ -1,0 +1,72 @@
+.swiper-slide {
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.swiper-slide img {
+  flex-shrink: 0;
+}
+.swiper-slide:focus {
+  outline: 2px solid #1e40af;
+}
+
+.swiper-remote {
+  position: absolute;
+  right: 20px;
+  bottom: 16px !important;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+}
+.swiper-pagination-bullet {
+  background: #d9d9d9; /* 기본 색상 */
+  opacity: 1;
+  width: 12px;
+  height: 12px;
+  margin: 0 7px;
+  border-radius: 50%;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  background: #5aabeb;
+}
+.tab-content a {
+  min-width: 0;
+  width: 100%;
+}
+.tab-content a > div {
+  width: 100%;
+  box-shadow: none;
+  border: 1px solid #b3b3b3;
+  padding: 15px 20px 0;
+  min-height: 260px;
+  height: auto;
+}
+.tab-content a > div > div {
+  padding: 0;
+  height: auto;
+}
+.tab-content a > div > div .flex.items-center.gap-4.p-4 {
+  padding: 0;
+  margin-bottom: 16px;
+}
+.tab-content a > div > .relative {
+  padding: 0 10px 30px;
+}
+.tab-content a > div .relative > .left-\[55px\] {
+  position: static;
+  margin-bottom: 25px;
+}
+.tab-content a > div hr {
+  width: 100%;
+  margin: 0;
+}
+.tab-content a > div .h-\[59px\] {
+  height: auto;
+}
+.tab-content a > div .h-\[59px\] > div {
+  padding: 10px;
+}
