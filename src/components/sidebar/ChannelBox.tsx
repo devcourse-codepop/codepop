@@ -1,11 +1,14 @@
 import { Link, useLocation } from "react-router-dom";
-type ChannelBoxProps = {
-  channelItem: ChannelItemType[];
-};
-export default function ChannelBox({ channelItem }: ChannelBoxProps) {
-  console.log(channelItem);
+import { useChannelItemStore } from "../../stores/channelStore";
+import { useEffect } from "react";
+
+export default function ChannelBox() {
   const pathName = useLocation().pathname;
-  const menuItems = [...channelItem];
+  const { channels, fetchChannels } = useChannelItemStore();
+
+  useEffect(() => {
+    fetchChannels();
+  }, [fetchChannels]);
 
   return (
     <>
@@ -14,7 +17,7 @@ export default function ChannelBox({ channelItem }: ChannelBoxProps) {
           Channel
         </h2>
         <ul className="space-y-[13px]">
-          {menuItems.map((item) => (
+          {channels.map((item) => (
             <li key={item.id}>
               <Link
                 // onClick={() => clickHandler(pathName)}
