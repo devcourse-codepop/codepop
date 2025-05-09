@@ -4,22 +4,40 @@ import PostDetailItem from '../components/post/PostDetailItem';
 import WriteCommentItem from '../components/post/WriteCommentItem';
 import ChannelBox from '../components/sidebar/ChannelBox';
 import MemberBox from '../components/sidebar/MemberBox';
+import { getPostList } from '../api/post/post';
+import { usePostStore } from '../stores/postStore';
+import { useEffect, useState } from 'react';
+import { Post } from '../types';
 
-export default function PostDetail({
-  channelId,
-  postId,
-}: {
-  channelId: string;
-  postId: string;
-}) {
+export default function PostDetail() {
   const params = useParams();
   const channel = params.channelId;
+  const post = params.postId;
 
-  const json = {
-    title: '이건 뭘까요,,?',
-    content:
-      '어디부터가 오류일까요..? 도와주십쇼 !!!!!! 왜 실행되는지 모르겠습니다 ㅠㅠ',
+  const channelIdList = usePostStore((state) => state.channelIdList);
+
+  const [postItem, setPostItem] = useState<Post | null>(null);
+
+  const filteringItem = (data: Post[]) => {
+    for (const res of data) {
+      if (res._id === post) {
+        setPostItem(res);
+      }
+    }
   };
+
+  const getPostItem = async () => {
+    try {
+      const { data } = await getPostList(channelIdList[Number(channel) - 1]);
+      filteringItem(data);
+    } catch (e) {
+      console.log(e instanceof Error && e.message);
+    }
+  };
+
+  useEffect(() => {
+    getPostItem();
+  }, []);
 
   return (
     <>
@@ -27,22 +45,27 @@ export default function PostDetail({
         <Header />
       </div> */}
       <div className="flex mx-[60px] h-[calc(100vh-100px)]">
-        <div className="flex flex-col gap-[50px] pb-[60px]">
-          <ChannelBox channelId={channelId} />
+        <div className="flex flex-col gap-[30px] pb-[60px]">
+          <ChannelBox channelId={String(channel)} />
           <MemberBox />
           {/* <div className="">
             <MemberBox />
           </div> */}
         </div>
         <div className="w-full ml-[50px]">
-          <div className="flex justify-between items-end pb-5">
+          <div className="flex justify-between items-end pb-[30px]">
             <ChannelName channelId={String(channel)} />
           </div>
           {/* max-h-[640px] */}
-          <div className="flex flex-col gap-[50px] max-h-[605px] overflow-auto">
-            <PostDetailItem title={json} updatedAt="2025.04.29" />
-            <WriteCommentItem channelId={channelId} postId={postId} />
-          </div>
+          {postItem && (
+            <div className="flex flex-col gap-[30px] max-h-[605px] overflow-auto">
+              <PostDetailItem key={postItem?._id} {...postItem} />
+              <WriteCommentItem
+                channelId={String(channel)}
+                postId={String(post)}
+              />
+            </div>
+          )}
         </div>
       </div>
     </>

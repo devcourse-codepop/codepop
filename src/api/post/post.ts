@@ -19,3 +19,26 @@ export const deleteLikes = (likeId: string) => {
 export const getSearchPostList = (value: string) => {
   return axiosInstance.get(`/search/all/${value}`);
 };
+
+export const postComments = (postId: string, comment: string) => {
+  return axiosInstance.post('/comments/create', {
+    postId,
+    // comment,
+    comment: JSON.stringify({
+      content: comment,
+      image: null,
+    }),
+  });
+};
+
+export const deleteComments = (commentId: string) => {
+  return axiosInstance.delete('/comments/delete', {
+    data: { id: commentId },
+  });
+};
+
+export const deletePosts = (postId: string) => {
+  return axiosInstance.delete('/posts/delete', {
+    data: { id: postId },
+  });
+};
