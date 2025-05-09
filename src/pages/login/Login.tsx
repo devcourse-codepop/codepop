@@ -7,7 +7,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { login } from '../../api/auth/login';
-import { emailRegex, passwordRegex } from '../../utils/validators';
 import { AxiosError } from 'axios';
 
 export default function Login() {
@@ -20,13 +19,7 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
-  const validateEmail = (email: string) => {
-    return emailRegex.test(email);
-  };
-
-  const validatePassword = (password: string) => {
-    return passwordRegex.test(password);
-  };
+  const [loginError, setLoginError] = useState('');
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -52,6 +45,17 @@ export default function Login() {
     // console.clear();
     // setEmailError('');
     // setPasswordError('');
+
+    if (!email) {
+      setLoginError('이메일은 필수 입력 항목입니다.');
+      return;
+    }
+
+    if (!password) {
+      setLoginError('비밀번호는 필수 입력 항목입니다.');
+      return;
+    }
+
     try {
       const res = await login(email, password);
       const token = res.data.token;
@@ -67,8 +71,7 @@ export default function Login() {
           message.toLowerCase().includes('password') &&
           message.includes('match')
         ) {
-          setEmailError('이메일이 올바르지 않습니다.');
-          setPasswordError('비밀번호가 올바르지 않습니다.');
+          setLoginError('이메일 또는 비밀번호가 올바르지 않습니다.');
         } else {
           console.error(err);
         }
@@ -88,17 +91,6 @@ export default function Login() {
               type="email"
               label="Email"
               onChange={handleEmail}
-              onBlur={() => {
-                if (!email) {
-                  setEmailError('이메일은 필수 입력 항목입니다.');
-                  return;
-                } else if (!validateEmail(email)) {
-                  setEmailError('이메일 형식을 확인해주세요.');
-                  return;
-                } else {
-                  setEmailError('');
-                }
-              }}
             />
             {email && (
               <img
@@ -112,31 +104,15 @@ export default function Login() {
               />
             )}
           </div>
-          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">
-            {emailError || '\u00A0'}
-          </p>
         </div>
 
-        <div className="mb-10">
+        <div className="mb-5">
           <div className="relative">
             <Input
               value={password}
               type="password"
               label="Password"
               onChange={handlePassword}
-              onBlur={() => {
-                if (!password) {
-                  setPasswordError('비밀번호는 필수 입력 항목입니다.');
-                  return;
-                } else if (!validatePassword(password)) {
-                  setPasswordError(
-                    '비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.'
-                  );
-                  return;
-                } else {
-                  setPasswordError('');
-                }
-              }}
             />
 
             {password && (
@@ -151,14 +127,14 @@ export default function Login() {
               />
             )}
           </div>
-          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">
-            {passwordError || '\u00A0'}
-          </p>
         </div>
+        <p className="text-sm text-red-500 px-1 mb-2">
+          {loginError || emailError || passwordError || '\u00A0'}
+        </p>
 
         <Button
           value="Log In"
-          className="button-style1 mb-5"
+          className="button-style1 mb-5 mt-2"
           onClick={handleSubmit}
         />
         <p className="flex justify-center text-sm">
