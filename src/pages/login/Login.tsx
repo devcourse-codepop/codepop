@@ -46,8 +46,13 @@ export default function Login() {
     // setEmailError('');
     // setPasswordError('');
 
-    if (!email && !password) {
-      setLoginError('이메일과 비밀번호는 필수 입력 항목입니다.');
+    if (!email) {
+      setLoginError('이메일은 필수 입력 항목입니다.');
+      return;
+    }
+
+    if (!password) {
+      setLoginError('비밀번호는 필수 입력 항목입니다.');
       return;
     }
 
@@ -66,7 +71,7 @@ export default function Login() {
           message.toLowerCase().includes('password') &&
           message.includes('match')
         ) {
-          setLoginError('이메일과 비밀번호를 정확히 입력해주세요.');
+          setLoginError('이메일 또는 비밀번호가 올바르지 않습니다.');
         } else {
           console.error(err);
         }
