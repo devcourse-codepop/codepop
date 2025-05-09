@@ -12,7 +12,7 @@ type InputProps = Omit<React.ComponentPropsWithoutRef<'input'>, 'type'> & {
   label: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur: () => void;
+  onBlur?: () => void;
 };
 
 export default function Input(props: InputProps) {
