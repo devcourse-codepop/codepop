@@ -15,7 +15,7 @@ export default function ChannelBox({ channelItem }: ChannelBoxProps) {
         </h2>
         <ul className="space-y-[13px]">
           {menuItems.map((item) => (
-            <li>
+            <li key={item.id}>
               <Link
                 // onClick={() => clickHandler(pathName)}
                 to={item.to}

@@ -43,6 +43,7 @@ export default function App() {
           <Route path="/channel/1" element={<MainContent />} />
           <Route path="/channel/2" element={<MainContent />} />
           <Route path="/channel/3" element={<MainContent />} />
+          <Route path="/mypage" element={<MainContent />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />

@@ -36,8 +36,8 @@ export default function Banner() {
           loop={true}
           spaceBetween={0}
           slidesPerView={1}
-          autoplay={{ delay: 2000 }}
-          speed={1000}
+          autoplay={{ delay: 4500 }}
+          speed={1700}
           // navigation
           pagination={{
             clickable: true,
