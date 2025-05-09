@@ -4,6 +4,7 @@ import { axiosInstance } from './api/axios';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Login from './pages/login/Login';
 import SignUp from './pages/signup/SignUp';
+import Error from './pages/Error';
 
 export default function App() {
   const accessToken = useAuthStore((state) => state.accessToken);
@@ -15,20 +16,24 @@ export default function App() {
         .get('/auth-user')
         .then((res) => {
           setUser(res.data);
+          useAuthStore.setState({ isLoading: false });
         })
         .catch(() => {
           useAuthStore.getState().logout();
+          useAuthStore.setState({ isLoading: false });
         });
     } else {
       useAuthStore.setState({ isLoading: false });
     }
-  });
+  }, []);
+
   return (
     <>
       <Routes>
         <Route path="/" element={<Navigate to="/signup" />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
+        <Route path="*" element={<Error />} />
       </Routes>
 
       {/* <Routes>
@@ -36,13 +41,13 @@ export default function App() {
         <Route path="/login" element={<Login />} />
 
 
-        <Route path="/" element={<SignUp />} />
-        <Route path="channel/:channelId" element={<SignUp />} />
-        <Route path="channel/:channelId/post/:postId" element={<SignUp />} />
-        <Route path="channel/:channelId/write" element={<SignUp />} />
-        <Route path="channel/:channelId/update/:postId" element={<SignUp />} />
+        <Route path="/" element={< />} />
+        <Route path="channel/:channelId" element={< />} />
+        <Route path="channel/:channelId/post/:postId" element={< />} />
+        <Route path="channel/:channelId/write" element={< />} />
+        <Route path="channel/:channelId/update/:postId" element={< />} />
 
-        <Route path="*" element={<SignUp />} />
+        <Route path="*" element={< />} />
       </Routes> */}
     </>
   );
