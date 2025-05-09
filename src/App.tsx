@@ -46,7 +46,7 @@ export default function App() {
         <Route path="channel/:channelId" element={<PostList />} />
         <Route
           path="channel/:channelId/post/:postId"
-          element={<PostDetail channelId="1" postId="1" />}
+          element={<PostDetail />}
         />
         <Route path="channel/:channelId/write" element="" />
         <Route path="channel/:channelId/update/:postId" element="" />
