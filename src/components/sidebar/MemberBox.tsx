@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 import Avatar from "../avatar/Avatar";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { noAuthAxiosInstance } from "../../api/axios-no-auth";
 
@@ -62,7 +62,7 @@ export default function MemberBox() {
     setUsers(result.data);
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     fetchUsers();
   }, []);
 

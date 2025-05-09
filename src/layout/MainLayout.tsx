@@ -3,7 +3,7 @@ import Header from "../components/header/Header";
 import ChannelBox from "../components/sidebar/ChannelBox";
 import MemberBox from "../components/sidebar/MemberBox";
 import { noAuthAxiosInstance } from "../api/axios-no-auth";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import "../css/layout/layout.css";
 
 export default function MainLayout() {
@@ -13,7 +13,7 @@ export default function MainLayout() {
     const result = await noAuthAxiosInstance.get("/channels");
     setChannels(result.data);
   };
-  useEffect(() => {
+  useLayoutEffect(() => {
     fetchChannel();
   }, []);
   channels.map((channel, index) => {
