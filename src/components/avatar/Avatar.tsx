@@ -29,7 +29,7 @@ export default function Avatar({ name, email, image, isOnline }: AvatarProps) {
       </div>
       <div className="flex flex-col">
         <span className="text-sm font-semibold">{name}</span>
-        <span className="text-xs opacity-60">{email}</span>
+        <span className="text-xs opacity-60 break-all leading-3">{email}</span>
       </div>
     </div>
   );
