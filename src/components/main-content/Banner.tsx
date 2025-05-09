@@ -51,21 +51,21 @@ export default function Banner() {
             <img
               src={banner1}
               alt="메인 배너 1"
-              className="min-w-full min-h-full"
+              className="min-w-full min-h-full max-w-none"
             />
           </SwiperSlide>
           <SwiperSlide>
             <img
               src={banner2}
               alt="메인 배너 2"
-              className="min-w-full min-h-full"
+              className="min-w-full min-h-full max-w-none"
             />
           </SwiperSlide>
           <SwiperSlide>
             <img
               src={banner3}
               alt="메인 배너 2"
-              className="min-w-full min-h-full"
+              className="min-w-full min-h-full max-w-none"
             />
           </SwiperSlide>
         </Swiper>

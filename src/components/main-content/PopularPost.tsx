@@ -22,8 +22,17 @@ export default function PopularPost() {
           {tabs.map((tab) => (
             <div key={tab.id}>
               <button
-                className={`bg-[${tab.color}] text-white rounded-[10px] w-[123px] h-[40px] text-[12px] font-bold cursor-pointer`}
+                className={`bg-[#E3E3E3] text-white rounded-[10px] w-[123px] h-[40px] text-[12px] cursor-pointer duration-300`}
                 onClick={() => setActiveTab(tab.id)}
+                style={{
+                  backgroundColor: activeTab === tab.id ? tab.color : "#E3E3E3",
+                  color: activeTab === tab.id ? "#fff" : "#6A6A6A",
+                  fontWeight: activeTab === tab.id ? "bold" : "normal",
+                  boxShadow:
+                    activeTab === tab.id
+                      ? "0px 2px 3px rgba(0, 0, 0, 0.2)"
+                      : "",
+                }}
               >
                 {tab.label}
               </button>

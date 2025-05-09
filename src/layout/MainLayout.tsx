@@ -4,6 +4,7 @@ import Banner from "../components/main-content/Banner";
 import PopularPost from "../components/main-content/PopularPost";
 import ChannelBox from "../components/sidebar/ChannelBox";
 import MemberBox from "../components/sidebar/MemberBox";
+import "../css/layout/layout.css";
 
 export default function MainLayout() {
   return (
@@ -18,7 +19,7 @@ export default function MainLayout() {
             </div>
             <MemberBox></MemberBox>
           </aside>
-          <main className="h-full overflow-x-auto w-full pr-2.5">
+          <main className="h-full overflow-x-auto w-full pr-2.5 scroll-custom pb-[30px]">
             {/* 컨텐츠 영역 */}
             <Outlet />
           </main>
