@@ -103,7 +103,7 @@ export default function SignUp() {
 
   return (
     <div className="flex flex-col justify-center items-center h-screen gap-15">
-      <img src={logo} alt="로고" className="w-50" />
+      <img src={logo} alt="Signup 로고" className="w-50" />
 
       <form className="flex flex-col">
         <div className="mb-5">
@@ -139,7 +139,7 @@ export default function SignUp() {
               />
             )}
           </div>
-          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">
+          <p className="text-sm text-red-500 pt-1 px-1 h-2.5">
             {fullNameError || '\u00A0'}
           </p>
         </div>
@@ -155,6 +155,11 @@ export default function SignUp() {
                 if (!email) {
                   setEmailError('이메일은 필수 입력 항목입니다.');
                   return;
+                } else if (
+                  email.split('@')[0].length < 5 ||
+                  email.split('@')[0].length > 20
+                ) {
+                  setEmailError('이메일 아이디는 5~20자 사이여야 합니다.');
                 } else if (!validateEmail(email)) {
                   setEmailError('이메일 형식을 확인해주세요.');
                   return;
@@ -176,7 +181,7 @@ export default function SignUp() {
               />
             )}
           </div>
-          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">
+          <p className="text-sm text-red-500 pt-1 px-1 h-2.5">
             {emailError || '\u00A0'}
           </p>
         </div>
@@ -216,7 +221,7 @@ export default function SignUp() {
             )}
           </div>
 
-          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">
+          <p className="text-sm text-red-500 pt-1 px-1 h-2.5">
             {passwordError || '\u00A0'}
           </p>
         </div>
@@ -251,14 +256,14 @@ export default function SignUp() {
             )}
           </div>
 
-          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">
+          <p className="text-sm text-red-500 pt-1 px-1 h-2.5">
             {confirmPasswordError || '\u00A0'}
           </p>
         </div>
 
         <Button
           value="Sign Up"
-          className="button-style1"
+          className="button-style1 mb-5 mt-2"
           onClick={handleSubmit}
         />
       </form>
