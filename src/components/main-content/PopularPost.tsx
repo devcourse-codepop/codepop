@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PostList from "../post/PostList";
 import { Link } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
+import { noAuthAxiosInstance } from "../../api/axios-no-auth";
 
 export default function PopularPost() {
   const tabs = [
@@ -9,8 +10,50 @@ export default function PopularPost() {
     { id: "tab2", label: "이거 왜 안 쓰지?", color: "#3380DE" },
     { id: "tab3", label: "골라봐", color: "#60A7F7" },
   ];
+  const [channels, setChannels] = useState<ChannelType[]>([]);
+  const [populars1, setPopulars1] = useState<PopularType[]>([]);
+  const [populars2, setPopulars2] = useState<PopularType[]>([]);
+  const [populars3, setPopulars3] = useState<PopularType[]>([]);
+
+  const fetchChannel = async () => {
+    const result = await noAuthAxiosInstance.get(`/channels`);
+    setChannels(result.data);
+    channels.map((channel, index) => {
+      let cName = "";
+      let cColor = "";
+      switch (channel.name) {
+        case "MysteryCode":
+          cName = "이거 왜 되지?";
+          cColor = "#10215C";
+          break;
+        case "DeskSetup":
+          cName = "이거 왜 안 쓰지?";
+          cColor = "#3380DE";
+          break;
+        case "Vote":
+          cName = "골라봐";
+          cColor = "#60A7F7";
+          break;
+        default:
+          cName = channel.name;
+          cColor = "#10215C";
+      }
+      tabs[index] = { id: channel._id, label: cName, color: cColor };
+    });
+  };
+  console.log(tabs);
+  const fetchPopular = async () => {
+    setPopulars1(await noAuthAxiosInstance.get(`/posts/channel/${tabs[0].id}`));
+    setPopulars2(await noAuthAxiosInstance.get(`/posts/channel/${tabs[1].id}`));
+    setPopulars3(await noAuthAxiosInstance.get(`/posts/channel/${tabs[2].id}`));
+  };
 
   const [activeTab, setActiveTab] = useState("tab1");
+
+  useEffect(() => {
+    fetchChannel();
+    fetchPopular();
+  }, []);
 
   return (
     <>

@@ -2,7 +2,7 @@ import { Search } from "lucide-react";
 import Avatar from "../avatar/Avatar";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { memberAxiosInstance } from "../../api/memberAxiosInstance";
+import { noAuthAxiosInstance } from "../../api/axios-no-auth";
 
 export default function MemberBox() {
   // const user22s = [
@@ -58,7 +58,7 @@ export default function MemberBox() {
     setSearchKeyword(e.target.value);
   };
   const fetchUsers = async () => {
-    const result = await memberAxiosInstance.get("/users/get-users");
+    const result = await noAuthAxiosInstance.get("/users/get-users");
     setUsers(result.data);
   };
 

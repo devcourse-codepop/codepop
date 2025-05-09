@@ -1,15 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
-
-export default function ChannelBox() {
+type ChannelBoxProps = {
+  channelItem: ChannelItemType[];
+};
+export default function ChannelBox({ channelItem }: ChannelBoxProps) {
+  console.log(channelItem);
   const pathName = useLocation().pathname;
-
-  const menuItems = [
-    { name: "MysteryCode", to: "/channel/MysteryCode", color: "#10215C" },
-    { name: "DeskSetup", to: "/channel/DeskSetup", color: "#3380DE" },
-    { name: "Vote", to: "/channel/Vote", color: "#60A7F7" },
-  ];
-
-  // console.log(pathName.split("/channel")[1]);
+  const menuItems = [...channelItem];
 
   return (
     <>
@@ -26,13 +22,15 @@ export default function ChannelBox() {
                 className="flex items-start ml-[29px] group"
               >
                 <span
-                  className={`w-1 h-8 bg-[${item.color}] rounded-sm mr-[7px]`}
+                  className={`w-1 h-8 rounded-sm mr-[7px]`}
+                  style={{ backgroundColor: item.color }}
                 ></span>
                 <span className="font-noto font-[18px] pt-1 relative z-1">
-                  이거 왜 되지?
+                  {item.name}
                   <span
-                    className={`block w-0 h-3/7 bg-[${item.color}] opacity-30 absolute left-0 bottom-0 -z-1 group-hover:w-full duration-300 ease-out`}
+                    className={`block w-0 h-3/7 opacity-30 absolute left-0 bottom-0 -z-1 group-hover:w-full duration-300 ease-out`}
                     style={{
+                      backgroundColor: item.color,
                       width: pathName === item.to ? "100%" : "",
                     }}
                   ></span>

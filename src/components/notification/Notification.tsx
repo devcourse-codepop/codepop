@@ -3,21 +3,20 @@ import readAllImg from "../../assets/images/header/notifi.svg";
 import alarm from "../../assets/images/header/alarm.svg";
 import redDot from "../../assets/RedDotIcon.svg";
 import { useEffect, useState } from "react";
-import { notificationAxiosInstance } from "../../api/notificationAxiosInstance";
+import { axiosInstance } from "../../api/axios";
 
 export default function Notification() {
   const [notifiOpen, setNotifiOpen] = useState(false);
   const [notification, setNotification] = useState<NotificationType[]>([]);
 
   const fetchNotifications = async () => {
-    const result = await notificationAxiosInstance.get("/notifications");
+    const result = await axiosInstance.get("/notifications");
     setNotification(result.data);
-    console.log(result.data);
   };
 
   const readAllHandler = () => {
     notification.map(async (item) => {
-      await notificationAxiosInstance.post(`/notifications/seen/`, {
+      await axiosInstance.post(`/notifications/seen/`, {
         id: item._id,
       });
     });
@@ -30,7 +29,7 @@ export default function Notification() {
     } else if (item.comment !== undefined) {
       id = item.comment["_id"];
     }
-    await notificationAxiosInstance.post(`/notifications/seen/`, {
+    await axiosInstance.post(`/notifications/seen/`, {
       id: id,
     });
   };
@@ -42,7 +41,7 @@ export default function Notification() {
   return (
     <>
       <button
-        className="relative cursor-pointer"
+        className="relative cursor-pointer block"
         onClick={(e) => {
           e.preventDefault();
           setNotifiOpen(!notifiOpen);
