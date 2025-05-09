@@ -1,0 +1,24 @@
+type UserType = {
+  role: string;
+  emailVerified: boolean;
+  banned: boolean;
+  isOnline: boolean;
+  posts: [];
+  likes: string[];
+  comments: string[];
+  followers: string[];
+  following: string[];
+  notifications: string[];
+  messages: string[];
+  _id: string;
+  fullName: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  username: string;
+  image: string;
+  imagePublicId: string;
+  coverImage: string;
+  coverImagePublicId: string;
+};
