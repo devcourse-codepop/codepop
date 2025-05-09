@@ -4,8 +4,8 @@ import { axiosInstance } from "./api/axios";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "./pages/login/Login";
 import SignUp from "./pages/signup/SignUp";
-import CreateCodePost from "./pages/write/CreateCodePost";
-
+// import CreateCodePost from "./pages/write/CreateCodePost";
+import WritePostRouter from "./route/WritePostRouter";
 export default function App() {
   const accessToken = useAuthStore((state) => state.accessToken);
   const setUser = useAuthStore((state) => state.setUser);
@@ -25,7 +25,8 @@ export default function App() {
   return (
     <>
       <Routes>
-        <Route path="/channel/:channelId/write" element={<CreateCodePost />} />
+        {/* <Route path="/channel/:channelId/write" element={<CreateCodePost />} /> */}
+        <Route path="/channel/:channelId/write" element={<WritePostRouter />} />
         <Route path="/" element={<Navigate to="/signup" />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />

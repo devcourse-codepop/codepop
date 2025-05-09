@@ -1,0 +1,339 @@
+[33mcommit f83e66e110a3b4715e08aeec09aed040692b6c05[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeat/create-post[m[33m)[m
+Author: kang-min-ryu <dbrkdalswkd@gmail.com>
+Date:   Thu May 8 17:51:55 2025 +0900
+
+    ✨ Feat: API 연결
+
+[33mcommit 0036c6e0dea6b2713d16b2e872d38c8ed1655a77[m
+Merge: db1c4dd c1281f1
+Author: kang-min-ryu <dbrkdalswkd@gmail.com>
+Date:   Wed May 7 22:45:28 2025 +0900
+
+    Merge remote-tracking branch 'origin/dev' into feat/create-post
+
+[33mcommit db1c4dd4bf897bbb638fd014ef9a05730bba8ca0[m
+Author: kang-min-ryu <dbrkdalswkd@gmail.com>
+Date:   Wed May 7 21:17:57 2025 +0900
+
+   ✨ Feat: CodeEditor 추가
+
+[33mcommit c1281f18f58c83747d861d0e0fb66e9ad017c0e0[m[33m ([m[1;31morigin/dev[m[33m)[m
+Merge: 61fc251 8d84264
+Author: sy <sduddla921@gmail.com>
+Date:   Wed May 7 21:16:15 2025 +0900
+
+    Merge pull request #10 from devcourse-codepop/feat/auth
+    
+    Feat/auth : 로그인, 회원가입
+
+[33mcommit 8d84264c99a8c324e73e91ee9af33ce709689041[m[33m ([m[1;31morigin/feat/auth[m[33m)[m
+Merge: 7efe73b 61fc251
+Author: sduddla <sduddla921@gmail.com>
+Date:   Wed May 7 20:22:06 2025 +0900
+
+    🐛 Fix: App.tsx 오류 해결
+
+[33mcommit 7efe73b80bbf5a3d73273e23373d6b3f930bd12d[m
+Author: sduddla <sduddla921@gmail.com>
+Date:   Wed May 7 20:10:18 2025 +0900
+
+    ✨ Feat: 로그인 유효성 검사 추가
+
+[33mcommit 55bb7d63c4b850a7a2316b1759f4fd722f678a44[m
+Author: sduddla <sduddla921@gmail.com>
+Date:   Wed May 7 20:09:39 2025 +0900
+
+    ✨ Feat: 이메일 유효성 검사 추가
+
+[33mcommit 967fdbf87b2e853376b75aa4ac1faca4a1a0edf6[m
+Author: sduddla <sduddla921@gmail.com>
+Date:   Wed May 7 19:50:43 2025 +0900
+
+    ✨ Feat: App.tsx 라우트 추가, 로그인 유지
+
+[33mcommit 285937060227e17306317480d52ffd1b38ca9f45[m
+Author: sduddla <sduddla921@gmail.com>
+Date:   Wed May 7 19:44:36 2025 +0900
+
+    🔧 Chore: main.tsx 원래대로 복원
+
+[33mcommit 7f755a2a77b68c5eaaccd589c9c05e7e30f52efb[m
+Author: sduddla <sduddla921@gmail.com>
+Date:   Wed May 7 00:39:24 2025 +0900
+
+    ✨ Feat: 로그인 및 회원가입 컴포넌트 추가
+
+[33mcommit a3e468417ad76506914b4ff952b971b6e223ab7e[m
+Author: sduddla <sduddla921@gmail.com>
+Date:   Wed May 7 00:37:25 2025 +0900
+
+    ✨ Feat: 로그인 및 회원가입 API 요청 함수 추가
+
+[33mcommit 1781c40e4b3fad7297e9783cd56716740be436ef[m
+Author: sduddla <sduddla921@gmail.com>
+Date:   Wed May 7 00:34:51 2025 +0900
+
+    ✨ Feat: axios 요청/응답 인터셉터 설정
+
+[33mcommit 0a3f13b615fdd6ba7812a298f4bd5e3d50e9e533[m
+Author: sduddla <sduddla921@gmail.com>
+Date:   Wed May 7 00:31:00 2025 +0900
+
+    ✨ Feat: 로그인 상태 관리 위한 authStore.ts
+
+[33mcommit 6910fe982b4f0dfba9383e3652d63425abd2ed9a[m
+Author: sduddla <sduddla921@gmail.com>
+Date:   Wed May 7 00:26:19 2025 +0900
+
+    ✨ Feat: 사용자 이름, 이메일, 비밀 번호 정규식 유효성 검사
+
+[33mcommit 0d32a2b79aba5d66f368f452af76ff86d06800ca[m
+Author: sduddla <sduddla921@gmail.com>
+Date:   Wed May 7 00:22:39 2025 +0900
+
+    🎨 Design: input 입력값 삭제 아이콘(이미지) 추가
+
+[33mcommit 3434c9ed327a47a65f64991de05a7f80bdfecc0c[m
+Author: sduddla <sduddla921@gmail.com>
+Date:   Wed May 7 00:20:09 2025 +0900
+
+    ✨ Feat: onChange, 플로팅 라벨 추가
+
+[33mcommit 81137ec46fdc4ba7856005d905637e174f1cedae[m
+Author: sduddla <sduddla921@gmail.com>
+Date:   Wed May 7 00:15:36 2025 +0900
+
+    ✨ Feat: onClick 추가
+
+[33mcommit 8e3562d4031aeff998d9fc6a7397fb3d2ab886f3[m
+Author: sduddla <sduddla921@gmail.com>
+Date:   Tue May 6 23:34:38 2025 +0900
+
+    🎨 Design: input-style1 수정
+
+[33mcommit 97ba6b9832137e82683e6bc01540e4791b7f16be[m
+Author: sduddla <sduddla921@gmail.com>
+Date:   Tue May 6 23:32:35 2025 +0900
+
+    🎨 Design: favicon 변경
+
+[33mcommit 61fc2519826d181be08a3b842d46a7dcb0186a4f[m
+Merge: d509c46 5bf8a40
+Author: chosojeong97 <chosojeong97@gmail.com>
+Date:   Sat May 3 17:23:40 2025 +0900
+
+    Merge pull request #9 from devcourse-codepop/feat/404
+    
+    ✨ feat : 404페이지 생성
+
+[33mcommit d509c46a46b12a7b77f79bef6c41a6ccea52aace[m
+Merge: afe5dfd 6846c33
+Author: Yubin <50348099+yubin121@users.noreply.github.com>
+Date:   Fri May 2 17:12:34 2025 +0900
+
+    🐛 fix: UI 수정 및 투표 컴포넌트 생성
+    
+    🐛 fix: UI 수정 및 투표 컴포넌트 생성
+
+[33mcommit 5bf8a4090bc7fbb44a2447fad39fc06475329cb2[m[33m ([m[1;31morigin/feat/404[m[33m)[m
+Author: Chosojeong <chosojeong97@gmail.com>
+Date:   Fri May 2 16:27:55 2025 +0900
+
+    ✨ feat : 404페이지 생성
+
+[33mcommit 6846c336a1ad98eb75d953ec786dd6c52f2bf242[m[33m ([m[1;31morigin/components/part5[m[33m)[m
+Author: yubin121 <yubin045@naver.com>
+Date:   Fri May 2 15:57:42 2025 +0900
+
+    🐛 fix: UI 수정 및 아이콘, 버튼, 아바타 컴포넌트 추가
+
+[33mcommit b5195f2f837736e05ee1a545dcab811c36dfb2b7[m
+Author: yubin121 <yubin045@naver.com>
+Date:   Fri May 2 15:56:06 2025 +0900
+
+    🐛 fix: 좋아요 및 댓글 아이콘 정렬 수정
+
+[33mcommit 37097de9e8c412a9bd209258068a19ff0cb8aded[m
+Author: yubin121 <yubin045@naver.com>
+Date:   Fri May 2 15:54:14 2025 +0900
+
+    🐛 fix: 댓글 작성 컴포넌트 props 추가
+
+[33mcommit c701885b7eb282351aff52a2302b149fc3261133[m
+Author: yubin121 <yubin045@naver.com>
+Date:   Fri May 2 15:53:18 2025 +0900
+
+    🐛 fix: 코드 아이콘 및 이미지 아이콘 스타일 수정
+
+[33mcommit 8990afadb6c70f4bf603a0ece51d6dd86158cb2c[m
+Author: yubin121 <yubin045@naver.com>
+Date:   Fri May 2 15:52:22 2025 +0900
+
+    🐛 fix: 투표 아이콘 이미지 추가 및 컴포넌트 생성
+
+[33mcommit e470b9c61dc30d8765faf076966d9b677504ebbb[m
+Author: yubin121 <yubin045@naver.com>
+Date:   Fri May 2 15:51:39 2025 +0900
+
+    🐛 fix: 버튼 font-weight 및 border-radius 수정
+
+[33mcommit afe5dfd4e71e40e8f0b18440e363dce48fcb6f6a[m
+Merge: 2897ee6 3d39be0
+Author: Yubin <50348099+yubin121@users.noreply.github.com>
+Date:   Thu May 1 16:14:29 2025 +0900
+
+    ✨ feat: Part 5 컴포넌트 UI 생성
+    
+    ✨ feat: Part 5 컴포넌트 UI 생성
+
+[33mcommit 3d39be009adaf5b5ca7ee7243987ab772ef65fce[m
+Merge: 545b15c 2897ee6
+Author: Yubin <50348099+yubin121@users.noreply.github.com>
+Date:   Thu May 1 14:22:44 2025 +0900
+
+    Merge branch 'dev' into components/part5
+
+[33mcommit 545b15cb2033139cb37317eb81781210c1aff903[m
+Author: yubin121 <yubin045@naver.com>
+Date:   Thu May 1 00:03:32 2025 +0900
+
+    🐛 fix: formData name 및 value 수정
+
+[33mcommit f272fcf7cfeccfb2f1b48e01a385fd188f64d6ea[m
+Author: yubin121 <yubin045@naver.com>
+Date:   Wed Apr 30 23:34:52 2025 +0900
+
+    ✨ feat: Part 5 컴포넌트 UI 생성
+
+[33mcommit 2897ee67ca513ab413b7c2c9a2017892779b655b[m
+Author: sduddla <sduddla921@gmail.com>
+Date:   Wed Apr 30 17:27:52 2025 +0900
+
+    App.tsx
+
+[33mcommit 20b21168c5f383cb3bbfd7e7fe5446134d5d1a80[m
+Author: sduddla <sduddla921@gmail.com>
+Date:   Wed Apr 30 17:21:27 2025 +0900
+
+    🚚 파일, 폴더 수정
+
+[33mcommit c249ed663518a5e445eff2e716229e7beed7afdd[m
+Merge: 15673bb 678e6a4
+Author: dkawoindsa <145523906+dkawoindsa@users.noreply.github.com>
+Date:   Wed Apr 30 17:03:06 2025 +0900
+
+    Merge pull request #6 from devcourse-codepop/components/part3
+    
+    Components/part3
+
+[33mcommit 678e6a44485a0c924201ae06da5850e60a1f9819[m[33m ([m[1;31morigin/components/part3[m[33m, [m[1;32mcomponents/part3[m[33m)[m
+Merge: d18005f 15673bb
+Author: kang-min-ryu <dbrkdalswkd@gmail.com>
+Date:   Wed Apr 30 16:52:21 2025 +0900
+
+    Merge branch 'dev' of https://github.com/devcourse-codepop/codepop into components/part3
+
+[33mcommit d18005ff4a849a44cb3897dbd1611c8ae47d465b[m
+Author: kang-min-ryu <dbrkdalswkd@gmail.com>
+Date:   Wed Apr 30 16:33:21 2025 +0900
+
+    ✨ Part 3 컴포넌트 UI 생성
+
+[33mcommit 15673bb1739a796a022cea1c9fdf7f3e18e2ad61[m[33m ([m[1;32mdev[m[33m)[m
+Merge: 799df59 ac7a705
+Author: chosojeong97 <chosojeong97@gmail.com>
+Date:   Wed Apr 30 16:06:55 2025 +0900
+
+    Merge pull request #5 from devcourse-codepop/components/part1
+    
+    ✨ Part1 : 컴포넌트 UI 생성
+
+[33mcommit ac7a705aa025b2bec1505c9a1e4e833f50e17098[m[33m ([m[1;31morigin/components/part1[m[33m)[m
+Merge: 940ea67 799df59
+Author: Chosojeong <chosojeong97@gmail.com>
+Date:   Wed Apr 30 16:05:58 2025 +0900
+
+    ✨ part1 : UI컴포넌트 생성
+
+[33mcommit 799df593dc6eda9af37edfb36d4d984175d133ee[m
+Merge: a89f3fb 6053d75
+Author: sy <sduddla921@gmail.com>
+Date:   Wed Apr 30 16:02:50 2025 +0900
+
+    Merge pull request #4 from devcourse-codepop/components/part4
+    
+    part 4 컴포넌트 UI 생성
+
+[33mcommit 6053d75edac4883592f1512e71db016683dd1236[m[33m ([m[1;31morigin/components/part4[m[33m)[m
+Merge: 79f6ade a89f3fb
+Author: sduddla <sduddla921@gmail.com>
+Date:   Wed Apr 30 15:57:03 2025 +0900
+
+    app.tsx 오류 해결
+
+[33mcommit 940ea67419df55c6a5e252fbe2832667cadaf75c[m
+Merge: 4d5951e a89f3fb
+Author: Chosojeong <chosojeong97@gmail.com>
+Date:   Wed Apr 30 15:48:10 2025 +0900
+
+    ✨ part1 : UI컴포넌트 생성
+
+[33mcommit 4d5951ee07c06544b73e82075de376905a2eecd9[m
+Author: Chosojeong <chosojeong97@gmail.com>
+Date:   Wed Apr 30 15:45:31 2025 +0900
+
+    app.tsx 오류
+
+[33mcommit a89f3fbfb3a188fda507f028fc2e0098ed05a328[m
+Merge: e23e52b c7587d6
+Author: COMPOSEDKIM <146106094+COMPOSEDKIM@users.noreply.github.com>
+Date:   Wed Apr 30 15:26:11 2025 +0900
+
+    Merge pull request #2 from devcourse-codepop/components/part2
+    
+    ✨feat: Part 2 컴포넌트 UI 생성
+
+[33mcommit 23a9bb8705e1c5ed49faf344abded291638a4298[m
+Author: Chosojeong <chosojeong97@gmail.com>
+Date:   Wed Apr 30 14:58:28 2025 +0900
+
+    ✨ Part1 : 컴포넌트 UI 생성
+
+[33mcommit c7587d6eee0d3d8c60dcf123f66430b6c1a263a9[m[33m ([m[1;31morigin/components/part2[m[33m)[m
+Author: ty <composedkim@naver.com>
+Date:   Wed Apr 30 14:20:49 2025 +0900
+
+    ✨feat: Part 2 컴포넌트 UI 생성
+    
+    ChannelBox, DropSort, MemberBox,SearchPost 컴포넌트 생성
+    a.txt 삭제 및 lucide-react install
+
+[33mcommit 79f6ade20fff301efceeb2d369a44675d08c223f[m
+Author: sduddla <sduddla921@gmail.com>
+Date:   Wed Apr 30 14:52:11 2025 +0900
+
+    ✨ feat: Part 4 컴포넌트 UI 생성
+
+[33mcommit 13d7a460f0bb64dc57cdd3a129369990466b2e93[m
+Author: yubin121 <yubin045@naver.com>
+Date:   Wed Apr 30 14:19:13 2025 +0900
+
+    part 5: 컴포넌트 ui 만들기
+
+[33mcommit 22ebeacc58bb63130c889a36a005ea88e798b8f5[m
+Author: sduddla <sduddla921@gmail.com>
+Date:   Wed Apr 30 14:15:26 2025 +0900
+
+    part 4: 컴포넌트 ui 만들기
+
+[33mcommit e23e52ba974a96811bba2377ff34d7e3ba6b1687[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: sduddla <sduddla921@gmail.com>
+Date:   Wed Apr 30 10:54:20 2025 +0900
+
+    초기 세팅
+
+[33mcommit d84d358d8d23a095d77e64e641c7f3d4655d57b9[m
+Author: sduddla <sduddla921@gmail.com>
+Date:   Wed Apr 30 09:31:50 2025 +0900
+
+    초기 세팅

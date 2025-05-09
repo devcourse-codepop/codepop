@@ -7,17 +7,29 @@ import VoteIcon from "../icon/VoteIcon";
 
 interface Props {
   editor: Editor | null;
+  onTogglePoll: () => void;
+  onImageSelect?: (file: File) => void; // 추가
+  showPollButton?: boolean;
+  showCodeButton?: boolean;
 }
 
-export default function EditorToolbar({ editor }: Props) {
+export default function EditorToolbar({
+  editor,
+  onTogglePoll,
+  onImageSelect,
+  showPollButton = false,
+  showCodeButton = false,
+}: Props) {
   if (!editor) return null;
 
   return (
     <div className="flex gap-6 mb-4">
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
-        className={`cursor-pointer rounded-[5px] ${
-          editor.isActive("bold") ? "font-bold bg-blue-400" : ""
+        className={`cursor-pointer rounded-[5px]${
+          editor.isActive("bold")
+            ? "font-bold bg-blue-400"
+            : " hover:bg-gray-200"
         }`}
       >
         <BoldIcon />
@@ -26,22 +38,27 @@ export default function EditorToolbar({ editor }: Props) {
       <button
         onClick={() => editor.chain().focus().toggleItalic().run()}
         className={`cursor-pointer rounded-[5px] ${
-          editor.isActive("italic") ? "italic bg-blue-400" : ""
+          editor.isActive("italic")
+            ? "italic bg-blue-400"
+            : " hover:bg-gray-200"
         }`}
       >
         <ItalicIcon />
       </button>
 
-      <button
-        onClick={() => {
-          editor.chain().focus().toggleCodeBlock().run();
-        }}
-        className={`cursor-pointer rounded-[5px] ${
-          editor.isActive("codeBlock") ? "bg-blue-400" : ""
-        }`}
-      >
-        <CodeEditIcon />
-      </button>
+      {showCodeButton && (
+        <button
+          onClick={() => {
+            editor.chain().focus().toggleCodeBlock().run();
+          }}
+          className={`cursor-pointer rounded-[5px] 
+          ${
+            editor.isActive("codeBlock") ? "bg-blue-400" : "hover:bg-gray-200"
+          }`}
+        >
+          <CodeEditIcon />
+        </button>
+      )}
 
       <input
         type="file"
@@ -49,14 +66,22 @@ export default function EditorToolbar({ editor }: Props) {
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (file) {
+            onImageSelect?.(file); // 부모에게 파일 전달
             const reader = new FileReader();
             reader.onload = () => {
               const result = reader.result;
               if (typeof result === "string") {
-                editor?.chain().focus().setImage({ src: result }).run();
+                editor
+                  ?.chain()
+                  .focus()
+                  .insertContent({
+                    type: "customImage",
+                    attrs: { src: result },
+                  })
+                  .run();
               }
             };
-            reader.readAsDataURL(file); // ✅ base64 URL 생성
+            reader.readAsDataURL(file);
           }
         }}
         className="hidden cursor-pointer rounded-[5px]"
@@ -65,23 +90,19 @@ export default function EditorToolbar({ editor }: Props) {
 
       <label
         htmlFor="image-upload"
-        className="cursor-pointer flex items-center justify-center"
+        className="cursor-pointer rounded-[5px] flex items-center justify-center hover:bg-gray-200"
       >
         <ImageIcon />
       </label>
 
-      <button
-        onClick={() => {
-          editor
-            .chain()
-            .focus()
-            .insertContent(`<PollCreator />`) // 또는 적절한 HTML/노드
-            .run();
-        }}
-        className="cursor-pointer rounded-[5px] hover:bg-gray-200"
-      >
-        <VoteIcon />
-      </button>
+      {showPollButton && (
+        <button
+          onClick={onTogglePoll}
+          className="cursor-pointer rounded-[5px] hover:bg-gray-200"
+        >
+          <VoteIcon />
+        </button>
+      )}
     </div>
   );
 }

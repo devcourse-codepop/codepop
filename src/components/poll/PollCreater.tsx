@@ -1,17 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface PollOption {
   id: number;
   text: string;
-  votes: number;
 }
 
 interface PollCreatorProps {
-  onCreate: (question: string, options: PollOption[]) => void;
+  onCreate: (options: PollOption[]) => void;
 }
 
 export default function PollCreator({ onCreate }: PollCreatorProps) {
-  const [question, setQuestion] = useState("");
   const [options, setOptions] = useState<string[]>(["", ""]);
 
   const handleAddOption = () => {
@@ -24,24 +22,19 @@ export default function PollCreator({ onCreate }: PollCreatorProps) {
     setOptions(newOptions);
   };
 
-  const handleCreate = () => {
-    const pollOptions = options
-      .filter((opt) => opt.trim() !== "")
-      .map((text, idx) => ({ id: idx, text, votes: 0 }));
-    if (question && pollOptions.length >= 2) {
-      onCreate(question, pollOptions);
+  // 옵션이 변경될 때마다 부모에 전달
+  useEffect(() => {
+    if (options.length >= 2) {
+      const pollOptions = options
+        .filter((opt) => opt.trim() !== "")
+        .map((text, idx) => ({ id: idx, text }));
+      onCreate(pollOptions);
     }
-  };
+  }, [options, onCreate]);
 
   return (
-    <div className="p-4 max-w-md mx-auto bg-white rounded shadow">
-      <h2 className="text-xl font-bold mb-2">Create a Poll</h2>
-      <input
-        className="w-full border p-2 mb-2 rounded"
-        placeholder="Poll question..."
-        value={question}
-        onChange={(e) => setQuestion(e.target.value)}
-      />
+    <div className="p-4 max-w-md mb-[25px] bg-white rounded shadow">
+      <h2 className="text-xl font-bold mb-2">Create Poll</h2>
       {options.map((opt, i) => (
         <input
           key={i}
@@ -59,12 +52,6 @@ export default function PollCreator({ onCreate }: PollCreatorProps) {
           + Add Option
         </button>
       )}
-      <button
-        className="bg-blue-500 text-white w-full p-2 rounded"
-        onClick={handleCreate}
-      >
-        Create Poll
-      </button>
     </div>
   );
 }
