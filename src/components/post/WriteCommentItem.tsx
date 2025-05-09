@@ -2,6 +2,8 @@ import { useState } from 'react';
 import Button from '../common/Button';
 import ImageIcon from '../icon/ImageIcon';
 import CodeEditIcon from '../icon/CodeEditIcon';
+import { postComments } from '../../api/post/post';
+//import { useNavigate } from 'react-router-dom';
 
 export default function WriteCommentItem({
   channelId,
@@ -10,9 +12,20 @@ export default function WriteCommentItem({
   channelId: string;
   postId: string;
 }) {
+  //const navigate = useNavigate();
+
   const [comment, setComment] = useState('');
   const changeCommentHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setComment(e.target.value);
+  };
+
+  const createNewComment = async () => {
+    try {
+      const { data } = await postComments(postId, comment);
+      console.log(data);
+    } catch (e) {
+      console.log(e instanceof Error && e.message);
+    }
   };
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
@@ -34,7 +47,18 @@ export default function WriteCommentItem({
     formData.append('postId', postId);
     formData.append('comment', comment);
 
-    // axios
+    createNewComment();
+    // {
+    //   postId,
+    //   comment: JSON.stringify({
+    //     content: comment,
+    //     image: null,
+    //   }),
+    // }
+
+    setComment('');
+    // navigate(`/channel/${channelId}/post/${postId}`);
+    window.location.href = `/channel/${channelId}/post/${postId}`;
   };
 
   return (
