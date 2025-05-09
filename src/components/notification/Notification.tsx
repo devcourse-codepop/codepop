@@ -20,6 +20,7 @@ export default function Notification() {
         id: item._id,
       });
     });
+    fetchNotifications();
   };
 
   const readHandler = async (item: NotificationType) => {
@@ -32,6 +33,7 @@ export default function Notification() {
     await axiosInstance.post(`/notifications/seen/`, {
       id: id,
     });
+    fetchNotifications();
   };
 
   useEffect(() => {
@@ -67,22 +69,28 @@ export default function Notification() {
               <img src={readAllImg} />
             </button>
           </div>
-          <div className="notiList px-2 h-[200px] overflow-y-auto scroll-custom">
-            {notification.map((notifi) => (
-              <Link
-                to={`/post/${notifi.post}`}
-                onClick={() => readHandler(notifi)}
-                className="block relative pl-4 text-[13px] my-3.5"
-              >
-                {!notifi.seen && (
-                  <img className="absolute left-0 top-2" src={redDot} />
-                )}
-                {notifi.like !== undefined &&
-                  `[${notifi.author["fullName"]}] 님이 당신의 게시물을 좋아합니다.`}
-                {notifi.comment !== undefined &&
-                  `[${notifi.author["fullName"]}] 님이 당신의 게시물에 댓글을 달았습니다.`}
-              </Link>
-            ))}
+          <div className="notiList px-2 h-[200px] overflow-y-auto scroll-custom relative">
+            {notification.length === 0 ? (
+              <p className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm text-[#5c5c5c]">
+                알림이 없습니다
+              </p>
+            ) : (
+              notification.map((notifi) => (
+                <Link
+                  to={`/post/${notifi.post}`}
+                  onClick={() => readHandler(notifi)}
+                  className="block relative pl-4 text-[13px] my-3.5"
+                >
+                  {!notifi.seen && (
+                    <img className="absolute left-0 top-2" src={redDot} />
+                  )}
+                  {notifi.like !== undefined &&
+                    `[${notifi.author["fullName"]}] 님이 당신의 게시물을 좋아합니다.`}
+                  {notifi.comment !== undefined &&
+                    `[${notifi.author["fullName"]}] 님이 당신의 게시물에 댓글을 달았습니다.`}
+                </Link>
+              ))
+            )}
           </div>
           <div className="text-right">
             <button
