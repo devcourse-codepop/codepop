@@ -16,7 +16,7 @@ type InputProps = Omit<React.ComponentPropsWithoutRef<'input'>, 'type'> & {
 };
 
 export default function Input(props: InputProps) {
-  const { label, value, onChange, onBlur, onClick, ...rest } = props;
+  const { label, value, onChange, onBlur, ...rest } = props;
   return (
     <div className="relative">
       <input
@@ -24,7 +24,6 @@ export default function Input(props: InputProps) {
         type={rest.type}
         onChange={onChange}
         onBlur={onBlur}
-        onClick={onClick}
         className={`peer cursor-pointer outline-none border border-gray-300  focus:border-[#1E293B] focus:border-2 input-style1 `}
         placeholder=" "
       />
