@@ -53,7 +53,7 @@ export default function MemberBox() {
   //   },
   // ];
   const [searchKeyword, setSearchKeyword] = useState<string>("");
-  const [users, setUsers] = useState<UserType[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const searchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value);
   };
