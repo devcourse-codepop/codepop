@@ -67,7 +67,7 @@ export default function MemberBox() {
   }, []);
 
   return (
-    <div className="w-[291px] max-h-[calc(100%-241px)] h-[579px] bg-white rounded-[10px] shadow-md pl-[30px] pr-[26px]  relative overflow-hidden">
+    <div className="w-[291px] max-h-[calc(100%-240px)] h-[580px] bg-white rounded-[10px] shadow-md pl-[30px] pr-[26px]  relative overflow-hidden">
       <h2 className="text-[#595656] font-medium text-[18px] mb-[13px] pt-[20px]">
         Member
       </h2>
@@ -87,7 +87,11 @@ export default function MemberBox() {
           searchKeyword !== null ? (
             (user.fullName.includes(searchKeyword) ||
               user.email.includes(searchKeyword)) && (
-              <Link to="/profile" key={user._id}>
+              <Link
+                to={`/profile/${user._id}`}
+                key={user._id}
+                state={{ userid: user._id }}
+              >
                 <Avatar
                   name={user.fullName}
                   email={user.email}
@@ -97,7 +101,11 @@ export default function MemberBox() {
               </Link>
             )
           ) : (
-            <Link to="/profile" key={user._id}>
+            <Link
+              to={`/profile/:${user._id}`}
+              key={user._id}
+              state={{ userid: user._id }}
+            >
               <Avatar
                 name={user.fullName}
                 email={user.email}
