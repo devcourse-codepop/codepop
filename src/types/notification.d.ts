@@ -11,10 +11,3 @@ type NotificationType = {
   createdAt: string;
   updatedAt: string;
 };
-
-//   {
-//     notificationType: "COMMENT" | "FOLLOW" | "LIKE" | "MESSAGE";
-//     notificationTypeId: string;
-//     userId: string;
-//     postId: Nullable<string>;
-//   };

@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/header/logo.svg";
-import user from "../../assets/images/header/userImg.svg";
 import Notification from "../notification/Notification";
-import { useState } from "react";
 import { useAuthStore } from "../../stores/authStore";
 
 export default function Header() {
@@ -31,7 +29,7 @@ export default function Header() {
                 Logout
               </Link>
               <div className="notification-wrapper">
-                <Notification></Notification>
+                <Notification />
               </div>
               <Link
                 to="/mypage"

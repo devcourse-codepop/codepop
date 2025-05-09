@@ -2,7 +2,7 @@ import { Search } from "lucide-react";
 import Avatar from "../avatar/Avatar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { noAuthAxiosInstance } from "../../api/axios-no-auth";
+import { axiosInstance } from "../../api/axios";
 
 export default function MemberBox() {
   // const user22s = [
@@ -58,7 +58,7 @@ export default function MemberBox() {
     setSearchKeyword(e.target.value);
   };
   const fetchUsers = async () => {
-    const result = await noAuthAxiosInstance.get("/users/get-users");
+    const result = await axiosInstance.get("/users/get-users");
     setUsers(result.data);
   };
 
@@ -87,7 +87,7 @@ export default function MemberBox() {
           searchKeyword !== null ? (
             (user.fullName.includes(searchKeyword) ||
               user.email.includes(searchKeyword)) && (
-              <Link to="/profile">
+              <Link to="/profile" key={user._id}>
                 <Avatar
                   name={user.fullName}
                   email={user.email}
@@ -97,7 +97,7 @@ export default function MemberBox() {
               </Link>
             )
           ) : (
-            <Link to="/profile">
+            <Link to="/profile" key={user._id}>
               <Avatar
                 name={user.fullName}
                 email={user.email}

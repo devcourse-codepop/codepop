@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import PostList from "../post/PostList";
 import { Link } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
-import { noAuthAxiosInstance } from "../../api/axios-no-auth";
+import { axiosInstance } from "../../api/axios";
 
 export default function PopularPost() {
   const tabs = [
@@ -10,13 +10,10 @@ export default function PopularPost() {
     { id: "tab2", label: "이거 왜 안 쓰지?", color: "#3380DE" },
     { id: "tab3", label: "골라봐", color: "#60A7F7" },
   ];
-  const [channels, setChannels] = useState<ChannelType[]>([]);
-  const [populars1, setPopulars1] = useState<PopularType[]>([]);
-  const [populars2, setPopulars2] = useState<PopularType[]>([]);
-  const [populars3, setPopulars3] = useState<PopularType[]>([]);
+  const [channels, setChannels] = useState<Channel[]>([]);
 
   const fetchChannel = async () => {
-    const result = await noAuthAxiosInstance.get(`/channels`);
+    const result = await axiosInstance.get(`/channels`);
     setChannels(result.data);
     channels.map((channel, index) => {
       let cName = "";
@@ -41,18 +38,11 @@ export default function PopularPost() {
       tabs[index] = { id: channel._id, label: cName, color: cColor };
     });
   };
-  console.log(tabs);
-  const fetchPopular = async () => {
-    setPopulars1(await noAuthAxiosInstance.get(`/posts/channel/${tabs[0].id}`));
-    setPopulars2(await noAuthAxiosInstance.get(`/posts/channel/${tabs[1].id}`));
-    setPopulars3(await noAuthAxiosInstance.get(`/posts/channel/${tabs[2].id}`));
-  };
 
   const [activeTab, setActiveTab] = useState("tab1");
 
   useEffect(() => {
     fetchChannel();
-    fetchPopular();
   }, []);
 
   return (
@@ -93,7 +83,7 @@ export default function PopularPost() {
                       tag: `${tab.label}4444`,
                     }}
                     updatedAt="2025.4.28"
-                  ></PostList>
+                  />
                 </Link>
                 <Link to="/post/id">
                   <PostList
@@ -103,7 +93,7 @@ export default function PopularPost() {
                       tag: `${tab.label}`,
                     }}
                     updatedAt="2025.4.28"
-                  ></PostList>
+                  />
                 </Link>
               </div>
             </div>

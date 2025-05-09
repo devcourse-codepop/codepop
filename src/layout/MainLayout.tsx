@@ -2,15 +2,15 @@ import { Outlet } from "react-router-dom";
 import Header from "../components/header/Header";
 import ChannelBox from "../components/sidebar/ChannelBox";
 import MemberBox from "../components/sidebar/MemberBox";
-import { noAuthAxiosInstance } from "../api/axios-no-auth";
+import { axiosInstance } from "../api/axios";
 import { useState, useEffect, useLayoutEffect } from "react";
 import "../css/layout/layout.css";
 
 export default function MainLayout() {
   const menuItems: ChannelItemType[] = [];
-  const [channels, setChannels] = useState<ChannelType[]>([]);
+  const [channels, setChannels] = useState<Channel[]>([]);
   const fetchChannel = async () => {
-    const result = await noAuthAxiosInstance.get("/channels");
+    const result = await axiosInstance.get("/channels");
     setChannels(result.data);
   };
   useLayoutEffect(() => {
@@ -50,14 +50,14 @@ export default function MainLayout() {
   return (
     <>
       <div className="max-w-[1500px] mx-auto">
-        <Header></Header>
+        <Header />
 
         <div className="flex px-[60px] h-[calc(100dvh-100px)]">
           <aside className="flex flex-col h-full mr-[50px] pb-[30px] box-border">
             <div className="mb-[30px]">
-              <ChannelBox channelItem={menuItems}></ChannelBox>
+              <ChannelBox channelItem={menuItems} />
             </div>
-            <MemberBox></MemberBox>
+            <MemberBox />
           </aside>
           <main className="h-full overflow-x-auto w-full pr-2.5 scroll-custom pb-[30px]">
             {/* 컨텐츠 영역 */}
