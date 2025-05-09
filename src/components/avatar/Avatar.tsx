@@ -16,7 +16,7 @@ export default function Avatar({ name, email, image, isOnline }: AvatarProps) {
     imgSrc = image;
   }
   return (
-    <div className="flex  items-center gap-4 p-4 ">
+    <div className="flex  items-center gap-x-4 gap-y-1 p-4 flex-wrap">
       <div className="relative shrink-0">
         <img
           src={imgSrc}
