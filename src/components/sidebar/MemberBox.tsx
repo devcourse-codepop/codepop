@@ -67,7 +67,7 @@ export default function MemberBox() {
   }, []);
 
   return (
-    <div className="w-[291px] h-[calc(100%-241px)] bg-white rounded-[10px] shadow-md pl-[30px] pr-[26px]  relative overflow-hidden">
+    <div className="w-[291px] max-h-[calc(100%-241px)] h-[579px] bg-white rounded-[10px] shadow-md pl-[30px] pr-[26px]  relative overflow-hidden">
       <h2 className="text-[#595656] font-medium text-[18px] mb-[13px] pt-[20px]">
         Member
       </h2>
