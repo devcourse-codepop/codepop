@@ -40,14 +40,14 @@ export default function SignUp() {
     return fullNameRegex.test(fullName);
   };
 
-  const handleUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFullName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setFullName(value);
 
-    if (fullNameError) {
-      if (value && fullNameRegex.test(value)) {
-        setFullNameError('');
-      }
+    if (value && !validateUsername(value)) {
+      setFullNameError('이름은 특수문자 없이 10글자 이하로 입력해주세요.');
+    } else {
+      setFullNameError('');
     }
   };
 
@@ -55,51 +55,24 @@ export default function SignUp() {
     const value = e.target.value;
     setEmail(value);
 
-    if (emailError) {
-      if (value && emailRegex.test(value)) {
-        setEmailError('');
-      }
+    const [id] = value.split('@');
+    if (id.split('@')[0].length < 5 || id.split('@')[0].length > 20) {
+      setEmailError('이메일 아이디는 5~20자 사이여야 합니다.');
+      return;
     }
+
+    if (!validateEmail(value)) {
+      setEmailError('이메일 형식을 확인해주세요.');
+      return;
+    }
+    setEmailError('');
   };
 
   const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setPassword(value);
 
-    if (passwordError) {
-      if (value && passwordRegex.test(value)) {
-        setPasswordError('');
-      }
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!fullName) {
-      setFullNameError('이름은 필수 입력 항목입니다.');
-      return;
-    } else if (!validateUsername(fullName)) {
-      setFullNameError('이름은 특수문자 없이 10글자 이하로 입력해주세요.');
-      return;
-    } else {
-      setFullNameError('');
-    }
-
-    if (!email) {
-      setEmailError('이메일은 필수 입력 항목입니다.');
-      return;
-    } else if (!validateEmail(email)) {
-      setEmailError('이메일 형식을 확인해주세요.');
-      return;
-    } else {
-      setEmailError('');
-    }
-
-    if (!password) {
-      setPasswordError('비밀번호는 필수 입력 항목입니다.');
-      return;
-    } else if (!validatePassword(password)) {
+    if (!validatePassword(password)) {
       setPasswordError(
         '비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.'
       );
@@ -107,19 +80,50 @@ export default function SignUp() {
     } else {
       setPasswordError('');
     }
+  };
 
-    if (password !== confirmPassword) {
+  const handleConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setConfirmPassword(value);
+
+    if (password !== value) {
       setConfirmPasswordError('비밀번호가 일치하지 않습니다.');
       return;
     } else {
       setConfirmPasswordError('');
     }
+  };
 
-    console.clear();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    setFullNameError('');
     setEmailError('');
+    setPasswordError('');
+    setConfirmPasswordError('');
+
+    if (!fullName) {
+      setFullNameError('이름은 필수 입력 항목입니다.');
+      return;
+    }
+
+    if (!email) {
+      setEmailError('이메일은 필수 입력 항목입니다.');
+      return;
+    }
+
+    if (!password) {
+      setPasswordError('비밀번호는 필수 입력 항목입니다.');
+      return;
+    }
+
+    if (!confirmPassword) {
+      setConfirmPasswordError('비밀번호 확인은 필수 입력 항목입니다.');
+      return;
+    }
+
     try {
       await signup(fullName, email, password);
-      alert('회원가입 성공');
       navigate('/login');
     } catch (err) {
       const error = err as AxiosError;
@@ -140,7 +144,7 @@ export default function SignUp() {
 
   return (
     <div className="flex flex-col justify-center items-center h-screen gap-15">
-      <img src={logo} alt="로고" className="w-50" />
+      <img src={logo} alt="Signup 로고" className="w-50" />
 
       <form className="flex flex-col">
         <div className="mb-5">
@@ -149,7 +153,7 @@ export default function SignUp() {
               value={fullName}
               type="email"
               label="Username"
-              onChange={handleUsername}
+              onChange={handleFullName}
             />
             {fullName && (
               <img
@@ -163,7 +167,7 @@ export default function SignUp() {
               />
             )}
           </div>
-          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">
+          <p className="text-sm text-red-500 pt-1 px-1 h-2.5">
             {fullNameError || '\u00A0'}
           </p>
         </div>
@@ -176,6 +180,7 @@ export default function SignUp() {
               label="Email"
               onChange={handleEmail}
             />
+
             {email && (
               <img
                 src={Delete}
@@ -188,8 +193,7 @@ export default function SignUp() {
               />
             )}
           </div>
-
-          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">
+          <p className="text-sm text-red-500 pt-1 px-1 h-2.5">
             {emailError || '\u00A0'}
           </p>
         </div>
@@ -216,21 +220,18 @@ export default function SignUp() {
             )}
           </div>
 
-          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">
+          <p className="text-sm text-red-500 pt-1 px-1 h-2.5">
             {passwordError || '\u00A0'}
           </p>
         </div>
 
-        <div className="mb-10">
+        <div className="mb-5">
           <div className="relative">
             <Input
               value={confirmPassword}
               type="password"
               label="Confirm Password"
-              onChange={(e) => {
-                setConfirmPassword(e.target.value);
-                setConfirmPasswordError('');
-              }}
+              onChange={handleConfirmPassword}
             />
 
             {confirmPassword && (
@@ -245,15 +246,14 @@ export default function SignUp() {
               />
             )}
           </div>
-
-          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">
+          <p className="text-sm text-red-500 pt-1 px-1 h-2.5">
             {confirmPasswordError || '\u00A0'}
           </p>
         </div>
 
         <Button
           value="Sign Up"
-          className="button-style1"
+          className="button-style1 mt-2"
           onClick={handleSubmit}
         />
       </form>

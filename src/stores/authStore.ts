@@ -4,6 +4,7 @@ interface User {
   _id: string;
   fullName: string;
   email: string;
+  image: string;
   coverImage: string;
   role: string;
   emailVerified: boolean;
@@ -19,7 +20,6 @@ interface AuthStore {
   login: (accessToken: string) => void;
   logout: () => void;
   setUser: (user: User) => void;
-  resetUser: () => void; // 추가
 }
 
 const storeToken = sessionStorage.getItem('token');
@@ -45,28 +45,13 @@ export const useAuthStore = create<AuthStore>((set) => ({
       _id: userData._id,
       fullName: userData.fullName,
       email: userData.email,
+      image: userData.image,
       coverImage: userData.coverImage,
       role: userData.role,
       emailVerified: true,
       banned: true,
       isOnline: true,
     };
-    set({ user, isLoading: false });
-    //set((state) => ({ ...state, user, isLoading: false }));
-  },
-
-  // 추가
-  resetUser: () => {
-    const user = {
-      _id: '',
-      fullName: '',
-      email: '',
-      coverImage: '',
-      role: '',
-      emailVerified: false,
-      banned: false,
-      isOnline: false,
-    };
-    set({ user, isLoading: true });
+    set({ user, isLoading: false, isLoggedIn: true });
   },
 }));

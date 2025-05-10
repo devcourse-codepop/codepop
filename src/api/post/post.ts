@@ -42,3 +42,11 @@ export const deletePosts = (postId: string) => {
     data: { id: postId },
   });
 };
+
+export const getAuthorPostData = (userId: string) => {
+  return axiosInstance.get<Post[]>(`/posts/author/${userId}`);
+};
+
+export const getPostData = (postId: string) => {
+  return axiosInstance.get<Post>(`/posts/${postId}`);
+};

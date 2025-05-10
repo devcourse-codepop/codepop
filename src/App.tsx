@@ -1,10 +1,12 @@
 import { useEffect } from 'react';
 import { useAuthStore } from './stores/authStore';
 import { axiosInstance } from './api/axios';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Login from './pages/login/Login';
 import SignUp from './pages/signup/SignUp';
-import Header from './components/header/Header';
+import Error from './pages/Error';
+import MainLayout from './layout/MainLayout';
+import MainContent from './pages/MainContent';
 import PostList from './pages/PostList';
 import PostDetail from './pages/PostDetail';
 
@@ -29,30 +31,45 @@ export default function App() {
     } else {
       useAuthStore.setState({ isLoading: false });
     }
-  });
+  }, []);
+
   return (
     <>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
+      {/* <Routes>
+        <Route path="/" element={<Navigate to="/signup" />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-
-        <Route path="mypage" element="" />
-        <Route path="mypage/edit" element="" />
-
-        <Route path="/user/:userId" element="" />
-
-        <Route path="channel/:channelId" element={<PostList />} />
-        <Route
-          path="channel/:channelId/post/:postId"
-          element={<PostDetail />}
-        />
-        <Route path="channel/:channelId/write" element="" />
-        <Route path="channel/:channelId/update/:postId" element="" />
-
-        <Route path="*" element="" />
+        <Route path="*" element={<Error />} />
+      </Routes> */}
+      <Routes>
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<MainContent />} />
+          <Route path="/mypage" element={<MainContent />} />
+          <Route path="/channel/:channelId" element={<PostList />} />
+          <Route
+            path="/channel/:channelId/post/:postId"
+            element={<PostDetail />}
+          />
+          <Route path="/channel/:channelId/write" element="" />
+          <Route path="/channel/:channelId/update/:postId" element="" />
+        </Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="*" element={<Error />} />
       </Routes>
+      {/* <Routes>
+        
+        <Route path="/login" element={<Login />} />
+
+
+        <Route path="/" element={< />} />
+        <Route path="channel/:channelId" element={< />} />
+        <Route path="channel/:channelId/post/:postId" element={< />} />
+        <Route path="channel/:channelId/write" element={< />} />
+        <Route path="channel/:channelId/update/:postId" element={< />} />
+
+        <Route path="*" element={< />} />
+      </Routes> */}
     </>
   );
 }

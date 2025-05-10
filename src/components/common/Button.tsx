@@ -9,7 +9,7 @@ export default function Button({
 }) {
   return (
     <>
-      <button className={className} type="submit" onClick={onClick}>
+      <button className={className} type='submit' onClick={onClick}>
         {value}
       </button>
     </>

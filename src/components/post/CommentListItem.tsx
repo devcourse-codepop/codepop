@@ -115,7 +115,7 @@ export default function CommentListItem(props: Comment) {
           <div className="py-[11px] px-4 text-sm font-normal">
             {JSON.parse(comment).content}
           </div>
-          {comment.image && (
+          {JSON.parse(comment).image && (
             <div className="px-[55px] pb-[23px]">
               <img src={JSON.parse(comment).image} />
             </div>

@@ -1,7 +1,7 @@
 import ChannelName from '../components/channel/ChannelName';
 import PostListItem from '../components/post/PostListItem';
-import ChannelBox from '../components/sidebar/ChannelBox';
-import MemberBox from '../components/sidebar/MemberBox';
+//import ChannelBox from '../components/sidebar/ChannelBox';
+//import MemberBox from '../components/sidebar/MemberBox';
 import postBtn from '../assets/PostBtn.svg';
 import { useEffect, useState } from 'react';
 import { Search } from 'lucide-react';
@@ -151,19 +151,15 @@ export default function PostList() {
 
   return (
     <>
-      {/* <div className="">
-        <Header />
-      </div> */}
-      {/* h-[calc(100vh-100px)] */}
-      <div className="flex mx-[60px] relative ">
-        <div className="flex flex-col gap-[30px] pb-[60px]">
+      {/* mx-[60px] h-[calc(100vh-100px)] */}
+      <div className="flex relative ">
+        {/* <div className="flex flex-col gap-[30px] pb-[60px]">
           <ChannelBox channelId={String(channel)} />
           <MemberBox />
-          {/* <div className="">
-            <MemberBox />
-          </div> */}
-        </div>
-        <div className="w-full ml-[50px] ">
+        </div> */}
+
+        {/* w-full ml-[50px]  */}
+        <div className="">
           <div className="flex justify-between items-end pb-[30px]">
             <div>
               <ChannelName channelId={String(channel)} />
