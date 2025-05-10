@@ -1,21 +1,43 @@
-export default function ChannelBox() {
+import { Link, useLocation } from 'react-router-dom';
+type ChannelBoxProps = {
+  channelItem: ChannelItemType[];
+};
+export default function ChannelBox({ channelItem }: ChannelBoxProps) {
+  console.log(channelItem);
+  const pathName = useLocation().pathname;
+  const menuItems = [...channelItem];
+
   return (
     <>
-      <div className='w-[291px] h-[211px] bg-white rounded-[10px] shadow-md font-semibold'>
-        <h2 className='text-[20px] font-medium text-[#595956] ml-7 mt-5 mb-[14px]'>Channel</h2>
-        <ul className='space-y-[13px]'>
-          <li className='flex items-start ml-[29px]'>
-            <span className='w-1 h-8 bg-[#10215C] rounded-sm mr-[7px]'></span>
-            <span className='font-noto font-[18px] pt-1'>이거 왜 되지?</span>
-          </li>
-          <li className='flex items-start ml-[29px]'>
-            <span className='w-1 h-8 bg-[#3380DE] rounded-sm mr-[7px]'></span>
-            <span className='font-[18px] pt-1'>이거 왜 안 쓰지?</span>
-          </li>
-          <li className='flex items-start ml-[29px] '>
-            <span className='w-1 h-8 bg-[#60A7F7] rounded-sm mr-[7px]'></span>
-            <span className='font-[18px] pt-1'>골라봐</span>
-          </li>
+      <div className="w-[291px] h-[211px] bg-white rounded-[10px] pt-5 shadow-md font-semibold">
+        <h2 className="text-[20px] font-medium text-[#595956] ml-7 mb-[14px]">
+          Channel
+        </h2>
+        <ul className="space-y-[13px]">
+          {menuItems.map((item) => (
+            <li key={item.id}>
+              <Link
+                // onClick={() => clickHandler(pathName)}
+                to={item.to}
+                className="flex items-start ml-[29px] group"
+              >
+                <span
+                  className={`w-1 h-8 rounded-sm mr-[7px]`}
+                  style={{ backgroundColor: item.color }}
+                ></span>
+                <span className="font-noto font-[18px] pt-1 relative z-1">
+                  {item.name}
+                  <span
+                    className={`block w-0 h-3/7 opacity-30 absolute left-0 bottom-0 -z-1 group-hover:w-full duration-300 ease-out`}
+                    style={{
+                      backgroundColor: item.color,
+                      width: pathName === item.to ? '100%' : '',
+                    }}
+                  ></span>
+                </span>
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
     </>

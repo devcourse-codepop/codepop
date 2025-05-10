@@ -4,6 +4,7 @@ interface User {
   _id: string;
   fullName: string;
   email: string;
+  image: string;
   coverImage: string;
   role: string;
   emailVerified: boolean;
@@ -13,6 +14,7 @@ interface User {
 
 interface AuthStore {
   isLoggedIn: boolean;
+  isLoading: boolean;
   accessToken: string | null;
   user: User | null;
   login: (accessToken: string) => void;
@@ -20,21 +22,22 @@ interface AuthStore {
   setUser: (user: User) => void;
 }
 
-const storeToken = localStorage.getItem('token');
+const storeToken = sessionStorage.getItem('token');
 
 export const useAuthStore = create<AuthStore>((set) => ({
   isLoggedIn: false,
   accessToken: storeToken,
   user: null,
+  isLoading: true,
 
   login: (accessToken) => {
-    localStorage.setItem('token', accessToken);
+    sessionStorage.setItem('token', accessToken);
     set({ accessToken, isLoggedIn: true });
   },
 
   logout: () => {
-    localStorage.removeItem('token');
-    set({ accessToken: null, isLoggedIn: false, user: null });
+    sessionStorage.removeItem('token');
+    set({ accessToken: null, isLoggedIn: false, user: null, isLoading: false });
   },
 
   setUser: (userData) => {
@@ -42,12 +45,13 @@ export const useAuthStore = create<AuthStore>((set) => ({
       _id: userData._id,
       fullName: userData.fullName,
       email: userData.email,
+      image: userData.image,
       coverImage: userData.coverImage,
       role: userData.role,
       emailVerified: true,
       banned: true,
       isOnline: true,
     };
-    set({ user });
+    set({ user, isLoading: false, isLoggedIn: true });
   },
 }));

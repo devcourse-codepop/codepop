@@ -1,13 +1,10 @@
-// components/editor/Editor.tsx
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-// import Image from "@tiptap/extension-image";
 import EditorToolbar from "./EditorToolbar";
-import "../../css/editor.css";
+
 import { CustomImage } from "./extensions/CustomImage";
 import { useState } from "react";
 import PollCreator from "../poll/PollCreater";
-// import { useEffect } from "react";
 
 interface Props {
   onChange: (html: string) => void;
@@ -47,9 +44,20 @@ export default function Editor({
       />
       <EditorContent
         editor={editor}
-        className={`prose max-w-none [&_.ProseMirror]:outline-none ${
-          disableMinHeight ? "" : "[&_.ProseMirror]:min-h-[450px]"
-        } [&_.ProseMirror]:h-auto`}
+        className={`
+        prose max-w-none [&_.ProseMirror]:outline-none
+        ${disableMinHeight ? "" : "[&_.ProseMirror]:min-h-[450px]"}
+        [&_.ProseMirror]:h-auto
+
+        [&_.ProseMirror_pre]:bg-[#ececec]
+        [&_.ProseMirror_pre]:p-4
+        [&_.ProseMirror_pre]:rounded-lg
+        [&_.ProseMirror_pre]:font-mono
+        [&_.ProseMirror_pre]:whitespace-pre-wrap
+
+        [&_.ProseMirror_img]:max-w-[30%]
+        [&_.ProseMirror_img]:h-auto
+        `}
       />
 
       {showPollCreator && onPollCreate && (
