@@ -28,7 +28,7 @@ export default function PopularPost() {
   const parseHandler = (str: string | object | null) => {
     if (typeof str === "string") {
       try {
-        const parsed = JSON.parse(str);
+        JSON.parse(str);
         return str;
       } catch {
         return `{"title":"${str}", "content":"s"}`;
