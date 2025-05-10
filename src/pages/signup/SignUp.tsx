@@ -6,11 +6,7 @@ import Delete from '../../assets/images/input-delete/input-delete.svg';
 import { useState } from 'react';
 import { signup } from '../../api/auth/signup';
 import { useNavigate } from 'react-router-dom';
-import {
-  emailRegex,
-  fullNameRegex,
-  passwordRegex,
-} from '../../utils/validators';
+import { emailRegex, fullNameRegex, passwordRegex } from '../../utils/validators';
 import { AxiosError } from 'axios';
 
 export default function SignUp() {
@@ -89,10 +85,7 @@ export default function SignUp() {
 
       if (error.response?.status === 400) {
         const message = error.response.data as string;
-        if (
-          message.toLowerCase().includes('email') &&
-          message.includes('used')
-        ) {
+        if (message.toLowerCase().includes('email') && message.includes('used')) {
           setEmailError('이미 사용 중인 이메일입니다.');
         } else {
           console.error(err);
@@ -112,15 +105,15 @@ export default function SignUp() {
               value={fullName}
               type="email"
               label="Username"
+              className={`peer cursor-pointer outline-none border border-gray-300  focus:border-[#1E293B] focus:border-2 input-style1 `}
+              placeholder=" "
               onChange={handleFullName}
               onBlur={() => {
                 if (!fullName) {
                   setFullNameError('이름은 필수 입력 항목입니다.');
                   return;
                 } else if (!validateUsername(fullName)) {
-                  setFullNameError(
-                    '이름은 특수문자 없이 10글자 이하로 입력해주세요.'
-                  );
+                  setFullNameError('이름은 특수문자 없이 10글자 이하로 입력해주세요.');
                   return;
                 } else {
                   setFullNameError('');
@@ -139,9 +132,7 @@ export default function SignUp() {
               />
             )}
           </div>
-          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">
-            {fullNameError || '\u00A0'}
-          </p>
+          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">{fullNameError || '\u00A0'}</p>
         </div>
 
         <div className="mb-5">
@@ -150,6 +141,8 @@ export default function SignUp() {
               value={email}
               type="email"
               label="Email"
+              className={`peer cursor-pointer outline-none border border-gray-300  focus:border-[#1E293B] focus:border-2 input-style1 `}
+              placeholder=" "
               onChange={handleEmail}
               onBlur={() => {
                 if (!email) {
@@ -176,9 +169,7 @@ export default function SignUp() {
               />
             )}
           </div>
-          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">
-            {emailError || '\u00A0'}
-          </p>
+          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">{emailError || '\u00A0'}</p>
         </div>
 
         <div className="mb-5">
@@ -187,15 +178,15 @@ export default function SignUp() {
               value={password}
               type="password"
               label="Password"
+              className={`peer cursor-pointer outline-none border border-gray-300  focus:border-[#1E293B] focus:border-2 input-style1 `}
+              placeholder=" "
               onChange={handlePassword}
               onBlur={() => {
                 if (!password) {
                   setPasswordError('비밀번호는 필수 입력 항목입니다.');
                   return;
                 } else if (!validatePassword(password)) {
-                  setPasswordError(
-                    '비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.'
-                  );
+                  setPasswordError('비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.');
                   return;
                 } else {
                   setPasswordError('');
@@ -216,9 +207,7 @@ export default function SignUp() {
             )}
           </div>
 
-          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">
-            {passwordError || '\u00A0'}
-          </p>
+          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">{passwordError || '\u00A0'}</p>
         </div>
 
         <div className="mb-10">
@@ -227,6 +216,8 @@ export default function SignUp() {
               value={confirmPassword}
               type="password"
               label="Confirm Password"
+              className={`peer cursor-pointer outline-none border border-gray-300  focus:border-[#1E293B] focus:border-2 input-style1 `}
+              placeholder=" "
               onChange={handleConfirmPassword}
               onBlur={() => {
                 if (password !== confirmPassword) {
@@ -251,16 +242,10 @@ export default function SignUp() {
             )}
           </div>
 
-          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">
-            {confirmPasswordError || '\u00A0'}
-          </p>
+          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">{confirmPasswordError || '\u00A0'}</p>
         </div>
 
-        <Button
-          value="Sign Up"
-          className="button-style1"
-          onClick={handleSubmit}
-        />
+        <Button value="Sign Up" className="button-style1" onClick={handleSubmit} />
       </form>
     </div>
   );
