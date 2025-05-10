@@ -62,7 +62,7 @@ interface User {
   email: string;
   coverImage: string;
   image: string;
-  role: "Admin" | "Regular" | string;
+  role: 'Admin' | 'Regular' | string;
   emailVerified: boolean;
   banned: boolean;
   isOnline: boolean;
@@ -79,12 +79,12 @@ interface User {
 
 type UserInfo = {
   userData: User | null;
-  onSelectTab: React.Dispatch<React.SetStateAction<"posts" | "likes" | "comments">>;
+  onSelectTab: React.Dispatch<React.SetStateAction<'posts' | 'likes' | 'comments'>>;
 };
 
 type UserPostInfo = {
   userData: User | null;
-  selectedTab: "posts" | "likes" | "comments";
+  selectedTab: 'posts' | 'likes' | 'comments';
 };
 
 //Conversation, Notification 제외
@@ -101,11 +101,11 @@ interface EditMenuProps {
   onClose: () => void;
 }
 
-interface PhotoUploadModalProps {
+type PhotoUploadModalProps = {
   isOpen: boolean;
-  isCover: boolean;
   onClose: () => void;
-}
+  onSave: (file: File, previewUrl: string) => void;
+};
 
 type EnteredErrorValues = {
   myNameError: string;
@@ -113,8 +113,8 @@ type EnteredErrorValues = {
   confirmPasswordError: string;
 };
 
-declare module "react-js-pagination" {
-  import * as React from "react";
+declare module 'react-js-pagination' {
+  import * as React from 'react';
 
   export interface PaginationProps {
     activePage: number;
