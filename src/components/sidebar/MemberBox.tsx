@@ -1,64 +1,18 @@
 import { Search } from "lucide-react";
 import Avatar from "../avatar/Avatar";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { axiosInstance } from "../../api/axios";
+import { getAllUsersData } from "../../api/memberbox/member";
 
 export default function MemberBox() {
-  // const user22s = [
-  //   {
-  //     name: "홍길동",
-  //     email: "hong@gmail.com",
-  //     image: avatar,
-  //   },
-  //   {
-  //     name: "차은우",
-  //     email: "cha@gmail.com",
-  //     image: avatar,
-  //   },
-  //   {
-  //     name: "장원영",
-  //     email: "jang@gmail.com",
-  //     image: avatar,
-  //   },
-  //   {
-  //     name: "홍길동2",
-  //     email: "hong2@gmail.com",
-  //     image: avatar,
-  //   },
-  //   {
-  //     name: "차은우2",
-  //     email: "cha2@gmail.com",
-  //     image: avatar,
-  //   },
-  //   {
-  //     name: "장원영2",
-  //     email: "jang2@gmail.com",
-  //     image: avatar,
-  //   },
-  //   {
-  //     name: "홍길동3",
-  //     email: "hong2@gmail.com",
-  //     image: avatar,
-  //   },
-  //   {
-  //     name: "차은우3",
-  //     email: "cha2@gmail.com",
-  //     image: avatar,
-  //   },
-  //   {
-  //     name: "장원영3",
-  //     email: "jang2@gmail.com",
-  //     image: avatar,
-  //   },
-  // ];
   const [searchKeyword, setSearchKeyword] = useState<string>("");
   const [users, setUsers] = useState<User[]>([]);
   const searchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value);
   };
+
   const fetchUsers = async () => {
-    const result = await axiosInstance.get("/users/get-users");
+    const result = await getAllUsersData();
     setUsers(result.data);
   };
 

@@ -1,29 +1,18 @@
 import { useEffect, useState } from "react";
 import PostList from "../post/PostList";
 import { Link } from "react-router-dom";
-import { axiosInstance } from "../../api/axios";
 import { useChannelItemStore } from "../../stores/channelStore";
+import { getPopularPostData } from "../../api/post/post";
 
 export default function PopularPost() {
   const { channels, fetchChannels } = useChannelItemStore();
   const [activeTab, setActiveTab] = useState(0);
   const [sortPopulars, setSortPopulars] = useState<Post[]>([]);
-  const fetchPosts = async (channelId: string) => {
-    const result = await axiosInstance.get(`/posts/channel/${channelId}`);
-    return result.data;
-  };
-  const tabClickHandler = async (channelId: string, index: number) => {
-    setActiveTab(index);
-    const data = await fetchPosts(channelId);
-    const sortPost = data.sort((a: Post, b: Post) => {
-      const aLike = a.likes.length + a.comments.length;
-      const bLike = b.likes.length + b.comments.length;
 
-      return bLike - aLike === 0
-        ? b.comments.length - a.comments.length
-        : bLike - aLike;
-    });
-    setSortPopulars(sortPost);
+  const tabClickHandler = async (channelId: string, index: number) => {
+    const data = await getPopularPostData(channelId);
+    setActiveTab(index);
+    setSortPopulars(data);
   };
 
   useEffect(() => {
@@ -48,6 +37,7 @@ export default function PopularPost() {
     }
     return str;
   };
+
   return (
     <>
       <div className="bg-white w-full rounded-[10px] px-[30px] py-[25px] shadow-md">
