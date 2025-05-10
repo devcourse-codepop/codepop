@@ -159,14 +159,14 @@ export default function PostList() {
         </div> */}
 
         {/* w-full ml-[50px]  */}
-        <div className="">
+        <div className="w-full">
           <div className="flex justify-between items-end pb-[30px]">
             <div>
               <ChannelName channelId={String(channel)} />
             </div>
             <div className="flex gap-2.5">
               {/* <SearchPost /> */}
-              <div className="w-[205px] h-[31px]  flex items-center bg-white rounded-[5px] px-2.5 py-2">
+              <div className="w-[205px] h-[31px] flex items-center bg-white rounded-[5px] px-2.5 py-2">
                 <input
                   type="text"
                   value={input}
@@ -240,7 +240,7 @@ export default function PostList() {
                 .map((item) => <PostListItem key={item._id} {...item} />)}
           </div>
         </div>
-        <div className="absolute right-[-30px] bottom-7 cursor-pointer">
+        <div className="absolute right-0 bottom-7 cursor-pointer">
           {/* <img src={postBtn} alt="게시글 작성 버튼" /> */}
           <img src={postBtn} onClick={createNewPost} alt="게시글 작성 버튼" />
         </div>

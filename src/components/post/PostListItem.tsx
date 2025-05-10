@@ -54,22 +54,21 @@ export default function PostListItem(props: Post) {
 
   return (
     <>
-      <div
-        className="w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] cursor-pointer relative"
-        onClick={clickPostHandler}
-      >
+      <div className="w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative">
         <div className="flex justify-between h-[85px] pl-3 pt-2.5">
           <Avatar
-            name={author.fullName}
-            email={author.email}
-            image={author.image}
+            name={author?.fullName}
+            email={author?.email}
+            image={author?.image}
+            isOnline={author?.isOnline}
           />
         </div>
         <div
           className={twMerge(
-            'flex justify-between px-[55px] py-[15px] gap-[55px]',
+            'flex justify-between px-[55px] py-[15px] gap-[55px] cursor-pointer',
             !image && 'py-[23px]'
           )}
+          onClick={clickPostHandler}
         >
           <div className="flex flex-col justify-center gap-[22px] ">
             <div className="text-[18px] font-semibold">

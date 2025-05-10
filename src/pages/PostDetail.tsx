@@ -46,7 +46,9 @@ export default function PostDetail() {
           <ChannelBox channelId={String(channel)} />
           <MemberBox />
         </div> */}
-      <div className="w-full ml-[50px]">
+
+      {/* ml-[50px] */}
+      <div className="w-full">
         <div className="flex justify-between items-end pb-[30px]">
           <ChannelName channelId={String(channel)} />
         </div>

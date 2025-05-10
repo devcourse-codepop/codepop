@@ -45,9 +45,9 @@ export default function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<MainContent />} />
           <Route path="/mypage" element={<MainContent />} />
-          <Route path="/channel/:channelId" element={<PostList />} />
+          <Route path="channel/:channelId" element={<PostList />} />
           <Route
-            path="/channel/:channelId/post/:postId"
+            path="channel/:channelId/post/:postId"
             element={<PostDetail />}
           />
           <Route path="/channel/:channelId/write" element="" />
