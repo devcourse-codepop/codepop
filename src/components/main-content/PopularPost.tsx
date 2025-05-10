@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { useChannelItemStore } from "../../stores/channelStore";
 import { getPopularPostData } from "../../api/post/post";
+import { Post } from "../../types";
 import PostListItem from "../post/PostListItem";
 
 export default function PopularPost() {
