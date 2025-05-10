@@ -5,19 +5,17 @@ type InputProps = Omit<React.ComponentPropsWithoutRef<'input'>, 'type'> & {
   type?: Exclude<ReactInputType, 'radio' | 'checkbox' | 'range'>;
   label?: string;
   value: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: () => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export default function Input(props: InputProps) {
-  const { label, value, onChange, onBlur, ...rest } = props;
+  const { label, value, onChange, ...rest } = props;
   return (
     <div className='relative'>
       <input
         value={value}
         type={rest.type}
         onChange={onChange}
-        onBlur={onBlur}
         // className={`peer cursor-pointer outline-none border border-gray-300  focus:border-[#1E293B] focus:border-2 input-style1 `}
         {...rest}
       />

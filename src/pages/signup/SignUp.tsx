@@ -40,7 +40,9 @@ export default function SignUp() {
     const value = e.target.value;
     setFullName(value);
 
-    if (value && fullNameError) {
+    if (value && !validateUsername(value)) {
+      setFullNameError('이름은 특수문자 없이 10글자 이하로 입력해주세요.');
+    } else {
       setFullNameError('');
     }
   };
@@ -49,16 +51,27 @@ export default function SignUp() {
     const value = e.target.value;
     setEmail(value);
 
-    if (value && emailError) {
-      setEmailError('');
+    const [id] = value.split('@');
+    if (id.split('@')[0].length < 5 || id.split('@')[0].length > 20) {
+      setEmailError('이메일 아이디는 5~20자 사이여야 합니다.');
+      return;
     }
+
+    if (!validateEmail(value)) {
+      setEmailError('이메일 형식을 확인해주세요.');
+      return;
+    }
+    setEmailError('');
   };
 
   const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setPassword(value);
 
-    if (value && passwordError) {
+    if (!validatePassword(password)) {
+      setPasswordError('비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.');
+      return;
+    } else {
       setPasswordError('');
     }
   };
@@ -67,7 +80,10 @@ export default function SignUp() {
     const value = e.target.value;
     setConfirmPassword(value);
 
-    if (value && confirmPasswordError) {
+    if (password !== value) {
+      setConfirmPasswordError('비밀번호가 일치하지 않습니다.');
+      return;
+    } else {
       setConfirmPasswordError('');
     }
   };
@@ -75,8 +91,31 @@ export default function SignUp() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // console.clear();
-    // setEmailError('');
+    setFullNameError('');
+    setEmailError('');
+    setPasswordError('');
+    setConfirmPasswordError('');
+
+    if (!fullName) {
+      setFullNameError('이름은 필수 입력 항목입니다.');
+      return;
+    }
+
+    if (!email) {
+      setEmailError('이메일은 필수 입력 항목입니다.');
+      return;
+    }
+
+    if (!password) {
+      setPasswordError('비밀번호는 필수 입력 항목입니다.');
+      return;
+    }
+
+    if (!confirmPassword) {
+      setConfirmPasswordError('비밀번호 확인은 필수 입력 항목입니다.');
+      return;
+    }
+
     try {
       await signup(fullName, email, password);
       navigate('/login');
@@ -95,157 +134,115 @@ export default function SignUp() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen gap-15">
-      <img src={logo} alt="로고" className="w-50" />
+    <div className='flex flex-col justify-center items-center h-screen gap-15'>
+      <img src={logo} alt='Signup 로고' className='w-50' />
 
-      <form className="flex flex-col">
-        <div className="mb-5">
-          <div className="relative">
+      <form className='flex flex-col'>
+        <div className='mb-5'>
+          <div className='relative'>
             <Input
               value={fullName}
-              type="email"
-              label="Username"
+              type='email'
+              label='Username'
               className={`peer cursor-pointer outline-none border border-gray-300  focus:border-[#1E293B] focus:border-2 input-style1 `}
-              placeholder=" "
+              placeholder=' '
               onChange={handleFullName}
-              onBlur={() => {
-                if (!fullName) {
-                  setFullNameError('이름은 필수 입력 항목입니다.');
-                  return;
-                } else if (!validateUsername(fullName)) {
-                  setFullNameError('이름은 특수문자 없이 10글자 이하로 입력해주세요.');
-                  return;
-                } else {
-                  setFullNameError('');
-                }
-              }}
             />
             {fullName && (
               <img
                 src={Delete}
-                alt="삭제"
+                alt='삭제'
                 onClick={() => {
                   setFullName('');
                   setFullNameError('');
                 }}
-                className="absolute w-[20px] h-[20px] right-5 top-1/2 -translate-y-1/2 cursor-pointer"
+                className='absolute w-[20px] h-[20px] right-5 top-1/2 -translate-y-1/2 cursor-pointer'
               />
             )}
           </div>
-          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">{fullNameError || '\u00A0'}</p>
+          <p className='text-sm text-red-500 pt-1 px-1 h-2.5'>{fullNameError || '\u00A0'}</p>
         </div>
 
-        <div className="mb-5">
-          <div className="relative">
+        <div className='mb-5'>
+          <div className='relative'>
             <Input
               value={email}
-              type="email"
-              label="Email"
+              type='email'
+              label='Email'
               className={`peer cursor-pointer outline-none border border-gray-300  focus:border-[#1E293B] focus:border-2 input-style1 `}
-              placeholder=" "
+              placeholder=' '
               onChange={handleEmail}
-              onBlur={() => {
-                if (!email) {
-                  setEmailError('이메일은 필수 입력 항목입니다.');
-                  return;
-                } else if (!validateEmail(email)) {
-                  setEmailError('이메일 형식을 확인해주세요.');
-                  return;
-                } else {
-                  setEmailError('');
-                }
-              }}
             />
 
             {email && (
               <img
                 src={Delete}
-                alt="삭제"
+                alt='삭제'
                 onClick={() => {
                   setEmail('');
                   setEmailError('');
                 }}
-                className="absolute w-[20px] h-[20px] right-5 top-1/2 -translate-y-1/2 cursor-pointer"
+                className='absolute w-[20px] h-[20px] right-5 top-1/2 -translate-y-1/2 cursor-pointer'
               />
             )}
           </div>
-          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">{emailError || '\u00A0'}</p>
+          <p className='text-sm text-red-500 pt-1 px-1 h-2.5'>{emailError || '\u00A0'}</p>
         </div>
 
-        <div className="mb-5">
-          <div className="relative">
+        <div className='mb-5'>
+          <div className='relative'>
             <Input
               value={password}
-              type="password"
-              label="Password"
+              type='password'
+              label='Password'
               className={`peer cursor-pointer outline-none border border-gray-300  focus:border-[#1E293B] focus:border-2 input-style1 `}
-              placeholder=" "
+              placeholder=' '
               onChange={handlePassword}
-              onBlur={() => {
-                if (!password) {
-                  setPasswordError('비밀번호는 필수 입력 항목입니다.');
-                  return;
-                } else if (!validatePassword(password)) {
-                  setPasswordError('비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.');
-                  return;
-                } else {
-                  setPasswordError('');
-                }
-              }}
             />
 
             {password && (
               <img
                 src={Delete}
-                alt="삭제"
+                alt='삭제'
                 onClick={() => {
                   setPassword('');
                   setPasswordError('');
                 }}
-                className="absolute w-[20px] h-[20px] right-5 top-1/2 -translate-y-1/2 cursor-pointer"
+                className='absolute w-[20px] h-[20px] right-5 top-1/2 -translate-y-1/2 cursor-pointer'
               />
             )}
           </div>
 
-          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">{passwordError || '\u00A0'}</p>
+          <p className='text-sm text-red-500 pt-1 px-1 h-2.5'>{passwordError || '\u00A0'}</p>
         </div>
 
-        <div className="mb-10">
-          <div className="relative">
+        <div className='mb-5'>
+          <div className='relative'>
             <Input
               value={confirmPassword}
-              type="password"
-              label="Confirm Password"
+              type='password'
+              label='Confirm Password'
               className={`peer cursor-pointer outline-none border border-gray-300  focus:border-[#1E293B] focus:border-2 input-style1 `}
-              placeholder=" "
+              placeholder=' '
               onChange={handleConfirmPassword}
-              onBlur={() => {
-                if (password !== confirmPassword) {
-                  setConfirmPasswordError('비밀번호가 일치하지 않습니다.');
-                  return;
-                } else {
-                  setConfirmPasswordError('');
-                }
-              }}
             />
 
             {confirmPassword && (
               <img
                 src={Delete}
-                alt="삭제"
+                alt='삭제'
                 onClick={() => {
                   setConfirmPassword('');
                   setConfirmPasswordError('');
                 }}
-                className="absolute w-[20px] h-[20px] right-5 top-1/2 -translate-y-1/2 cursor-pointer"
+                className='absolute w-[20px] h-[20px] right-5 top-1/2 -translate-y-1/2 cursor-pointer'
               />
             )}
           </div>
-
-          <p className="text-sm text-red-500 pt-1 px-2 h-2.5">{confirmPasswordError || '\u00A0'}</p>
+          <p className='text-sm text-red-500 pt-1 px-1 h-2.5'>{confirmPasswordError || '\u00A0'}</p>
         </div>
 
-        <Button value="Sign Up" className="button-style1" onClick={handleSubmit} />
+        <Button value='Sign Up' className='button-style1 mt-2' onClick={handleSubmit} />
       </form>
     </div>
   );
