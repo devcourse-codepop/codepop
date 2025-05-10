@@ -33,7 +33,7 @@ export default function PollCreator({ onCreate }: PollCreatorProps) {
   }, [options, onCreate]);
 
   return (
-    <div className="p-4 max-w-md mb-[25px] bg-white rounded shadow">
+    <div className="p-4 max-w-md mt-[25px] mb-[25px] bg-white rounded shadow">
       <h2 className="text-xl font-bold mb-2">Create Poll</h2>
       {options.map((opt, i) => (
         <input

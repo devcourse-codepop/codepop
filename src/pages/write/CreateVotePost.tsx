@@ -81,6 +81,7 @@ export default function CreateVotePost() {
               onPollCreate={handlePollCreate}
               onImageSelect={(file) => setImageFile(file)} // 이미지 저장
               showPollButton={true}
+              disableMinHeight={true}
             />
             <hr className="absolute bottom-[80px]  w-[955px] opacity-30" />
             <Button

@@ -15,6 +15,7 @@ interface Props {
   onImageSelect?: (file: File) => void; // 추가
   showPollButton?: boolean;
   showCodeButton?: boolean;
+  disableMinHeight?: boolean;
 }
 
 export default function Editor({
@@ -23,6 +24,7 @@ export default function Editor({
   onImageSelect,
   showPollButton = false,
   showCodeButton = false,
+  disableMinHeight = false,
 }: Props) {
   const editor = useEditor({
     extensions: [StarterKit, CustomImage],
@@ -45,8 +47,11 @@ export default function Editor({
       />
       <EditorContent
         editor={editor}
-        className="prose max-w-none [&_.ProseMirror]:outline-none  [&_.ProseMirror]:min-h-[450px] [&_.ProseMirror]:h-auto"
+        className={`prose max-w-none [&_.ProseMirror]:outline-none ${
+          disableMinHeight ? "" : "[&_.ProseMirror]:min-h-[450px]"
+        } [&_.ProseMirror]:h-auto`}
       />
+
       {showPollCreator && onPollCreate && (
         <PollCreator onCreate={onPollCreate} />
       )}
