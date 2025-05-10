@@ -1,9 +1,8 @@
-<<<<<<< HEAD
 import { useEffect, useState } from "react";
-import PostList from "../post/PostList";
 import { Link } from "react-router-dom";
 import { useChannelItemStore } from "../../stores/channelStore";
 import { getPopularPostData } from "../../api/post/post";
+import PostListItem from "../post/PostListItem";
 
 export default function PopularPost() {
   const { channels, fetchChannels } = useChannelItemStore();
@@ -30,13 +29,12 @@ export default function PopularPost() {
     if (typeof str === "string") {
       try {
         const parsed = JSON.parse(str);
-        return parsed;
-      } catch (e) {
-        console.log(e);
         return str;
+      } catch {
+        return `{"title":"${str}", "content":"s"}`;
       }
     }
-    return str;
+    return `{"title":"${str}", "content":""}`;
   };
 
   return (
@@ -88,23 +86,18 @@ export default function PopularPost() {
                   해당 채널에 게시글이 없습니다.
                 </p>
               ) : (
-                sortPopulars.map((popular, pIndex) => {
-                  const postTitle =
-                    popular.title !== null &&
-                    typeof parseHandler(popular.title) === "string"
-                      ? parseHandler(popular.title)
-                      : parseHandler(popular.title)["title"] ?? "";
-                  const postContent =
-                    popular.title !== null &&
-                    typeof parseHandler(popular.title) === "string"
-                      ? ""
-                      : parseHandler(popular.title)["content"] ?? "";
+                sortPopulars.slice(0, 2).map((popular, pIndex) => {
+                  const parsePopular: Post = {
+                    ...popular,
+                    title: parseHandler(popular.title),
+                  };
+                  console.log(parsePopular);
                   return (
-                    <Link
-                      key={`post-${pIndex}`}
-                      to={`/post/:${popular._id}`}
-                      className="basis-[calc(50%-0.875rem)]  max-w-full"
+                    <div
+                      key={`popular-${pIndex}`}
+                      className="tabConstentItem basis-[calc(50%-0.875rem)]  max-w-full"
                     >
+                      <PostListItem {...parsePopular} />
                       {/* <PostList
                         title={{
                           title: `${postTitle}`,
@@ -113,7 +106,7 @@ export default function PopularPost() {
                         }}
                         updatedAt={popular.createdAt.split("T")[0]}
                       /> */}
-                    </Link>
+                    </div>
                   );
                 })
               )}
