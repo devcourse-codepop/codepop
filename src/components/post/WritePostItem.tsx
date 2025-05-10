@@ -4,7 +4,7 @@ import ImageIcon from "../icon/ImageIcon";
 import CodeEditIcon from "../icon/CodeEditIcon";
 import VoteIcon from "../icon/VoteIcon";
 
-export default function WritePost({ channelId }: { channelId: string }) {
+export default function WritePostItem({ channelId }: { channelId: string }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   // const [tag, setTag] = useState("");
@@ -62,7 +62,7 @@ export default function WritePost({ channelId }: { channelId: string }) {
 
   return (
     <>
-      <div className="w-[999px] h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)]">
+      <div className="w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)]">
         <form onSubmit={(e) => submitHandler(e)}>
           <textarea
             id="title"
@@ -73,10 +73,9 @@ export default function WritePost({ channelId }: { channelId: string }) {
             placeholder="제목"
             className="w-full h-[96px] text-[35px] px-[32px] py-[22px] resize-none outline-none"
           />
-          <hr className="w-[955px] mx-[22px] text-[#b2b2b2]" />
-          {/* <div className="h-[26px]">icon section</div> */}
-          <div className="w-full h-[36px] relative">
-            <div className="inline-block absolute right-[25px] top-[22px]">
+          <hr className="mx-[22px] text-[#b2b2b2]" />
+          <div className="w-full h-[66px] flex justify-end items-center">
+            <div className="pr-[25px]">
               {channelId === "1" && <CodeEditIcon />}
               {channelId === "3" && <VoteIcon />}
               <ImageIcon />
@@ -89,9 +88,9 @@ export default function WritePost({ channelId }: { channelId: string }) {
             value={content}
             onChange={(e) => changeContentHandler(e)}
             placeholder="내용"
-            className="w-full h-[550px] text-[30px] px-[38px] py-[7px] resize-none outline-none"
+            className="w-full h-[520px] text-[30px] px-[38px] py-[7px] resize-none outline-none"
           />
-          <hr className="w-[955px] mx-[22px] text-[#b2b2b2]" />
+          <hr className="mx-[22px] text-[#b2b2b2]" />
           <div className="w-full h-[84px] relative">
             <div className="inline-block absolute right-[20px] bottom-[15px]">
               <Button value="완료" className="button-style2" />

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useEffect, useState } from "react";
 import PostList from "../post/PostList";
 import { Link } from "react-router-dom";
@@ -104,14 +105,14 @@ export default function PopularPost() {
                       to={`/post/:${popular._id}`}
                       className="basis-[calc(50%-0.875rem)]  max-w-full"
                     >
-                      <PostList
+                      {/* <PostList
                         title={{
                           title: `${postTitle}`,
                           content: `${postContent}`,
                           tag: `아마 태그 없앴던거 같음`,
                         }}
                         updatedAt={popular.createdAt.split("T")[0]}
-                      />
+                      /> */}
                     </Link>
                   );
                 })

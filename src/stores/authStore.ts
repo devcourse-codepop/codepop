@@ -4,6 +4,7 @@ interface User {
   _id: string;
   fullName: string;
   email: string;
+  image: string;
   coverImage: string;
   role: string;
   emailVerified: boolean;
@@ -44,12 +45,13 @@ export const useAuthStore = create<AuthStore>((set) => ({
       _id: userData._id,
       fullName: userData.fullName,
       email: userData.email,
+      image: userData.image,
       coverImage: userData.coverImage,
       role: userData.role,
       emailVerified: true,
       banned: true,
       isOnline: true,
     };
-    set({ user, isLoading: false });
+    set({ user, isLoading: false, isLoggedIn: true });
   },
 }));
