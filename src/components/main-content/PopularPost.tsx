@@ -39,8 +39,8 @@ export default function PopularPost() {
 
   return (
     <>
-      <div className="bg-white w-full rounded-[10px] px-[30px] py-[25px] shadow-md">
-        <h3 className="font-semibold text-[#595956] text-[18px] mb-[25px]">
+      <div className="bg-white w-full rounded-[10px] px-[30px] py-[25px] pt-[20px] shadow-md">
+        <h3 className="font-semibold text-[#595956] text-[18px] mb-[20px]">
           Popular Posts
         </h3>
         <ul className="flex relative gap-x-5 gap-y-2.5 mb-4.5 flex-wrap">
