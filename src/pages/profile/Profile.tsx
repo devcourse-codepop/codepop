@@ -31,7 +31,7 @@ export default function Profile({ userId }: { userId: string }) {
   return (
     <div className='w-full h-[calc(100vh-100px-30px)] bg-white rounded-[10px] shadow-md font-semibold overflow-hidden flex flex-col'>
       <div className='h-[223px] flex-shrink-0'>
-        <img src={userData?.coverImage} className='w-full h-full rounded-t-[10px] ' alt='BackgroundImage' />
+        <img src={userData?.coverImage} className='w-full h-full rounded-t-[10px] object-fill' alt='BackgroundImage ' />
       </div>
       <div className=' flex  overflow-hidden'>
         <ProfileLeft userData={userData} onSelectTab={setSelectedTab} />
