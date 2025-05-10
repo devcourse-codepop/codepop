@@ -1,8 +1,8 @@
-import { Search } from "lucide-react";
-import Avatar from "../avatar/Avatar";
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { axiosInstance } from "../../api/axios";
+import { Search } from 'lucide-react';
+import Avatar from '../avatar/Avatar';
+import React, { useLayoutEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { axiosInstance } from '../../api/axios';
 
 export default function MemberBox() {
   // const user22s = [
@@ -52,13 +52,13 @@ export default function MemberBox() {
   //     image: avatar,
   //   },
   // ];
-  const [searchKeyword, setSearchKeyword] = useState<string>("");
+  const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [users, setUsers] = useState<User[]>([]);
   const searchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value);
   };
   const fetchUsers = async () => {
-    const result = await axiosInstance.get("/users/get-users");
+    const result = await axiosInstance.get('/users/get-users');
     setUsers(result.data);
   };
 

@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from 'react-router-dom';
 type ChannelBoxProps = {
   channelItem: ChannelItemType[];
 };
@@ -31,7 +31,7 @@ export default function ChannelBox({ channelItem }: ChannelBoxProps) {
                     className={`block w-0 h-3/7 opacity-30 absolute left-0 bottom-0 -z-1 group-hover:w-full duration-300 ease-out`}
                     style={{
                       backgroundColor: item.color,
-                      width: pathName === item.to ? "100%" : "",
+                      width: pathName === item.to ? '100%' : '',
                     }}
                   ></span>
                 </span>

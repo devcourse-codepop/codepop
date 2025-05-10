@@ -1,44 +1,44 @@
-import { Outlet } from "react-router-dom";
-import Header from "../components/header/Header";
-import ChannelBox from "../components/sidebar/ChannelBox";
-import MemberBox from "../components/sidebar/MemberBox";
-import { axiosInstance } from "../api/axios";
-import { useState, useEffect, useLayoutEffect } from "react";
-import "../css/layout/layout.css";
+import { Outlet } from 'react-router-dom';
+import Header from '../components/header/Header';
+import ChannelBox from '../components/sidebar/ChannelBox';
+import MemberBox from '../components/sidebar/MemberBox';
+import { axiosInstance } from '../api/axios';
+import { useState, useLayoutEffect } from 'react';
+import '../css/layout/layout.css';
 
 export default function MainLayout() {
   const menuItems: ChannelItemType[] = [];
   const [channels, setChannels] = useState<Channel[]>([]);
   const fetchChannel = async () => {
-    const result = await axiosInstance.get("/channels");
+    const result = await axiosInstance.get('/channels');
     setChannels(result.data);
   };
   useLayoutEffect(() => {
     fetchChannel();
   }, []);
   channels.map((channel, index) => {
-    let cName = "";
-    let cColor = "";
-    let cTo = "";
+    let cName = '';
+    let cColor = '';
+    let cTo = '';
     switch (channel.name) {
-      case "MysteryCode":
-        cName = "이거 왜 되지?";
-        cColor = "#10215C";
-        cTo = "/channel/1";
+      case 'MysteryCode':
+        cName = '이거 왜 되지?';
+        cColor = '#10215C';
+        cTo = '/channel/1';
         break;
-      case "DeskSetup":
-        cName = "이거 왜 안 쓰지?";
-        cColor = "#3380DE";
-        cTo = "/channel/2";
+      case 'DeskSetup':
+        cName = '이거 왜 안 쓰지?';
+        cColor = '#3380DE';
+        cTo = '/channel/2';
         break;
-      case "Vote":
-        cName = "골라봐";
-        cColor = "#60A7F7";
-        cTo = "/channel/3";
+      case 'Vote':
+        cName = '골라봐';
+        cColor = '#60A7F7';
+        cTo = '/channel/3';
         break;
       default:
         cName = channel.name;
-        cColor = "#10215C";
+        cColor = '#10215C';
     }
     menuItems[index] = {
       id: channel._id,
