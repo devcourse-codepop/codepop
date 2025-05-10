@@ -46,7 +46,7 @@ export default function Editor({
         editor={editor}
         className={`
         prose max-w-none [&_.ProseMirror]:outline-none
-        ${disableMinHeight ? "" : "[&_.ProseMirror]:min-h-[450px]"}
+        ${disableMinHeight ? "" : "[&_.ProseMirror]:min-h-[365px]"}
         [&_.ProseMirror]:h-auto
 
         [&_.ProseMirror_pre]:bg-[#ececec]

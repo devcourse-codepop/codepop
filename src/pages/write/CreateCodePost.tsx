@@ -41,7 +41,7 @@ export default function CreateCodePost() {
         pollOptions: pollOptions,
       })
     );
-    formData.append("channelId", channelId);
+    formData.append("channelId", "681b84d4437f722b6908ab61");
 
     if (imageFile) {
       formData.append("image", imageFile); // 이미지 파일 추가
@@ -57,16 +57,13 @@ export default function CreateCodePost() {
   };
 
   return (
-    <div className="w-full max-w-[1440px] mx-auto min-h-screen h-auto flex items-start justify-center relative">
-      <div className="justify-center mb-[60px]">
-        <div className="ml-[384px] mt-[30px]">
-          <ChannelName
-            subtitle='"이거 왜 되지?"'
-            title="미스터리 코드 공유 채널"
-          />
+    <div className="w-full flex relative">
+      <div>
+        <div className="pb-[30px]">
+          <ChannelName channelId={channelId ?? "1"} />
         </div>
 
-        <div className="ml-[381px] w-[999px] min-h-[766px] h-auto bg-white shadow-md rounded-[5px] p-5 relative">
+        <div className=" bg-white shadow-md rounded-[10px] p-5 relative">
           <input
             type="text"
             ref={titleRef}
@@ -74,14 +71,14 @@ export default function CreateCodePost() {
             autoFocus
             className="w-[955px] font-semibold text-[25px] m-3 outline-none"
           />
-          <hr className="mt-[14px] mb-[15px] opacity-30" />
+          <hr className="mt-[15px] mb-[15px] opacity-30" />
           <Editor
             onChange={setContent}
             onPollCreate={handlePollCreate}
             onImageSelect={(file) => setImageFile(file)} // 이미지 저장
             showCodeButton={true}
           />
-          <hr className="absolute bottom-[80px]  w-[955px] opacity-30" />
+          <hr className="mb-[60px] opacity-30" />
           <Button
             value="완료"
             className="button-style2 absolute bottom-[15px] right-[20px]"
