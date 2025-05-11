@@ -13,7 +13,14 @@ export default function MemberBox() {
 
   const fetchUsers = async () => {
     const result = await getAllUsersData();
-    setUsers(result.data);
+    setUsers(
+      result.data.sort((a, b) => {
+        if (a.isOnline === b.isOnline) {
+          return a.fullName.localeCompare(b.fullName); // 이름 오름차순
+        }
+        return a.isOnline ? -1 : 1; // 온라인 먼저
+      })
+    );
   };
 
   useLayoutEffect(() => {
