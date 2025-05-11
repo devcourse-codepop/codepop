@@ -5,7 +5,7 @@ import { useAuthStore } from "../../stores/authStore";
 
 export default function Header() {
   const { isLoggedIn, user, logout } = useAuthStore();
-  console.log(user?.image);
+
   let imgSrc: string = "";
   if (user?.image === undefined || user?.image === "") {
     imgSrc =
