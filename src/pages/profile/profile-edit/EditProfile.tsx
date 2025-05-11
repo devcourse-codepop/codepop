@@ -152,21 +152,33 @@ export default function EditProfile({ userId }: { userId: string }) {
       return;
     }
 
-    await axiosInstance.put('/settings/update-user', { fullName: myName, username: myName });
-    await axiosInstance.put('/settings/update-password', { password });
+    try {
+      await axiosInstance.put('/settings/update-user', { fullName: myName, username: myName });
+      await axiosInstance.put('/settings/update-password', { password });
 
-    const imagePath = isCover ? coverImage : profileImage;
-    if (imagePath) {
-      const formData = new FormData();
-      formData.append('image', imagePath);
-      formData.append('isCover', String(isCover));
-      await axiosInstance.post('/users/upload-photo', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      if (coverImage) {
+        const formDataCover = new FormData();
+        formDataCover.append('image', coverImage);
+        formDataCover.append('isCover', 'true');
+        await axiosInstance.post('/users/upload-photo', formDataCover, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+      }
+
+      if (profileImage) {
+        const formDataProfile = new FormData();
+        formDataProfile.append('image', profileImage);
+        formDataProfile.append('isCover', 'false');
+        await axiosInstance.post('/users/upload-photo', formDataProfile, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+      }
+
+      setDidEdit(true);
+      navigate('/profile');
+    } catch (error) {
+      console.error('프로필 저장 중 오류 발생:', error);
     }
-
-    setDidEdit(true);
-    navigate('/profile');
   };
 
   const validatePassword = (password: string) => passwordRegex.test(password);
