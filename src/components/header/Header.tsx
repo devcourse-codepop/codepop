@@ -5,13 +5,13 @@ import { useAuthStore } from "../../stores/authStore";
 
 export default function Header() {
   const { isLoggedIn, user, logout } = useAuthStore();
-  console.log(user?.coverImage);
+  console.log(user?.image);
   let imgSrc: string = "";
-  if (user?.coverImage === undefined || user?.coverImage === "") {
+  if (user?.image === undefined || user?.image === "") {
     imgSrc =
       "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
   } else {
-    imgSrc = user?.coverImage;
+    imgSrc = user?.image;
   }
   return (
     <>
@@ -35,7 +35,7 @@ export default function Header() {
                 to="/mypage"
                 className="w-10 h-10 rounded-3xl overflow-hidden"
               >
-                <img src={imgSrc} />
+                <img src={imgSrc} className="w-full h-full" />
               </Link>
             </div>
           )}
