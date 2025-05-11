@@ -93,7 +93,7 @@ export default function ProfileRight({ userData, selectedTab }: UserPostInfo) {
         {selectedTab === 'comments' && '댓글 단 글'}
       </p>
 
-      <div className='mt-[31px] w-[714px] min-h-[365px]'>
+      <div className='mt-[31px] w-[682px] min-h-[365px]'>
         {userPostData && userPostData.length === 0 && (
           <p className='text-center whitespace-pre-line text-gray-500 text-sm py-45 border-t-2 leading-[3rem]'>
             {selectedTab === 'posts'
