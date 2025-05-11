@@ -16,7 +16,6 @@ export default function EditProfile({ userId }: { userId: string }) {
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
   const [userData, setUserData] = useState<User | null>(null);
-  const [didEdit, setDidEdit] = useState(false);
 
   const [enteredErrorValues, setEnteredErrorValues] = useState<EnteredErrorValues>({
     myNameError: '',
@@ -40,34 +39,12 @@ export default function EditProfile({ userId }: { userId: string }) {
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [profilePreviewUrl, setProfilePreviewUrl] = useState<string | null>(null);
 
+  const validateUsername = (name: string) => fullNameRegex.test(name);
+  const validatePassword = (password: string) => passwordRegex.test(password);
+
   const handleInputChange = (identifier: string, value: string) => {
-    setEnteredUserValues((prevValues) => ({
-      ...prevValues,
-      [identifier]: value,
-    }));
-    setDidEdit(false);
-  };
+    setEnteredUserValues((prev) => ({ ...prev, [identifier]: value }));
 
-  const axiosList = async () => {
-    try {
-      const { data: userData } = await getUserData(userId);
-      setUserData(userData);
-    } catch (error) {
-      console.error('getUserData 오류:', error);
-    }
-  };
-
-  useEffect(() => {
-    setUserData(null);
-    if (userId) axiosList();
-  }, [userId]);
-
-  if (!userData) {
-    return <div className='text-center py-10 text-gray-500'>로딩 중...</div>;
-  }
-
-  const handleBlur = (identifier: string) => {
-    const value = enteredUserValues[identifier as keyof EnteredValues];
     let errorMessage = '';
 
     if (identifier === 'myName') {
@@ -97,6 +74,24 @@ export default function EditProfile({ userId }: { userId: string }) {
       [`${identifier}Error`]: errorMessage,
     }));
   };
+
+  const axiosList = async () => {
+    try {
+      const { data: userData } = await getUserData(userId);
+      setUserData(userData);
+    } catch (error) {
+      console.error('getUserData 오류:', error);
+    }
+  };
+
+  useEffect(() => {
+    setUserData(null);
+    if (userId) axiosList();
+  }, [userId]);
+
+  if (!userData) {
+    return <div className='text-center py-10 text-gray-500'>로딩 중...</div>;
+  }
 
   const handleSavePhoto = (file: File, previewUrl: string) => {
     if (isCover) {
@@ -142,13 +137,28 @@ export default function EditProfile({ userId }: { userId: string }) {
 
     const { myName, password, confirmPassword } = enteredUserValues;
 
-    const isValid = validateUsername(myName) && validatePassword(password) && confirmPassword === password;
-    const hasValidationErrors = Object.values(enteredErrorValues).some((val) => val !== '');
+    const newErrors = {
+      myNameError: '',
+      passwordError: '',
+      confirmPasswordError: '',
+    };
 
-    if (!isValid) {
-      if (!hasValidationErrors) {
-        setDidEdit(true);
-      }
+    if (!myName) {
+      newErrors.myNameError = '이름은 필수 입력 항목입니다.';
+    } else if (!validateUsername(myName)) {
+      newErrors.myNameError = '이름은 특수문자 없이 10글자 이하로 입력해주세요.';
+    } else if (!password) {
+      newErrors.passwordError = '비밀번호는 필수 입력 항목입니다.';
+    } else if (!validatePassword(password)) {
+      newErrors.passwordError = '비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.';
+    } else if (!confirmPassword) {
+      newErrors.confirmPasswordError = '비밀번호 확인은 필수 입력 항목입니다.';
+    } else if (confirmPassword !== password) {
+      newErrors.confirmPasswordError = '비밀번호가 일치하지 않습니다.';
+    }
+
+    if (newErrors.myNameError || newErrors.passwordError || newErrors.confirmPasswordError) {
+      setEnteredErrorValues(newErrors);
       return;
     }
 
@@ -173,25 +183,10 @@ export default function EditProfile({ userId }: { userId: string }) {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       }
-
-      setDidEdit(true);
       navigate('/profile');
     } catch (error) {
       console.error('프로필 저장 중 오류 발생:', error);
     }
-  };
-
-  const validatePassword = (password: string) => passwordRegex.test(password);
-  const validateUsername = (fullName: string) => fullNameRegex.test(fullName);
-
-  const getMissingFieldsMessage = () => {
-    const missing = [];
-    if (!enteredUserValues.myName) missing.push('이름');
-    if (!enteredUserValues.password) missing.push('비밀번호');
-    if (!enteredUserValues.confirmPassword) missing.push('비밀번호 확인');
-    return missing.length === 0
-      ? '\u00A0'
-      : `${missing.join(', ')} ${missing.length > 1 ? '항목을 입력해주세요.' : '를 입력해주세요.'}`;
   };
 
   return (
@@ -257,7 +252,6 @@ export default function EditProfile({ userId }: { userId: string }) {
               value={enteredUserValues.myName}
               className='input-profile'
               onChange={(event) => handleInputChange('myName', event.target.value)}
-              onBlur={() => handleBlur('myName')}
             />
             <p className='text-[11px] text-red-500 pt-1 h-2.5'>{enteredErrorValues.myNameError || '\u00A0'}</p>
 
@@ -271,7 +265,6 @@ export default function EditProfile({ userId }: { userId: string }) {
               className='input-profile'
               value={enteredUserValues.password}
               onChange={(event) => handleInputChange('password', event.target.value)}
-              onBlur={() => handleBlur('password')}
             />
             <p className='text-[11px] text-red-500 pt-1 h-2.5'>{enteredErrorValues.passwordError || '\u00A0'}</p>
 
@@ -282,14 +275,10 @@ export default function EditProfile({ userId }: { userId: string }) {
               className='input-profile'
               value={enteredUserValues.confirmPassword}
               onChange={(event) => handleInputChange('confirmPassword', event.target.value)}
-              onBlur={() => handleBlur('confirmPassword')}
             />
             <p className='text-[11px] text-red-500 pt-1 h-2.5'>{enteredErrorValues.confirmPasswordError || '\u00A0'}</p>
 
             <div className='flex justify-end mr-[113px] mt-[25px] relative'>
-              <p className='text-[11px] text-red-500 pt-2 h-2.5 absolute bottom-[45px]'>
-                {didEdit && getMissingFieldsMessage()}
-              </p>
               <Button value='수정' className='button-edit' />
             </div>
           </form>
