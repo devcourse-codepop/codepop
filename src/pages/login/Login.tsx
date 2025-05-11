@@ -6,14 +6,12 @@ import defaultProfileImage from '../../assets/images/profile/defaultProfileImage
 import defaultCover from '../../assets/images/profile/defaultCover.png';
 
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { login } from '../../api/auth/login';
 import { AxiosError } from 'axios';
 import { axiosInstance } from '../../api/axios';
 
 export default function Login() {
-  const navigate = useNavigate();
   const storeLogin = useAuthStore((state) => state.login);
 
   const [email, setEmail] = useState('');
@@ -90,7 +88,6 @@ export default function Login() {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       }
-      navigate('/profile');
     } catch (err) {
       const error = err as AxiosError;
 
