@@ -2,7 +2,7 @@ import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import logo from '../../assets/images/header/logo.svg';
 import Delete from '../../assets/images/input-delete/input-delete.svg';
-import defaultProfileImage from '../../assets/images/profile/defaultProfileImage.png';
+import defaultProfileImage from '../../assets/images/profile/defaultProfileImage.jpg';
 import defaultCover from '../../assets/images/profile/defaultCover.png';
 
 import { useState } from 'react';
