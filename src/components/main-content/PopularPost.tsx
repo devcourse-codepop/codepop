@@ -31,7 +31,7 @@ export default function PopularPost() {
         JSON.parse(str);
         return str;
       } catch {
-        return `{"title":"${str}", "content":"s"}`;
+        return `{"title":"${str}", "content":""}`;
       }
     }
     return `{"title":"${str}", "content":""}`;
