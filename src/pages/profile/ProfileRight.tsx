@@ -133,12 +133,13 @@ export default function ProfileRight({ userData, selectedTab }: UserPostInfo) {
               </div>
 
               <div className='ml-[130px] flex flex-col cursor-pointer align-middle justify-center'>
-                <p className='font-semibold text-[15px] truncate'>{userPosts.title}</p>
+                {/* <p className='font-semibold text-[15px] truncate'>{userPosts.title}</p> */}
+                <p className='font-semibold text-[15px] truncate'>{JSON.parse(userPosts.title).title}</p>
 
                 {selectedTab === 'comments' && userPosts.comments.length > 0 && (
                   <div className='mt-1 text-[12px] text-gray-700 flex gap-[0.2vw]'>
                     <img src={comment} />
-                    <p>{userPosts.comments[0].comment}</p>
+                    <p>{JSON.parse(userPosts.comments[0].comment).content}</p>
                     {(userPosts.myCommentCount ?? 0) > 0 && <p className='ml-[13px]'>+{userPosts.myCommentCount}개</p>}
                   </div>
                 )}
