@@ -1,11 +1,14 @@
-import { Link, useLocation } from 'react-router-dom';
-type ChannelBoxProps = {
-  channelItem: ChannelItemType[];
-};
-export default function ChannelBox({ channelItem }: ChannelBoxProps) {
-  console.log(channelItem);
+import { Link, useLocation } from "react-router-dom";
+import { useChannelItemStore } from "../../stores/channelStore";
+import { useEffect } from "react";
+
+export default function ChannelBox() {
   const pathName = useLocation().pathname;
-  const menuItems = [...channelItem];
+  const { channels, fetchChannels } = useChannelItemStore();
+
+  useEffect(() => {
+    fetchChannels();
+  }, [fetchChannels]);
 
   return (
     <>
@@ -14,7 +17,7 @@ export default function ChannelBox({ channelItem }: ChannelBoxProps) {
           Channel
         </h2>
         <ul className="space-y-[13px]">
-          {menuItems.map((item) => (
+          {channels.map((item) => (
             <li key={item.id}>
               <Link
                 // onClick={() => clickHandler(pathName)}
@@ -31,7 +34,7 @@ export default function ChannelBox({ channelItem }: ChannelBoxProps) {
                     className={`block w-0 h-3/7 opacity-30 absolute left-0 bottom-0 -z-1 group-hover:w-full duration-300 ease-out`}
                     style={{
                       backgroundColor: item.color,
-                      width: pathName === item.to ? '100%' : '',
+                      width: pathName === item.to ? "100%" : "",
                     }}
                   ></span>
                 </span>

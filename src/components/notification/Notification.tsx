@@ -1,37 +1,46 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import readAllImg from "../../assets/images/header/notifi.svg";
 import alarm from "../../assets/images/header/alarm.svg";
 import redDot from "../../assets/RedDotIcon.svg";
 import { useEffect, useState } from "react";
-import { axiosInstance } from "../../api/axios";
+import {
+  getNotificationsData,
+  putNotificationSeenData,
+} from "../../api/notification/notification";
 
 export default function Notification() {
   const [notifiOpen, setNotifiOpen] = useState(false);
-  const [notification, setNotification] = useState<NotificationType[]>([]);
+  const [notifications, setNotifications] = useState<NotificationType[]>([]);
+  const navigate = useNavigate();
 
   const fetchNotifications = async () => {
-    const result = await axiosInstance.get("/notifications");
-    setNotification(result.data);
+    const result = await getNotificationsData();
+    setNotifications(result.data);
+  };
+
+  const seenHandler = async (notification: NotificationType) => {
+    return await putNotificationSeenData(notification._id);
+    // let id = "";
+    // if (notification.like !== undefined) {
+    //   id = notification.like["_id"];
+    // } else if (notification.comment !== undefined) {
+    //   id = notification.comment["_id"];
+    // }
+
+    // if (id !== "") await putNotificationSeenData(id);
   };
 
   const readAllHandler = () => {
-    notification.map(async (item) => {
-      await axiosInstance.post(`/notifications/seen/`, {
-        id: item._id,
-      });
+    notifications.map((notification) => {
+      seenHandler(notification);
     });
+    fetchNotifications();
   };
 
-  const readHandler = async (item: NotificationType) => {
-    let id = "";
-    if (item.like !== undefined) {
-      id = item.like["_id"];
-    } else if (item.comment !== undefined) {
-      id = item.comment["_id"];
-    }
-    await axiosInstance.post(`/notifications/seen/`, {
-      id: id,
-    });
+  const readHandler = (notification: NotificationType) => {
+    seenHandler(notification);
+    fetchNotifications();
+    // navigate("/post/");
   };
 
   useEffect(() => {
@@ -48,7 +57,7 @@ export default function Notification() {
         }}
       >
         <img src={alarm} />
-        {!notification.reduce((sum, d) => sum && d.seen, true) && (
+        {!notifications.reduce((sum, data) => sum && data.seen, true) && (
           <span className="block w-[8px] h-[8px] rounded-2xl bg-[#FF0000] absolute right-0 top-0.5"></span>
         )}
       </button>
@@ -67,22 +76,28 @@ export default function Notification() {
               <img src={readAllImg} />
             </button>
           </div>
-          <div className="notiList px-2 h-[200px] overflow-y-auto scroll-custom">
-            {notification.map((notifi) => (
-              <Link
-                to={`/post/${notifi.post}`}
-                onClick={() => readHandler(notifi)}
-                className="block relative pl-4 text-[13px] my-3.5"
-              >
-                {!notifi.seen && (
-                  <img className="absolute left-0 top-2" src={redDot} />
-                )}
-                {notifi.like !== undefined &&
-                  `[${notifi.author["fullName"]}] 님이 당신의 게시물을 좋아합니다.`}
-                {notifi.comment !== undefined &&
-                  `[${notifi.author["fullName"]}] 님이 당신의 게시물에 댓글을 달았습니다.`}
-              </Link>
-            ))}
+          <div className="notiList px-2 h-[200px] overflow-y-auto scroll-custom relative">
+            {notifications.length === 0 ? (
+              <p className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm text-[#5c5c5c]">
+                알림이 없습니다
+              </p>
+            ) : (
+              notifications.map((notifi, index) => (
+                <button
+                  onClick={() => readHandler(notifi)}
+                  className="block relative pl-4 text-[13px] my-3.5 cursor-pointer"
+                  key={`notification-${index}`}
+                >
+                  {!notifi.seen && (
+                    <img className="absolute left-0 top-2" src={redDot} />
+                  )}
+                  {notifi.like !== undefined &&
+                    `[${notifi.author["fullName"]}] 님이 당신의 게시물을 좋아합니다.`}
+                  {notifi.comment !== undefined &&
+                    `[${notifi.author["fullName"]}] 님이 당신의 게시물에 댓글을 달았습니다.`}
+                </button>
+              ))
+            )}
           </div>
           <div className="text-right">
             <button

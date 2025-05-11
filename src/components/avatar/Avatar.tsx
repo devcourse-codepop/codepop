@@ -8,16 +8,15 @@ interface AvatarProps {
 }
 
 export default function Avatar({ name, email, image, isOnline }: AvatarProps) {
-  let imgSrc: string = '';
-  if (image === undefined || image === '') {
+  let imgSrc: string = "";
+  if (image === undefined || image === "") {
     imgSrc =
-      'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg';
+      "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
   } else {
     imgSrc = image;
   }
   return (
-    <div className="flex  items-center gap-4 p-4 ">
-      {/* <img src={image ? image : userImg} alt="사용자" className="w-12 h-12" /> */}
+    <div className="flex  items-center gap-x-4 gap-y-1 p-4 flex-wrap">
       <div className="relative shrink-0">
         <img
           src={imgSrc}
@@ -30,7 +29,7 @@ export default function Avatar({ name, email, image, isOnline }: AvatarProps) {
       </div>
       <div className="flex flex-col">
         <span className="text-sm font-semibold">{name}</span>
-        <span className="text-xs opacity-60">{email}</span>
+        <span className="text-xs opacity-60 break-all leading-3">{email}</span>
       </div>
     </div>
   );

@@ -1,64 +1,18 @@
-import { Search } from 'lucide-react';
-import Avatar from '../avatar/Avatar';
-import React, { useLayoutEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { axiosInstance } from '../../api/axios';
+import { Search } from "lucide-react";
+import Avatar from "../avatar/Avatar";
+import React, { useLayoutEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { getAllUsersData } from "../../api/memberbox/member";
 
 export default function MemberBox() {
-  // const user22s = [
-  //   {
-  //     name: "홍길동",
-  //     email: "hong@gmail.com",
-  //     image: avatar,
-  //   },
-  //   {
-  //     name: "차은우",
-  //     email: "cha@gmail.com",
-  //     image: avatar,
-  //   },
-  //   {
-  //     name: "장원영",
-  //     email: "jang@gmail.com",
-  //     image: avatar,
-  //   },
-  //   {
-  //     name: "홍길동2",
-  //     email: "hong2@gmail.com",
-  //     image: avatar,
-  //   },
-  //   {
-  //     name: "차은우2",
-  //     email: "cha2@gmail.com",
-  //     image: avatar,
-  //   },
-  //   {
-  //     name: "장원영2",
-  //     email: "jang2@gmail.com",
-  //     image: avatar,
-  //   },
-  //   {
-  //     name: "홍길동3",
-  //     email: "hong2@gmail.com",
-  //     image: avatar,
-  //   },
-  //   {
-  //     name: "차은우3",
-  //     email: "cha2@gmail.com",
-  //     image: avatar,
-  //   },
-  //   {
-  //     name: "장원영3",
-  //     email: "jang2@gmail.com",
-  //     image: avatar,
-  //   },
-  // ];
-  const [searchKeyword, setSearchKeyword] = useState<string>('');
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
   const [users, setUsers] = useState<User[]>([]);
   const searchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value);
   };
+
   const fetchUsers = async () => {
-    const result = await axiosInstance.get('/users/get-users');
+    const result = await getAllUsersData();
     setUsers(result.data);
   };
 
@@ -67,7 +21,7 @@ export default function MemberBox() {
   }, []);
 
   return (
-    <div className="w-[291px] max-h-[calc(100%-241px)] h-[579px] bg-white rounded-[10px] shadow-md pl-[30px] pr-[26px]  relative overflow-hidden">
+    <div className="w-[291px] max-h-[calc(100%-240px)] h-[580px] bg-white rounded-[10px] shadow-md pl-[30px] pr-[26px]  relative overflow-hidden">
       <h2 className="text-[#595656] font-medium text-[18px] mb-[13px] pt-[20px]">
         Member
       </h2>
@@ -87,7 +41,11 @@ export default function MemberBox() {
           searchKeyword !== null ? (
             (user.fullName.includes(searchKeyword) ||
               user.email.includes(searchKeyword)) && (
-              <Link to="/profile" key={user._id}>
+              <Link
+                to={`/profile/${user._id}`}
+                key={user._id}
+                state={{ userid: user._id }}
+              >
                 <Avatar
                   name={user.fullName}
                   email={user.email}
@@ -97,7 +55,11 @@ export default function MemberBox() {
               </Link>
             )
           ) : (
-            <Link to="/profile" key={user._id}>
+            <Link
+              to={`/profile/:${user._id}`}
+              key={user._id}
+              state={{ userid: user._id }}
+            >
               <Avatar
                 name={user.fullName}
                 email={user.email}
