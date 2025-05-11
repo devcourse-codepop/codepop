@@ -11,6 +11,7 @@ import PostList from './pages/PostList';
 import PostDetail from './pages/PostDetail';
 import WritePostRouter from './route/WritePostRouter';
 import ProfilePage from './pages/profile/ProfilePage';
+import EditProfilePage from './pages/profile/profile-edit/EditProfilePage';
 
 export default function App() {
   const accessToken = useAuthStore((state) => state.accessToken);
@@ -47,6 +48,7 @@ export default function App() {
         <Route element={<MainLayout />}>
           <Route path='/' element={<MainContent />} />
           <Route path='/profile' element={<ProfilePage />} />
+          <Route path='/profile/edit' element={<EditProfilePage />} />
           <Route path='channel/:channelId' element={<PostList />} />
           <Route path='channel/:channelId/post/:postId' element={<PostDetail />} />
           <Route path='/channel/:channelId/write' element={<WritePostRouter />} />

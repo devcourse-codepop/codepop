@@ -9,7 +9,7 @@ import Button from '../../../components/common/Button';
 import { getUserData } from '../../../api/profileInfo/profile';
 import { useAuthStore } from '../../../stores/authStore';
 import { useNavigate } from 'react-router-dom';
-import defaultProfileImage from '../../../assets/images/profile/defaultProfileImage.png';
+import defaultProfileImage from '../../../assets/images/profile/defaultProfileImage.jpg';
 import defaultCover from '../../../assets/images/profile/defaultCover.png';
 
 export default function EditProfile({ userId }: { userId: string }) {
