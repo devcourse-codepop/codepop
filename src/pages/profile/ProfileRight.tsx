@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import Pagination from 'react-js-pagination';
 import { getAuthorPostData, getPostData } from '../../api/post/post';
 import comment from '../../assets/images/comment-outline.svg';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProfileRight({ userData, selectedTab }: UserPostInfo) {
   const userId = userData?._id;
   const [userPostData, setUserPostData] = useState<Post[] | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 6;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -124,6 +126,15 @@ export default function ProfileRight({ userData, selectedTab }: UserPostInfo) {
               ? 'bg-[#10215C]'
               : 'bg-[#3380DE]'
           }`}
+                onClick={() => {
+                  if (userPosts.channel.name === 'Vote') {
+                    navigate('/channel/3');
+                  } else if (userPosts.channel.name === 'MysteryCode') {
+                    navigate('/channel/1');
+                  } else {
+                    navigate('/channel/2');
+                  }
+                }}
               >
                 {userPosts.channel.name === 'Vote'
                   ? '골라봐'
