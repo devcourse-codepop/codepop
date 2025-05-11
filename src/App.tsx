@@ -1,15 +1,16 @@
-import { useEffect } from "react";
-import { useAuthStore } from "./stores/authStore";
-import { axiosInstance } from "./api/axios";
-import { Route, Routes } from "react-router-dom";
-import Login from "./pages/login/Login";
-import SignUp from "./pages/signup/SignUp";
-import Error from "./pages/Error";
-import MainLayout from "./layout/MainLayout";
-import MainContent from "./pages/MainContent";
-import PostList from "./pages/PostList";
-import PostDetail from "./pages/PostDetail";
-import WritePostRouter from "./route/WritePostRouter";
+import { useEffect } from 'react';
+import { useAuthStore } from './stores/authStore';
+import { axiosInstance } from './api/axios';
+import { Route, Routes } from 'react-router-dom';
+import Login from './pages/login/Login';
+import SignUp from './pages/signup/SignUp';
+import Error from './pages/Error';
+import MainLayout from './layout/MainLayout';
+import MainContent from './pages/MainContent';
+import PostList from './pages/PostList';
+import PostDetail from './pages/PostDetail';
+import WritePostRouter from './route/WritePostRouter';
+import ProfilePage from './pages/profile/ProfilePage';
 
 export default function App() {
   const accessToken = useAuthStore((state) => state.accessToken);
@@ -19,7 +20,7 @@ export default function App() {
   useEffect(() => {
     if (accessToken) {
       axiosInstance
-        .get("/auth-user")
+        .get('/auth-user')
         .then((res) => {
           //resetUser(); // 추가
           setUser(res.data);
@@ -44,22 +45,16 @@ export default function App() {
       </Routes> */}
       <Routes>
         <Route element={<MainLayout />}>
-          <Route path="/" element={<MainContent />} />
-          <Route path="/mypage" element={<MainContent />} />
-          <Route path="channel/:channelId" element={<PostList />} />
-          <Route
-            path="channel/:channelId/post/:postId"
-            element={<PostDetail />}
-          />
-          <Route
-            path="/channel/:channelId/write"
-            element={<WritePostRouter />}
-          />
-          <Route path="/channel/:channelId/update/:postId" element="" />
+          <Route path='/' element={<MainContent />} />
+          <Route path='/profile' element={<ProfilePage />} />
+          <Route path='channel/:channelId' element={<PostList />} />
+          <Route path='channel/:channelId/post/:postId' element={<PostDetail />} />
+          <Route path='/channel/:channelId/write' element={<WritePostRouter />} />
+          <Route path='/channel/:channelId/update/:postId' element='' />
         </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="*" element={<Error />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/signup' element={<SignUp />} />
+        <Route path='*' element={<Error />} />
       </Routes>
       {/* <Routes>
         
