@@ -99,3 +99,5 @@ export default function Notification() {
     </>
   );
 }
+
+// ex) <Notification value={["[한유빈] 님이 당신의 게시물을 좋아합니다.", "두 번째 알림"]}/>
