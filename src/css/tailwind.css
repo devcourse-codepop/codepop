@@ -13,4 +13,14 @@
   .input-style1 {
     @apply w-[500px] h-[86px] bg-[#ffffff] rounded-[5px] px-5 pt-5 text-[20px];
   }
+
+  .button-edit {
+    @apply w-[90px] h-[30px] text-white bg-[#1E293B] text-[12px] rounded-[2px] cursor-pointer font-medium;
+  }
+  .input-edit-profile {
+    @apply w-[500px] h-[86px] bg-[#ffffff] text-[23px] rounded-[5px] px-10;
+  }
+  .input-profile {
+    @apply w-[285px] h-[37px] text-[15px] rounded-[5px] pl-[14px] outline-none border mt-[11px] border-[#E3E3E3] font-normal;
+  }
 }
