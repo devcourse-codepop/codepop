@@ -3,13 +3,14 @@ import likeRed from '../../assets/images/LikeRed.svg';
 import comment from '../../assets/images/comment-outline.svg';
 import { useEffect, useState } from 'react';
 import { Like } from '../../types';
-import { deleteLikes, postLikes } from '../../api/post/post';
+import { deleteLikes, postLikes, postNotifications } from '../../api/post/post';
 import { useAuthStore } from '../../stores/authStore';
 
 interface LikeCommentProps {
   likeCount: number;
   commentCount: number;
   postId: string;
+  postUserId: string;
   likes: Like[];
 }
 
@@ -17,6 +18,7 @@ export default function LikeComment({
   likeCount,
   commentCount,
   postId,
+  postUserId,
   likes,
 }: LikeCommentProps) {
   const [like, setLike] = useState(likeCount);
@@ -32,6 +34,7 @@ export default function LikeComment({
       try {
         const { data } = await postLikes(postId);
         setLikeId(data._id);
+        sendLikeNotification(data._id);
       } catch (e) {
         console.log(e instanceof Error && e.message);
       }
@@ -45,6 +48,20 @@ export default function LikeComment({
       } catch (e) {
         console.log(e instanceof Error && e.message);
       }
+    }
+  };
+
+  const sendLikeNotification = async (notificationTypeId: string) => {
+    try {
+      const { data } = await postNotifications(
+        'LIKE',
+        notificationTypeId,
+        postUserId,
+        postId
+      );
+      console.log(data);
+    } catch (e) {
+      console.log(e instanceof Error && e.message);
     }
   };
 

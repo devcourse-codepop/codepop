@@ -1,15 +1,15 @@
-import { Link } from "react-router-dom";
-import logo from "../../assets/images/header/logo.svg";
-import Notification from "../notification/Notification";
-import { useAuthStore } from "../../stores/authStore";
+import { Link } from 'react-router-dom';
+import logo from '../../assets/images/header/logo.svg';
+import Notification from '../notification/Notification';
+import { useAuthStore } from '../../stores/authStore';
 
 export default function Header() {
   const { isLoggedIn, user, logout } = useAuthStore();
 
-  let imgSrc: string = "";
-  if (user?.image === undefined || user?.image === "") {
+  let imgSrc: string = '';
+  if (user?.image === undefined || user?.image === '') {
     imgSrc =
-      "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg";
+      'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg';
   } else {
     imgSrc = user?.image;
   }
