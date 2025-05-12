@@ -1,12 +1,12 @@
-import { Link, useNavigate } from "react-router-dom";
-import readAllImg from "../../assets/images/header/notifi.svg";
-import alarm from "../../assets/images/header/alarm.svg";
-import redDot from "../../assets/RedDotIcon.svg";
-import { useEffect, useState } from "react";
+import { Link, useNavigate } from 'react-router-dom';
+import readAllImg from '../../assets/images/header/notifi.svg';
+import alarm from '../../assets/images/header/alarm.svg';
+import redDot from '../../assets/RedDotIcon.svg';
+import { useEffect, useState } from 'react';
 import {
   getNotificationsData,
   putNotificationSeenData,
-} from "../../api/notification/notification";
+} from '../../api/notification/notification';
 
 export default function Notification() {
   const [notifiOpen, setNotifiOpen] = useState(false);
@@ -71,7 +71,7 @@ export default function Notification() {
             <button
               className="cursor-pointer"
               aria-label="readAll"
-              onClick={() => readAllHandler}
+              onClick={readAllHandler}
             >
               <img src={readAllImg} />
             </button>
@@ -92,9 +92,9 @@ export default function Notification() {
                     <img className="absolute left-0 top-2" src={redDot} />
                   )}
                   {notifi.like !== undefined &&
-                    `[${notifi.author["fullName"]}] 님이 당신의 게시물을 좋아합니다.`}
+                    `[${notifi.author['fullName']}] 님이 당신의 게시물을 좋아합니다.`}
                   {notifi.comment !== undefined &&
-                    `[${notifi.author["fullName"]}] 님이 당신의 게시물에 댓글을 달았습니다.`}
+                    `[${notifi.author['fullName']}] 님이 당신의 게시물에 댓글을 달았습니다.`}
                 </button>
               ))
             )}
