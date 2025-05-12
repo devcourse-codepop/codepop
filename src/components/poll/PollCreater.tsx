@@ -1,0 +1,57 @@
+import { useEffect, useState } from "react";
+
+interface PollOption {
+  id: number;
+  text: string;
+}
+
+interface PollCreatorProps {
+  onCreate: (options: PollOption[]) => void;
+}
+
+export default function PollCreator({ onCreate }: PollCreatorProps) {
+  const [options, setOptions] = useState<string[]>(["", ""]);
+
+  const handleAddOption = () => {
+    if (options.length < 4) setOptions([...options, ""]);
+  };
+
+  const handleChangeOption = (index: number, value: string) => {
+    const newOptions = [...options];
+    newOptions[index] = value;
+    setOptions(newOptions);
+  };
+
+  // 옵션이 변경될 때마다 부모에 전달
+  useEffect(() => {
+    if (options.length >= 2) {
+      const pollOptions = options
+        .filter((opt) => opt.trim() !== "")
+        .map((text, idx) => ({ id: idx, text }));
+      onCreate(pollOptions);
+    }
+  }, [options, onCreate]);
+
+  return (
+    <div className="p-4 max-w-md mt-[25px] mb-[25px] bg-white rounded shadow">
+      <h2 className="text-xl font-bold mb-2">Create Poll</h2>
+      {options.map((opt, i) => (
+        <input
+          key={i}
+          className="w-full border p-2 mb-2 rounded"
+          placeholder={`Choice ${i + 1}`}
+          value={opt}
+          onChange={(e) => handleChangeOption(i, e.target.value)}
+        />
+      ))}
+      {options.length < 4 && (
+        <button
+          className="text-blue-500 text-sm mb-2"
+          onClick={handleAddOption}
+        >
+          + Add Option
+        </button>
+      )}
+    </div>
+  );
+}

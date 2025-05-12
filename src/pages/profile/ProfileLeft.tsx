@@ -1,7 +1,9 @@
 import { Mail } from 'lucide-react';
 import Button from '../../components/common/Button';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProfileLeft({ userData, onSelectTab }: UserInfo) {
+  const navigate = useNavigate();
   return (
     <>
       <div className='w-[291px] h-[633px] rounded-bl-[10px] px-[50px] border-r-2 border-gray-300 '>
@@ -24,7 +26,7 @@ export default function ProfileLeft({ userData, onSelectTab }: UserInfo) {
             </p>
           </div>
           <div className='mt-[25px] flex gap-6'>
-            <Button value='프로필 수정' className='button-style3' />
+            <Button value='프로필 수정' className='button-style3' onClick={() => navigate('/profileEdit')} />
             <Mail className='w-[30px] h-[30px] cursor-pointer' />
           </div>
         </div>

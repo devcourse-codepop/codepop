@@ -1,0 +1,108 @@
+import { Editor } from "@tiptap/react";
+import CodeEditIcon from "../icon/CodeEditIcon";
+import ImageIcon from "../icon/ImageIcon";
+import BoldIcon from "../icon/BoldIcon";
+import ItalicIcon from "../icon/ItalicIcon";
+import VoteIcon from "../icon/VoteIcon";
+
+interface Props {
+  editor: Editor | null;
+  onTogglePoll: () => void;
+  onImageSelect?: (file: File) => void; // 추가
+  showPollButton?: boolean;
+  showCodeButton?: boolean;
+}
+
+export default function EditorToolbar({
+  editor,
+  onTogglePoll,
+  onImageSelect,
+  showPollButton = false,
+  showCodeButton = false,
+}: Props) {
+  if (!editor) return null;
+
+  return (
+    <div className="flex gap-6 mb-4">
+      <button
+        onClick={() => editor.chain().focus().toggleBold().run()}
+        className={`cursor-pointer rounded-[5px]${
+          editor.isActive("bold")
+            ? "font-bold bg-blue-400"
+            : " hover:bg-gray-200"
+        }`}
+      >
+        <BoldIcon />
+      </button>
+
+      <button
+        onClick={() => editor.chain().focus().toggleItalic().run()}
+        className={`cursor-pointer rounded-[5px] ${
+          editor.isActive("italic")
+            ? "italic bg-blue-400"
+            : " hover:bg-gray-200"
+        }`}
+      >
+        <ItalicIcon />
+      </button>
+
+      {showCodeButton && (
+        <button
+          onClick={() => {
+            editor.chain().focus().toggleCodeBlock().run();
+          }}
+          className={`cursor-pointer rounded-[5px] 
+          ${
+            editor.isActive("codeBlock") ? "bg-blue-400" : "hover:bg-gray-200"
+          }`}
+        >
+          <CodeEditIcon />
+        </button>
+      )}
+
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file) {
+            onImageSelect?.(file); // 부모에게 파일 전달
+            const reader = new FileReader();
+            reader.onload = () => {
+              const result = reader.result;
+              if (typeof result === "string") {
+                editor
+                  ?.chain()
+                  .focus()
+                  .insertContent({
+                    type: "customImage",
+                    attrs: { src: result },
+                  })
+                  .run();
+              }
+            };
+            reader.readAsDataURL(file);
+          }
+        }}
+        className="hidden cursor-pointer rounded-[5px]"
+        id="image-upload"
+      />
+
+      <label
+        htmlFor="image-upload"
+        className="cursor-pointer rounded-[5px] flex items-center justify-center hover:bg-gray-200"
+      >
+        <ImageIcon />
+      </label>
+
+      {showPollButton && (
+        <button
+          onClick={onTogglePoll}
+          className="cursor-pointer rounded-[5px] hover:bg-gray-200"
+        >
+          <VoteIcon />
+        </button>
+      )}
+    </div>
+  );
+}

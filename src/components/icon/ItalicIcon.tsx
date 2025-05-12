@@ -1,10 +1,10 @@
-import voteIcon from "../../assets/VoteIcon.svg";
+import italicIcon from "../../assets/ItalicIcon.svg";
 
-export default function VoteIcon() {
+export default function ItalicIcon() {
   return (
     <>
       <img
-        src={voteIcon}
+        src={italicIcon}
         className="w-[30px] h-[30px] inline-block cursor-pointer"
       />
     </>
