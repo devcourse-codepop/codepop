@@ -12,6 +12,9 @@ export default function WriteCommentItem({
   postUserId: string;
 }) {
   const [comment, setComment] = useState('');
+  const changeCommentHandler = (value: string) => {
+    setComment(value);
+  };
   // const changeCommentHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
   //   setComment(e.target.value);
   // };
@@ -160,7 +163,7 @@ export default function WriteCommentItem({
         <CommentEditor
           channelId={channelId}
           submitHandler={submitHandler}
-          onChange={setComment}
+          onChange={(v) => changeCommentHandler(v)}
           showCodeButton={true}
         />
       </div>
