@@ -44,9 +44,9 @@ export default function PostDetail() {
         <div className="flex justify-between items-end pb-[30px]">
           <ChannelName channelId={String(channel)} />
         </div>
-        {/* max-h-[640px] */}
+        {/* max-h-[605px] */}
         {postItem && (
-          <div className="flex flex-col gap-[30px] max-h-[605px] overflow-auto">
+          <div className="flex flex-col gap-[30px] max-h-[calc(100vh-100px-120px)] overflow-auto">
             <PostDetailItem key={postItem?._id} {...postItem} />
             <WriteCommentItem
               channelId={String(channel)}

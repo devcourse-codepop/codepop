@@ -78,7 +78,7 @@ export default function PostList() {
       {/* mx-[60px] h-[calc(100vh-100px)] */}
       <div className="flex ">
         {/* w-full ml-[50px]  */}
-        <div className="w-full">
+        <div className="w-full ">
           <div className="flex justify-between items-end pb-[30px]">
             <div>
               <ChannelName channelId={String(channel)} />
@@ -109,8 +109,8 @@ export default function PostList() {
               </select>
             </div>
           </div>
-          {/* max-h-[640px] */}
-          <div className="flex flex-col gap-[30px] max-h-[605px] overflow-auto">
+          {/* max-h-[605px] */}
+          <div className="flex flex-col gap-[30px] pb-5 max-h-[calc(100vh-100px-120px)] overflow-auto">
             {postListItem.length === 0 && (
               <div className="flex flex-col justify-center items-center gap-5 text-lg font-semibold pt-16 opacity-60">
                 <div>게시글이 없습니다!</div>
