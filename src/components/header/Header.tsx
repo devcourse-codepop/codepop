@@ -31,9 +31,11 @@ export default function Header() {
               <div className='notification-wrapper'>
                 <Notification />
               </div>
-              <Link to='/profile' className='w-10 h-10 rounded-3xl overflow-hidden'>
-                <img src={imgSrc} />
-              </Link>
+              <img
+                src={imgSrc}
+                className='w-10 h-10 rounded-3xl overflow-hidden'
+                onClick={() => (window.location.href = '/profile')}
+              />
             </div>
           )}
         </div>
