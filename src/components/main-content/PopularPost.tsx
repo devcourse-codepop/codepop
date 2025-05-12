@@ -91,7 +91,6 @@ export default function PopularPost() {
                     ...popular,
                     title: parseHandler(popular.title),
                   };
-                  console.log(parsePopular);
                   return (
                     <div
                       key={`popular-${pIndex}`}
