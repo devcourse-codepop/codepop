@@ -82,52 +82,48 @@ export default function MemberBox() {
           height: isLoggedIn ? `calc(100% - 161px)` : `calc(100% - 91px)`,
         }}
       >
-        {filterUsers.map(
-          (user) =>
-            (user.fullName.includes(searchKeyword) ||
-              user.email.includes(searchKeyword)) && (
-              <div className="relative" key={user._id}>
-                <div
-                  className="memberCard cursor-pointer"
-                  onClick={() => ToggleHandelr(user._id)}
-                >
-                  <Avatar
-                    name={user.fullName}
-                    email={user.email}
-                    image={user.image}
-                    isOnline={user.isOnline}
-                  ></Avatar>
-                </div>
-                <button
-                  className="absolute right-0 top-4 cursor-pointer"
-                  onClick={() => ToggleHandelr(user._id)}
-                >
-                  <img src={menuIcon} className="rotate-90" />
-                  {openUser === user._id && (
-                    <ul className="avatarMenu absolute text-xs w-27 right-5 top-0 bg-white rounded-[5px] border border-[#ddd] text-left z-2 py-1">
-                      <li>
-                        <Link
-                          className="px-3 py-1 block opacity-70 hover:opacity-100"
-                          state={{ userid: user._id }}
-                          to={`/profile`}
-                        >
-                          프로필 보기
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          className="px-3 py-1 block  opacity-70 hover:opacity-100"
-                          to={`/message/`}
-                        >
-                          메세지 보내기
-                        </Link>
-                      </li>
-                    </ul>
-                  )}
-                </button>
-              </div>
-            )
-        )}
+        {filterUsers.map((user) => (
+          <div className="relative" key={user._id}>
+            <div
+              className="memberCard cursor-pointer"
+              onClick={() => ToggleHandelr(user._id)}
+            >
+              <Avatar
+                name={user.fullName}
+                email={user.email}
+                image={user.image}
+                isOnline={user.isOnline}
+              ></Avatar>
+            </div>
+            <button
+              className="absolute right-0 top-4 cursor-pointer"
+              onClick={() => ToggleHandelr(user._id)}
+            >
+              <img src={menuIcon} className="rotate-90" />
+              {openUser === user._id && (
+                <ul className="avatarMenu absolute text-xs w-27 right-5 top-0 bg-white rounded-[5px] border border-[#ddd] text-left z-2 py-1">
+                  <li>
+                    <Link
+                      className="px-3 py-1 block opacity-70 hover:opacity-100"
+                      to={`/profile`}
+                      state={{ userid: user._id }}
+                    >
+                      프로필 보기
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="px-3 py-1 block  opacity-70 hover:opacity-100"
+                      to={`/message/`}
+                    >
+                      메세지 보내기
+                    </Link>
+                  </li>
+                </ul>
+              )}
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );
