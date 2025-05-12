@@ -2,16 +2,18 @@ import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import logo from '../../assets/images/header/logo.svg';
 import Delete from '../../assets/images/input-delete/input-delete.svg';
-import defaultProfileImage from '../../assets/images/profile/defaultProfileImage.png';
+import defaultProfileImage from '../../assets/images/profile/defaultProfileImage.jpg';
 import defaultCover from '../../assets/images/profile/defaultCover.png';
 
 import { useState } from 'react';
 import { useAuthStore } from '../../stores/authStore';
+import { useNavigate } from 'react-router-dom';
 import { login } from '../../api/auth/login';
 import { AxiosError } from 'axios';
 import { axiosInstance } from '../../api/axios';
 
 export default function Login() {
+  const navigate = useNavigate();
   const storeLogin = useAuthStore((state) => state.login);
 
   const [email, setEmail] = useState('');
@@ -88,6 +90,7 @@ export default function Login() {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       }
+      navigate('/');
     } catch (err) {
       const error = err as AxiosError;
 
