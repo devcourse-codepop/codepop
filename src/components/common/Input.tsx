@@ -5,7 +5,7 @@ type InputProps = Omit<React.ComponentPropsWithoutRef<'input'>, 'type'> & {
   type?: Exclude<ReactInputType, 'radio' | 'checkbox' | 'range'>;
   label?: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export default function Input(props: InputProps) {

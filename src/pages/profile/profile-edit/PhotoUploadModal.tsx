@@ -56,18 +56,18 @@ export default function PhotoUploadModal({ isOpen, onClose, onSave }: PhotoUploa
           onClick={handleButtonClick}
         >
           {previewUrl ? (
-            <img src={previewUrl} alt='preview' className='w-full h-48 object-cover rounded-[5px]' />
+            <img src={previewUrl} alt='preview' className='w-full h-full object-cover rounded-[5px]' />
           ) : (
             <p className='text-gray-500'>클릭하거나 파일을 드래그하여 업로드</p>
           )}
           <input type='file' accept='image/*' className='hidden' ref={inputRef} onChange={handleFileInputChange} />
         </div>
         <div className='flex justify-end gap-2 mt-6'>
-          <button className='px-4 py-2 text-gray-600 hover:text-gray-800' onClick={handleCancel}>
+          <button className='px-4 py-2 text-gray-600 hover:text-gray-800 cursor-pointer' onClick={handleCancel}>
             취소
           </button>
           <button
-            className='bg-[#1E293B] text-white px-4 py-2 rounded-[5px]'
+            className='bg-[#1E293B] text-white px-4 py-2 rounded-[5px] cursor-pointer'
             onClick={handleSave}
             disabled={!selectedFile}
           >

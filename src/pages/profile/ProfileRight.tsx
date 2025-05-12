@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import Pagination from 'react-js-pagination';
 import { getAuthorPostData, getPostData } from '../../api/post/post';
 import comment from '../../assets/images/comment-outline.svg';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProfileRight({ userData, selectedTab }: UserPostInfo) {
   const userId = userData?._id;
   const [userPostData, setUserPostData] = useState<Post[] | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 6;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -93,7 +95,7 @@ export default function ProfileRight({ userData, selectedTab }: UserPostInfo) {
         {selectedTab === 'comments' && '댓글 단 글'}
       </p>
 
-      <div className='mt-[31px] w-[714px] min-h-[365px]'>
+      <div className='mt-[31px] w-[682px] min-h-[365px]'>
         {userPostData && userPostData.length === 0 && (
           <p className='text-center whitespace-pre-line text-gray-500 text-sm py-45 border-t-2 leading-[3rem]'>
             {selectedTab === 'posts'
@@ -124,6 +126,15 @@ export default function ProfileRight({ userData, selectedTab }: UserPostInfo) {
               ? 'bg-[#10215C]'
               : 'bg-[#3380DE]'
           }`}
+                onClick={() => {
+                  if (userPosts.channel.name === 'Vote') {
+                    navigate('/channel/3');
+                  } else if (userPosts.channel.name === 'MysteryCode') {
+                    navigate('/channel/1');
+                  } else {
+                    navigate('/channel/2');
+                  }
+                }}
               >
                 {userPosts.channel.name === 'Vote'
                   ? '골라봐'
@@ -132,13 +143,24 @@ export default function ProfileRight({ userData, selectedTab }: UserPostInfo) {
                   : '이거 왜 안 쓰지?'}
               </div>
 
-              <div className='ml-[130px] flex flex-col cursor-pointer align-middle justify-center'>
-                <p className='font-semibold text-[15px] truncate'>{userPosts.title}</p>
+              <div
+                className='ml-[130px] flex flex-col cursor-pointer align-middle justify-center'
+                onClick={() => {
+                  if (userPosts.channel.name === 'Vote') {
+                    navigate(`/channel/3/post/${userPosts._id}`);
+                  } else if (userPosts.channel.name === 'MysteryCode') {
+                    navigate(`/channel/1/post/${userPosts._id}`);
+                  } else {
+                    navigate(`/channel/2/post/${userPosts._id}`);
+                  }
+                }}
+              >
+                <p className='font-semibold text-[15px] truncate max-w-[430px]'>{JSON.parse(userPosts.title).title}</p>
 
                 {selectedTab === 'comments' && userPosts.comments.length > 0 && (
                   <div className='mt-1 text-[12px] text-gray-700 flex gap-[0.2vw]'>
                     <img src={comment} />
-                    <p>{userPosts.comments[0].comment}</p>
+                    <p className='truncate max-w-[400px]'>{JSON.parse(userPosts.comments[0].comment).content}</p>
                     {(userPosts.myCommentCount ?? 0) > 0 && <p className='ml-[13px]'>+{userPosts.myCommentCount}개</p>}
                   </div>
                 )}
