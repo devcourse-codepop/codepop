@@ -97,6 +97,8 @@ export default function SignUp() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    let hasError = false;
+
     setFullNameError('');
     setEmailError('');
     setPasswordError('');
@@ -104,23 +106,44 @@ export default function SignUp() {
 
     if (!fullName) {
       setFullNameError('이름은 필수 입력 항목입니다.');
-      return;
+      hasError = true;
+    } else if (!validateUsername) {
+      setFullNameError('이름은 특수문자 없이 10글자 이하로 입력해주세요.');
+      hasError = true;
     }
 
     if (!email) {
       setEmailError('이메일은 필수 입력 항목입니다.');
-      return;
+      hasError = true;
+    } else {
+      const [id] = email.split('@');
+      if (id.length < 5 || id.length > 20) {
+        setEmailError('이메일 아이디는 5~20자 사이여야 합니다.');
+        hasError = true;
+      } else if (!validateEmail(email)) {
+        setEmailError('이메일 형식을 확인해주세요.');
+        hasError = true;
+      }
     }
 
     if (!password) {
       setPasswordError('비밀번호는 필수 입력 항목입니다.');
-      return;
+      hasError = true;
+    } else if (!validatePassword(password)) {
+      setPasswordError(
+        '비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.'
+      );
+      hasError = true;
     }
 
     if (!confirmPassword) {
       setConfirmPasswordError('비밀번호 확인은 필수 입력 항목입니다.');
-      return;
+      hasError = true;
+    } else if (password !== confirmPassword) {
+      setConfirmPasswordError('비밀번호가 일치하지 않습니다.');
     }
+
+    if (hasError) return;
 
     try {
       await signup(fullName, email, password);
