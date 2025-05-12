@@ -143,8 +143,18 @@ export default function ProfileRight({ userData, selectedTab }: UserPostInfo) {
                   : '이거 왜 안 쓰지?'}
               </div>
 
-              <div className='ml-[130px] flex flex-col cursor-pointer align-middle justify-center'>
-                {/* <p className='font-semibold text-[15px] truncate'>{userPosts.title}</p> */}
+              <div
+                className='ml-[130px] flex flex-col cursor-pointer align-middle justify-center'
+                onClick={() => {
+                  if (userPosts.channel.name === 'Vote') {
+                    navigate(`/channel/3/post/${userPosts._id}`);
+                  } else if (userPosts.channel.name === 'MysteryCode') {
+                    navigate(`/channel/1/post/${userPosts._id}`);
+                  } else {
+                    navigate(`/channel/2/post/${userPosts._id}`);
+                  }
+                }}
+              >
                 <p className='font-semibold text-[15px] truncate'>{JSON.parse(userPosts.title).title}</p>
 
                 {selectedTab === 'comments' && userPosts.comments.length > 0 && (
