@@ -138,7 +138,7 @@ export default function PostList() {
           </div>
         </div>
       </div>
-      <div className="absolute right-0 bottom-5 cursor-pointer">
+      <div className="absolute right-35 bottom-5 cursor-pointer">
         <img src={postBtn} onClick={createNewPost} alt="게시글 작성 버튼" />
       </div>
     </>
