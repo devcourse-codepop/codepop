@@ -155,12 +155,12 @@ export default function ProfileRight({ userData, selectedTab }: UserPostInfo) {
                   }
                 }}
               >
-                <p className='font-semibold text-[15px] truncate'>{JSON.parse(userPosts.title).title}</p>
+                <p className='font-semibold text-[15px] truncate max-w-[430px]'>{JSON.parse(userPosts.title).title}</p>
 
                 {selectedTab === 'comments' && userPosts.comments.length > 0 && (
                   <div className='mt-1 text-[12px] text-gray-700 flex gap-[0.2vw]'>
                     <img src={comment} />
-                    <p>{JSON.parse(userPosts.comments[0].comment).content}</p>
+                    <p className='truncate max-w-[400px]'>{JSON.parse(userPosts.comments[0].comment).content}</p>
                     {(userPosts.myCommentCount ?? 0) > 0 && <p className='ml-[13px]'>+{userPosts.myCommentCount}개</p>}
                   </div>
                 )}
