@@ -1,6 +1,6 @@
-import { Link, useLocation } from "react-router-dom";
-import { useChannelItemStore } from "../../stores/channelStore";
-import { useEffect } from "react";
+import { Link, useLocation } from 'react-router-dom';
+import { useChannelItemStore } from '../../stores/channelStore';
+import { useEffect } from 'react';
 
 export default function ChannelBox() {
   const pathName = useLocation().pathname;
@@ -34,7 +34,7 @@ export default function ChannelBox() {
                     className={`block w-0 h-3/7 opacity-30 absolute left-0 bottom-0 -z-1 group-hover:w-full duration-300 ease-out`}
                     style={{
                       backgroundColor: item.color,
-                      width: pathName === item.to ? "100%" : "",
+                      width: pathName === item.to ? '100%' : '',
                     }}
                   ></span>
                 </span>
