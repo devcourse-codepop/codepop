@@ -42,9 +42,6 @@
   width: 100%;
   box-shadow: none;
   border: 1px solid #b3b3b3;
-  /* padding: 15px 20px 0; */
-  /* min-height: 260px; */
-  /* height: auto; */
 }
 .tabConstentItem > div > div:nth-child(1) {
   padding: 5px;
@@ -56,8 +53,6 @@
 }
 .tabConstentItem > div > div:nth-child(2) {
   width: 100%;
-  /*! padding-left: 50px; */
-  /*! padding-right: 50px; */
   padding: 15px 45px;
   word-break: break-all;
   gap: 0;
