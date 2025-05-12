@@ -108,8 +108,8 @@ export default function MemberBox() {
                       <li>
                         <Link
                           className="px-3 py-1 block opacity-70 hover:opacity-100"
-                          to={`/profile/${user._id}`}
                           state={{ userid: user._id }}
+                          to={`/profile`}
                         >
                           프로필 보기
                         </Link>

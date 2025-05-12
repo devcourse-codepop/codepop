@@ -32,7 +32,7 @@ export default function Header() {
                 <Notification />
               </div>
               <Link
-                to="/mypage"
+                to="/profile"
                 className="w-10 h-10 rounded-3xl overflow-hidden"
               >
                 <img src={imgSrc} className="w-full h-full" />
