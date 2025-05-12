@@ -1,13 +1,13 @@
-import { useCallback, useRef, useState } from "react";
-import ChannelName from "../../components/channel/ChannelName";
-import Button from "../../components/common/Button";
-import Editor from "../../components/editor/Editor";
-import { createCodePost } from "../../api/write/write";
-import { useParams } from "react-router-dom";
+import { useCallback, useRef, useState } from 'react';
+import ChannelName from '../../components/channel/ChannelName';
+import Button from '../../components/common/Button';
+import Editor from '../../components/editor/Editor';
+import { createCodePost } from '../../api/write/write';
+import { useParams } from 'react-router-dom';
 
 export default function CreateCodePost() {
   const titleRef = useRef<HTMLInputElement>(null);
-  const [content, setContent] = useState(""); // Editor에서 본문 HTML을 받음
+  const [content, setContent] = useState(''); // Editor에서 본문 HTML을 받음
   const [pollOptions, setPollOptions] = useState<
     { id: number; text: string }[]
   >([]);
@@ -24,35 +24,35 @@ export default function CreateCodePost() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const titleText = titleRef.current?.value || "";
+    const titleText = titleRef.current?.value || '';
 
     if (!channelId) {
-      console.error("채널 ID가 없습니다.");
+      console.error('채널 ID가 없습니다.');
       return;
     }
 
     const formData = new FormData();
 
     formData.append(
-      "title",
+      'title',
       JSON.stringify({
         title: titleText,
         content: content,
         pollOptions: pollOptions,
       })
     );
-    formData.append("channelId", "681b84d4437f722b6908ab61");
+    formData.append('channelId', '681b84d4437f722b6908ab61');
 
     if (imageFile) {
-      formData.append("image", imageFile); // 이미지 파일 추가
+      formData.append('image', imageFile); // 이미지 파일 추가
     }
 
     try {
       const res = await createCodePost(formData);
-      console.log("작성 성공:", res.data);
+      console.log('작성 성공:', res.data);
       // 성공 시 이동 등 처리
     } catch (err) {
-      console.error("작성 실패", err);
+      console.error('작성 실패', err);
     }
   };
 
@@ -60,7 +60,7 @@ export default function CreateCodePost() {
     <div className="w-full flex relative">
       <div>
         <div className="pb-[30px]">
-          <ChannelName channelId={channelId ?? "1"} />
+          <ChannelName channelId={channelId ?? '1'} />
         </div>
 
         <div className=" bg-white shadow-md rounded-[10px] p-5 relative">
