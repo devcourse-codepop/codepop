@@ -1,14 +1,3 @@
-/* header */
-.notification-wrapper {
-  position: relative;
-}
-.notification-wrapper > div {
-  position: absolute;
-  z-index: 10;
-  right: -20px;
-  top: calc(100% + 6px);
-}
-
 /* side-bar */
 .myInfoCard > div {
   padding: 5px 10px 15px 0;

@@ -62,7 +62,7 @@ export default function Notification() {
         )}
       </button>
       {notifiOpen && (
-        <div className="relative gap-3 bg-white rounded-[10px] z-1 py-4 px-5 shadow-2xl w-[340px]">
+        <div className="absolute gap-3 bg-white rounded-[10px] z-1 py-4 px-5 shadow-2xl w-[340px] z-10 -right-5 top-8.5">
           <span className="w-[12px] h-[12px] bg-white rounded-[2px] absolute rotate-135 -top-1.5 right-6 -z-2"></span>
           <div className="border-b border-[#cccccc] flex justify-between pb-3">
             <h3 className="text-[#4D4D4D] text-base font-medium">
