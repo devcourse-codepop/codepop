@@ -10,6 +10,7 @@ import MainContent from "./pages/MainContent";
 import PostList from "./pages/PostList";
 import PostDetail from "./pages/PostDetail";
 import WritePostRouter from "./route/WritePostRouter";
+import UpdatePostRouter from "./route/UpdatePostRouter";
 
 export default function App() {
   const accessToken = useAuthStore((state) => state.accessToken);
@@ -55,7 +56,10 @@ export default function App() {
             path="/channel/:channelId/write"
             element={<WritePostRouter />}
           />
-          <Route path="/channel/:channelId/update/:postId" element="" />
+          <Route
+            path="/channel/:channelId/update/:postId"
+            element={<UpdatePostRouter />}
+          />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />

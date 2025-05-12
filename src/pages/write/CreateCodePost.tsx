@@ -3,7 +3,7 @@ import ChannelName from "../../components/channel/ChannelName";
 import Button from "../../components/common/Button";
 import Editor from "../../components/editor/Editor";
 import { createCodePost } from "../../api/write/write";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function CreateCodePost() {
   const titleRef = useRef<HTMLInputElement>(null);
@@ -12,6 +12,7 @@ export default function CreateCodePost() {
     { id: number; text: string }[]
   >([]);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const navigate = useNavigate();
   const { channelId } = useParams();
 
   const handlePollCreate = useCallback(
@@ -23,7 +24,7 @@ export default function CreateCodePost() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    navigate(`/channel/${channelId}`);
     const titleText = titleRef.current?.value || "";
 
     if (!channelId) {
@@ -56,6 +57,14 @@ export default function CreateCodePost() {
     }
   };
 
+  // // 이미지 삭제 핸들러 추가
+  // const handleImageDelete = () => {
+  //   const newContent = content.replace(/<p[^>]*>\s*<img[^>]*>\s*<\/p>/g, "");
+  //   setContent(newContent);
+  //   setImageFile(null);
+  //   console.log("에디터 본문에서 이미지 및 <p> 태그가 삭제되었습니다.");
+  // };
+
   return (
     <div className="w-full flex relative">
       <div>
@@ -77,8 +86,18 @@ export default function CreateCodePost() {
             onPollCreate={handlePollCreate}
             onImageSelect={(file) => setImageFile(file)} // 이미지 저장
             showCodeButton={true}
+            initialContent={content}
           />
           <hr className="mb-[60px] opacity-30" />
+
+          {/* {imageFile && (
+            <Button
+              value="이미지 삭제"
+              className="button-style2 absolute bottom-[15px] right-[160px]"
+              onClick={handleImageDelete}
+            />
+          )} */}
+
           <Button
             value="완료"
             className="button-style2 absolute bottom-[15px] right-[20px]"

@@ -1,16 +1,16 @@
-import Avatar from '../avatar/Avatar';
-import LikeComment from '../reaction/LikeComment';
+import Avatar from "../avatar/Avatar";
+import LikeComment from "../reaction/LikeComment";
 //import voteBtn from '../../assets/VoteBtn.svg';
-import menuIcon from '../../assets/MenuIcon.svg';
-import { useEffect, useRef, useState } from 'react';
+import menuIcon from "../../assets/MenuIcon.svg";
+import { useEffect, useRef, useState } from "react";
 //import CommentListItem from './CommentListItem';
-import { Comment, Post } from '../../types';
-import dayjs from 'dayjs';
-import { deletePosts, getPostList } from '../../api/post/post';
-import { usePostStore } from '../../stores/postStore';
-import { useNavigate, useParams } from 'react-router-dom';
-import CommentListItem from './CommentListItem';
-import { useAuthStore } from '../../stores/authStore';
+import { Comment, Post } from "../../types";
+import dayjs from "dayjs";
+import { deletePosts, getPostList } from "../../api/post/post";
+import { usePostStore } from "../../stores/postStore";
+import { useNavigate, useParams } from "react-router-dom";
+import CommentListItem from "./CommentListItem";
+import { useAuthStore } from "../../stores/authStore";
 
 export default function PostDetailItem(props: Post) {
   const { _id, title, image, author, likes, comments, updatedAt } = props;
@@ -40,12 +40,12 @@ export default function PostDetailItem(props: Post) {
 
   const getDatetimeSortFormat = (update: string): string => {
     const date = dayjs(update);
-    return date.format('YYYY-MM-DD');
+    return date.format("YYYY-MM-DD");
   };
 
   const getDatetimeFormat = () => {
     const date = dayjs(updatedAt);
-    return date.format('YYYY.MM.DD');
+    return date.format("YYYY.MM.DD");
   };
 
   const checkPostUser = () => {
@@ -66,7 +66,7 @@ export default function PostDetailItem(props: Post) {
     for (let i = 0; i < newStr.length; i++) {
       count++;
       if (count === lineChangeLength) {
-        newStr = newStr.slice(0, i) + '\n' + newStr.slice(i);
+        newStr = newStr.slice(0, i) + "\n" + newStr.slice(i);
         count = 0;
         i = i + 1;
       }
@@ -87,7 +87,7 @@ export default function PostDetailItem(props: Post) {
     for (let i = 0; i < newStr.length; i++) {
       count++;
       if (count === lineChangeLength) {
-        newStr = newStr.slice(0, i) + '\n' + newStr.slice(i);
+        newStr = newStr.slice(0, i) + "\n" + newStr.slice(i);
         count = 0;
         i = i + 1;
       }
@@ -116,7 +116,7 @@ export default function PostDetailItem(props: Post) {
   };
 
   const clickUpdateHandler = () => {
-    navigate(`channel/${channel}/update/${post}`);
+    navigate(`/channel/${channel}/update/${post}`);
   };
 
   const clickDeleteHandler = async () => {
@@ -139,7 +139,7 @@ export default function PostDetailItem(props: Post) {
   useEffect(() => {
     if (divRef.current) {
       const width = divRef.current.offsetWidth;
-      console.log('width:', width);
+      console.log("width:", width);
       setCurrentWidth(width);
     }
   }, []);
