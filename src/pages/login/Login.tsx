@@ -90,6 +90,7 @@ export default function Login() {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       }
+      navigate('/');
     } catch (err) {
       const error = err as AxiosError;
 
@@ -106,7 +107,6 @@ export default function Login() {
         }
       }
     }
-    navigate('/');
   };
 
   return (
