@@ -20,7 +20,9 @@ export default function ChannelBox() {
           {channels.map((item) => (
             <li key={item.id}>
               <Link
-                // onClick={() => clickHandler(pathName)}
+                onClick={() => {
+                  window.location.href = `${item.to}`;
+                }}
                 to={item.to}
                 className="flex items-start ml-[29px] group"
               >

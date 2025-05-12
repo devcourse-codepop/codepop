@@ -5,7 +5,7 @@ import { useAuthStore } from '../../stores/authStore';
 
 export default function Header() {
   const { isLoggedIn, user, logout } = useAuthStore();
-  console.log(user?.image);
+
   let imgSrc: string = '';
   if (user?.image === undefined || user?.image === '') {
     imgSrc =
@@ -28,14 +28,15 @@ export default function Header() {
               <Link to="/" onClick={logout} className="text-[20px]">
                 Logout
               </Link>
-              <div className="notification-wrapper">
+              <div className="notification-wrapper relative">
                 <Notification />
               </div>
-              <img
-                src={imgSrc}
-                className="w-10 h-10 rounded-3xl overflow-hidden cursor-pointer"
-                onClick={() => (window.location.href = '/profile')}
-              />
+              <Link
+                to="/profile"
+                className="w-10 h-10 rounded-3xl overflow-hidden"
+              >
+                <img src={imgSrc} className="w-full h-full" />
+              </Link>
             </div>
           )}
         </div>
