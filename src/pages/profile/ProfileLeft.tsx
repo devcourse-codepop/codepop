@@ -2,6 +2,7 @@ import { Mail } from 'lucide-react';
 import Button from '../../components/common/Button';
 import { useAuthStore } from '../../stores/authStore';
 import { useNavigate } from 'react-router-dom';
+import defaultProfileImage from '../../assets/images/profile/defaultProfileImage.jpg';
 
 export default function ProfileLeft({ userData, onSelectTab, userId }: UserInfo) {
   const user = useAuthStore((state) => state.user);
@@ -10,7 +11,7 @@ export default function ProfileLeft({ userData, onSelectTab, userId }: UserInfo)
     <>
       <div className='w-[291px] h-[633px] rounded-bl-[10px] px-[50px] border-r-2 border-gray-300 '>
         <img
-          src={userData?.image}
+          src={userData?.image || defaultProfileImage}
           className='w-[196px] h-[196px] rounded-[5px] mt-[60px]  object-contain overflow-hidden'
         />
         <div className='pt-[0px]'>
