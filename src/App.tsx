@@ -32,7 +32,7 @@ export default function App() {
     } else {
       useAuthStore.setState({ isLoading: false });
     }
-  }, []);
+  }, [accessToken]);
 
   return (
     <>
