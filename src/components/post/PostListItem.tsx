@@ -1,5 +1,6 @@
 import Avatar from '../avatar/Avatar';
 import LikeComment from '../reaction/LikeComment';
+//import CodeIcon from '../../assets/CodeEditIcon.svg';
 import { Post } from '../../types';
 import dayjs from 'dayjs';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -24,6 +25,8 @@ export default function PostListItem(props: Post) {
   const user = useAuthStore((state) => state.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  let codes;
+
   const removeImgTags = (html: string): string => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
@@ -31,49 +34,22 @@ export default function PostListItem(props: Post) {
     const imgs = doc.querySelectorAll('img');
     imgs.forEach((img) => img.remove());
 
-    const codes = doc.querySelectorAll('pre');
-    codes.forEach((code) => code.remove());
+    // const codes = doc.querySelectorAll('pre');
+    codes = doc.querySelectorAll('pre');
+    codes.forEach((code) => {
+      code.remove();
+    });
 
     return doc.body.innerHTML;
+  };
+
+  const setCodeCount = () => {
+    if (codes.length > 0) return codes.length;
   };
 
   const getDatetimeFormat = () => {
     const date = dayjs(updatedAt).add(9, 'hour');
     return date.format('YYYY.MM.DD');
-  };
-
-  const getTitleSubstr = () => {
-    const totalLength = image ? 35 : 53;
-    //const totalLength = Math.floor(currentWidth / 26);
-    if (removeImgTags(JSON.parse(title).title).length > totalLength) {
-      const newStr =
-        removeImgTags(JSON.parse(title).title).substr(0, totalLength) + ' ...';
-      console.log(newStr);
-      return newStr;
-    }
-    return removeImgTags(JSON.parse(title).title);
-  };
-
-  const getContentSubstr = () => {
-    const totalLength = 250;
-    //const lineChangeLength = 55;
-    //let count = 0;
-    if (removeImgTags(JSON.parse(title).content).length > totalLength) {
-      const newStr =
-        removeImgTags(JSON.parse(title).content).substr(0, totalLength) +
-        ' ...';
-      // for (let i = 0; i < newStr.length; i++) {
-      //   count++;
-      //   if (count === lineChangeLength) {
-      //     newStr = newStr.slice(0, i) + '\n' + newStr.slice(i);
-      //     count = 0;
-      //     i = i + 1;
-      //   }
-      // }
-      console.log(newStr);
-      return newStr;
-    }
-    return removeImgTags(JSON.parse(title).content);
   };
 
   const clickPostHandler = () => {
@@ -123,16 +99,23 @@ export default function PostListItem(props: Post) {
               image && 'max-w-[635px]'
             )}
           >
-            <div className="postTitle text-[18px] font-semibold">
-              {getTitleSubstr()}
+            <div className="postTitle text-[18px] font-semibold truncate">
+              {JSON.parse(title).title}
             </div>
-            {/* w-[500px] */}
             <div
               dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(getContentSubstr()),
+                __html: DOMPurify.sanitize(
+                  removeImgTags(JSON.parse(title).content)
+                ),
               }}
-              className="postContent text-[15px] font-normal"
+              className="postContent text-[15px] font-normal line-clamp-5"
             />
+            {/* {setCodeCount() > 0 && (
+              <div className="flex justify-end text-[14px] opacity-70">
+                +<span className="text-[#ff0000]">{setCodeCount()}</span>개의
+                코드 블록
+              </div>
+            )} */}
           </div>
           {image && (
             <div className="border border-[#e0e0e0] rounded-[5px]">
@@ -144,7 +127,35 @@ export default function PostListItem(props: Post) {
           {getDatetimeFormat()}
         </div>
         <hr className="mx-[18px] text-[#b2b2b2]" />
-        <div className="h-[59px]">
+        {/* <div className="flex justify-between h-[59px]"> */}
+        <div
+          className={twMerge(
+            'flex h-[59px]',
+            setCodeCount() > 0 ? 'justify-between' : 'justify-end'
+          )}
+        >
+          {/* {setCodeCount() > 0 && (
+            <div className="flex justify-center items-center text-[14px] opacity-70">
+              +<span className="text-[#ff0000]">{setCodeCount()}</span>개의 코드
+              블록
+            </div>
+          )} */}
+          {/* {setCodeCount() > 0 && (
+            <div className="flex justify-center items-center text-[14px]">
+              <img
+                src={CodeIcon}
+                alt="코드 아이콘"
+                className="mr-2 opacity-60"
+              />
+              +<span className="text-[#ff0000]">{setCodeCount()}</span>
+            </div>
+          )} */}
+          {setCodeCount() > 0 && (
+            <div className="flex justify-center items-center text-[14px] opacity-70 ml-5">
+              +<span className="text-[#ff0000]">{setCodeCount()}</span>개의 코드
+              블록
+            </div>
+          )}
           <LikeComment
             likeCount={likes.length}
             commentCount={comments.length}
