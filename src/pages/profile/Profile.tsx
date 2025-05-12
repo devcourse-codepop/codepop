@@ -21,6 +21,7 @@ export default function Profile({ userId }: { userId: string }) {
     setUserData(null);
     if (userId) {
       axiosList();
+      setSelectedTab('posts');
     }
   }, [userId]);
 
