@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { useEffect } from "react";
 import { useAuthStore } from "./stores/authStore";
 import { axiosInstance } from "./api/axios";
@@ -12,22 +11,8 @@ import PostList from "./pages/PostList";
 import PostDetail from "./pages/PostDetail";
 import WritePostRouter from "./route/WritePostRouter";
 import UpdatePostRouter from "./route/UpdatePostRouter";
-=======
-import { useEffect } from 'react';
-import { useAuthStore } from './stores/authStore';
-import { axiosInstance } from './api/axios';
-import { Route, Routes } from 'react-router-dom';
-import Login from './pages/login/Login';
-import SignUp from './pages/signup/SignUp';
-import Error from './pages/Error';
-import MainLayout from './layout/MainLayout';
-import MainContent from './pages/MainContent';
-import PostList from './pages/PostList';
-import PostDetail from './pages/PostDetail';
-import WritePostRouter from './route/WritePostRouter';
-import ProfilePage from './pages/profile/ProfilePage';
-import EditProfilePage from './pages/profile/profile-edit/EditProfilePage';
->>>>>>> d541d4578ed8df6f136e6eac275ea1cf502d55dc
+import ProfilePage from "./pages/profile/ProfilePage";
+import EditProfilePage from "./pages/profile/profile-edit/EditProfilePage";
 
 export default function App() {
   const accessToken = useAuthStore((state) => state.accessToken);
@@ -37,7 +22,7 @@ export default function App() {
   useEffect(() => {
     if (accessToken) {
       axiosInstance
-        .get('/auth-user')
+        .get("/auth-user")
         .then((res) => {
           //resetUser(); // 추가
           setUser(res.data);

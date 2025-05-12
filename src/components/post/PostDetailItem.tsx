@@ -1,10 +1,7 @@
-<<<<<<< HEAD
 import Avatar from "../avatar/Avatar";
 import LikeComment from "../reaction/LikeComment";
-//import voteBtn from '../../assets/VoteBtn.svg';
 import menuIcon from "../../assets/MenuIcon.svg";
-import { useEffect, useRef, useState } from "react";
-//import CommentListItem from './CommentListItem';
+import { useEffect, useState } from "react";
 import { Comment, Post } from "../../types";
 import dayjs from "dayjs";
 import { deletePosts, getPostList } from "../../api/post/post";
@@ -12,20 +9,7 @@ import { usePostStore } from "../../stores/postStore";
 import { useNavigate, useParams } from "react-router-dom";
 import CommentListItem from "./CommentListItem";
 import { useAuthStore } from "../../stores/authStore";
-=======
-import Avatar from '../avatar/Avatar';
-import LikeComment from '../reaction/LikeComment';
-import menuIcon from '../../assets/MenuIcon.svg';
-import { useEffect, useState } from 'react';
-import { Comment, Post } from '../../types';
-import dayjs from 'dayjs';
-import { deletePosts, getPostList } from '../../api/post/post';
-import { usePostStore } from '../../stores/postStore';
-import { useNavigate, useParams } from 'react-router-dom';
-import CommentListItem from './CommentListItem';
-import { useAuthStore } from '../../stores/authStore';
-import DOMPurify from 'dompurify';
->>>>>>> d541d4578ed8df6f136e6eac275ea1cf502d55dc
+import DOMPurify from "dompurify";
 
 export default function PostDetailItem(props: Post) {
   // image,
@@ -56,38 +40,28 @@ export default function PostDetailItem(props: Post) {
 
   const editCodeStyle = (html: string): string => {
     const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
+    const doc = parser.parseFromString(html, "text/html");
 
-    const codes = doc.querySelectorAll('pre');
+    const codes = doc.querySelectorAll("pre");
     codes.forEach((code) => {
-      code.style.backgroundColor = '#ececec';
-      code.style.padding = '20px';
-      code.style.marginTop = '10px';
-      code.style.marginBottom = '10px';
-      code.style.borderRadius = '8px';
+      code.style.backgroundColor = "#ececec";
+      code.style.padding = "20px";
+      code.style.marginTop = "10px";
+      code.style.marginBottom = "10px";
+      code.style.borderRadius = "8px";
     });
 
     return doc.body.innerHTML;
   };
 
   const getDatetimeSortFormat = (update: string): string => {
-<<<<<<< HEAD
-    const date = dayjs(update);
+    const date = dayjs(update).add(9, "hour");
     return date.format("YYYY-MM-DD");
   };
 
   const getDatetimeFormat = () => {
-    const date = dayjs(updatedAt);
+    const date = dayjs(updatedAt).add(9, "hour");
     return date.format("YYYY.MM.DD");
-=======
-    const date = dayjs(update).add(9, 'hour');
-    return date.format('YYYY-MM-DD');
-  };
-
-  const getDatetimeFormat = () => {
-    const date = dayjs(updatedAt).add(9, 'hour');
-    return date.format('YYYY.MM.DD');
->>>>>>> d541d4578ed8df6f136e6eac275ea1cf502d55dc
   };
 
   const checkPostUser = () => {
@@ -96,51 +70,6 @@ export default function PostDetailItem(props: Post) {
     }
   };
 
-<<<<<<< HEAD
-  const getTitleSubstr = () => {
-    const lineChangeLength = Math.floor(currentWidth / 10);
-    console.log(lineChangeLength);
-    let count = 0;
-
-    if (JSON.parse(title).title.length < lineChangeLength)
-      return JSON.parse(title).title;
-
-    let newStr = JSON.parse(title).title;
-    for (let i = 0; i < newStr.length; i++) {
-      count++;
-      if (count === lineChangeLength) {
-        newStr = newStr.slice(0, i) + "\n" + newStr.slice(i);
-        count = 0;
-        i = i + 1;
-      }
-    }
-    //console.log(newStr);
-    return newStr;
-  };
-
-  const getContentSubstr = () => {
-    const lineChangeLength = Math.floor(currentWidth / 13);
-    console.log(lineChangeLength);
-    let count = 0;
-
-    if (JSON.parse(title).content.length < lineChangeLength)
-      return JSON.parse(title).content;
-
-    let newStr = JSON.parse(title).content;
-    for (let i = 0; i < newStr.length; i++) {
-      count++;
-      if (count === lineChangeLength) {
-        newStr = newStr.slice(0, i) + "\n" + newStr.slice(i);
-        count = 0;
-        i = i + 1;
-      }
-    }
-    //console.log(newStr);
-    return newStr;
-  };
-
-=======
->>>>>>> d541d4578ed8df6f136e6eac275ea1cf502d55dc
   const filteringItem = (data: Post[]) => {
     for (const res of data) {
       if (res._id === post) {
@@ -179,15 +108,6 @@ export default function PostDetailItem(props: Post) {
     }
   }, [user]);
 
-<<<<<<< HEAD
-  useEffect(() => {
-    if (divRef.current) {
-      const width = divRef.current.offsetWidth;
-      console.log("width:", width);
-      setCurrentWidth(width);
-    }
-  }, []);
-=======
   // useEffect(() => {
   //   if (divRef.current) {
   //     const width = divRef.current.offsetWidth;
@@ -195,7 +115,6 @@ export default function PostDetailItem(props: Post) {
   //     setCurrentWidth(width);
   //   }
   // }, []);
->>>>>>> d541d4578ed8df6f136e6eac275ea1cf502d55dc
 
   return (
     <>
