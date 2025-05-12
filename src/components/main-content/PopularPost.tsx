@@ -31,7 +31,7 @@ export default function PopularPost() {
         JSON.parse(str);
         return str;
       } catch {
-        return `{"title":"${str}", "content":"s"}`;
+        return `{"title":"${str}", "content":""}`;
       }
     }
     return `{"title":"${str}", "content":""}`;
@@ -40,7 +40,7 @@ export default function PopularPost() {
   return (
     <>
       <div className="bg-white w-full rounded-[10px] px-[30px] py-[25px] pt-[20px] shadow-md">
-        <h3 className="font-semibold text-[#595956] text-[18px] mb-[20px]">
+        <h3 className="font-semibold text-[#595956] text-[18px] mb-[15px]">
           Popular Posts
         </h3>
         <ul className="flex relative gap-x-5 gap-y-2.5 mb-4.5 flex-wrap">
@@ -91,7 +91,6 @@ export default function PopularPost() {
                     ...popular,
                     title: parseHandler(popular.title),
                   };
-                  console.log(parsePopular);
                   return (
                     <div
                       key={`popular-${pIndex}`}
