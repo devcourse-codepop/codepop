@@ -197,7 +197,7 @@ export default function EditProfile({ userId }: { userId: string }) {
       <div className='w-full h-[calc(100vh-100px-30px)] bg-white rounded-[10px] shadow-md font-semibold '>
         <div className='relative h-[223px] rounded-t-[10px]'>
           <img
-            src={coverPreviewUrl || userData.coverImage}
+            src={coverPreviewUrl || userData.coverImage || defaultCover}
             className='w-full h-full rounded-t-[10px]'
             alt='Background'
           />
@@ -224,7 +224,7 @@ export default function EditProfile({ userId }: { userId: string }) {
         <div className='flex justify-center items-center'>
           <div className='relative inline-block mt-[19px]'>
             <img
-              src={profilePreviewUrl || userData.image}
+              src={profilePreviewUrl || userData.image || defaultProfileImage}
               className='w-[300px] h-[300px] rounded-[5px] ml-[100px] border border-[#E3E3E3] object-cover'
               alt='Profile'
             />
