@@ -1,14 +1,14 @@
-import Avatar from '../avatar/Avatar';
-import LikeComment from '../reaction/LikeComment';
+import Avatar from "../avatar/Avatar";
+import LikeComment from "../reaction/LikeComment";
 //import CodeIcon from '../../assets/CodeEditIcon.svg';
-import { Post } from '../../types';
-import dayjs from 'dayjs';
-import { useNavigate, useParams } from 'react-router-dom';
-import { twMerge } from 'tailwind-merge';
-import { useState } from 'react';
-import { useAuthStore } from '../../stores/authStore';
-import NotLoginModal from './NotLoginModal';
-import DOMPurify from 'dompurify';
+import { Post } from "../../types";
+import dayjs from "dayjs";
+import { useNavigate, useParams } from "react-router-dom";
+import { twMerge } from "tailwind-merge";
+import { useState } from "react";
+import { useAuthStore } from "../../stores/authStore";
+import NotLoginModal from "./NotLoginModal";
+import DOMPurify from "dompurify";
 
 export default function PostListItem(props: Post) {
   const { _id, title, image, author, likes, comments, updatedAt } = props;
@@ -29,13 +29,13 @@ export default function PostListItem(props: Post) {
 
   const removeImgTags = (html: string): string => {
     const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
+    const doc = parser.parseFromString(html, "text/html");
 
-    const imgs = doc.querySelectorAll('img');
+    const imgs = doc.querySelectorAll("img");
     imgs.forEach((img) => img.remove());
 
     // const codes = doc.querySelectorAll('pre');
-    codes = doc.querySelectorAll('pre');
+    codes = doc.querySelectorAll("pre");
     codes.forEach((code) => {
       code.remove();
     });
@@ -48,8 +48,8 @@ export default function PostListItem(props: Post) {
   };
 
   const getDatetimeFormat = () => {
-    const date = dayjs(updatedAt).add(9, 'hour');
-    return date.format('YYYY.MM.DD');
+    const date = dayjs(updatedAt).add(9, "hour");
+    return date.format("YYYY.MM.DD");
   };
 
   const clickPostHandler = () => {
@@ -88,15 +88,15 @@ export default function PostListItem(props: Post) {
         </div>
         <div
           className={twMerge(
-            'flex justify-between px-[55px] py-[15px] gap-[55px] cursor-pointer',
-            !image && 'py-[23px]'
+            "flex justify-between px-[55px] py-[15px] gap-[55px] cursor-pointer",
+            !image && "py-[23px]"
           )}
           onClick={clickPostHandler}
         >
           <div
             className={twMerge(
-              'flex flex-col justify-center w-full gap-[22px] ',
-              image && 'max-w-[635px]'
+              "flex flex-col justify-center w-full gap-[22px] ",
+              image && "max-w-[635px]"
             )}
           >
             <div className="postTitle text-[18px] font-semibold truncate">
@@ -130,8 +130,8 @@ export default function PostListItem(props: Post) {
         {/* <div className="flex justify-between h-[59px]"> */}
         <div
           className={twMerge(
-            'flex h-[59px]',
-            setCodeCount() > 0 ? 'justify-between' : 'justify-end'
+            "flex h-[59px]",
+            setCodeCount() > 0 ? "justify-between" : "justify-end"
           )}
         >
           {/* {setCodeCount() > 0 && (

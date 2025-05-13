@@ -3,7 +3,7 @@ import ChannelName from "../../components/channel/ChannelName";
 import Button from "../../components/common/Button";
 import Editor from "../../components/editor/Editor";
 import { createCodePost } from "../../api/write/write";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function CreateVotePost() {
   const titleRef = useRef<HTMLInputElement>(null);
@@ -12,6 +12,7 @@ export default function CreateVotePost() {
     { id: number; text: string }[]
   >([]);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const navigate = useNavigate();
   const { channelId } = useParams();
 
   const handlePollCreate = useCallback(
@@ -23,7 +24,7 @@ export default function CreateVotePost() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    navigate(`/channel/${channelId}`);
     const titleText = titleRef.current?.value || "";
 
     if (!channelId) {
@@ -79,6 +80,7 @@ export default function CreateVotePost() {
               onImageSelect={(file) => setImageFile(file)} // 이미지 저장
               showPollButton={true}
               // disableMinHeight={true}
+              initialContent={content}
             />
             <hr className="mb-[60px] opacity-30" />
             <Button

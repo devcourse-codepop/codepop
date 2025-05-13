@@ -1,17 +1,18 @@
-import { useEffect } from 'react';
-import { useAuthStore } from './stores/authStore';
-import { axiosInstance } from './api/axios';
-import { Route, Routes } from 'react-router-dom';
-import Login from './pages/login/Login';
-import SignUp from './pages/signup/SignUp';
-import Error from './pages/Error';
-import MainLayout from './layout/MainLayout';
-import MainContent from './pages/MainContent';
-import PostList from './pages/PostList';
-import PostDetail from './pages/PostDetail';
-import WritePostRouter from './route/WritePostRouter';
-import ProfilePage from './pages/profile/ProfilePage';
-import EditProfilePage from './pages/profile/profile-edit/EditProfilePage';
+import { useEffect } from "react";
+import { useAuthStore } from "./stores/authStore";
+import { axiosInstance } from "./api/axios";
+import { Route, Routes } from "react-router-dom";
+import Login from "./pages/login/Login";
+import SignUp from "./pages/signup/SignUp";
+import Error from "./pages/Error";
+import MainLayout from "./layout/MainLayout";
+import MainContent from "./pages/MainContent";
+import PostList from "./pages/PostList";
+import PostDetail from "./pages/PostDetail";
+import WritePostRouter from "./route/WritePostRouter";
+import UpdatePostRouter from "./route/UpdatePostRouter";
+import ProfilePage from "./pages/profile/ProfilePage";
+import EditProfilePage from "./pages/profile/profile-edit/EditProfilePage";
 
 export default function App() {
   const accessToken = useAuthStore((state) => state.accessToken);
@@ -21,7 +22,7 @@ export default function App() {
   useEffect(() => {
     if (accessToken) {
       axiosInstance
-        .get('/auth-user')
+        .get("/auth-user")
         .then((res) => {
           //resetUser(); // 추가
           setUser(res.data);
@@ -58,7 +59,10 @@ export default function App() {
             path="/channel/:channelId/write"
             element={<WritePostRouter />}
           />
-          <Route path="/channel/:channelId/update/:postId" element="" />
+          <Route
+            path="/channel/:channelId/update/:postId"
+            element={<UpdatePostRouter />}
+          />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
