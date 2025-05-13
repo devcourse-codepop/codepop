@@ -82,10 +82,10 @@ export default function Notification() {
         closeHandler();
       }
     };
-
     window.addEventListener('mousedown', clickHandler);
     return () => window.removeEventListener('mousedown', clickHandler);
   }, [modalRef]);
+
   return (
     <>
       <button
