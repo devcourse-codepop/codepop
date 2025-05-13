@@ -93,6 +93,7 @@ export default function CreateSetPost({ theme }: { theme: Theme }) {
               onPollCreate={handlePollCreate}
               onImageSelect={(file) => setImageFile(file)} // 이미지 저장
               initialContent={content}
+              theme={theme}
             />
             <hr
               className={`mb-[60px] opacity-30 ${

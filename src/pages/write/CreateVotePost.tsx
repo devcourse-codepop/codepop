@@ -95,6 +95,7 @@ export default function CreateVotePost({ theme }: { theme: Theme }) {
               showPollButton={true}
               // disableMinHeight={true}
               initialContent={content}
+              theme={theme}
             />
             <hr
               className={`mb-[60px] opacity-30 ${

@@ -90,9 +90,9 @@ export default function WritePostItem({
           <hr className="mx-[22px] text-[#b2b2b2]" />
           <div className="w-full h-[66px] flex justify-end items-center">
             <div className="pr-[25px]">
-              {channelId === '1' && <CodeEditIcon />}
-              {channelId === '3' && <VoteIcon />}
-              <ImageIcon />
+              {channelId === '1' && <CodeEditIcon theme={theme} />}
+              {channelId === '3' && <VoteIcon theme={theme} />}
+              <ImageIcon theme={theme} />
             </div>
           </div>
           <textarea

@@ -6,6 +6,10 @@ import { CustomImage } from './extensions/CustomImage';
 import { useState, useEffect } from 'react';
 import PollCreator from '../poll/PollCreater';
 
+interface Theme {
+  name: string;
+}
+
 interface Props {
   onChange: (html: string) => void;
   onPollCreate?: (options: { id: number; text: string }[]) => void;
@@ -14,6 +18,7 @@ interface Props {
   showCodeButton?: boolean;
   disableMinHeight?: boolean;
   initialContent: string; // 추가된 부분
+  theme: Theme;
 }
 
 export default function Editor({
@@ -24,6 +29,7 @@ export default function Editor({
   showCodeButton = false,
   disableMinHeight = false,
   initialContent, // 추가된 부분
+  theme,
 }: Props) {
   const editor = useEditor({
     extensions: [StarterKit, CustomImage],
@@ -50,6 +56,7 @@ export default function Editor({
         onImageSelect={onImageSelect}
         showPollButton={showPollButton}
         showCodeButton={showCodeButton}
+        theme={theme}
       />
       <EditorContent
         editor={editor}

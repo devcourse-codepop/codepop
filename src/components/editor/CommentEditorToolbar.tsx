@@ -1,14 +1,20 @@
 import { Editor } from '@tiptap/react';
 import CodeEditIcon from '../icon/CodeEditIcon';
 
+interface Theme {
+  name: string;
+}
+
 interface Props {
   editor: Editor | null;
   showCodeButton?: boolean;
+  theme: Theme;
 }
 
 export default function CommentEditorToolbar({
   editor,
   showCodeButton = false,
+  theme,
 }: Props) {
   if (!editor) return null;
 
@@ -24,7 +30,7 @@ export default function CommentEditorToolbar({
             editor.isActive('codeBlock') ? 'bg-blue-400' : 'hover:bg-gray-200'
           }`}
         >
-          <CodeEditIcon />
+          <CodeEditIcon theme={theme} />
         </button>
       )}
     </div>

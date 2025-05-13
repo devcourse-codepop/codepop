@@ -101,6 +101,7 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
             onImageSelect={(file) => setImageFile(file)} // 이미지 저장
             showCodeButton={true}
             initialContent={content}
+            theme={theme}
           />
           <hr
             className={`mb-[60px] opacity-30 ${

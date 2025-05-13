@@ -1,10 +1,15 @@
-import voteIcon from "../../assets/VoteIcon.svg";
+import voteIcon from '../../assets/VoteIcon.svg';
+import voteIconWhite from '../../assets/VoteIconWhite.svg';
 
-export default function VoteIcon() {
+interface Theme {
+  name: string;
+}
+
+export default function VoteIcon({ theme }: { theme: Theme }) {
   return (
     <>
       <img
-        src={voteIcon}
+        src={`${theme.name === 'Dark' ? voteIconWhite : voteIcon}`}
         className="w-[30px] h-[30px] inline-block cursor-pointer"
       />
     </>

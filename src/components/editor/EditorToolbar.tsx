@@ -1,9 +1,13 @@
-import { Editor } from "@tiptap/react";
-import CodeEditIcon from "../icon/CodeEditIcon";
-import ImageIcon from "../icon/ImageIcon";
-import BoldIcon from "../icon/BoldIcon";
-import ItalicIcon from "../icon/ItalicIcon";
-import VoteIcon from "../icon/VoteIcon";
+import { Editor } from '@tiptap/react';
+import CodeEditIcon from '../icon/CodeEditIcon';
+import ImageIcon from '../icon/ImageIcon';
+import BoldIcon from '../icon/BoldIcon';
+import ItalicIcon from '../icon/ItalicIcon';
+import VoteIcon from '../icon/VoteIcon';
+
+interface Theme {
+  name: string;
+}
 
 interface Props {
   editor: Editor | null;
@@ -11,6 +15,7 @@ interface Props {
   onImageSelect?: (file: File) => void; // 추가
   showPollButton?: boolean;
   showCodeButton?: boolean;
+  theme: Theme;
 }
 
 export default function EditorToolbar({
@@ -19,6 +24,7 @@ export default function EditorToolbar({
   onImageSelect,
   showPollButton = false,
   showCodeButton = false,
+  theme,
 }: Props) {
   if (!editor) return null;
 
@@ -27,23 +33,23 @@ export default function EditorToolbar({
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         className={`cursor-pointer rounded-[5px]${
-          editor.isActive("bold")
-            ? "font-bold bg-blue-400"
-            : " hover:bg-gray-200"
+          editor.isActive('bold')
+            ? 'font-bold bg-blue-400'
+            : ' hover:bg-gray-200'
         }`}
       >
-        <BoldIcon />
+        <BoldIcon theme={theme} />
       </button>
 
       <button
         onClick={() => editor.chain().focus().toggleItalic().run()}
         className={`cursor-pointer rounded-[5px] ${
-          editor.isActive("italic")
-            ? "italic bg-blue-400"
-            : " hover:bg-gray-200"
+          editor.isActive('italic')
+            ? 'italic bg-blue-400'
+            : ' hover:bg-gray-200'
         }`}
       >
-        <ItalicIcon />
+        <ItalicIcon theme={theme} />
       </button>
 
       {showCodeButton && (
@@ -53,10 +59,10 @@ export default function EditorToolbar({
           }}
           className={`cursor-pointer rounded-[5px] 
           ${
-            editor.isActive("codeBlock") ? "bg-blue-400" : "hover:bg-gray-200"
+            editor.isActive('codeBlock') ? 'bg-blue-400' : 'hover:bg-gray-200'
           }`}
         >
-          <CodeEditIcon />
+          <CodeEditIcon theme={theme} />
         </button>
       )}
 
@@ -70,12 +76,12 @@ export default function EditorToolbar({
             const reader = new FileReader();
             reader.onload = () => {
               const result = reader.result;
-              if (typeof result === "string") {
+              if (typeof result === 'string') {
                 editor
                   ?.chain()
                   .focus()
                   .insertContent({
-                    type: "customImage",
+                    type: 'customImage',
                     attrs: { src: result },
                   })
                   .run();
@@ -92,7 +98,7 @@ export default function EditorToolbar({
         htmlFor="image-upload"
         className="cursor-pointer rounded-[5px] flex items-center justify-center hover:bg-gray-200"
       >
-        <ImageIcon />
+        <ImageIcon theme={theme} />
       </label>
 
       {showPollButton && (
@@ -100,7 +106,7 @@ export default function EditorToolbar({
           onClick={onTogglePoll}
           className="cursor-pointer rounded-[5px] hover:bg-gray-200"
         >
-          <VoteIcon />
+          <VoteIcon theme={theme} />
         </button>
       )}
     </div>

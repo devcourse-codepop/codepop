@@ -74,9 +74,12 @@ export default function CommentEditor({
           <CommentEditorToolbar
             editor={editor}
             showCodeButton={showCodeButton}
+            theme={theme}
           />
         )}
-        {channelId !== '1' && <CommentEditorToolbar editor={editor} />}
+        {channelId !== '1' && (
+          <CommentEditorToolbar editor={editor} theme={theme} />
+        )}
 
         <Button
           value="댓글 달기"
