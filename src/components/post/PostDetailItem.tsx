@@ -1,15 +1,15 @@
-import Avatar from "../avatar/Avatar";
-import LikeComment from "../reaction/LikeComment";
-import menuIcon from "../../assets/MenuIcon.svg";
-import { useEffect, useState } from "react";
-import { Comment, Post } from "../../types";
-import dayjs from "dayjs";
-import { deletePosts, getPostList } from "../../api/post/post";
-import { usePostStore } from "../../stores/postStore";
-import { useNavigate, useParams } from "react-router-dom";
-import CommentListItem from "./CommentListItem";
-import { useAuthStore } from "../../stores/authStore";
-import DOMPurify from "dompurify";
+import Avatar from '../avatar/Avatar';
+import LikeComment from '../reaction/LikeComment';
+import menuIcon from '../../assets/MenuIcon.svg';
+import { useEffect, useState } from 'react';
+import { Comment, Post } from '../../types';
+import dayjs from 'dayjs';
+import { deletePosts, getPostList } from '../../api/post/post';
+import { usePostStore } from '../../stores/postStore';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import CommentListItem from './CommentListItem';
+import { useAuthStore } from '../../stores/authStore';
+import DOMPurify from 'dompurify';
 
 export default function PostDetailItem(props: Post) {
   // image,
@@ -40,28 +40,28 @@ export default function PostDetailItem(props: Post) {
 
   const editCodeStyle = (html: string): string => {
     const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
+    const doc = parser.parseFromString(html, 'text/html');
 
-    const codes = doc.querySelectorAll("pre");
+    const codes = doc.querySelectorAll('pre');
     codes.forEach((code) => {
-      code.style.backgroundColor = "#ececec";
-      code.style.padding = "20px";
-      code.style.marginTop = "10px";
-      code.style.marginBottom = "10px";
-      code.style.borderRadius = "8px";
+      code.style.backgroundColor = '#ececec';
+      code.style.padding = '20px';
+      code.style.marginTop = '10px';
+      code.style.marginBottom = '10px';
+      code.style.borderRadius = '8px';
     });
 
     return doc.body.innerHTML;
   };
 
   const getDatetimeSortFormat = (update: string): string => {
-    const date = dayjs(update).add(9, "hour");
-    return date.format("YYYY-MM-DD");
+    const date = dayjs(update).add(9, 'hour');
+    return date.format('YYYY-MM-DD');
   };
 
   const getDatetimeFormat = () => {
-    const date = dayjs(updatedAt).add(9, "hour");
-    return date.format("YYYY.MM.DD");
+    const date = dayjs(updatedAt).add(9, 'hour');
+    return date.format('YYYY.MM.DD');
   };
 
   const checkPostUser = () => {
@@ -119,37 +119,31 @@ export default function PostDetailItem(props: Post) {
   return (
     <>
       <div
-        className="w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative"
+        className='w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative'
         //ref={divRef}
       >
-        <div className="flex justify-between h-[85px] pl-3 pt-2.5">
-          <Avatar
-            name={author.fullName}
-            email={author.email}
-            image={author.image}
-            isOnline={author.isOnline}
-          />
+        <div className='flex justify-between h-[85px] pl-3 pt-2.5'>
+          <Link to={`/profile`} state={{ userid: author?._id }}>
+            <Avatar name={author.fullName} email={author.email} image={author.image} isOnline={author.isOnline} />
+          </Link>
           {/* 사용자 이름과 글쓴이 이름이 일치할 경우 */}
           {isUser && (
             <>
-              <div
-                onClick={clickMenuHandler}
-                className="w-9 h-9 pr-2.5 cursor-pointer"
-              >
+              <div onClick={clickMenuHandler} className='w-9 h-9 pr-2.5 cursor-pointer'>
                 <img src={menuIcon} />
               </div>
               {isOpen && (
                 // shadow-[1px_2px_3px_rgba(0,0,0,0.25)]
-                <div className="flex flex-col w-[91px] h-[70px] rounded-[2px] border border-[#e5e5e5] absolute top-8 right-4">
+                <div className='flex flex-col w-[91px] h-[70px] rounded-[2px] border border-[#e5e5e5] absolute top-8 right-4'>
                   <div
-                    className="flex justify-center items-center text-[12px] h-[34px] cursor-pointer"
+                    className='flex justify-center items-center text-[12px] h-[34px] cursor-pointer'
                     onClick={clickUpdateHandler}
                   >
                     수정하기
                   </div>
-                  <hr className="opacity-10" />
+                  <hr className='opacity-10' />
                   <div
-                    className="flex justify-center items-center text-[12px] text-[#FF0404] h-[34px] cursor-pointer"
+                    className='flex justify-center items-center text-[12px] text-[#FF0404] h-[34px] cursor-pointer'
                     onClick={clickDeleteHandler}
                   >
                     삭제하기
@@ -159,18 +153,14 @@ export default function PostDetailItem(props: Post) {
             </>
           )}
         </div>
-        <div className="flex flex-col px-[55px] py-[15px] gap-[22px]">
-          <div className="text-[20px] font-semibold">
-            {JSON.parse(title).title}
-          </div>
+        <div className='flex flex-col px-[55px] py-[15px] gap-[22px]'>
+          <div className='text-[20px] font-semibold'>{JSON.parse(title).title}</div>
           {/* w-[500px] */}
           <div
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(
-                editCodeStyle(JSON.parse(title).content)
-              ),
+              __html: DOMPurify.sanitize(editCodeStyle(JSON.parse(title).content)),
             }}
-            className="text-[15px] font-normal"
+            className='text-[15px] font-normal'
           />
           {/* {image && (
             <div>
@@ -181,11 +171,9 @@ export default function PostDetailItem(props: Post) {
             </div>
           )} */}
         </div>
-        <div className="flex justify-end pr-5 pb-[9px] text-[#808080] text-sm font-light">
-          {getDatetimeFormat()}
-        </div>
-        <hr className="mx-[18px] text-[#b2b2b2]" />
-        <div className="h-[59px]">
+        <div className='flex justify-end pr-5 pb-[9px] text-[#808080] text-sm font-light'>{getDatetimeFormat()}</div>
+        <hr className='mx-[18px] text-[#b2b2b2]' />
+        <div className='h-[59px]'>
           <LikeComment
             likeCount={likes.length}
             commentCount={comments.length}
