@@ -1,15 +1,15 @@
-import Avatar from '../avatar/Avatar';
-import LikeComment from '../reaction/LikeComment';
-import menuIcon from '../../assets/MenuIcon.svg';
-import { useEffect, useState } from 'react';
-import { Comment, Post } from '../../types';
-import dayjs from 'dayjs';
-import { deletePosts, getPostList } from '../../api/post/post';
-import { usePostStore } from '../../stores/postStore';
-import { useNavigate, useParams } from 'react-router-dom';
-import CommentListItem from './CommentListItem';
-import { useAuthStore } from '../../stores/authStore';
-import DOMPurify from 'dompurify';
+import Avatar from "../avatar/Avatar";
+import LikeComment from "../reaction/LikeComment";
+import menuIcon from "../../assets/MenuIcon.svg";
+import { useEffect, useState } from "react";
+import { Comment, Post } from "../../types";
+import dayjs from "dayjs";
+import { deletePosts, getPostList } from "../../api/post/post";
+import { usePostStore } from "../../stores/postStore";
+import { useNavigate, useParams } from "react-router-dom";
+import CommentListItem from "./CommentListItem";
+import { useAuthStore } from "../../stores/authStore";
+import DOMPurify from "dompurify";
 
 export default function PostDetailItem(props: Post) {
   // image,
@@ -40,28 +40,28 @@ export default function PostDetailItem(props: Post) {
 
   const editCodeStyle = (html: string): string => {
     const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
+    const doc = parser.parseFromString(html, "text/html");
 
-    const codes = doc.querySelectorAll('pre');
+    const codes = doc.querySelectorAll("pre");
     codes.forEach((code) => {
-      code.style.backgroundColor = '#ececec';
-      code.style.padding = '20px';
-      code.style.marginTop = '10px';
-      code.style.marginBottom = '10px';
-      code.style.borderRadius = '8px';
+      code.style.backgroundColor = "#ececec";
+      code.style.padding = "20px";
+      code.style.marginTop = "10px";
+      code.style.marginBottom = "10px";
+      code.style.borderRadius = "8px";
     });
 
     return doc.body.innerHTML;
   };
 
   const getDatetimeSortFormat = (update: string): string => {
-    const date = dayjs(update).add(9, 'hour');
-    return date.format('YYYY-MM-DD');
+    const date = dayjs(update).add(9, "hour");
+    return date.format("YYYY-MM-DD");
   };
 
   const getDatetimeFormat = () => {
-    const date = dayjs(updatedAt).add(9, 'hour');
-    return date.format('YYYY.MM.DD');
+    const date = dayjs(updatedAt).add(9, "hour");
+    return date.format("YYYY.MM.DD");
   };
 
   const checkPostUser = () => {
@@ -88,7 +88,7 @@ export default function PostDetailItem(props: Post) {
   };
 
   const clickUpdateHandler = () => {
-    navigate(`channel/${channel}/update/${post}`);
+    navigate(`/channel/${channel}/update/${post}`);
   };
 
   const clickDeleteHandler = async () => {

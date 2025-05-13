@@ -1,17 +1,17 @@
-import { axiosInstance } from '../axios';
+import { axiosInstance } from "../axios";
 
 export const getPostList = (channelId: string) => {
   return axiosInstance.get(`/posts/channel/${channelId}`);
 };
 
 export const postLikes = (postId: string) => {
-  return axiosInstance.post('/likes/create', {
+  return axiosInstance.post("/likes/create", {
     postId,
   });
 };
 
 export const deleteLikes = (likeId: string) => {
-  return axiosInstance.delete('/likes/delete', {
+  return axiosInstance.delete("/likes/delete", {
     data: { id: likeId },
   });
 };
@@ -21,7 +21,7 @@ export const getSearchPostList = (value: string) => {
 };
 
 export const postComments = (postId: string, comment: string) => {
-  return axiosInstance.post('/comments/create', {
+  return axiosInstance.post("/comments/create", {
     postId,
     // comment,
     comment: JSON.stringify({
@@ -40,13 +40,22 @@ export const postComments = (postId: string, comment: string) => {
 // };
 
 export const deleteComments = (commentId: string) => {
-  return axiosInstance.delete('/comments/delete', {
+  return axiosInstance.delete("/comments/delete", {
     data: { id: commentId },
   });
 };
 
+// update 하는 코드
+export const updatePost = (formData: FormData) => {
+  return axiosInstance.put(`/posts/update`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
 export const deletePosts = (postId: string) => {
-  return axiosInstance.delete('/posts/delete', {
+  return axiosInstance.delete("/posts/delete", {
     data: { id: postId },
   });
 };

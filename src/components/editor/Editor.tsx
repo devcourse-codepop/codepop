@@ -3,16 +3,17 @@ import StarterKit from "@tiptap/starter-kit";
 import EditorToolbar from "./EditorToolbar";
 
 import { CustomImage } from "./extensions/CustomImage";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PollCreator from "../poll/PollCreater";
 
 interface Props {
   onChange: (html: string) => void;
-  onPollCreate?: (options: { id: number; text: string }[]) => void; // 🔹 추가
-  onImageSelect?: (file: File) => void; // 추가
+  onPollCreate?: (options: { id: number; text: string }[]) => void;
+  onImageSelect?: (file: File) => void;
   showPollButton?: boolean;
   showCodeButton?: boolean;
   disableMinHeight?: boolean;
+  initialContent: string; // 추가된 부분
 }
 
 export default function Editor({
@@ -22,16 +23,24 @@ export default function Editor({
   showPollButton = false,
   showCodeButton = false,
   disableMinHeight = false,
+  initialContent, // 추가된 부분
 }: Props) {
   const editor = useEditor({
     extensions: [StarterKit, CustomImage],
-    content: "<p></p>",
+    content: "", // 빈 문자열로 시작
     onUpdate({ editor }) {
       onChange(editor.getHTML());
     },
   });
-
+  const [hasSetInitialContent, setHasSetInitialContent] = useState(false);
   const [showPollCreator, setShowPollCreator] = useState(false);
+
+  useEffect(() => {
+    if (editor && initialContent && !hasSetInitialContent) {
+      editor.commands.setContent(initialContent);
+      setHasSetInitialContent(true); // 초기 콘텐츠 설정 완료
+    }
+  }, [editor, initialContent, hasSetInitialContent]);
 
   return (
     <div className="p-4 rounded-lg min-h-[100px] h-auto mb-12">
@@ -45,18 +54,18 @@ export default function Editor({
       <EditorContent
         editor={editor}
         className={`
-        prose max-w-none [&_.ProseMirror]:outline-none
-        ${disableMinHeight ? "" : "[&_.ProseMirror]:min-h-[365px]"}
-        [&_.ProseMirror]:h-auto
+          prose max-w-none [&_.ProseMirror]:outline-none
+          ${disableMinHeight ? "" : "[&_.ProseMirror]:min-h-[365px]"}
+          [&_.ProseMirror]:h-auto
 
-        [&_.ProseMirror_pre]:bg-[#ececec]
-        [&_.ProseMirror_pre]:p-4
-        [&_.ProseMirror_pre]:rounded-lg
-        [&_.ProseMirror_pre]:font-mono
-        [&_.ProseMirror_pre]:whitespace-pre-wrap
+          [&_.ProseMirror_pre]:bg-[#ececec]
+          [&_.ProseMirror_pre]:p-4
+          [&_.ProseMirror_pre]:rounded-lg
+          [&_.ProseMirror_pre]:font-mono
+          [&_.ProseMirror_pre]:whitespace-pre-wrap
 
-        [&_.ProseMirror_img]:max-w-[30%]
-        [&_.ProseMirror_img]:h-auto
+          [&_.ProseMirror_img]:max-w-[30%]
+          [&_.ProseMirror_img]:h-auto
         `}
       />
 
