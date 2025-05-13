@@ -72,7 +72,7 @@ export default function CreateCodePost() {
           <ChannelName channelId={channelId ?? "1"} />
         </div>
 
-        <div className=" bg-white shadow-md rounded-[10px] p-5 relative">
+        <div className=" bg-white shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto">
           <input
             type="text"
             ref={titleRef}

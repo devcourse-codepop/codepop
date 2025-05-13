@@ -10,10 +10,18 @@ import { useNavigate, useParams } from "react-router-dom";
 import CommentListItem from "./CommentListItem";
 import { useAuthStore } from "../../stores/authStore";
 import DOMPurify from "dompurify";
+import PollOptionsVoteView from "../poll/PollOptionsVoteView";
+
+interface PollOption {
+  id: string;
+  text: string;
+  voteCount: number;
+}
 
 export default function PostDetailItem(props: Post) {
   // image,
-  const { _id, title, author, likes, comments, updatedAt } = props;
+  const { _id, title, author, likes, comments, updatedAt, imagePublicId } =
+    props;
 
   const params = useParams();
   const channel = params.channelId;
@@ -22,7 +30,8 @@ export default function PostDetailItem(props: Post) {
   const navigate = useNavigate();
 
   //const divRef = useRef<HTMLDivElement | null>(null);
-
+  const parsedTitle = JSON.parse(title); // ✅ 파싱 결과 저장
+  const pollOptions: PollOption[] = parsedTitle.pollOptions || [];
   const channelIdList = usePostStore((state) => state.channelIdList);
 
   const user = useAuthStore((state) => state.user);
@@ -172,6 +181,20 @@ export default function PostDetailItem(props: Post) {
             }}
             className="text-[15px] font-normal"
           />
+          {/* 투표 옵션이 있을 경우 */}
+          {pollOptions.length > 0 && (
+            <div className="mt-4">
+              <PollOptionsVoteView
+                options={pollOptions}
+                postId={_id}
+                channelId={channel ?? ""}
+                originalTitle={parsedTitle.title}
+                originalContent={parsedTitle.content}
+                imageToDeletePublicId={imagePublicId || null}
+                imageFile={null}
+              />
+            </div>
+          )}
           {/* {image && (
             <div>
               <img
