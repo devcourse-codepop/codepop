@@ -12,6 +12,7 @@ export default function ProfileLeft({ userData, onSelectTab, userId }: UserInfo)
       <div className='w-[291px] h-[633px] rounded-bl-[10px] px-[50px] border-r-2 border-gray-300 '>
         <img
           src={userData?.image || defaultProfileImage}
+          alt='Profile'
           className='w-[196px] h-[196px] rounded-[5px] mt-[60px]  object-contain overflow-hidden'
         />
         <div className='pt-[0px]'>
