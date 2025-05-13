@@ -70,7 +70,7 @@ export default function CreateSetPost({ theme }: { theme: Theme }) {
           </div>
 
           <div
-            className={`shadow-md rounded-[10px] p-5 relative ${
+            className={`shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto ${
               theme.name === 'Dark'
                 ? 'bg-[#2d2d2d] text-[#ffffff]'
                 : 'bg-[#ffffff] text-[#111111]'

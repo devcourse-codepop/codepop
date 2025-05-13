@@ -11,6 +11,7 @@ import NotLoginModal from './NotLoginModal';
 import DOMPurify from 'dompurify';
 import DeletedUserModal from './DeletedUserModal';
 import { useChannelItemStore } from '../../stores/channelStore';
+import PollOptionsView from '../poll/PollOptionsView';
 
 interface Theme {
   name: string;
@@ -40,7 +41,7 @@ export default function PostListItem(props: PostListItemProps) {
   const navigate = useNavigate();
 
   // const divRef = useRef<HTMLDivElement | null>(null);
-
+  const pollOptions = JSON.parse(title).pollOptions;
   // const [currentWidth, setCurrentWidth] = useState(0);
 
   const user = useAuthStore((state) => state.user);
@@ -166,6 +167,12 @@ export default function PostListItem(props: PostListItemProps) {
               }}
               className="postContent text-[15px] font-normal line-clamp-5"
             />
+            {/* 투표 옵션이 있을 경우 */}
+            {pollOptions && pollOptions.length > 0 && (
+              <div className="mt-4">
+                <PollOptionsView options={pollOptions} />
+              </div>
+            )}
             {/* {setCodeCount() > 0 && (
               <div className="flex justify-end text-[14px] opacity-70">
                 +<span className="text-[#ff0000]">{setCodeCount()}</span>개의
@@ -195,6 +202,7 @@ export default function PostListItem(props: PostListItemProps) {
               : 'text-[#b2b2b2] opacity-50'
           }`}
         />
+
         {/* <div className="flex justify-between h-[59px]"> */}
         <div
           className={twMerge(

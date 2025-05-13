@@ -4,6 +4,7 @@ import Button from '../../components/common/Button';
 import Editor from '../../components/editor/Editor';
 import { getPostData, updatePost } from '../../api/post/post';
 import { useNavigate, useParams } from 'react-router-dom';
+import PollOptionsView from '../../components/poll/PollOptionsView';
 
 interface Theme {
   name: string;
@@ -107,14 +108,14 @@ export default function UpdateVotePost({ theme }: { theme: Theme }) {
   // };
 
   return (
-    <div className="w-full flex relative">
+    <div className="w-full flex relative ">
       <div>
         <div className="pb-[30px]">
           <ChannelName channelId={channelId ?? '1'} theme={theme} />
         </div>
 
         <div
-          className={`shadow-md rounded-[10px] p-5 relative ${
+          className={`shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto ${
             theme.name === 'Dark'
               ? 'bg-[#2d2d2d] text-[#ffffff]'
               : 'bg-[#ffffff] text-[#111111]'
@@ -146,6 +147,16 @@ export default function UpdateVotePost({ theme }: { theme: Theme }) {
             }`}
           />
 
+          <div className="mb-2.5">
+            {pollOptions.length > 0 && (
+              <div className="mt-6">
+                <h2 className="font-semibold text-gray-700 mb-2">투표 항목</h2>
+                <PollOptionsView options={pollOptions} />
+              </div>
+            )}
+          </div>
+          <hr className="opacity-30" />
+
           {/* 이미지 삭제 버튼 추가 */}
           {/* {imageToDeletePublicId && (
             <Button
@@ -155,13 +166,15 @@ export default function UpdateVotePost({ theme }: { theme: Theme }) {
             />
           )} */}
 
-          <Button
-            value="완료"
-            className={`button-style2 absolute bottom-[15px] right-[20px] ${
-              theme.name === 'Dark' ? 'bg-[#ffffff] text-[#111111]' : ''
-            }`}
-            onClick={handleSubmit} // 게시물 작성 완료 시 제출
-          />
+          <div className="flex justify-end mt-6">
+            <Button
+              value="완료"
+              className={`button-style2 absolute bottom-[15px] right-[20px] ${
+                theme.name === 'Dark' ? 'bg-[#ffffff] text-[#111111]' : ''
+              }`}
+              onClick={handleSubmit} // 게시물 작성 완료 시 제출
+            />
+          </div>
         </div>
       </div>
     </div>

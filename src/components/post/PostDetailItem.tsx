@@ -2,8 +2,6 @@ import Avatar from '../avatar/Avatar';
 import LikeComment from '../reaction/LikeComment';
 import menuIcon from '../../assets/MenuIcon.svg';
 import menuIconWhite from '../../assets/MenuIconWhite.svg';
-// import { useEffect, useState } from 'react';
-
 import { useEffect, useState } from 'react';
 import { Comment, Post } from '../../types';
 import dayjs from 'dayjs';
@@ -13,7 +11,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import CommentListItem from './CommentListItem';
 import { useAuthStore } from '../../stores/authStore';
 import DOMPurify from 'dompurify';
+import PollOptionsVoteView from '../poll/PollOptionsVoteView';
 import CheckDeleteModal from './CheckDeleteModal';
+
+interface PollOption {
+  id: string;
+  text: string;
+  voteCount: number;
+}
 
 interface Theme {
   name: string;
@@ -25,7 +30,16 @@ interface PostDetailItemProps extends Post {
 
 export default function PostDetailItem(props: PostDetailItemProps) {
   // image,
-  const { _id, title, author, likes, comments, createdAt, theme } = props;
+  const {
+    _id,
+    title,
+    author,
+    likes,
+    comments,
+    createdAt,
+    theme,
+    imagePublicId,
+  } = props;
 
   const params = useParams();
   const channel = params.channelId;
@@ -34,7 +48,8 @@ export default function PostDetailItem(props: PostDetailItemProps) {
   const navigate = useNavigate();
 
   //const divRef = useRef<HTMLDivElement | null>(null);
-
+  const parsedTitle = JSON.parse(title); // ✅ 파싱 결과 저장
+  const pollOptions: PollOption[] = parsedTitle.pollOptions || [];
   const channelIdList = usePostStore((state) => state.channelIdList);
 
   const user = useAuthStore((state) => state.user);
@@ -80,7 +95,6 @@ export default function PostDetailItem(props: PostDetailItemProps) {
 
   const getDatetimeSortFormat = (update: string): string => {
     const date = dayjs(update).add(9, 'hour');
-
     return date.format('YYYY-MM-DD HH:mm:ss');
   };
 
@@ -159,6 +173,7 @@ export default function PostDetailItem(props: PostDetailItemProps) {
         className={`w-full h-auto rounded-[5px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative ${
           theme.name === 'Dark' ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
         }`}
+
         //ref={divRef}
       >
         <div className="flex justify-between h-[85px] pl-3 pt-2.5">
@@ -182,7 +197,8 @@ export default function PostDetailItem(props: PostDetailItemProps) {
               </div>
               {isOpen && (
                 // shadow-[1px_2px_3px_rgba(0,0,0,0.25)]
-                <div className="flex flex-col w-[91px] h-[70px] rounded-[2px] border border-[#e5e5e5] absolute top-8 right-4 bg-[white]">
+
+                <div className="flex flex-col w-[91px] h-[70px] rounded-[2px] border border-[#e5e5e5] absolute top-8 right-4">
                   <div
                     className="flex justify-center items-center text-[12px] h-[34px] cursor-pointer"
                     onClick={clickUpdateHandler}
@@ -220,6 +236,20 @@ export default function PostDetailItem(props: PostDetailItemProps) {
               theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
             }`}
           />
+          {/* 투표 옵션이 있을 경우 */}
+          {pollOptions.length > 0 && (
+            <div className="mt-4">
+              <PollOptionsVoteView
+                options={pollOptions}
+                postId={_id}
+                channelId={channel ?? ''}
+                originalTitle={parsedTitle.title}
+                originalContent={parsedTitle.content}
+                imageToDeletePublicId={imagePublicId || null}
+                imageFile={null}
+              />
+            </div>
+          )}
           {/* {image && (
             <div>
               <img
