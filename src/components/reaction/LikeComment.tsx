@@ -140,7 +140,10 @@ export default function LikeComment({
         </span>
       </div>
       {isLoginModalOpen && (
-        <NotLoginModal closeLoginModalHanlder={closeLoginModalHanlder} />
+        <NotLoginModal
+          closeLoginModalHanlder={closeLoginModalHanlder}
+          theme={theme}
+        />
       )}
     </div>
   );
