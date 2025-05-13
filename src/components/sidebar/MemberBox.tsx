@@ -1,7 +1,7 @@
 import menuIcon from '../../assets/MenuIcon.svg';
 import { Search } from 'lucide-react';
 import Avatar from '../avatar/Avatar';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getAllUsersData } from '../../api/memberbox/member';
 import { useAuthStore } from '../../stores/authStore';
@@ -11,6 +11,7 @@ export default function MemberBox() {
   const [searchKeyword, setSearchKeyword] = useState<string>(''); // 검색 키워드
   const [openUser, setOpenUser] = useState<string>(''); // 각 프로필 메뉴
   const [users, setUsers] = useState<User[]>([]); // 모든 사용자
+  const modalRef = useRef<HTMLUListElement>(null);
 
   const fetchUsers = async () => {
     const result = await getAllUsersData();
@@ -50,6 +51,17 @@ export default function MemberBox() {
     }
   };
 
+  useEffect(() => {
+    const clickHandler = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        setOpenUser('');
+      }
+    };
+
+    window.addEventListener('mousedown', clickHandler);
+    return () => window.removeEventListener('mousedown', clickHandler);
+  }, [modalRef]);
+
   return (
     <div className="w-[291px] max-h-[calc(100%-240px)] h-[580px] bg-white rounded-[10px] shadow-md pl-[30px] pr-[26px]  pt-[20px]  relative overflow-hidden">
       <h2 className="text-[#595656] font-medium text-[18px] mb-[13px]">
@@ -83,7 +95,7 @@ export default function MemberBox() {
         }}
       >
         {filterUsers.map((user) => (
-          <div className="relative" key={user._id}>
+          <div className="relative" key={user._id} id={user._id}>
             <div
               className="memberCard cursor-pointer"
               onClick={() => ToggleHandelr(user._id)}
@@ -101,7 +113,10 @@ export default function MemberBox() {
             >
               <img src={menuIcon} className="rotate-90" />
               {openUser === user._id && (
-                <ul className="avatarMenu absolute text-xs w-27 right-5 top-0 bg-white rounded-[5px] border border-[#ddd] text-left z-2 py-1">
+                <ul
+                  ref={modalRef}
+                  className="avatarMenu absolute text-xs w-27 right-5 top-0 bg-white rounded-[5px] border border-[#ddd] text-left z-2 py-1"
+                >
                   <li>
                     <Link
                       className="px-3 py-1 block opacity-70 hover:opacity-100"
