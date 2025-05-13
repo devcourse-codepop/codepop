@@ -40,15 +40,23 @@ export default function CommentListItem(props: CommentListItemProps) {
     const doc = parser.parseFromString(html, 'text/html');
 
     const codes = doc.querySelectorAll('pre');
+    const codeStr = '<span>&lt;/&gt;</span>';
     codes.forEach((code) => {
       const dark = theme.name === 'Dark';
 
       code.style.backgroundColor = dark ? '#1e1e1e' : '#ececec';
       code.style.color = dark ? '#ffffff' : '#111111';
       code.style.padding = '20px';
+      code.style.paddingTop = '2px';
       code.style.marginTop = '10px';
       code.style.marginBottom = '10px';
       code.style.borderRadius = '8px';
+      code.innerHTML = codeStr + '<br/><br/>' + code.innerHTML;
+
+      const span = code.querySelector('span');
+      span!.style.fontSize = '12px';
+      span!.style.opacity = '30%';
+      span!.style.marginLeft = '-10px';
     });
 
     return doc.body.innerHTML;

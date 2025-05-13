@@ -3,13 +3,14 @@ import LikeComment from '../reaction/LikeComment';
 //import CodeIcon from '../../assets/CodeEditIcon.svg';
 import { Post } from '../../types';
 import dayjs from 'dayjs';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 import { useState } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 import NotLoginModal from './NotLoginModal';
 import DOMPurify from 'dompurify';
 import DeletedUserModal from './DeletedUserModal';
+import { useChannelItemStore } from '../../stores/channelStore';
 
 interface Theme {
   name: string;
@@ -20,11 +21,21 @@ interface PostListItemProps extends Post {
 }
 
 export default function PostListItem(props: PostListItemProps) {
-  const { _id, title, image, author, likes, comments, createdAt, theme } =
-    props;
+  const {
+    _id,
+    title,
+    image,
+    author,
+    likes,
+    comments,
+    createdAt,
+    theme,
+    channel,
+  } = props;
 
-  const params = useParams();
-  const channel = params.channelId;
+  const { channels } = useChannelItemStore();
+  // const params = useParams();
+  // const channel = params.channelId;
 
   const navigate = useNavigate();
 
@@ -79,8 +90,15 @@ export default function PostListItem(props: PostListItemProps) {
 
   const clickPostHandler = () => {
     if (user) {
-      if (!author) setIsUserModalOpen(true);
-      else navigate(`/channel/${channel}/post/${_id}`);
+      if (!author) {
+        setIsUserModalOpen(true);
+      } else {
+        channels.map((cha) => {
+          if (cha.id === channel._id) {
+            navigate(`${cha.to}/post/${_id}`);
+          }
+        });
+      }
     } else {
       setIsLoginModalOpen(true);
     }

@@ -32,18 +32,22 @@ export default function SignUp({ theme }: { theme: Theme }) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
+  // 이메일 유효성 검사
   const validateEmail = (email: string) => {
     return emailRegex.test(email);
   };
 
+  // 비밀번호 유효성 검사
   const validatePassword = (password: string) => {
     return passwordRegex.test(password);
   };
 
+  // 사용자 이름 유효성 검사
   const validateUsername = (fullName: string) => {
     return fullNameRegex.test(fullName);
   };
 
+  // 사용자 이름 입력값 저장, 조건에 맞지 않으면 에러 메시지 표시
   const handleFullName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setFullName(value);
@@ -59,12 +63,37 @@ export default function SignUp({ theme }: { theme: Theme }) {
     const value = e.target.value;
     setEmail(value);
 
-    const [id] = value.split('@');
-    if (id.split('@')[0].length < 5 || id.split('@')[0].length > 20) {
-      setEmailError('이메일 아이디는 5~20자 사이여야 합니다.');
+    // @ 기준으로 나누기
+    const [id, domain] = value.split('@');
+
+    // . 기준으로 나누기
+    const [fullDomain, ext] = domain?.split('.') || [];
+
+    // 첫 글자 검사
+    if (!id || !/^[a-zA-Z]/.test(id)) {
+      setEmailError('이메일의 아이디 첫 글자는 영문자여야 합니다.');
       return;
     }
 
+    // 아이디 길이 검사
+    if (id.length < 5 || id.length > 20) {
+      setEmailError('이메일 아이디는 5~20자 사이로 입력해주세요.');
+      return;
+    }
+
+    // 도메인 길이 검사
+    if (!fullDomain || fullDomain.length > 10) {
+      setEmailError('도메인 이름은 10자 이하로 입력해주세요.');
+      return;
+    }
+
+    // 확장자 길이 검사
+    if (!ext || ext.length < 2 || ext.length > 5) {
+      setEmailError('도메인 확장자는 2~5자 사이로 입력해주세요. ');
+      return;
+    }
+
+    // 전체 검사
     if (!validateEmail(value)) {
       setEmailError('이메일 형식을 확인해주세요.');
       return;
@@ -72,6 +101,7 @@ export default function SignUp({ theme }: { theme: Theme }) {
     setEmailError('');
   };
 
+  // 비밀번호 입력값 저장, 조건에 맞지 않으면 에러 메시지 표시
   const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setPassword(value);
@@ -86,6 +116,7 @@ export default function SignUp({ theme }: { theme: Theme }) {
     }
   };
 
+  // 확인 비밀번호 입력값 저장, 비밀번호와 다르면 에러 메시지 표시
   const handleConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setConfirmPassword(value);
@@ -98,6 +129,7 @@ export default function SignUp({ theme }: { theme: Theme }) {
     }
   };
 
+  // 전체
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -111,40 +143,64 @@ export default function SignUp({ theme }: { theme: Theme }) {
     if (!fullName) {
       setFullNameError('이름은 필수 입력 항목입니다.');
       hasError = true;
-    } else if (!validateUsername) {
+      return;
+    } else if (!validateUsername(fullName)) {
       setFullNameError('이름은 특수문자 없이 10글자 이하로 입력해주세요.');
       hasError = true;
+      return;
     }
 
     if (!email) {
       setEmailError('이메일은 필수 입력 항목입니다.');
       hasError = true;
+      return;
     } else {
-      const [id] = email.split('@');
-      if (id.length < 5 || id.length > 20) {
-        setEmailError('이메일 아이디는 5~20자 사이여야 합니다.');
+      const [id, domain] = email.split('@');
+      const [fullDomain, ext] = domain?.split('.') || [];
+
+      if (!id || !/^[a-zA-Z]/.test(id)) {
+        setEmailError('이메일의 아이디 첫 글자는 영문자여야 합니다.');
         hasError = true;
+        return;
+      } else if (id.length < 5 || id.length > 20) {
+        setEmailError('이메일 아이디는 5~20자 사이로 입력해주세요.');
+        hasError = true;
+        return;
+      } else if (!fullDomain || fullDomain.length > 10) {
+        setEmailError('도메인 이름은 10자 이하로 입력해주세요.');
+        hasError = true;
+        return;
+      } else if (!ext || ext.length < 2 || ext.length > 5) {
+        setEmailError('도메인 확장자는 2~5자 사이로 입력해주세요.');
+        hasError = true;
+        return;
       } else if (!validateEmail(email)) {
         setEmailError('이메일 형식을 확인해주세요.');
         hasError = true;
+        return;
       }
     }
 
     if (!password) {
       setPasswordError('비밀번호는 필수 입력 항목입니다.');
       hasError = true;
+      return;
     } else if (!validatePassword(password)) {
       setPasswordError(
         '비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.'
       );
       hasError = true;
+      return;
     }
 
     if (!confirmPassword) {
       setConfirmPasswordError('비밀번호 확인은 필수 입력 항목입니다.');
       hasError = true;
+      return;
     } else if (password !== confirmPassword) {
       setConfirmPasswordError('비밀번호가 일치하지 않습니다.');
+      hasError = true;
+      return;
     }
 
     if (hasError) return;

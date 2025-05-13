@@ -1,5 +1,6 @@
 import menuIcon from '../../assets/MenuIcon.svg';
 import menuIconWhite from '../../assets/MenuIconWhite.svg';
+
 import { Search } from 'lucide-react';
 import Avatar from '../avatar/Avatar';
 import React, { useEffect, useState } from 'react';
@@ -82,7 +83,7 @@ export default function MemberBox({ theme }: { theme: Theme }) {
       {isLoggedIn && (
         <div className="myInfoCard">
           <Avatar
-            name={`${user !== null ? user.fullName : ''} (나)`}
+            name={`(나) ${user !== null ? user.fullName : ''}`}
             email={user !== null ? user.email : ''}
             image={user !== null ? user.image : ''}
             isOnline={user !== null ? user.isOnline : false}

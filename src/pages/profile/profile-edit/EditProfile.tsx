@@ -28,6 +28,12 @@ export default function EditProfile({
   const setUser = useAuthStore((state) => state.setUser);
   const [userData, setUserData] = useState<User | null>(null);
 
+  const [enteredUserValues, setEnteredUserValues] = useState<EnteredValues>({
+    myName: user?.fullName || '',
+    password: '',
+    confirmPassword: '',
+  });
+
   const [enteredErrorValues, setEnteredErrorValues] =
     useState<EnteredErrorValues>({
       myNameError: '',
@@ -40,12 +46,6 @@ export default function EditProfile({
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isCover, setIsCover] = useState(false);
 
-  const [enteredUserValues, setEnteredUserValues] = useState<EnteredValues>({
-    myName: user?.fullName || '',
-    password: '',
-    confirmPassword: '',
-  });
-
   const [coverImage, setCoverImage] = useState<File | null>(null);
   const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(null);
   const [profileImage, setProfileImage] = useState<File | null>(null);
@@ -56,6 +56,7 @@ export default function EditProfile({
   const validateUsername = (name: string) => fullNameRegex.test(name);
   const validatePassword = (password: string) => passwordRegex.test(password);
 
+  /// input 변경 시 유효성 검사 (변경될 때마다 검사)
   const handleInputChange = (identifier: string, value: string) => {
     setEnteredUserValues((prev) => ({ ...prev, [identifier]: value }));
 
@@ -90,7 +91,7 @@ export default function EditProfile({
     }));
   };
 
-  const axiosList = async () => {
+  const fetchUserData = async () => {
     try {
       const { data: userData } = await getUserData(userId);
       setUserData(userData);
@@ -100,13 +101,14 @@ export default function EditProfile({
   };
 
   useEffect(() => {
-    if (userId) axiosList();
+    if (userId) fetchUserData();
   }, [userId]);
 
   if (!userData) {
     return <div className="text-center py-10 text-gray-500">로딩 중...</div>;
   }
 
+  // 모달로 받은 사진 미리 보기 및 저장
   const handleSavePhoto = (file: File, previewUrl: string) => {
     if (isCover) {
       setCoverImage(file);
@@ -117,6 +119,7 @@ export default function EditProfile({
     }
   };
 
+  // 이미지 삭제 -> 기본 이미지로 대체
   const handleDelete = async () => {
     setIsBackgroundMenuOpen(false);
     setIsProfileMenuOpen(false);
@@ -136,6 +139,7 @@ export default function EditProfile({
     }
   };
 
+  // 제출할 때 에러 메시지 있으면 제출하지 않음. 제출 시 api 호출하여 정보 변경
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -201,7 +205,7 @@ export default function EditProfile({
         });
         if (user) {
           const { data: userData2 } = await getUserData(userId);
-          setUserData(userData);
+          setUserData(userData2);
           setUser({ ...user, image: userData2.image });
         }
       }
@@ -210,6 +214,10 @@ export default function EditProfile({
       console.error('프로필 저장 중 오류 발생:', error);
     }
   };
+
+  if (!userData) {
+    return <div className="text-center py-10 text-gray-500">로딩 중...</div>;
+  }
 
   return (
     <>
@@ -220,7 +228,7 @@ export default function EditProfile({
       >
         <div className="relative h-[223px] rounded-t-[10px]">
           <img
-            src={coverPreviewUrl || userData.coverImage}
+            src={coverPreviewUrl || userData.coverImage || defaultCover}
             className="w-full h-full rounded-t-[10px]"
             alt="Background"
           />
@@ -247,7 +255,7 @@ export default function EditProfile({
         <div className="flex justify-center items-center">
           <div className="relative inline-block mt-[19px]">
             <img
-              src={profilePreviewUrl || userData.image}
+              src={profilePreviewUrl || userData.image || defaultProfileImage}
               className="w-[300px] h-[300px] rounded-[5px] ml-[100px] border border-[#E3E3E3] object-cover"
               alt="Profile"
             />

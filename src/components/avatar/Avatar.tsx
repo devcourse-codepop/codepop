@@ -38,16 +38,16 @@ export default function Avatar({
           <span className="w-3 h-3 rounded-md bg-[#5FE3A4] absolute right-0 top-1"></span>
         )}
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col w-full pr-5 box-content">
         <span
-          className={`text-sm font-semibold ${
+          className={`text-sm font-semibold line-clamp-1 break-all ${
             theme?.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
           }`}
         >
           {name ? name : '탈퇴한 회원'}
         </span>
         <span
-          className={`text-xs opacity-60 break-all leading-3 ${
+          className={`text-xs opacity-60 break-all leading-[17px] line-clamp-2 ${
             theme?.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
           }`}
         >

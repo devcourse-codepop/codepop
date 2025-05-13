@@ -1,21 +1,28 @@
-// import { useNavigate } from 'react-router-dom';
-import readAllImg from '../../assets/images/header/notifi.svg';
+// import readAllImg from '../../assets/images/header/notifi.svg';
+import { useNavigate } from 'react-router-dom';
+import close from '../../assets/images/header/close.svg';
 import alarm from '../../assets/images/header/alarm.svg';
 import alarmWhite from '../../assets/images/header/alarm-white.svg';
 import redDot from '../../assets/RedDotIcon.svg';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   getNotificationsData,
   putNotificationSeenData,
 } from '../../api/notification/notification';
+import { useChannelItemStore } from '../../stores/channelStore';
+import { twMerge } from 'tailwind-merge';
 
 interface Theme {
   name: string;
 }
 
 export default function Notification({ theme }: { theme: Theme }) {
+  const { channels } = useChannelItemStore();
   const [notifiOpen, setNotifiOpen] = useState(false);
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
+  const [newData, setNewData] = useState(0);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
   // const navigate = useNavigate();
 
   const fetchNotifications = async () => {
@@ -23,35 +30,69 @@ export default function Notification({ theme }: { theme: Theme }) {
     setNotifications(result.data);
   };
 
-  const seenHandler = async (notification: NotificationType) => {
-    return await putNotificationSeenData(notification._id);
-    // let id = "";
-    // if (notification.like !== undefined) {
-    //   id = notification.like["_id"];
-    // } else if (notification.comment !== undefined) {
-    //   id = notification.comment["_id"];
-    // }
-
-    // if (id !== "") await putNotificationSeenData(id);
-  };
-
-  const readAllHandler = () => {
+  const newDataHandler = () => {
+    let dataSum = 0;
     notifications.map((notification) => {
-      seenHandler(notification);
+      if (
+        notification.seen === false &&
+        notification.like !== null &&
+        notification.comment !== null
+      ) {
+        dataSum += 1;
+      }
     });
+    setNewData(dataSum);
+  };
+
+  const readHandler = async () => {
+    await putNotificationSeenData();
     fetchNotifications();
   };
 
-  const readHandler = (notification: NotificationType) => {
-    seenHandler(notification);
-    fetchNotifications();
-    // navigate("/post/");
+  const navigateHandler = (notifi: NotificationType) => {
+    channels.map((channel) => {
+      if (notifi.like !== undefined) {
+        if (channel.id === notifi.like['post']['channel']) {
+          navigate(`${channel.to}/post/${notifi.like['post']['_id']}`);
+        }
+      } else if (notifi.comment !== undefined) {
+        if (channel.id === notifi.comment['post']['channel']) {
+          navigate(`${channel.to}/post/${notifi.comment['post']['_id']}`);
+        }
+      }
+    });
+
+    closeHandler();
+  };
+
+  const closeHandler = () => {
+    // 닫힐때는 읽음도 처리 되도록
+    setNotifiOpen(false);
+    readHandler();
   };
 
   useEffect(() => {
     fetchNotifications();
+    newDataHandler();
+
+    const interval = setInterval(fetchNotifications, 2000);
+    return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    newDataHandler();
+  }, [notifications]);
+
+  useEffect(() => {
+    const clickHandler = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        closeHandler();
+      }
+    };
+
+    window.addEventListener('mousedown', clickHandler);
+    return () => window.removeEventListener('mousedown', clickHandler);
+  }, [modalRef]);
   return (
     <>
       <button
@@ -62,8 +103,10 @@ export default function Notification({ theme }: { theme: Theme }) {
         }}
       >
         <img src={`${theme.name === 'Dark' ? alarmWhite : alarm}`} />
-        {!notifications.reduce((sum, data) => sum && data.seen, true) && (
-          <span className="block w-[8px] h-[8px] rounded-2xl bg-[#FF0000] absolute right-0 top-0.5"></span>
+        {newData > 0 && (
+          <span className="block w-3.5 h-3.5 rounded-2xl bg-[#FF0000] absolute -right-1 top-0 text-[11px] text-white leading-3">
+            {newData}
+          </span>
         )}
       </button>
       {notifiOpen && (
@@ -79,21 +122,20 @@ export default function Notification({ theme }: { theme: Theme }) {
           ></span>
           <div className="border-b border-[#cccccc] flex justify-between pb-3">
             <h3
-              className={` text-base font-medium ${
+              className={` text-base font-medium flex items-end gap-x-2${
                 theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#4D4D4D]'
               }`}
             >
-              Notifications
+              Notifications{' '}
+              {/* <span className="inline-block bg-zinc-400 rounded-3xl px-2 py-1.5 mb-0.5 min-w-7 text-center text-white text-xs leading-1.5">
+                {newData}
+              </span> */}
             </h3>
-            <button
-              className="cursor-pointer"
-              aria-label="readAll"
-              onClick={readAllHandler}
-            >
-              <img src={readAllImg} />
-            </button>
           </div>
-          <div className="notiList px-2 h-[200px] overflow-y-auto scroll-custom relative">
+          <div
+            ref={modalRef}
+            className="notiList px-2 h-[200px] overflow-y-auto scroll-custom relative"
+          >
             {notifications.length === 0 ? (
               <p
                 className={`absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm ${
@@ -103,51 +145,52 @@ export default function Notification({ theme }: { theme: Theme }) {
                 알림이 없습니다
               </p>
             ) : (
-              notifications.map((notifi, index) => (
-                <button
-                  onClick={() => readHandler(notifi)}
-                  className="block relative pl-4 text-[13px] my-3.5 cursor-pointer"
-                  key={`notification-${index}`}
-                >
-                  {!notifi.seen && (
-                    <img className="absolute left-0 top-2" src={redDot} />
-                  )}
-                  {notifi.like !== undefined && (
-                    <p
-                      className={`${
-                        theme.name === 'Dark'
-                          ? 'text-[#ffffff]'
-                          : 'text-[#111111]'
-                      }`}
-                    >
-                      [{notifi.author.fullName}] 님이 당신의 게시물을
-                      좋아합니다.
-                    </p>
-                  )}
-                  {notifi.comment !== undefined && (
-                    <p
-                      className={`${
-                        theme.name === 'Dark'
-                          ? 'text-[#ffffff]'
-                          : 'text-[#111111]'
-                      }`}
-                    >
-                      [{notifi.author.fullName}] 님이 당신의 게시물에 댓글을
-                      달았습니다.
-                    </p>
-                  )}
-                </button>
-              ))
+              notifications.map((notifi, index) => {
+                let thisType = '';
+                if (notifi.like !== undefined && notifi.like !== null) {
+                  thisType = 'like';
+                } else if (
+                  notifi.comment !== undefined &&
+                  notifi.comment !== null
+                ) {
+                  thisType = 'comment';
+                } else thisType = 'none';
+                return (
+                  <>
+                    {thisType !== 'none' && (
+                      <button
+                        onClick={() => {
+                          navigateHandler(notifi);
+                        }}
+                        className="block relative pl-3.5 text-[13px] my-3.5 cursor-pointer text-left"
+                        key={`notification-${index}`}
+                      >
+                        <img
+                          className={twMerge(
+                            'absolute -left-0.5 top-2',
+                            notifi.seen && 'grayscale-100 opacity-30'
+                          )}
+                          src={redDot}
+                        />
+                        {thisType === 'like' &&
+                          `[${notifi.author['fullName']}] 님이 당신의 게시물을 좋아합니다.`}
+                        {thisType === 'comment' &&
+                          `[${notifi.author['fullName']}] 님이 당신의 게시물에 댓글을 달았습니다.`}
+                      </button>
+                    )}
+                  </>
+                );
+              })
             )}
           </div>
-          <div className="text-right">
+          <div className="absolute right-5 top-4">
             <button
               className="text-sm text-[#bbbbbb] cursor-pointer"
               onClick={() => {
-                setNotifiOpen(false);
+                closeHandler();
               }}
             >
-              Close
+              <img src={close} className="opacity-60" />
             </button>
           </div>
         </div>
