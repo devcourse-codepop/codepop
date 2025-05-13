@@ -12,11 +12,12 @@ export default function ProfileLeft({ userData, onSelectTab, userId }: UserInfo)
       <div className='w-[291px] h-[633px] rounded-bl-[10px] px-[50px] border-r-2 border-gray-300 '>
         <img
           src={userData?.image || defaultProfileImage}
+          alt='Profile'
           className='w-[196px] h-[196px] rounded-[5px] mt-[60px]  object-contain overflow-hidden'
         />
         <div className='pt-[0px]'>
           <p className='font-bold text-[20px] mt-[42px]'> {userData?.fullName}</p>
-          <p className='font-normal text-[14px] mt-[11px]'>{userData?.email}</p>
+          <p className='font-normal text-[14px] mt-[11px] w-[200px] break-words'>{userData?.email}</p>
           <div className='flex gap-8.5 text-[16px] font-semibold mt-[38px] '>
             <div className='flex flex-col items-center cursor-pointer' onClick={() => onSelectTab('posts')}>
               <span>포스트</span>

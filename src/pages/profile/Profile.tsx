@@ -12,7 +12,6 @@ export default function Profile({ userId }: { userId: string }) {
     try {
       const { data: userData } = await getUserData(userId);
       setUserData(userData);
-      console.log('완료');
     } catch (error) {
       console.error('getUserData 오류:', error);
     }
