@@ -11,7 +11,6 @@ import { useNavigate } from 'react-router-dom';
 import { login } from '../../api/auth/login';
 import { AxiosError } from 'axios';
 import { axiosInstance } from '../../api/axios';
-import { useLocation } from 'react-router-dom';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -24,8 +23,6 @@ export default function Login() {
   const [passwordError, setPasswordError] = useState('');
 
   const [loginError, setLoginError] = useState('');
-
-  const location = useLocation();
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -100,10 +97,7 @@ export default function Login() {
         });
       }
 
-      const from = location.state?.from || '/';
-      navigate(from);
-
-      // navigate('/');
+      navigate(-1);
     } catch (err) {
       const error = err as AxiosError;
 
