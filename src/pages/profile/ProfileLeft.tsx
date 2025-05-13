@@ -1,6 +1,8 @@
 import { Mail } from 'lucide-react';
 import Button from '../../components/common/Button';
 import { useAuthStore } from '../../stores/authStore';
+import { useNavigate } from 'react-router-dom';
+import defaultProfileImage from '../../assets/images/profile/defaultProfileImage.jpg';
 
 interface Theme {
   name: string;
@@ -17,6 +19,7 @@ export default function ProfileLeft({
   theme,
 }: ProfileLeftProps) {
   const user = useAuthStore((state) => state.user);
+  const navigate = useNavigate();
   return (
     <>
       <div
@@ -25,7 +28,7 @@ export default function ProfileLeft({
         }`}
       >
         <img
-          src={userData?.image}
+          src={userData?.image || defaultProfileImage}
           className="w-[196px] h-[196px] rounded-[5px] mt-[60px]  object-contain overflow-hidden"
         />
         <div className="pt-[0px]">
@@ -87,7 +90,7 @@ export default function ProfileLeft({
                 className={`button-style3 ${
                   theme.name === 'Dark' ? 'bg-[#ffffff] text-[#111111]' : ''
                 }`}
-                onClick={() => (window.location.href = '/profile/edit')}
+                onClick={() => navigate('/profile/edit')}
               />
               <Mail
                 className={`w-[30px] h-[30px] cursor-pointer ${

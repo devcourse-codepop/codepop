@@ -10,6 +10,7 @@ import { getUserData } from '../../../api/profileInfo/profile';
 import { useAuthStore } from '../../../stores/authStore';
 import defaultProfileImage from '../../../assets/images/profile/defaultProfileImage.jpg';
 import defaultCover from '../../../assets/images/profile/defaultCover.png';
+import { useNavigate } from 'react-router-dom';
 
 interface Theme {
   name: string;
@@ -22,7 +23,9 @@ export default function EditProfile({
   userId: string;
   theme: Theme;
 }) {
+  const navigator = useNavigate();
   const user = useAuthStore((state) => state.user);
+  const setUser = useAuthStore((state) => state.setUser);
   const [userData, setUserData] = useState<User | null>(null);
 
   const [enteredErrorValues, setEnteredErrorValues] =
@@ -97,7 +100,6 @@ export default function EditProfile({
   };
 
   useEffect(() => {
-    setUserData(null);
     if (userId) axiosList();
   }, [userId]);
 
@@ -132,16 +134,6 @@ export default function EditProfile({
       setProfileImage(file);
       setProfilePreviewUrl(URL.createObjectURL(file));
     }
-
-    const formData = new FormData();
-    if (!file) {
-      return;
-    }
-    formData.append('image', imagePath);
-    formData.append('isCover', String(isCover));
-    await axiosInstance.post('/users/upload-photo', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -187,6 +179,10 @@ export default function EditProfile({
       });
       await axiosInstance.put('/settings/update-password', { password });
 
+      if (user) {
+        setUser({ ...user, fullName: enteredUserValues.myName });
+      }
+
       if (coverImage) {
         const formDataCover = new FormData();
         formDataCover.append('image', coverImage);
@@ -203,8 +199,13 @@ export default function EditProfile({
         await axiosInstance.post('/users/upload-photo', formDataProfile, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
+        if (user) {
+          const { data: userData2 } = await getUserData(userId);
+          setUserData(userData);
+          setUser({ ...user, image: userData2.image });
+        }
       }
-      window.location.href = '/profile';
+      navigator('/profile');
     } catch (error) {
       console.error('프로필 저장 중 오류 발생:', error);
     }

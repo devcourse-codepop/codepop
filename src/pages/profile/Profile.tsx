@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import ProfileLeft from './ProfileLeft';
 import ProfileRight from './ProfileRight';
 import { getUserData } from '../../api/profileInfo/profile';
+import defaultCover from '../../assets/images/profile/defaultCover.png';
 
 interface Theme {
   name: string;
@@ -49,7 +50,7 @@ export default function Profile({
     >
       <div className="h-[223px] flex-shrink-0">
         <img
-          src={userData?.coverImage}
+          src={userData?.coverImage || defaultCover}
           className="w-full h-full rounded-t-[10px] object-fill"
           alt="BackgroundImage "
         />

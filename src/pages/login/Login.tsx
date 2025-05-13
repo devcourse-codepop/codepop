@@ -1,16 +1,12 @@
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import Delete from '../../assets/images/input-delete/input-delete.svg';
-import defaultProfileImage from '../../assets/images/profile/defaultProfileImage.jpg';
-import defaultCover from '../../assets/images/profile/defaultCover.png';
 
 import { useState } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../api/auth/login';
 import { AxiosError } from 'axios';
-import { axiosInstance } from '../../api/axios';
-import { useLocation } from 'react-router-dom';
 
 interface Theme {
   name: string;
@@ -29,8 +25,6 @@ export default function Login({ theme }: { theme: Theme }) {
 
   const [loginError, setLoginError] = useState('');
 
-  const location = useLocation();
-
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEmail(value);
@@ -47,12 +41,6 @@ export default function Login({ theme }: { theme: Theme }) {
     if (value && passwordError) {
       setPasswordError('');
     }
-  };
-
-  const fetchImageAsFile = async (url: string, filename: string) => {
-    const response = await fetch(url);
-    const blob = await response.blob();
-    return new File([blob], filename, { type: blob.type });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -77,37 +65,7 @@ export default function Login({ theme }: { theme: Theme }) {
       const token = res.data.token;
       console.log(res.data);
       storeLogin(token);
-
-      if (!res.data.image) {
-        const fileProfile = await fetchImageAsFile(
-          defaultProfileImage,
-          'default-profile.jpg'
-        );
-        const formDataProfile = new FormData();
-        formDataProfile.append('image', fileProfile);
-        formDataProfile.append('isCover', 'false');
-        await axiosInstance.post('/users/upload-photo', formDataProfile, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        });
-      }
-
-      if (!res.data.coverImage) {
-        const fileCover = await fetchImageAsFile(
-          defaultCover,
-          'default-cover.jpg'
-        );
-        const formDataCover = new FormData();
-        formDataCover.append('image', fileCover);
-        formDataCover.append('isCover', 'true');
-        await axiosInstance.post('/users/upload-photo', formDataCover, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        });
-      }
-
-      const from = location.state?.from || '/';
-      navigate(from);
-
-      // navigate('/');
+      navigate('/');
     } catch (err) {
       const error = err as AxiosError;
 

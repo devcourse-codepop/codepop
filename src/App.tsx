@@ -18,6 +18,7 @@ import DarkMode from './components/toggle/DarkMode';
 export default function App() {
   const accessToken = useAuthStore((state) => state.accessToken);
   const setUser = useAuthStore((state) => state.setUser);
+  const user = useAuthStore((state) => state.user);
   //const resetUser = useAuthStore((state) => state.resetUser); // 추기
 
   useEffect(() => {
@@ -36,7 +37,7 @@ export default function App() {
     } else {
       useAuthStore.setState({ isLoading: false });
     }
-  }, [accessToken]);
+  }, [accessToken, user?.fullName]);
 
   return (
     <DarkMode>

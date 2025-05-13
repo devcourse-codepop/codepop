@@ -81,8 +81,9 @@ export default function ProfileRight({
 
         const postsWithMyLatestComment = commentPosts.map((post) => {
           const myComment = latestCommentsMap.get(post._id);
+
           const myCommentCount = Math.max(
-            (commentCountMap.get(post._id) || 0) - 1,
+            commentCountMap.get(post._id) || 0,
             0
           );
 
@@ -212,29 +213,22 @@ export default function ProfileRight({
                 {selectedTab === 'comments' &&
                   userPosts.comments.length > 0 && (
                     <div
-                      className={
-                        'mt-1 text-[12px] text-gray-700 flex gap-[0.2vw]'
-                      }
+                      className={`mt-1 text-[12px]  flex ${
+                        theme.name === 'Dark'
+                          ? 'text-[#ffffff] opacity-70'
+                          : 'text-gray-700'
+                      }`}
                     >
                       <img
                         src={`${
                           theme.name === 'Dark' ? commentWhite : comment
                         }`}
                       />
-                      <p
-                        className={`truncate max-w-[400px] 4 ${
-                          theme.name === 'Dark'
-                            ? 'text-[#ffffff]'
-                            : 'text-[#111111]'
-                        }`}
-                      >
-                        {JSON.parse(userPosts.comments[0].comment).content}
-                      </p>
-                      {(userPosts.myCommentCount ?? 0) > 0 && (
-                        <p className={'ml-[13px]'}>
+                      {
+                        <p className="ml-[5px]">
                           +{userPosts.myCommentCount}개
                         </p>
-                      )}
+                      }
                     </div>
                   )}
               </div>

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Notification from '../notification/Notification';
 import { useAuthStore } from '../../stores/authStore';
 import moon from '../../assets/images/toggle/moon.svg';
@@ -16,7 +16,9 @@ export default function Header({
   theme: Theme;
   nextTheme: () => void;
 }) {
-  const { isLoggedIn, user, logout } = useAuthStore();
+  const { isLoggedIn, logout } = useAuthStore();
+  const navigator = useNavigate();
+  const user = useAuthStore((state) => state.user);
 
   let imgSrc: string = '';
   if (user?.image === undefined || user?.image === '') {
@@ -35,7 +37,6 @@ export default function Header({
         </h1>
 
         <div className="flex items-center gap-6">
-          {/* 로그인 */}
           {!isLoggedIn && (
             <Link
               to="/login"
@@ -47,7 +48,6 @@ export default function Header({
             </Link>
           )}
 
-          {/* 로그아웃 */}
           {isLoggedIn && (
             <>
               <Link
@@ -62,16 +62,15 @@ export default function Header({
               <div className="notification-wrapper relative">
                 <Notification theme={theme} />
               </div>
-              <Link
-                to="/profile"
-                className="w-10 h-10 rounded-3xl overflow-hidden"
-              >
-                <img src={imgSrc} className="w-full h-full" />
-              </Link>
+              <img
+                src={imgSrc}
+                className="w-10 h-10 rounded-3xl overflow-hidden cursor-pointer"
+                onClick={() => navigator('/profile')}
+              />
             </>
           )}
 
-          {/* 다크모드 */}
+          {/* 다크모드 버튼 */}
           <div
             className={`w-10 h-10 rounded-full flex justify-center items-center transition-colors duration-300 ${
               theme.name === 'Dark' ? 'bg-black' : 'bg-white'
