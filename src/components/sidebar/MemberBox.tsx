@@ -1,15 +1,15 @@
-import menuIcon from "../../assets/MenuIcon.svg";
-import { Search } from "lucide-react";
-import Avatar from "../avatar/Avatar";
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { getAllUsersData } from "../../api/memberbox/member";
-import { useAuthStore } from "../../stores/authStore";
+import menuIcon from '../../assets/MenuIcon.svg';
+import { Search } from 'lucide-react';
+import Avatar from '../avatar/Avatar';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getAllUsersData } from '../../api/memberbox/member';
+import { useAuthStore } from '../../stores/authStore';
 
 export default function MemberBox() {
   const { isLoggedIn, user } = useAuthStore(); // 내 프로필
-  const [searchKeyword, setSearchKeyword] = useState<string>(""); // 검색 키워드
-  const [openUser, setOpenUser] = useState<string>(""); // 각 프로필 메뉴
+  const [searchKeyword, setSearchKeyword] = useState<string>(''); // 검색 키워드
+  const [openUser, setOpenUser] = useState<string>(''); // 각 프로필 메뉴
   const [users, setUsers] = useState<User[]>([]); // 모든 사용자
 
   const fetchUsers = async () => {
@@ -44,7 +44,7 @@ export default function MemberBox() {
 
   const ToggleHandelr = (id: string) => {
     if (openUser === id) {
-      setOpenUser("");
+      setOpenUser('');
     } else {
       setOpenUser(id);
     }
@@ -69,9 +69,9 @@ export default function MemberBox() {
       {isLoggedIn && (
         <div className="myInfoCard">
           <Avatar
-            name={`${user !== null ? user.fullName : ""} (나)`}
-            email={user !== null ? user.email : ""}
-            image={user !== null ? user.image : ""}
+            name={`(나) ${user !== null ? user.fullName : ''}`}
+            email={user !== null ? user.email : ''}
+            image={user !== null ? user.image : ''}
             isOnline={user !== null ? user.isOnline : false}
           ></Avatar>
         </div>

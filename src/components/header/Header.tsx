@@ -1,10 +1,12 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/header/logo.svg';
 import Notification from '../notification/Notification';
 import { useAuthStore } from '../../stores/authStore';
 
 export default function Header() {
-  const { isLoggedIn, user, logout } = useAuthStore();
+  const { isLoggedIn, logout } = useAuthStore();
+  const navigator = useNavigate();
+  const user = useAuthStore((state) => state.user);
 
   let imgSrc: string = '';
   if (user?.image === undefined || user?.image === '') {
@@ -15,28 +17,31 @@ export default function Header() {
   }
   return (
     <>
-      <header className="h-[100px] px-[60px] flex items-center justify-between">
+      <header className='h-[100px] px-[60px] flex items-center justify-between'>
         <h1>
-          <Link to="/">
+          <Link to='/'>
             <img src={logo} />
           </Link>
         </h1>
         <div>
-          {!isLoggedIn && <Link to="/login">Login</Link>}
+          {!isLoggedIn && (
+            <Link to='/login' className='text-[20px]'>
+              Login
+            </Link>
+          )}
           {isLoggedIn && (
-            <div className="flex items-center gap-6">
-              <Link to="/" onClick={logout} className="text-[20px]">
+            <div className='flex items-center gap-6'>
+              <Link to='/' onClick={logout} className='text-[20px]'>
                 Logout
               </Link>
-              <div className="notification-wrapper relative">
+              <div className='notification-wrapper relative'>
                 <Notification />
               </div>
-              <Link
-                to="/profile"
-                className="w-10 h-10 rounded-3xl overflow-hidden"
-              >
-                <img src={imgSrc} className="w-full h-full" />
-              </Link>
+              <img
+                src={imgSrc}
+                className='w-10 h-10 rounded-3xl overflow-hidden cursor-pointer'
+                onClick={() => navigator('/profile')}
+              />
             </div>
           )}
         </div>

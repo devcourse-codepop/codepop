@@ -1,14 +1,20 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useChannelItemStore } from '../../stores/channelStore';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 export default function ChannelBox() {
-  const pathName = useLocation().pathname;
   const { channels, fetchChannels } = useChannelItemStore();
+  const params = useParams();
+  const [channelParams, setchannelParams] = useState(params.channelId);
 
   useEffect(() => {
     fetchChannels();
   }, [fetchChannels]);
+
+  useEffect(() => {
+    setchannelParams(params.channelId);
+  }, [params]);
 
   return (
     <>
@@ -33,10 +39,12 @@ export default function ChannelBox() {
                 <span className="font-noto font-[18px] pt-1 relative z-1">
                   {item.name}
                   <span
-                    className={`block w-0 h-3/7 opacity-30 absolute left-0 bottom-0 -z-1 group-hover:w-full duration-300 ease-out`}
+                    className={twMerge(
+                      `block w-0 h-3/7 opacity-30 absolute left-0 bottom-0 -z-1 group-hover:w-full duration-300 ease-out`,
+                      channelParams === item.to.split('/')[2] && 'w-full'
+                    )}
                     style={{
                       backgroundColor: item.color,
-                      width: pathName === item.to ? '100%' : '',
                     }}
                   ></span>
                 </span>

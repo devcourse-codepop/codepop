@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { Like } from '../../types';
 import { deleteLikes, postLikes, postNotifications } from '../../api/post/post';
 import { useAuthStore } from '../../stores/authStore';
+import NotLoginModal from '../post/NotLoginModal';
 
 interface LikeCommentProps {
   likeCount: number;
@@ -27,22 +28,33 @@ export default function LikeComment({
 
   const user = useAuthStore((state) => state.user);
 
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+  const closeLoginModalHanlder = () => {
+    setIsLoginModalOpen(false);
+  };
+
   const clickLikes = async () => {
+    if (!user) setIsLoginModalOpen(true);
     if (!checkLike) {
-      setLike((like) => like + 1);
-      setCheckLike(true);
       try {
         const { data } = await postLikes(postId);
+
+        setLike((like) => like + 1);
+        setCheckLike(true);
+
         setLikeId(data._id);
         sendLikeNotification(data._id);
       } catch (e) {
         console.log(e instanceof Error && e.message);
       }
     } else {
-      setLike((like) => like - 1);
-      setCheckLike(false);
       try {
         const { data } = await deleteLikes(likeId);
+
+        setLike((like) => like - 1);
+        setCheckLike(false);
+
         console.log(data);
         setLikeId('');
       } catch (e) {
@@ -97,6 +109,9 @@ export default function LikeComment({
         <img src={comment} alt="댓글" className="w-5 h-5 relative top-[1px]" />
         <span className="text-sm">{commentCount}</span>
       </div>
+      {isLoginModalOpen && (
+        <NotLoginModal closeLoginModalHanlder={closeLoginModalHanlder} />
+      )}
     </div>
   );
 }

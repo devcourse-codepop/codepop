@@ -3,19 +3,22 @@ import LikeComment from "../reaction/LikeComment";
 //import CodeIcon from '../../assets/CodeEditIcon.svg';
 import { Post } from "../../types";
 import dayjs from "dayjs";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { twMerge } from "tailwind-merge";
 import { useState } from "react";
 import { useAuthStore } from "../../stores/authStore";
 import NotLoginModal from "./NotLoginModal";
 import DOMPurify from "dompurify";
+import DeletedUserModal from "./DeletedUserModal";
+import { useChannelItemStore } from "../../stores/channelStore";
 import PollOptionsView from "../poll/PollOptionsView";
 
 export default function PostListItem(props: Post) {
-  const { _id, title, image, author, likes, comments, updatedAt } = props;
-
-  const params = useParams();
-  const channel = params.channelId;
+  const { _id, title, image, author, likes, comments, createdAt, channel } =
+    props;
+  const { channels } = useChannelItemStore();
+  // const params = useParams();
+  // const channel = params.channelId;
 
   const navigate = useNavigate();
 
@@ -24,7 +27,8 @@ export default function PostListItem(props: Post) {
   // const [currentWidth, setCurrentWidth] = useState(0);
 
   const user = useAuthStore((state) => state.user);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 
   let codes;
 
@@ -48,21 +52,47 @@ export default function PostListItem(props: Post) {
     if (codes.length > 0) return codes.length;
   };
 
-  const getDatetimeFormat = () => {
-    const date = dayjs(updatedAt).add(9, "hour");
-    return date.format("YYYY.MM.DD");
+  // const getDatetimeFormat = () => {
+  //   const date = dayjs(createdAt).add(9, 'hour');
+  //   return date.format('YYYY.MM.DD');
+  // };
+
+  const getElapsedTime = () => {
+    const now = dayjs().add(9, "hour");
+    const writeTime = dayjs(createdAt).add(9, "hour");
+    // const now = dayjs();
+    // const writeTime = dayjs(createdAt);
+
+    const gap = now.diff(writeTime, "s");
+    if (gap < 60) return `${gap}초 전`;
+    if (gap < 3600) return `${Math.floor(gap / 60)}분 전`;
+    if (gap < 86400) return `${Math.floor(gap / 3600)}시간 전`;
+    // return `${Math.floor(gap / 86400)}일 전`;
+    return writeTime.format("YYYY.MM.DD");
   };
 
   const clickPostHandler = () => {
     if (user) {
-      navigate(`/channel/${channel}/post/${_id}`);
+      if (!author) {
+        setIsUserModalOpen(true);
+      } else {
+        channels.map((cha) => {
+          if (cha.id === channel._id) {
+            navigate(`${cha.to}/post/${_id}`);
+          }
+        });
+      }
     } else {
-      setIsModalOpen(true);
+      setIsLoginModalOpen(true);
     }
   };
 
-  const closeModalHanlder = () => {
-    setIsModalOpen(false);
+  const closeLoginModalHanlder = () => {
+    setIsLoginModalOpen(false);
+  };
+
+  const closeUserModalHanlder = () => {
+    setIsUserModalOpen(false);
   };
 
   // useEffect(() => {
@@ -76,10 +106,10 @@ export default function PostListItem(props: Post) {
   return (
     <>
       <div
-        className="w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative"
+        className='w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative'
         // ref={divRef}
       >
-        <div className="flex justify-between h-[85px] pl-3 pt-2.5">
+        <div className='flex justify-between h-[85px] pl-3 pt-2.5'>
           <Avatar
             name={author?.fullName}
             email={author?.email}
@@ -100,7 +130,7 @@ export default function PostListItem(props: Post) {
               image && "max-w-[635px]"
             )}
           >
-            <div className="postTitle text-[18px] font-semibold truncate">
+            <div className='postTitle text-[18px] font-semibold truncate'>
               {JSON.parse(title).title}
             </div>
             <div
@@ -109,11 +139,11 @@ export default function PostListItem(props: Post) {
                   removeImgTags(JSON.parse(title).content)
                 ),
               }}
-              className="postContent text-[15px] font-normal line-clamp-5"
+              className='postContent text-[15px] font-normal line-clamp-5'
             />
             {/* 투표 옵션이 있을 경우 */}
             {pollOptions && pollOptions.length > 0 && (
-              <div className="mt-4">
+              <div className='mt-4'>
                 <PollOptionsView options={pollOptions} />
               </div>
             )}
@@ -125,15 +155,16 @@ export default function PostListItem(props: Post) {
             )} */}
           </div>
           {image && (
-            <div className="border border-[#e0e0e0] rounded-[5px]">
-              <img src={image} className="w-[226px] h-[226px]" />
+            <div className='border border-[#e0e0e0] rounded-[5px]'>
+              <img src={image} className='w-[226px] h-[226px]' />
             </div>
           )}
         </div>
-        <div className="flex justify-end pr-5 pb-[9px] text-[#808080] text-sm font-light">
-          {getDatetimeFormat()}
+        <div className='flex justify-end pr-5 pb-[9px] text-[#808080] text-sm font-light'>
+          {/* {getDatetimeFormat()} */}
+          {getElapsedTime()}
         </div>
-        <hr className="mx-[18px] text-[#b2b2b2]" />
+        <hr className='mx-[18px] text-[#b2b2b2]' />
         {/* <div className="flex justify-between h-[59px]"> */}
         <div
           className={twMerge(
@@ -158,8 +189,8 @@ export default function PostListItem(props: Post) {
             </div>
           )} */}
           {setCodeCount() > 0 && (
-            <div className="flex justify-center items-center text-[14px] opacity-70 ml-5">
-              +<span className="text-[#ff0000]">{setCodeCount()}</span>개의 코드
+            <div className='flex justify-center items-center text-[14px] opacity-70 ml-5'>
+              +<span className='text-[#ff0000]'>{setCodeCount()}</span>개의 코드
               블록
             </div>
           )}
@@ -172,7 +203,12 @@ export default function PostListItem(props: Post) {
           />
         </div>
       </div>
-      {isModalOpen && <NotLoginModal closeModalHanlder={closeModalHanlder} />}
+      {isLoginModalOpen && (
+        <NotLoginModal closeLoginModalHanlder={closeLoginModalHanlder} />
+      )}
+      {isUserModalOpen && (
+        <DeletedUserModal closeUserModalHanlder={closeUserModalHanlder} />
+      )}
     </>
   );
 }
