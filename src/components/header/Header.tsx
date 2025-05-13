@@ -30,7 +30,7 @@ export default function Header() {
               <Link to='/' onClick={logout} className='text-[20px]'>
                 Logout
               </Link>
-              <div className='notification-wrapper'>
+              <div className='notification-wrapper relative'>
                 <Notification />
               </div>
               <img

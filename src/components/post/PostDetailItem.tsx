@@ -1,19 +1,19 @@
-import Avatar from '../avatar/Avatar';
-import LikeComment from '../reaction/LikeComment';
-//import voteBtn from '../../assets/VoteBtn.svg';
-import menuIcon from '../../assets/MenuIcon.svg';
-import { useEffect, useRef, useState } from 'react';
-//import CommentListItem from './CommentListItem';
-import { Comment, Post } from '../../types';
-import dayjs from 'dayjs';
-import { deletePosts, getPostList } from '../../api/post/post';
-import { usePostStore } from '../../stores/postStore';
-import { useNavigate, useParams } from 'react-router-dom';
-import CommentListItem from './CommentListItem';
-import { useAuthStore } from '../../stores/authStore';
+import Avatar from "../avatar/Avatar";
+import LikeComment from "../reaction/LikeComment";
+import menuIcon from "../../assets/MenuIcon.svg";
+import { useEffect, useState } from "react";
+import { Comment, Post } from "../../types";
+import dayjs from "dayjs";
+import { deletePosts, getPostList } from "../../api/post/post";
+import { usePostStore } from "../../stores/postStore";
+import { useNavigate, useParams } from "react-router-dom";
+import CommentListItem from "./CommentListItem";
+import { useAuthStore } from "../../stores/authStore";
+import DOMPurify from "dompurify";
 
 export default function PostDetailItem(props: Post) {
-  const { _id, title, image, author, likes, comments, updatedAt } = props;
+  // image,
+  const { _id, title, author, likes, comments, updatedAt } = props;
 
   const params = useParams();
   const channel = params.channelId;
@@ -21,13 +21,13 @@ export default function PostDetailItem(props: Post) {
 
   const navigate = useNavigate();
 
-  const divRef = useRef<HTMLDivElement | null>(null);
+  //const divRef = useRef<HTMLDivElement | null>(null);
 
   const channelIdList = usePostStore((state) => state.channelIdList);
 
   const user = useAuthStore((state) => state.user);
 
-  const [currentWidth, setCurrentWidth] = useState(0);
+  //const [currentWidth, setCurrentWidth] = useState(0);
 
   const [commentListItem, setCommentListItem] = useState<Comment[]>([]);
 
@@ -38,14 +38,30 @@ export default function PostDetailItem(props: Post) {
     setIsOpen(!isOpen);
   };
 
+  const editCodeStyle = (html: string): string => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+
+    const codes = doc.querySelectorAll("pre");
+    codes.forEach((code) => {
+      code.style.backgroundColor = "#ececec";
+      code.style.padding = "20px";
+      code.style.marginTop = "10px";
+      code.style.marginBottom = "10px";
+      code.style.borderRadius = "8px";
+    });
+
+    return doc.body.innerHTML;
+  };
+
   const getDatetimeSortFormat = (update: string): string => {
-    const date = dayjs(update);
-    return date.format('YYYY-MM-DD');
+    const date = dayjs(update).add(9, "hour");
+    return date.format("YYYY-MM-DD");
   };
 
   const getDatetimeFormat = () => {
-    const date = dayjs(updatedAt);
-    return date.format('YYYY.MM.DD');
+    const date = dayjs(updatedAt).add(9, "hour");
+    return date.format("YYYY.MM.DD");
   };
 
   const checkPostUser = () => {
@@ -54,52 +70,9 @@ export default function PostDetailItem(props: Post) {
     }
   };
 
-  const getTitleSubstr = () => {
-    const lineChangeLength = Math.floor(currentWidth / 10);
-    console.log(lineChangeLength);
-    let count = 0;
-
-    if (JSON.parse(title).title.length < lineChangeLength)
-      return JSON.parse(title).title;
-
-    let newStr = JSON.parse(title).title;
-    for (let i = 0; i < newStr.length; i++) {
-      count++;
-      if (count === lineChangeLength) {
-        newStr = newStr.slice(0, i) + '\n' + newStr.slice(i);
-        count = 0;
-        i = i + 1;
-      }
-    }
-    //console.log(newStr);
-    return newStr;
-  };
-
-  const getContentSubstr = () => {
-    const lineChangeLength = Math.floor(currentWidth / 13);
-    console.log(lineChangeLength);
-    let count = 0;
-
-    if (JSON.parse(title).content.length < lineChangeLength)
-      return JSON.parse(title).content;
-
-    let newStr = JSON.parse(title).content;
-    for (let i = 0; i < newStr.length; i++) {
-      count++;
-      if (count === lineChangeLength) {
-        newStr = newStr.slice(0, i) + '\n' + newStr.slice(i);
-        count = 0;
-        i = i + 1;
-      }
-    }
-    //console.log(newStr);
-    return newStr;
-  };
-
   const filteringItem = (data: Post[]) => {
     for (const res of data) {
       if (res._id === post) {
-        // console.log('해당 포스트의 전체 댓글 리스트: ', res.comments);
         setCommentListItem(res.comments);
       }
     }
@@ -108,7 +81,6 @@ export default function PostDetailItem(props: Post) {
   const getPostItem = async () => {
     try {
       const { data } = await getPostList(channelIdList[Number(channel) - 1]);
-      // console.log('전체 포스트 리스트: ', data);
       filteringItem(data);
     } catch (e) {
       console.log(e instanceof Error && e.message);
@@ -116,7 +88,7 @@ export default function PostDetailItem(props: Post) {
   };
 
   const clickUpdateHandler = () => {
-    navigate(`channel/${channel}/update/${post}`);
+    navigate(`/channel/${channel}/update/${post}`);
   };
 
   const clickDeleteHandler = async () => {
@@ -136,25 +108,26 @@ export default function PostDetailItem(props: Post) {
     }
   }, [user]);
 
-  useEffect(() => {
-    if (divRef.current) {
-      const width = divRef.current.offsetWidth;
-      console.log('width:', width);
-      setCurrentWidth(width);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (divRef.current) {
+  //     const width = divRef.current.offsetWidth;
+  //     console.log('width:', width);
+  //     setCurrentWidth(width);
+  //   }
+  // }, []);
 
   return (
     <>
       <div
         className="w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative"
-        ref={divRef}
+        //ref={divRef}
       >
         <div className="flex justify-between h-[85px] pl-3 pt-2.5">
           <Avatar
             name={author.fullName}
             email={author.email}
             image={author.image}
+            isOnline={author.isOnline}
           />
           {/* 사용자 이름과 글쓴이 이름이 일치할 경우 */}
           {isUser && (
@@ -188,32 +161,36 @@ export default function PostDetailItem(props: Post) {
         </div>
         <div className="flex flex-col px-[55px] py-[15px] gap-[22px]">
           <div className="text-[20px] font-semibold">
-            {/* {JSON.parse(title).title} */}
-            {getTitleSubstr()}
+            {JSON.parse(title).title}
           </div>
-          <div className="text-[15px] font-normal w-[500px]">
-            {/* {JSON.parse(title).content} */}
-            {getContentSubstr()}
-          </div>
-          {image && (
+          {/* w-[500px] */}
+          <div
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(
+                editCodeStyle(JSON.parse(title).content)
+              ),
+            }}
+            className="text-[15px] font-normal"
+          />
+          {/* {image && (
             <div>
               <img
                 src={image}
                 className="max-w-[626px] max-h-[626px] border border-[#e0e0e0] rounded-[5px]"
               />
             </div>
-          )}
+          )} */}
         </div>
         <div className="flex justify-end pr-5 pb-[9px] text-[#808080] text-sm font-light">
           {getDatetimeFormat()}
         </div>
         <hr className="mx-[18px] text-[#b2b2b2]" />
         <div className="h-[59px]">
-          {/* <LikeComment likeCount={12} commentCount={10} /> */}
           <LikeComment
             likeCount={likes.length}
             commentCount={comments.length}
             postId={_id}
+            postUserId={author._id}
             likes={likes}
           />
         </div>
@@ -229,8 +206,8 @@ export default function PostDetailItem(props: Post) {
             [...commentListItem]
               .sort(
                 (a, b) =>
-                  new Date(getDatetimeSortFormat(b.updatedAt)).getTime() -
-                  new Date(getDatetimeSortFormat(a.updatedAt)).getTime()
+                  new Date(getDatetimeSortFormat(a.updatedAt)).getTime() -
+                  new Date(getDatetimeSortFormat(b.updatedAt)).getTime()
               )
               .map((item) => <CommentListItem key={item._id} {...item} />)}
         </div>

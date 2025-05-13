@@ -10,6 +10,7 @@ import MainContent from './pages/MainContent';
 import PostList from './pages/PostList';
 import PostDetail from './pages/PostDetail';
 import WritePostRouter from './route/WritePostRouter';
+import UpdatePostRouter from './route/UpdatePostRouter';
 import ProfilePage from './pages/profile/ProfilePage';
 import EditProfilePage from './pages/profile/profile-edit/EditProfilePage';
 
@@ -50,10 +51,10 @@ export default function App() {
           <Route path='/' element={<MainContent />} />
           <Route path='/profile' element={<ProfilePage />} />
           <Route path='/profile/edit' element={<EditProfilePage />} />
-          <Route path='channel/:channelId' element={<PostList />} />
-          <Route path='channel/:channelId/post/:postId' element={<PostDetail />} />
+          <Route path='/channel/:channelId' element={<PostList />} />
+          <Route path='/channel/:channelId/post/:postId' element={<PostDetail />} />
           <Route path='/channel/:channelId/write' element={<WritePostRouter />} />
-          <Route path='/channel/:channelId/update/:postId' element='' />
+          <Route path='/channel/:channelId/update/:postId' element={<UpdatePostRouter />} />
         </Route>
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<SignUp />} />

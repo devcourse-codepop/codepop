@@ -1,9 +1,14 @@
-import Avatar from '../avatar/Avatar';
-import LikeComment from '../reaction/LikeComment';
-import { Post } from '../../types';
-import dayjs from 'dayjs';
-import { useNavigate, useParams } from 'react-router-dom';
-import { twMerge } from 'tailwind-merge';
+import Avatar from "../avatar/Avatar";
+import LikeComment from "../reaction/LikeComment";
+//import CodeIcon from '../../assets/CodeEditIcon.svg';
+import { Post } from "../../types";
+import dayjs from "dayjs";
+import { useNavigate, useParams } from "react-router-dom";
+import { twMerge } from "tailwind-merge";
+import { useState } from "react";
+import { useAuthStore } from "../../stores/authStore";
+import NotLoginModal from "./NotLoginModal";
+import DOMPurify from "dompurify";
 
 export default function PostListItem(props: Post) {
   const { _id, title, image, author, likes, comments, updatedAt } = props;
@@ -13,48 +18,66 @@ export default function PostListItem(props: Post) {
 
   const navigate = useNavigate();
 
+  // const divRef = useRef<HTMLDivElement | null>(null);
+
+  // const [currentWidth, setCurrentWidth] = useState(0);
+
+  const user = useAuthStore((state) => state.user);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  let codes;
+
+  const removeImgTags = (html: string): string => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+
+    const imgs = doc.querySelectorAll("img");
+    imgs.forEach((img) => img.remove());
+
+    // const codes = doc.querySelectorAll('pre');
+    codes = doc.querySelectorAll("pre");
+    codes.forEach((code) => {
+      code.remove();
+    });
+
+    return doc.body.innerHTML;
+  };
+
+  const setCodeCount = () => {
+    if (codes.length > 0) return codes.length;
+  };
+
   const getDatetimeFormat = () => {
-    const date = dayjs(updatedAt);
-    return date.format('YYYY.MM.DD');
-  };
-
-  const getTitleSubstr = () => {
-    const totalLength = 30;
-    if (JSON.parse(title).title.length > totalLength) {
-      const newStr = JSON.parse(title).title.substr(0, totalLength) + ' ...';
-      console.log(newStr);
-      return newStr;
-    }
-    return JSON.parse(title).title;
-  };
-
-  const getContentSubstr = () => {
-    const totalLength = 250;
-    const lineChangeLength = 55;
-    let count = 0;
-    if (JSON.parse(title).content.length > totalLength) {
-      let newStr = JSON.parse(title).content.substr(0, totalLength) + ' ...';
-      for (let i = 0; i < newStr.length; i++) {
-        count++;
-        if (count === lineChangeLength) {
-          newStr = newStr.slice(0, i) + '\n' + newStr.slice(i);
-          count = 0;
-          i = i + 1;
-        }
-      }
-      console.log(newStr);
-      return newStr;
-    }
-    return JSON.parse(title).content;
+    const date = dayjs(updatedAt).add(9, "hour");
+    return date.format("YYYY.MM.DD");
   };
 
   const clickPostHandler = () => {
-    navigate(`/channel/${channel}/post/${_id}`);
+    if (user) {
+      navigate(`/channel/${channel}/post/${_id}`);
+    } else {
+      setIsModalOpen(true);
+    }
   };
+
+  const closeModalHanlder = () => {
+    setIsModalOpen(false);
+  };
+
+  // useEffect(() => {
+  //   if (divRef.current) {
+  //     const width = divRef.current.offsetWidth;
+  //     console.log('width:', width);
+  //     setCurrentWidth(width);
+  //   }
+  // }, []);
 
   return (
     <>
-      <div className="w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative">
+      <div
+        className="w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative"
+        // ref={divRef}
+      >
         <div className="flex justify-between h-[85px] pl-3 pt-2.5">
           <Avatar
             name={author?.fullName}
@@ -65,21 +88,34 @@ export default function PostListItem(props: Post) {
         </div>
         <div
           className={twMerge(
-            'flex justify-between px-[55px] py-[15px] gap-[55px] cursor-pointer',
-            !image && 'py-[23px]'
+            "flex justify-between px-[55px] py-[15px] gap-[55px] cursor-pointer",
+            !image && "py-[23px]"
           )}
           onClick={clickPostHandler}
         >
-          <div className="flex flex-col justify-center gap-[22px] ">
-            <div className="text-[18px] font-semibold">
-              {/* {JSON.parse(title).title} */}
-              {getTitleSubstr()}
+          <div
+            className={twMerge(
+              "flex flex-col justify-center w-full gap-[22px] ",
+              image && "max-w-[635px]"
+            )}
+          >
+            <div className="postTitle text-[18px] font-semibold truncate">
+              {JSON.parse(title).title}
             </div>
-            {/* w-[500px] */}
-            <div className="text-[15px] font-normal opacity-70 w-[500px]">
-              {/* {JSON.parse(title).content} */}
-              {getContentSubstr()}
-            </div>
+            <div
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(
+                  removeImgTags(JSON.parse(title).content)
+                ),
+              }}
+              className="postContent text-[15px] font-normal line-clamp-5"
+            />
+            {/* {setCodeCount() > 0 && (
+              <div className="flex justify-end text-[14px] opacity-70">
+                +<span className="text-[#ff0000]">{setCodeCount()}</span>개의
+                코드 블록
+              </div>
+            )} */}
           </div>
           {image && (
             <div className="border border-[#e0e0e0] rounded-[5px]">
@@ -91,15 +127,45 @@ export default function PostListItem(props: Post) {
           {getDatetimeFormat()}
         </div>
         <hr className="mx-[18px] text-[#b2b2b2]" />
-        <div className="h-[59px]">
+        {/* <div className="flex justify-between h-[59px]"> */}
+        <div
+          className={twMerge(
+            "flex h-[59px]",
+            setCodeCount() > 0 ? "justify-between" : "justify-end"
+          )}
+        >
+          {/* {setCodeCount() > 0 && (
+            <div className="flex justify-center items-center text-[14px] opacity-70">
+              +<span className="text-[#ff0000]">{setCodeCount()}</span>개의 코드
+              블록
+            </div>
+          )} */}
+          {/* {setCodeCount() > 0 && (
+            <div className="flex justify-center items-center text-[14px]">
+              <img
+                src={CodeIcon}
+                alt="코드 아이콘"
+                className="mr-2 opacity-60"
+              />
+              +<span className="text-[#ff0000]">{setCodeCount()}</span>
+            </div>
+          )} */}
+          {setCodeCount() > 0 && (
+            <div className="flex justify-center items-center text-[14px] opacity-70 ml-5">
+              +<span className="text-[#ff0000]">{setCodeCount()}</span>개의 코드
+              블록
+            </div>
+          )}
           <LikeComment
             likeCount={likes.length}
             commentCount={comments.length}
             postId={_id}
+            postUserId={author?._id}
             likes={likes}
           />
         </div>
       </div>
+      {isModalOpen && <NotLoginModal closeModalHanlder={closeModalHanlder} />}
     </>
   );
 }

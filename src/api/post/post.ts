@@ -1,17 +1,17 @@
-import { axiosInstance } from '../axios';
+import { axiosInstance } from "../axios";
 
 export const getPostList = (channelId: string) => {
   return axiosInstance.get(`/posts/channel/${channelId}`);
 };
 
 export const postLikes = (postId: string) => {
-  return axiosInstance.post('/likes/create', {
+  return axiosInstance.post("/likes/create", {
     postId,
   });
 };
 
 export const deleteLikes = (likeId: string) => {
-  return axiosInstance.delete('/likes/delete', {
+  return axiosInstance.delete("/likes/delete", {
     data: { id: likeId },
   });
 };
@@ -21,7 +21,7 @@ export const getSearchPostList = (value: string) => {
 };
 
 export const postComments = (postId: string, comment: string) => {
-  return axiosInstance.post('/comments/create', {
+  return axiosInstance.post("/comments/create", {
     postId,
     // comment,
     comment: JSON.stringify({
@@ -31,14 +31,31 @@ export const postComments = (postId: string, comment: string) => {
   });
 };
 
+// export const postComments = (formData: FormData) => {
+//   return axiosInstance.post('/comments/create', formData, {
+//     headers: {
+//       'Content-Type': 'multipart/form-data',
+//     },
+//   });
+// };
+
 export const deleteComments = (commentId: string) => {
-  return axiosInstance.delete('/comments/delete', {
+  return axiosInstance.delete("/comments/delete", {
     data: { id: commentId },
   });
 };
 
+// update 하는 코드
+export const updatePost = (formData: FormData) => {
+  return axiosInstance.put(`/posts/update`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
 export const deletePosts = (postId: string) => {
-  return axiosInstance.delete('/posts/delete', {
+  return axiosInstance.delete("/posts/delete", {
     data: { id: postId },
   });
 };
@@ -54,13 +71,24 @@ export const getPostData = (postId: string) => {
 export const getPopularPostData = async (channelId: string) => {
   const response = await axiosInstance.get(`/posts/channel/${channelId}`);
   const sortPost = response.data.sort((a: Post, b: Post) => {
-    const aLike = a.likes.length + a.comments.length;
-    const bLike = b.likes.length + b.comments.length;
-
-    return bLike - aLike === 0
-      ? b.comments.length - a.comments.length
-      : bLike - aLike;
+    if (b.likes.length - a.likes.length !== 0)
+      return b.likes.length - a.likes.length;
+    else return b.comments.length - a.comments.length;
   });
 
   return sortPost;
+};
+
+export const postNotifications = (
+  notificationType: string,
+  notificationTypeId: string,
+  userId: string,
+  postId: string
+) => {
+  return axiosInstance.post('/notifications/create', {
+    notificationType,
+    notificationTypeId,
+    userId,
+    postId,
+  });
 };
