@@ -24,7 +24,11 @@ export default function Header() {
           </Link>
         </h1>
         <div>
-          {!isLoggedIn && <Link to='/login'>Login</Link>}
+          {!isLoggedIn && (
+            <Link to='/login' className='text-[20px]'>
+              Login
+            </Link>
+          )}
           {isLoggedIn && (
             <div className='flex items-center gap-6'>
               <Link to='/' onClick={logout} className='text-[20px]'>
