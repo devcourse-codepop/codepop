@@ -1,6 +1,6 @@
 import menuIcon from '../../assets/MenuIcon.svg';
 import userImg from '../../assets/images/header/userImg.svg';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 import { Comment } from '../../types';
 import { useAuthStore } from '../../stores/authStore';
@@ -16,6 +16,8 @@ export default function CommentListItem(props: Comment) {
   //const post = params.postId;
 
   const user = useAuthStore((state) => state.user);
+
+  const modalRef = useRef<HTMLDivElement | null>(null);
 
   const [isUser, setIsUser] = useState(false);
 
@@ -78,11 +80,26 @@ export default function CommentListItem(props: Comment) {
     setIsDeleteModalOpen(false);
   };
 
+  const closeHandler = () => {
+    setIsOpen(false);
+  };
+
   useEffect(() => {
     if (user) {
       checkCommentUser();
     }
   }, [user]);
+
+  useEffect(() => {
+    const clickHandler = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        closeHandler();
+      }
+    };
+
+    window.addEventListener('mousedown', clickHandler);
+    return () => window.removeEventListener('mousedown', clickHandler);
+  }, [modalRef]);
 
   return (
     <>
@@ -110,8 +127,9 @@ export default function CommentListItem(props: Comment) {
               </div>
               {isOpen && (
                 <div
-                  className="flex justify-center items-center text-[12px] text-[#FF0404] rounded-[2px] w-[91px] h-[34px] shadow-[1px_2px_3px_rgba(0,0,0,0.25)] cursor-pointer absolute top-8 right-4"
+                  className="flex justify-center items-center text-[12px] text-[#FF0404] rounded-[2px] w-[91px] h-[34px] border border-[#e5e5e5] cursor-pointer absolute top-8 right-4"
                   onClick={clickDeleteHandler}
+                  ref={modalRef}
                 >
                   삭제하기
                 </div>

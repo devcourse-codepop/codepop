@@ -1,7 +1,7 @@
 import Avatar from '../avatar/Avatar';
 import LikeComment from '../reaction/LikeComment';
 import menuIcon from '../../assets/MenuIcon.svg';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Comment, Post } from '../../types';
 import dayjs from 'dayjs';
 import { getPostList } from '../../api/post/post';
@@ -23,6 +23,7 @@ export default function PostDetailItem(props: Post) {
   const navigate = useNavigate();
 
   //const divRef = useRef<HTMLDivElement | null>(null);
+  const modalRef = useRef<HTMLDivElement | null>(null);
 
   const channelIdList = usePostStore((state) => state.channelIdList);
 
@@ -123,6 +124,10 @@ export default function PostDetailItem(props: Post) {
     setIsDeleteModalOpen(false);
   };
 
+  const closeHandler = () => {
+    setIsOpen(false);
+  };
+
   useEffect(() => {
     if (user) {
       getPostItem();
@@ -137,6 +142,17 @@ export default function PostDetailItem(props: Post) {
   //     setCurrentWidth(width);
   //   }
   // }, []);
+
+  useEffect(() => {
+    const clickHandler = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        closeHandler();
+      }
+    };
+
+    window.addEventListener('mousedown', clickHandler);
+    return () => window.removeEventListener('mousedown', clickHandler);
+  }, [modalRef]);
 
   return (
     <>
@@ -162,7 +178,10 @@ export default function PostDetailItem(props: Post) {
               </div>
               {isOpen && (
                 // shadow-[1px_2px_3px_rgba(0,0,0,0.25)]
-                <div className="flex flex-col w-[91px] h-[70px] rounded-[2px] border border-[#e5e5e5] absolute top-8 right-4">
+                <div
+                  className="flex flex-col w-[91px] h-[70px] rounded-[2px] border border-[#e5e5e5] absolute top-8 right-4"
+                  ref={modalRef}
+                >
                   <div
                     className="flex justify-center items-center text-[12px] h-[34px] cursor-pointer"
                     onClick={clickUpdateHandler}
