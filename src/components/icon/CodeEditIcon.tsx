@@ -1,5 +1,5 @@
 import codeEditIcon from '../../assets/CodeEditIcon.svg';
-import codeEditIconWhite from '../../assets/CodeEditIconWhite.svg';
+import codeEditIconWhite from '../../assets/CodeEditionIconWhite.svg';
 
 interface Theme {
   name: string;

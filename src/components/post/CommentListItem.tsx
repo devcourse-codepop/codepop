@@ -1,4 +1,5 @@
 import menuIcon from '../../assets/MenuIcon.svg';
+import menuIconWhite from '../../assets/MenuIconWhite.svg';
 import userImg from '../../assets/images/header/userImg.svg';
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
@@ -40,7 +41,10 @@ export default function CommentListItem(props: CommentListItemProps) {
 
     const codes = doc.querySelectorAll('pre');
     codes.forEach((code) => {
-      code.style.backgroundColor = '#ececec';
+      const dark = theme.name === 'Dark';
+
+      code.style.backgroundColor = dark ? '#1e1e1e' : '#ececec';
+      code.style.color = dark ? '#ffffff' : '#111111';
       code.style.padding = '20px';
       code.style.marginTop = '10px';
       code.style.marginBottom = '10px';
@@ -88,7 +92,9 @@ export default function CommentListItem(props: CommentListItemProps) {
     <>
       <div
         className={`h-auto rounded-[5px] border border-[#b4b4b4] mx-7 mb-[30px] relative ${
-          theme.name === 'Dark' ? 'bg-[#2d2d2d] text-[#ffffff]' : 'bg-[#ffffff]'
+          theme.name === 'Dark'
+            ? 'bg-[#2d2d2d] text-[#ffffff]'
+            : 'bg-[#ffffff] text-[#111111]'
         }`}
       >
         <div className="flex justify-between pt-2.5">
@@ -110,7 +116,9 @@ export default function CommentListItem(props: CommentListItemProps) {
                 onClick={clickMenuHandler}
                 className="w-9 h-9 pr-2.5 cursor-pointer"
               >
-                <img src={menuIcon} />
+                <img
+                  src={`${theme.name === 'Dark' ? menuIconWhite : menuIcon}`}
+                />
               </div>
               {isOpen && (
                 <div
@@ -142,6 +150,7 @@ export default function CommentListItem(props: CommentListItemProps) {
           post={post}
           _id={_id}
           closeDeleteModalHanlder={closeDeleteModalHanlder}
+          theme={theme}
         />
       )}
     </>

@@ -55,9 +55,12 @@ export default function PostDetailItem(props: PostDetailItemProps) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
 
+    const dark = theme.name === 'Dark';
+
     const codes = doc.querySelectorAll('pre');
     codes.forEach((code) => {
-      code.style.backgroundColor = '#ececec';
+      code.style.backgroundColor = dark ? '#1e1e1e' : '#ececec';
+      code.style.color = dark ? '#ffffff' : '#111111';
       code.style.padding = '20px';
       code.style.marginTop = '10px';
       code.style.marginBottom = '10px';
@@ -259,6 +262,7 @@ export default function PostDetailItem(props: PostDetailItemProps) {
           channel={String(channel)}
           _id={_id}
           closeDeleteModalHanlder={closeDeleteModalHanlder}
+          theme={theme}
         />
       )}
     </>

@@ -30,9 +30,9 @@ export default function ChannelName({ channelId, theme }: ChannelNameProps) {
           channelId === '1' &&
             `${theme.name === 'Dark' ? 'bg-[#19a9be]' : 'bg-[#10215c]'}`,
           channelId === '2' &&
-            `${theme.name === 'Dark' ? 'bg-[#3380de]' : 'bg-[#10215c]'}`,
+            `${theme.name === 'Dark' ? 'bg-[#3380de]' : 'bg-[#3380DE]'}`,
           channelId === '3' &&
-            `${theme.name === 'Dark' ? 'bg-[#9e68e9]' : 'bg-[#10215c]'}`
+            `${theme.name === 'Dark' ? 'bg-[#9e68e9]' : 'bg-[#60A7F7]'}`
         )}
       />
       <div className="flex flex-col items-start self-center">

@@ -118,7 +118,7 @@ export default function LikeComment({
         />
         <span
           className={`text-sm ${
-            theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#b2b2b2]'
+            theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
           }`}
         >
           {like}
@@ -133,7 +133,7 @@ export default function LikeComment({
         />
         <span
           className={`text-sm ${
-            theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#b2b2b2]'
+            theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
           }`}
         >
           {commentCount}

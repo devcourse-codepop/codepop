@@ -78,11 +78,10 @@ export default function PopularPost({ theme }: { theme: Theme }) {
                           : index === 1
                           ? '#3380DE'
                           : '#9E68E9'
-                        : channel.color
+                        : channel.colorLight
                       : theme.name === 'Dark'
                       ? '#4B4B4B'
                       : '#E3E3E3',
-
                   color: activeTab === index ? '#fff' : '#6A6A6A',
                   fontWeight: activeTab === index ? 'bold' : 'normal',
                   boxShadow:

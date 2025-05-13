@@ -124,7 +124,9 @@ export default function WriteCommentItem({
     <>
       <div
         className={`relative w-full h-auto rounded-[5px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] ${
-          theme.name === 'Dark' ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+          theme.name === 'Dark'
+            ? 'bg-[#2d2d2d] text-[#ffffff]'
+            : 'bg-[#ffffff] text-[#111111]'
         }`}
       >
         <div>

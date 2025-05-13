@@ -65,7 +65,6 @@ export default function Editor({
           ${disableMinHeight ? '' : '[&_.ProseMirror]:min-h-[365px]'}
           [&_.ProseMirror]:h-auto
 
-          [&_.ProseMirror_pre]:bg-[#ececec]
           [&_.ProseMirror_pre]:p-4
           [&_.ProseMirror_pre]:rounded-lg
           [&_.ProseMirror_pre]:font-mono
@@ -73,6 +72,12 @@ export default function Editor({
 
           [&_.ProseMirror_img]:max-w-[30%]
           [&_.ProseMirror_img]:h-auto
+
+          ${
+            theme.name === 'Dark'
+              ? '[&_.ProseMirror_pre]:bg-[#1e1e1e] [&_.ProseMirror_pre]:text-[#ffffff]'
+              : '[&_.ProseMirror_pre]:bg-[#ececec] [&_.ProseMirror_pre]:text-[#111111]'
+          }
 
           
         `}
