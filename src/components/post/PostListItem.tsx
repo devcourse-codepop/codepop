@@ -10,12 +10,14 @@ import { useAuthStore } from '../../stores/authStore';
 import NotLoginModal from './NotLoginModal';
 import DOMPurify from 'dompurify';
 import DeletedUserModal from './DeletedUserModal';
+import { useChannelItemStore } from '../../stores/channelStore';
 
 export default function PostListItem(props: Post) {
-  const { _id, title, image, author, likes, comments, createdAt } = props;
-
-  const params = useParams();
-  const channel = params.channelId;
+  const { _id, title, image, author, likes, comments, createdAt, channel } =
+    props;
+  const { channels } = useChannelItemStore();
+  // const params = useParams();
+  // const channel = params.channelId;
 
   const navigate = useNavigate();
 
@@ -70,8 +72,15 @@ export default function PostListItem(props: Post) {
 
   const clickPostHandler = () => {
     if (user) {
-      if (!author) setIsUserModalOpen(true);
-      else navigate(`/channel/${channel}/post/${_id}`);
+      if (!author) {
+        setIsUserModalOpen(true);
+      } else {
+        channels.map((cha) => {
+          if (cha.id === channel._id) {
+            navigate(`${cha.to}/post/${_id}`);
+          }
+        });
+      }
     } else {
       setIsLoginModalOpen(true);
     }

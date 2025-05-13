@@ -97,14 +97,6 @@ export default function PopularPost() {
                       className="tabConstentItem basis-[calc(50%-0.875rem)]  max-w-full"
                     >
                       <PostListItem {...parsePopular} />
-                      {/* <PostList
-                        title={{
-                          title: `${postTitle}`,
-                          content: `${postContent}`,
-                          tag: `아마 태그 없앴던거 같음`,
-                        }}
-                        updatedAt={popular.createdAt.split("T")[0]}
-                      /> */}
                     </div>
                   );
                 })
