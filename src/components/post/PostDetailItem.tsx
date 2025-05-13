@@ -53,13 +53,22 @@ export default function PostDetailItem(props: Post) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
 
-    const codes = doc.querySelectorAll("pre");
+
+    const codes = doc.querySelectorAll('pre');
+    const codeStr = '<span>&lt;/&gt;</span>';
     codes.forEach((code) => {
-      code.style.backgroundColor = "#ececec";
-      code.style.padding = "20px";
-      code.style.marginTop = "10px";
-      code.style.marginBottom = "10px";
-      code.style.borderRadius = "8px";
+      code.style.backgroundColor = '#ececec';
+      code.style.padding = '20px';
+      code.style.paddingTop = '2px';
+      code.style.marginTop = '10px';
+      code.style.marginBottom = '10px';
+      code.style.borderRadius = '8px';
+      code.innerHTML = codeStr + '<br/><br/>' + code.innerHTML;
+
+      const span = code.querySelector('span');
+      span!.style.fontSize = '12px';
+      span!.style.opacity = '30%';
+      span!.style.marginLeft = '-9px';
     });
 
     return doc.body.innerHTML;
