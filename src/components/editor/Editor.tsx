@@ -1,10 +1,10 @@
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import EditorToolbar from "./EditorToolbar";
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import EditorToolbar from './EditorToolbar';
 
-import { CustomImage } from "./extensions/CustomImage";
-import { useState, useEffect } from "react";
-import PollCreator from "../poll/PollCreater";
+import { CustomImage } from './extensions/CustomImage';
+import { useState, useEffect } from 'react';
+import PollCreator from '../poll/PollCreater';
 
 interface Props {
   onChange: (html: string) => void;
@@ -27,7 +27,7 @@ export default function Editor({
 }: Props) {
   const editor = useEditor({
     extensions: [StarterKit, CustomImage],
-    content: "", // 빈 문자열로 시작
+    content: '', // 빈 문자열로 시작
     onUpdate({ editor }) {
       onChange(editor.getHTML());
     },
@@ -55,7 +55,7 @@ export default function Editor({
         editor={editor}
         className={`
           prose max-w-none [&_.ProseMirror]:outline-none
-          ${disableMinHeight ? "" : "[&_.ProseMirror]:min-h-[365px]"}
+          ${disableMinHeight ? '' : '[&_.ProseMirror]:min-h-[365px]'}
           [&_.ProseMirror]:h-auto
 
           [&_.ProseMirror_pre]:bg-[#ececec]
@@ -66,6 +66,8 @@ export default function Editor({
 
           [&_.ProseMirror_img]:max-w-[30%]
           [&_.ProseMirror_img]:h-auto
+
+          
         `}
       />
 

@@ -2,14 +2,20 @@ import { useState } from 'react';
 import { postComments, postNotifications } from '../../api/post/post';
 import CommentEditor from '../editor/CommentEditor';
 
+interface Theme {
+  name: string;
+}
+
 export default function WriteCommentItem({
   channelId,
   postId,
   postUserId,
+  theme,
 }: {
   channelId: string;
   postId: string;
   postUserId: string;
+  theme: Theme;
 }) {
   const [comment, setComment] = useState('');
   const changeCommentHandler = (value: string) => {
@@ -116,7 +122,11 @@ export default function WriteCommentItem({
 
   return (
     <>
-      <div className="relative w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)]">
+      <div
+        className={`relative w-full h-auto rounded-[5px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] ${
+          theme.name === 'Dark' ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+        }`}
+      >
         <div>
           {/* <form onSubmit={(e) => submitHandler(e)}> */}
           {/* <textarea
@@ -165,6 +175,7 @@ export default function WriteCommentItem({
           submitHandler={submitHandler}
           onChange={(v) => changeCommentHandler(v)}
           showCodeButton={true}
+          theme={theme}
         />
       </div>
     </>

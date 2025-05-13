@@ -8,8 +8,16 @@ import { deleteComments } from '../../api/post/post';
 import { useParams } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 
-export default function CommentListItem(props: Comment) {
-  const { _id, comment, author, post, updatedAt } = props;
+interface Theme {
+  name: string;
+}
+
+interface CommentListItemProps extends Comment {
+  theme: Theme;
+}
+
+export default function CommentListItem(props: CommentListItemProps) {
+  const { _id, comment, author, post, updatedAt, theme } = props;
 
   const params = useParams();
   const channel = params.channelId;
@@ -78,7 +86,11 @@ export default function CommentListItem(props: Comment) {
 
   return (
     <>
-      <div className="h-auto rounded-[5px] bg-white border border-[#b4b4b4] mx-7 mb-[30px] relative">
+      <div
+        className={`h-auto rounded-[5px] border border-[#b4b4b4] mx-7 mb-[30px] relative ${
+          theme.name === 'Dark' ? 'bg-[#2d2d2d] text-[#ffffff]' : 'bg-[#ffffff]'
+        }`}
+      >
         <div className="flex justify-between pt-2.5">
           <div className="flex items-center gap-3 pl-4 pt-1">
             <img

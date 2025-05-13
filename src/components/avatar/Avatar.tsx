@@ -1,13 +1,24 @@
 //import userImg from '../../assets/images/header/userImg.svg';
 
+interface Theme {
+  name: string;
+}
+
 interface AvatarProps {
   name: string;
   email: string;
   image: string;
   isOnline?: boolean;
+  theme: Theme;
 }
 
-export default function Avatar({ name, email, image, isOnline }: AvatarProps) {
+export default function Avatar({
+  name,
+  email,
+  image,
+  isOnline,
+  theme,
+}: AvatarProps) {
   let imgSrc: string = '';
   if (image === undefined || image === '') {
     imgSrc =
@@ -28,10 +39,20 @@ export default function Avatar({ name, email, image, isOnline }: AvatarProps) {
         )}
       </div>
       <div className="flex flex-col">
-        <span className="text-sm font-semibold">
+        <span
+          className={`text-sm font-semibold ${
+            theme?.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+          }`}
+        >
           {name ? name : '탈퇴한 회원'}
         </span>
-        <span className="text-xs opacity-60 break-all leading-3">{email}</span>
+        <span
+          className={`text-xs opacity-60 break-all leading-3 ${
+            theme?.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+          }`}
+        >
+          {email}
+        </span>
       </div>
     </div>
   );

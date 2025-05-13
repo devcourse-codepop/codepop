@@ -6,12 +6,17 @@ import Placeholder from '@tiptap/extension-placeholder';
 import Button from '../common/Button';
 import CommentEditorToolbar from './CommentEditorToolbar';
 
+interface Theme {
+  name: string;
+}
+
 interface Props {
   channelId: string;
   submitHandler: (e: React.FormEvent<Element>) => void;
   onChange: (html: string) => void;
   showCodeButton?: boolean;
   disableMinHeight?: boolean;
+  theme: Theme;
 }
 
 export default function CommentEditor({
@@ -20,6 +25,7 @@ export default function CommentEditor({
   onChange,
   showCodeButton = false,
   disableMinHeight = false,
+  theme,
 }: Props) {
   const editor = useEditor({
     extensions: [
@@ -74,7 +80,9 @@ export default function CommentEditor({
 
         <Button
           value="댓글 달기"
-          className="button-style3"
+          className={`button-style3 ${
+            theme.name === 'Dark' ? 'bg-[#ffffff] text-[#111111]' : ''
+          }`}
           onClick={(e) => submitHandler(e)}
         />
       </div>

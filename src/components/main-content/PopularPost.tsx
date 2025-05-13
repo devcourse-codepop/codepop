@@ -1,10 +1,14 @@
-import { useEffect, useState } from "react";
-import { useChannelItemStore } from "../../stores/channelStore";
-import { getPopularPostData } from "../../api/post/post";
-import { Post } from "../../types";
-import PostListItem from "../post/PostListItem";
+import { useEffect, useState } from 'react';
+import { useChannelItemStore } from '../../stores/channelStore';
+import { getPopularPostData } from '../../api/post/post';
+import { Post } from '../../types';
+import PostListItem from '../post/PostListItem';
 
-export default function PopularPost() {
+interface Theme {
+  name: string;
+}
+
+export default function PopularPost({ theme }: { theme: Theme }) {
   const { channels, fetchChannels } = useChannelItemStore();
   const [activeTab, setActiveTab] = useState(0);
   const [sortPopulars, setSortPopulars] = useState<Post[]>([]);
@@ -26,7 +30,7 @@ export default function PopularPost() {
   }, [channels]);
 
   const parseHandler = (str: string | object | null) => {
-    if (typeof str === "string") {
+    if (typeof str === 'string') {
       try {
         JSON.parse(str);
         return str;
@@ -39,8 +43,16 @@ export default function PopularPost() {
 
   return (
     <>
-      <div className="bg-white w-full rounded-[10px] px-[30px] py-[25px] pt-[20px] shadow-md">
-        <h3 className="font-semibold text-[#595956] text-[18px] mb-[15px]">
+      <div
+        className={`w-full rounded-[10px] px-[30px] py-[25px] pt-[20px] shadow-md ${
+          theme.name === 'Dark' ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+        }`}
+      >
+        <h3
+          className={`font-semibold  text-[18px] mb-[15px] ${
+            theme.name === 'Dark' ? 'text-[#acacaa]' : 'text-[#595956]'
+          }`}
+        >
           Popular Posts
         </h3>
         <ul className="flex relative gap-x-5 gap-y-2.5 mb-4.5 flex-wrap">
@@ -59,11 +71,21 @@ export default function PopularPost() {
                 }}
                 style={{
                   backgroundColor:
-                    activeTab === index ? channel.color : "#E3E3E3",
-                  color: activeTab === index ? "#fff" : "#6A6A6A",
-                  fontWeight: activeTab === index ? "bold" : "normal",
+                    activeTab === index
+                      ? theme.name === 'Dark'
+                        ? index === 0
+                          ? '#19A9BE'
+                          : index === 1
+                          ? '#3380DE'
+                          : '#9E68E9'
+                        : channel.color
+                      : theme.name === 'Dark'
+                      ? '#4B4B4B'
+                      : '#E3E3E3',
+                  color: activeTab === index ? '#fff' : '#6A6A6A',
+                  fontWeight: activeTab === index ? 'bold' : 'normal',
                   boxShadow:
-                    activeTab === index ? "0px 2px 3px rgba(0, 0, 0, 0.2)" : "",
+                    activeTab === index ? '0px 2px 3px rgba(0, 0, 0, 0.2)' : '',
                 }}
               >
                 {channel.name}
@@ -96,7 +118,7 @@ export default function PopularPost() {
                       key={`popular-${pIndex}`}
                       className="tabConstentItem basis-[calc(50%-0.875rem)]  max-w-full"
                     >
-                      <PostListItem {...parsePopular} />
+                      <PostListItem {...parsePopular} theme={theme} />
                       {/* <PostList
                         title={{
                           title: `${postTitle}`,

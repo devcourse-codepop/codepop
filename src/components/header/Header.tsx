@@ -1,9 +1,21 @@
 import { Link } from 'react-router-dom';
-import logo from '../../assets/images/header/logo.svg';
 import Notification from '../notification/Notification';
 import { useAuthStore } from '../../stores/authStore';
+import moon from '../../assets/images/toggle/moon.svg';
+import sun from '../../assets/images/toggle/sun.svg';
 
-export default function Header() {
+interface Theme {
+  logo?: string;
+  name: string;
+}
+
+export default function Header({
+  theme,
+  nextTheme,
+}: {
+  theme: Theme;
+  nextTheme: () => void;
+}) {
   const { isLoggedIn, user, logout } = useAuthStore();
 
   let imgSrc: string = '';
@@ -18,18 +30,37 @@ export default function Header() {
       <header className="h-[100px] px-[60px] flex items-center justify-between">
         <h1>
           <Link to="/">
-            <img src={logo} />
+            <img src={theme.logo} />
           </Link>
         </h1>
-        <div>
-          {!isLoggedIn && <Link to="/login">Login</Link>}
+
+        <div className="flex items-center gap-6">
+          {/* 로그인 */}
+          {!isLoggedIn && (
+            <Link
+              to="/login"
+              className={`text-[20px] ${
+                theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+              }`}
+            >
+              Login
+            </Link>
+          )}
+
+          {/* 로그아웃 */}
           {isLoggedIn && (
-            <div className="flex items-center gap-6">
-              <Link to="/" onClick={logout} className="text-[20px]">
+            <>
+              <Link
+                to="/"
+                onClick={logout}
+                className={`text-[20px] ${
+                  theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+                }`}
+              >
                 Logout
               </Link>
               <div className="notification-wrapper relative">
-                <Notification />
+                <Notification theme={theme} />
               </div>
               <Link
                 to="/profile"
@@ -37,8 +68,26 @@ export default function Header() {
               >
                 <img src={imgSrc} className="w-full h-full" />
               </Link>
-            </div>
+            </>
           )}
+
+          {/* 다크모드 */}
+          <div
+            className={`w-10 h-10 rounded-full flex justify-center items-center transition-colors duration-300 ${
+              theme.name === 'Dark' ? 'bg-black' : 'bg-white'
+            }`}
+          >
+            <button
+              onClick={nextTheme}
+              className="w-full h-full flex justify-center items-center"
+            >
+              <img
+                src={theme.name === 'Dark' ? moon : sun}
+                alt="해, 달 이미지"
+                className="w-6 h-6 transition-transform duration-300"
+              />
+            </button>
+          </div>
         </div>
       </header>
     </>

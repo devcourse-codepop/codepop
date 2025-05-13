@@ -9,7 +9,11 @@ import { usePostStore } from '../stores/postStore';
 import { Post } from '../types';
 import dayjs from 'dayjs';
 
-export default function PostList() {
+interface Theme {
+  name: string;
+}
+
+export default function PostList({ theme }: { theme: Theme }) {
   const params = useParams();
   const channel = params.channelId;
 
@@ -81,7 +85,7 @@ export default function PostList() {
         <div className="w-full ">
           <div className="flex justify-between items-end pb-[30px]">
             <div>
-              <ChannelName channelId={String(channel)} />
+              <ChannelName channelId={String(channel)} theme={theme} />
             </div>
             <div className="flex gap-2.5">
               {/* <SearchPost /> */}
@@ -125,7 +129,9 @@ export default function PostList() {
                     new Date(getDatetimeFormat(b.updatedAt)).getTime() -
                     new Date(getDatetimeFormat(a.updatedAt)).getTime()
                 )
-                .map((item) => <PostListItem key={item._id} {...item} />)}
+                .map((item) => (
+                  <PostListItem key={item._id} {...item} theme={theme} />
+                ))}
             {postListItem.length !== 0 &&
               select === 'popular' &&
               [...postListItem]
@@ -134,7 +140,9 @@ export default function PostList() {
                     return b.likes.length - a.likes.length;
                   else return b.comments.length - a.comments.length;
                 })
-                .map((item) => <PostListItem key={item._id} {...item} />)}
+                .map((item) => (
+                  <PostListItem key={item._id} {...item} theme={theme} />
+                ))}
           </div>
         </div>
       </div>

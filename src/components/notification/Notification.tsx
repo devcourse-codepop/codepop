@@ -1,6 +1,7 @@
-import { Link, useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import readAllImg from '../../assets/images/header/notifi.svg';
 import alarm from '../../assets/images/header/alarm.svg';
+import alarmWhite from '../../assets/images/header/alarm-white.svg';
 import redDot from '../../assets/RedDotIcon.svg';
 import { useEffect, useState } from 'react';
 import {
@@ -8,10 +9,14 @@ import {
   putNotificationSeenData,
 } from '../../api/notification/notification';
 
-export default function Notification() {
+interface Theme {
+  name: string;
+}
+
+export default function Notification({ theme }: { theme: Theme }) {
   const [notifiOpen, setNotifiOpen] = useState(false);
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const fetchNotifications = async () => {
     const result = await getNotificationsData();
@@ -56,16 +61,28 @@ export default function Notification() {
           setNotifiOpen(!notifiOpen);
         }}
       >
-        <img src={alarm} />
+        <img src={`${theme.name === 'Dark' ? alarmWhite : alarm}`} />
         {!notifications.reduce((sum, data) => sum && data.seen, true) && (
           <span className="block w-[8px] h-[8px] rounded-2xl bg-[#FF0000] absolute right-0 top-0.5"></span>
         )}
       </button>
       {notifiOpen && (
-        <div className="absolute gap-3 bg-white rounded-[10px] z-1 py-4 px-5 shadow-2xl w-[340px] z-10 -right-5 top-8.5">
-          <span className="w-[12px] h-[12px] bg-white rounded-[2px] absolute rotate-135 -top-1.5 right-6 -z-2"></span>
+        <div
+          className={`absolute gap-3 rounded-[10px] z-1 py-4 px-5 shadow-2xl w-[340px] z-10 -right-5 top-8.5 ${
+            theme.name === 'Dark' ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+          }`}
+        >
+          <span
+            className={`w-[12px] h-[12px] rounded-[2px] absolute rotate-135 -top-1.5 right-6 -z-2 ${
+              theme.name === 'Dark' ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+            }`}
+          ></span>
           <div className="border-b border-[#cccccc] flex justify-between pb-3">
-            <h3 className="text-[#4D4D4D] text-base font-medium">
+            <h3
+              className={` text-base font-medium ${
+                theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#4D4D4D]'
+              }`}
+            >
               Notifications
             </h3>
             <button
@@ -78,7 +95,11 @@ export default function Notification() {
           </div>
           <div className="notiList px-2 h-[200px] overflow-y-auto scroll-custom relative">
             {notifications.length === 0 ? (
-              <p className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm text-[#5c5c5c]">
+              <p
+                className={`absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm ${
+                  theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#5c5c5c]'
+                }`}
+              >
                 알림이 없습니다
               </p>
             ) : (
@@ -91,10 +112,30 @@ export default function Notification() {
                   {!notifi.seen && (
                     <img className="absolute left-0 top-2" src={redDot} />
                   )}
-                  {notifi.like !== undefined &&
-                    `[${notifi.author['fullName']}] 님이 당신의 게시물을 좋아합니다.`}
-                  {notifi.comment !== undefined &&
-                    `[${notifi.author['fullName']}] 님이 당신의 게시물에 댓글을 달았습니다.`}
+                  {notifi.like !== undefined && (
+                    <p
+                      className={`${
+                        theme.name === 'Dark'
+                          ? 'text-[#ffffff]'
+                          : 'text-[#111111]'
+                      }`}
+                    >
+                      [{notifi.author.fullName}] 님이 당신의 게시물을
+                      좋아합니다.
+                    </p>
+                  )}
+                  {notifi.comment !== undefined && (
+                    <p
+                      className={`${
+                        theme.name === 'Dark'
+                          ? 'text-[#ffffff]'
+                          : 'text-[#111111]'
+                      }`}
+                    >
+                      [{notifi.author.fullName}] 님이 당신의 게시물에 댓글을
+                      달았습니다.
+                    </p>
+                  )}
                 </button>
               ))
             )}

@@ -7,7 +7,11 @@ import { usePostStore } from '../stores/postStore';
 import { useEffect, useState } from 'react';
 import { Post } from '../types';
 
-export default function PostDetail() {
+interface Theme {
+  name: string;
+}
+
+export default function PostDetail({ theme }: { theme: Theme }) {
   const params = useParams();
   const channel = params.channelId;
   const post = params.postId;
@@ -42,16 +46,17 @@ export default function PostDetail() {
       {/* ml-[50px] */}
       <div className="w-full">
         <div className="flex justify-between items-end pb-[30px]">
-          <ChannelName channelId={String(channel)} />
+          <ChannelName channelId={String(channel)} theme={theme} />
         </div>
         {/* max-h-[605px] */}
         {postItem && (
           <div className="flex flex-col gap-[30px] max-h-[calc(100vh-100px-120px)] overflow-auto">
-            <PostDetailItem key={postItem?._id} {...postItem} />
+            <PostDetailItem key={postItem?._id} {...postItem} theme={theme} />
             <WriteCommentItem
               channelId={String(channel)}
               postId={String(post)}
               postUserId={postItem.author._id}
+              theme={theme}
             />
           </div>
         )}

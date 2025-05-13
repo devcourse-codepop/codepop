@@ -1,15 +1,20 @@
-import menuIcon from "../../assets/MenuIcon.svg";
-import { Search } from "lucide-react";
-import Avatar from "../avatar/Avatar";
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { getAllUsersData } from "../../api/memberbox/member";
-import { useAuthStore } from "../../stores/authStore";
+import menuIcon from '../../assets/MenuIcon.svg';
+import menuIconWhite from '../../assets/MenuIconWhite.svg';
+import { Search } from 'lucide-react';
+import Avatar from '../avatar/Avatar';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getAllUsersData } from '../../api/memberbox/member';
+import { useAuthStore } from '../../stores/authStore';
 
-export default function MemberBox() {
+interface Theme {
+  name: string;
+}
+
+export default function MemberBox({ theme }: { theme: Theme }) {
   const { isLoggedIn, user } = useAuthStore(); // 내 프로필
-  const [searchKeyword, setSearchKeyword] = useState<string>(""); // 검색 키워드
-  const [openUser, setOpenUser] = useState<string>(""); // 각 프로필 메뉴
+  const [searchKeyword, setSearchKeyword] = useState<string>(''); // 검색 키워드
+  const [openUser, setOpenUser] = useState<string>(''); // 각 프로필 메뉴
   const [users, setUsers] = useState<User[]>([]); // 모든 사용자
 
   const fetchUsers = async () => {
@@ -44,15 +49,23 @@ export default function MemberBox() {
 
   const ToggleHandelr = (id: string) => {
     if (openUser === id) {
-      setOpenUser("");
+      setOpenUser('');
     } else {
       setOpenUser(id);
     }
   };
 
   return (
-    <div className="w-[291px] max-h-[calc(100%-240px)] h-[580px] bg-white rounded-[10px] shadow-md pl-[30px] pr-[26px]  pt-[20px]  relative overflow-hidden">
-      <h2 className="text-[#595656] font-medium text-[18px] mb-[13px]">
+    <div
+      className={`w-[291px] max-h-[calc(100%-240px)] h-[580px] rounded-[10px] shadow-md pl-[30px] pr-[26px]  pt-[20px]  relative overflow-hidden ${
+        theme.name === 'Dark' ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+      }`}
+    >
+      <h2
+        className={`font-medium text-[18px] mb-[13px] ${
+          theme.name === 'Dark' ? 'text-[#ACACAA]' : 'text-[#595956]'
+        }`}
+      >
         Member
       </h2>
       <div className="flex items-center text-[#898FA3] bg-[#F6F8FA] px-3 py-2 rounded-[5.54px] text-[14px] gap-4 mb-[13px]">
@@ -69,10 +82,11 @@ export default function MemberBox() {
       {isLoggedIn && (
         <div className="myInfoCard">
           <Avatar
-            name={`${user !== null ? user.fullName : ""} (나)`}
-            email={user !== null ? user.email : ""}
-            image={user !== null ? user.image : ""}
+            name={`${user !== null ? user.fullName : ''} (나)`}
+            email={user !== null ? user.email : ''}
+            image={user !== null ? user.image : ''}
             isOnline={user !== null ? user.isOnline : false}
+            theme={theme}
           ></Avatar>
         </div>
       )}
@@ -93,13 +107,17 @@ export default function MemberBox() {
                 email={user.email}
                 image={user.image}
                 isOnline={user.isOnline}
+                theme={theme}
               ></Avatar>
             </div>
             <button
               className="absolute right-0 top-4 cursor-pointer"
               onClick={() => ToggleHandelr(user._id)}
             >
-              <img src={menuIcon} className="rotate-90" />
+              <img
+                src={`${theme.name === 'Dark' ? menuIconWhite : menuIcon}`}
+                className="rotate-90"
+              />
               {openUser === user._id && (
                 <ul className="avatarMenu absolute text-xs w-27 right-5 top-0 bg-white rounded-[5px] border border-[#ddd] text-left z-2 py-1">
                   <li>

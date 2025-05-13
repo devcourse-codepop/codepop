@@ -1,10 +1,16 @@
 import likeClick from '../../assets/LikeClick.svg';
+import likeClickWhite from '../../assets/likeClickWhite.svg';
 import likeRed from '../../assets/images/LikeRed.svg';
 import comment from '../../assets/images/comment-outline.svg';
+import commentWhite from '../../assets/images/commentWhite.svg';
 import { useEffect, useState } from 'react';
 import { Like } from '../../types';
 import { deleteLikes, postLikes, postNotifications } from '../../api/post/post';
 import { useAuthStore } from '../../stores/authStore';
+
+interface Theme {
+  name: string;
+}
 
 interface LikeCommentProps {
   likeCount: number;
@@ -12,6 +18,7 @@ interface LikeCommentProps {
   postId: string;
   postUserId: string;
   likes: Like[];
+  theme: Theme;
 }
 
 export default function LikeComment({
@@ -20,6 +27,7 @@ export default function LikeComment({
   postId,
   postUserId,
   likes,
+  theme,
 }: LikeCommentProps) {
   const [like, setLike] = useState(likeCount);
   const [checkLike, setCheckLike] = useState(false);
@@ -85,17 +93,39 @@ export default function LikeComment({
     <div className="flex justify-end items-center gap-5 p-4">
       <div className="flex items-center gap-1.5">
         <img
-          src={checkLike ? likeRed : likeClick}
+          src={
+            checkLike
+              ? likeRed
+              : theme.name === 'Dark'
+              ? likeClickWhite
+              : likeClick
+          }
           alt="좋아요"
           className="w-5 h-5 cursor-pointer"
           onClick={clickLikes}
         />
-        <span className="text-sm">{like}</span>
+        <span
+          className={`text-sm ${
+            theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#b2b2b2]'
+          }`}
+        >
+          {like}
+        </span>
       </div>
 
       <div className="flex items-center gap-[10px]">
-        <img src={comment} alt="댓글" className="w-5 h-5 relative top-[1px]" />
-        <span className="text-sm">{commentCount}</span>
+        <img
+          src={theme.name === 'Dark' ? commentWhite : comment}
+          alt="댓글"
+          className="w-5 h-5 relative top-[1px]"
+        />
+        <span
+          className={`text-sm ${
+            theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#b2b2b2]'
+          }`}
+        >
+          {commentCount}
+        </span>
       </div>
     </div>
   );

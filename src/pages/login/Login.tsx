@@ -1,6 +1,5 @@
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
-import logo from '../../assets/images/header/logo.svg';
 import Delete from '../../assets/images/input-delete/input-delete.svg';
 import defaultProfileImage from '../../assets/images/profile/defaultProfileImage.jpg';
 import defaultCover from '../../assets/images/profile/defaultCover.png';
@@ -13,7 +12,12 @@ import { AxiosError } from 'axios';
 import { axiosInstance } from '../../api/axios';
 import { useLocation } from 'react-router-dom';
 
-export default function Login() {
+interface Theme {
+  name: string;
+  logo?: string;
+}
+
+export default function Login({ theme }: { theme: Theme }) {
   const navigate = useNavigate();
   const storeLogin = useAuthStore((state) => state.login);
 
@@ -124,7 +128,7 @@ export default function Login() {
 
   return (
     <div className="flex flex-col justify-center items-center h-screen gap-15">
-      <img src={logo} alt="로고" className="w-50" />
+      <img src={theme.logo} alt="로고" className="w-50" />
 
       <form className="flex flex-col">
         <div className="mb-5">
@@ -181,12 +185,27 @@ export default function Login() {
 
         <Button
           value="Log In"
-          className="button-style1 mb-5 mt-2"
+          className={`button-style1 mb-5 mt-2 ${
+            theme.name === 'Dark'
+              ? `w-[500px] h-[86px] text-[#ffffff] bg-[#2d2d2d] text-[23px] rounded-[10px] cursor-pointer`
+              : ''
+          }`}
           onClick={handleSubmit}
         />
         <p className="flex justify-center text-sm">
-          <span className="opacity-50 ">회원이 아니신가요?</span>
-          <a href="/signup" className="underline ml-2 text-[#1E293B]">
+          <span
+            className={`opacity-70 ${
+              theme.name === 'Dark' ? 'text-[#ffffff]' : ''
+            }`}
+          >
+            아직 회원이 아니신가요?
+          </span>
+          <a
+            href="/signup"
+            className={`ml-2 font-medium  ${
+              theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#1e293b]'
+            }`}
+          >
             회원가입
           </a>
         </p>

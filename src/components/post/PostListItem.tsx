@@ -1,17 +1,26 @@
-import Avatar from "../avatar/Avatar";
-import LikeComment from "../reaction/LikeComment";
+import Avatar from '../avatar/Avatar';
+import LikeComment from '../reaction/LikeComment';
 //import CodeIcon from '../../assets/CodeEditIcon.svg';
-import { Post } from "../../types";
-import dayjs from "dayjs";
-import { useNavigate, useParams } from "react-router-dom";
-import { twMerge } from "tailwind-merge";
-import { useState } from "react";
-import { useAuthStore } from "../../stores/authStore";
-import NotLoginModal from "./NotLoginModal";
-import DOMPurify from "dompurify";
+import { Post } from '../../types';
+import dayjs from 'dayjs';
+import { useNavigate, useParams } from 'react-router-dom';
+import { twMerge } from 'tailwind-merge';
+import { useState } from 'react';
+import { useAuthStore } from '../../stores/authStore';
+import NotLoginModal from './NotLoginModal';
+import DOMPurify from 'dompurify';
 
-export default function PostListItem(props: Post) {
-  const { _id, title, image, author, likes, comments, updatedAt } = props;
+interface Theme {
+  name: string;
+}
+
+interface PostListItemProps extends Post {
+  theme: Theme;
+}
+
+export default function PostListItem(props: PostListItemProps) {
+  const { _id, title, image, author, likes, comments, updatedAt, theme } =
+    props;
 
   const params = useParams();
   const channel = params.channelId;
@@ -29,13 +38,13 @@ export default function PostListItem(props: Post) {
 
   const removeImgTags = (html: string): string => {
     const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
+    const doc = parser.parseFromString(html, 'text/html');
 
-    const imgs = doc.querySelectorAll("img");
+    const imgs = doc.querySelectorAll('img');
     imgs.forEach((img) => img.remove());
 
     // const codes = doc.querySelectorAll('pre');
-    codes = doc.querySelectorAll("pre");
+    codes = doc.querySelectorAll('pre');
     codes.forEach((code) => {
       code.remove();
     });
@@ -48,8 +57,8 @@ export default function PostListItem(props: Post) {
   };
 
   const getDatetimeFormat = () => {
-    const date = dayjs(updatedAt).add(9, "hour");
-    return date.format("YYYY.MM.DD");
+    const date = dayjs(updatedAt).add(9, 'hour');
+    return date.format('YYYY.MM.DD');
   };
 
   const clickPostHandler = () => {
@@ -75,8 +84,9 @@ export default function PostListItem(props: Post) {
   return (
     <>
       <div
-        className="w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative"
-        // ref={divRef}
+        className={`w-full h-auto rounded-[5px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative ${
+          theme.name === 'Dark' ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+        }`}
       >
         <div className="flex justify-between h-[85px] pl-3 pt-2.5">
           <Avatar
@@ -84,22 +94,29 @@ export default function PostListItem(props: Post) {
             email={author?.email}
             image={author?.image}
             isOnline={author?.isOnline}
+            theme={theme}
           />
         </div>
         <div
           className={twMerge(
-            "flex justify-between px-[55px] py-[15px] gap-[55px] cursor-pointer",
-            !image && "py-[23px]"
+            'flex justify-between px-[55px] py-[15px] gap-[55px] cursor-pointer',
+            !image && 'py-[23px]'
           )}
           onClick={clickPostHandler}
         >
           <div
             className={twMerge(
-              "flex flex-col justify-center w-full gap-[22px] ",
-              image && "max-w-[635px]"
+              `flex flex-col justify-center w-full gap-[22px] ${
+                theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+              }`,
+              image && 'max-w-[635px]'
             )}
           >
-            <div className="postTitle text-[18px] font-semibold truncate">
+            <div
+              className={`postTitle text-[18px] font-semibold truncate ${
+                theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+              }`}
+            >
               {JSON.parse(title).title}
             </div>
             <div
@@ -123,15 +140,27 @@ export default function PostListItem(props: Post) {
             </div>
           )}
         </div>
-        <div className="flex justify-end pr-5 pb-[9px] text-[#808080] text-sm font-light">
+        <div
+          className={`flex justify-end pr-5 pb-[9px] text-[#808080] text-sm font-light ${
+            theme.name === 'Dark'
+              ? 'text-[#ffffff] opacity-50'
+              : 'text-[#111111] opacity-50'
+          }`}
+        >
           {getDatetimeFormat()}
         </div>
-        <hr className="mx-[18px] text-[#b2b2b2]" />
+        <hr
+          className={`mx-[18px] ${
+            theme.name === 'Dark'
+              ? 'text-[#ffffff] opacity-50'
+              : 'text-[#b2b2b2] opacity-50'
+          }`}
+        />
         {/* <div className="flex justify-between h-[59px]"> */}
         <div
           className={twMerge(
-            "flex h-[59px]",
-            setCodeCount() > 0 ? "justify-between" : "justify-end"
+            'flex h-[59px]',
+            setCodeCount() > 0 ? 'justify-between' : 'justify-end'
           )}
         >
           {/* {setCodeCount() > 0 && (
@@ -151,7 +180,11 @@ export default function PostListItem(props: Post) {
             </div>
           )} */}
           {setCodeCount() > 0 && (
-            <div className="flex justify-center items-center text-[14px] opacity-70 ml-5">
+            <div
+              className={`flex justify-center items-center text-[14px] opacity-70 ml-5 ${
+                theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+              }`}
+            >
               +<span className="text-[#ff0000]">{setCodeCount()}</span>개의 코드
               블록
             </div>
@@ -162,10 +195,13 @@ export default function PostListItem(props: Post) {
             postId={_id}
             postUserId={author?._id}
             likes={likes}
+            theme={theme}
           />
         </div>
       </div>
-      {isModalOpen && <NotLoginModal closeModalHanlder={closeModalHanlder} />}
+      {isModalOpen && (
+        <NotLoginModal closeModalHanlder={closeModalHanlder} theme={theme} />
+      )}
     </>
   );
 }

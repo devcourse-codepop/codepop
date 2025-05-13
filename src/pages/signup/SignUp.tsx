@@ -1,15 +1,23 @@
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
-import logo from '../../assets/images/header/logo.svg';
 import Delete from '../../assets/images/input-delete/input-delete.svg';
 
 import { useState } from 'react';
 import { signup } from '../../api/auth/signup';
 import { useNavigate } from 'react-router-dom';
-import { emailRegex, fullNameRegex, passwordRegex } from '../../utils/validators';
+import {
+  emailRegex,
+  fullNameRegex,
+  passwordRegex,
+} from '../../utils/validators';
 import { AxiosError } from 'axios';
 
-export default function SignUp() {
+interface Theme {
+  name: string;
+  logo?: string;
+}
+
+export default function SignUp({ theme }: { theme: Theme }) {
   const navigate = useNavigate();
 
   const [fullName, setFullName] = useState('');
@@ -69,7 +77,9 @@ export default function SignUp() {
     setPassword(value);
 
     if (!validatePassword(password)) {
-      setPasswordError('비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.');
+      setPasswordError(
+        '비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.'
+      );
       return;
     } else {
       setPasswordError('');
@@ -147,7 +157,10 @@ export default function SignUp() {
 
       if (error.response?.status === 400) {
         const message = error.response.data as string;
-        if (message.toLowerCase().includes('email') && message.includes('used')) {
+        if (
+          message.toLowerCase().includes('email') &&
+          message.includes('used')
+        ) {
           setEmailError('이미 사용 중인 이메일입니다.');
         } else {
           console.error(err);
@@ -157,115 +170,131 @@ export default function SignUp() {
   };
 
   return (
-    <div className='flex flex-col justify-center items-center h-screen gap-15'>
-      <img src={logo} alt='Signup 로고' className='w-50' />
+    <div className="flex flex-col justify-center items-center h-screen gap-15">
+      <img src={theme.logo} alt="로고" className="w-50" />
 
-      <form className='flex flex-col'>
-        <div className='mb-5'>
-          <div className='relative'>
+      <form className="flex flex-col">
+        <div className="mb-5">
+          <div className="relative">
             <Input
               value={fullName}
-              type='email'
-              label='Username'
+              type="email"
+              label="Username"
               className={`peer cursor-pointer outline-none border border-gray-300  focus:border-[#1E293B] focus:border-2 input-style1 `}
-              placeholder=' '
+              placeholder=" "
               onChange={handleFullName}
             />
             {fullName && (
               <img
                 src={Delete}
-                alt='삭제'
+                alt="삭제"
                 onClick={() => {
                   setFullName('');
                   setFullNameError('');
                 }}
-                className='absolute w-[20px] h-[20px] right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+                className="absolute w-[20px] h-[20px] right-5 top-1/2 -translate-y-1/2 cursor-pointer"
               />
             )}
           </div>
-          <p className='text-sm text-red-500 pt-1 px-1 h-2.5'>{fullNameError || '\u00A0'}</p>
+          <p className="text-sm text-red-500 pt-1 px-1 h-2.5">
+            {fullNameError || '\u00A0'}
+          </p>
         </div>
 
-        <div className='mb-5'>
-          <div className='relative'>
+        <div className="mb-5">
+          <div className="relative">
             <Input
               value={email}
-              type='email'
-              label='Email'
+              type="email"
+              label="Email"
               className={`peer cursor-pointer outline-none border border-gray-300  focus:border-[#1E293B] focus:border-2 input-style1 `}
-              placeholder=' '
+              placeholder=" "
               onChange={handleEmail}
             />
 
             {email && (
               <img
                 src={Delete}
-                alt='삭제'
+                alt="삭제"
                 onClick={() => {
                   setEmail('');
                   setEmailError('');
                 }}
-                className='absolute w-[20px] h-[20px] right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+                className="absolute w-[20px] h-[20px] right-5 top-1/2 -translate-y-1/2 cursor-pointer"
               />
             )}
           </div>
-          <p className='text-sm text-red-500 pt-1 px-1 h-2.5'>{emailError || '\u00A0'}</p>
+          <p className="text-sm text-red-500 pt-1 px-1 h-2.5">
+            {emailError || '\u00A0'}
+          </p>
         </div>
 
-        <div className='mb-5'>
-          <div className='relative'>
+        <div className="mb-5">
+          <div className="relative">
             <Input
               value={password}
-              type='password'
-              label='Password'
+              type="password"
+              label="Password"
               className={`peer cursor-pointer outline-none border border-gray-300  focus:border-[#1E293B] focus:border-2 input-style1 `}
-              placeholder=' '
+              placeholder=" "
               onChange={handlePassword}
             />
 
             {password && (
               <img
                 src={Delete}
-                alt='삭제'
+                alt="삭제"
                 onClick={() => {
                   setPassword('');
                   setPasswordError('');
                 }}
-                className='absolute w-[20px] h-[20px] right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+                className="absolute w-[20px] h-[20px] right-5 top-1/2 -translate-y-1/2 cursor-pointer"
               />
             )}
           </div>
 
-          <p className='text-sm text-red-500 pt-1 px-1 h-2.5'>{passwordError || '\u00A0'}</p>
+          <p className="text-sm text-red-500 pt-1 px-1 h-2.5">
+            {passwordError || '\u00A0'}
+          </p>
         </div>
 
-        <div className='mb-5'>
-          <div className='relative'>
+        <div className="mb-5">
+          <div className="relative">
             <Input
               value={confirmPassword}
-              type='password'
-              label='Confirm Password'
+              type="password"
+              label="Confirm Password"
               className={`peer cursor-pointer outline-none border border-gray-300  focus:border-[#1E293B] focus:border-2 input-style1 `}
-              placeholder=' '
+              placeholder=" "
               onChange={handleConfirmPassword}
             />
 
             {confirmPassword && (
               <img
                 src={Delete}
-                alt='삭제'
+                alt="삭제"
                 onClick={() => {
                   setConfirmPassword('');
                   setConfirmPasswordError('');
                 }}
-                className='absolute w-[20px] h-[20px] right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+                className="absolute w-[20px] h-[20px] right-5 top-1/2 -translate-y-1/2 cursor-pointer"
               />
             )}
           </div>
-          <p className='text-sm text-red-500 pt-1 px-1 h-2.5'>{confirmPasswordError || '\u00A0'}</p>
+          <p className="text-sm text-red-500 pt-1 px-1 h-2.5">
+            {confirmPasswordError || '\u00A0'}
+          </p>
         </div>
 
-        <Button value='Sign Up' className='button-style1 mt-2' onClick={handleSubmit} />
+        <Button
+          value="Sign Up"
+          className={`button-style1 mt-2 ${
+            theme.name === 'Dark'
+              ? `w-[500px] h-[86px] text-[#ffffff] bg-[#2d2d2d] text-[23px] rounded-[10px] cursor-pointer`
+              : ''
+          }`}
+          onClick={handleSubmit}
+        />
       </form>
     </div>
   );

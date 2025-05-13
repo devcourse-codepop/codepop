@@ -1,19 +1,28 @@
-import Avatar from "../avatar/Avatar";
-import LikeComment from "../reaction/LikeComment";
-import menuIcon from "../../assets/MenuIcon.svg";
-import { useEffect, useState } from "react";
-import { Comment, Post } from "../../types";
-import dayjs from "dayjs";
-import { deletePosts, getPostList } from "../../api/post/post";
-import { usePostStore } from "../../stores/postStore";
-import { useNavigate, useParams } from "react-router-dom";
-import CommentListItem from "./CommentListItem";
-import { useAuthStore } from "../../stores/authStore";
-import DOMPurify from "dompurify";
+import Avatar from '../avatar/Avatar';
+import LikeComment from '../reaction/LikeComment';
+import menuIcon from '../../assets/MenuIcon.svg';
+import menuIconWhite from '../../assets/MenuIconWhite.svg';
+import { useEffect, useState } from 'react';
+import { Comment, Post } from '../../types';
+import dayjs from 'dayjs';
+import { deletePosts, getPostList } from '../../api/post/post';
+import { usePostStore } from '../../stores/postStore';
+import { useNavigate, useParams } from 'react-router-dom';
+import CommentListItem from './CommentListItem';
+import { useAuthStore } from '../../stores/authStore';
+import DOMPurify from 'dompurify';
 
-export default function PostDetailItem(props: Post) {
+interface Theme {
+  name: string;
+}
+
+interface PostDetailItemProps extends Post {
+  theme: Theme;
+}
+
+export default function PostDetailItem(props: PostDetailItemProps) {
   // image,
-  const { _id, title, author, likes, comments, updatedAt } = props;
+  const { _id, title, author, likes, comments, updatedAt, theme } = props;
 
   const params = useParams();
   const channel = params.channelId;
@@ -40,28 +49,28 @@ export default function PostDetailItem(props: Post) {
 
   const editCodeStyle = (html: string): string => {
     const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
+    const doc = parser.parseFromString(html, 'text/html');
 
-    const codes = doc.querySelectorAll("pre");
+    const codes = doc.querySelectorAll('pre');
     codes.forEach((code) => {
-      code.style.backgroundColor = "#ececec";
-      code.style.padding = "20px";
-      code.style.marginTop = "10px";
-      code.style.marginBottom = "10px";
-      code.style.borderRadius = "8px";
+      code.style.backgroundColor = '#ececec';
+      code.style.padding = '20px';
+      code.style.marginTop = '10px';
+      code.style.marginBottom = '10px';
+      code.style.borderRadius = '8px';
     });
 
     return doc.body.innerHTML;
   };
 
   const getDatetimeSortFormat = (update: string): string => {
-    const date = dayjs(update).add(9, "hour");
-    return date.format("YYYY-MM-DD");
+    const date = dayjs(update).add(9, 'hour');
+    return date.format('YYYY-MM-DD');
   };
 
   const getDatetimeFormat = () => {
-    const date = dayjs(updatedAt).add(9, "hour");
-    return date.format("YYYY.MM.DD");
+    const date = dayjs(updatedAt).add(9, 'hour');
+    return date.format('YYYY.MM.DD');
   };
 
   const checkPostUser = () => {
@@ -119,7 +128,9 @@ export default function PostDetailItem(props: Post) {
   return (
     <>
       <div
-        className="w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative"
+        className={`w-full h-auto rounded-[5px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative ${
+          theme.name === 'Dark' ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+        }`}
         //ref={divRef}
       >
         <div className="flex justify-between h-[85px] pl-3 pt-2.5">
@@ -128,6 +139,7 @@ export default function PostDetailItem(props: Post) {
             email={author.email}
             image={author.image}
             isOnline={author.isOnline}
+            theme={theme}
           />
           {/* 사용자 이름과 글쓴이 이름이 일치할 경우 */}
           {isUser && (
@@ -136,11 +148,13 @@ export default function PostDetailItem(props: Post) {
                 onClick={clickMenuHandler}
                 className="w-9 h-9 pr-2.5 cursor-pointer"
               >
-                <img src={menuIcon} />
+                <img
+                  src={`${theme.name === 'Dark' ? menuIconWhite : menuIcon}`}
+                />
               </div>
               {isOpen && (
                 // shadow-[1px_2px_3px_rgba(0,0,0,0.25)]
-                <div className="flex flex-col w-[91px] h-[70px] rounded-[2px] border border-[#e5e5e5] absolute top-8 right-4">
+                <div className="flex flex-col w-[91px] h-[70px] rounded-[2px] border border-[#e5e5e5] absolute top-8 right-4 bg-[white]">
                   <div
                     className="flex justify-center items-center text-[12px] h-[34px] cursor-pointer"
                     onClick={clickUpdateHandler}
@@ -160,7 +174,11 @@ export default function PostDetailItem(props: Post) {
           )}
         </div>
         <div className="flex flex-col px-[55px] py-[15px] gap-[22px]">
-          <div className="text-[20px] font-semibold">
+          <div
+            className={`text-[20px] font-semibold ${
+              theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+            }`}
+          >
             {JSON.parse(title).title}
           </div>
           {/* w-[500px] */}
@@ -170,7 +188,9 @@ export default function PostDetailItem(props: Post) {
                 editCodeStyle(JSON.parse(title).content)
               ),
             }}
-            className="text-[15px] font-normal"
+            className={`text-[15px] font-normal ${
+              theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+            }`}
           />
           {/* {image && (
             <div>
@@ -192,6 +212,7 @@ export default function PostDetailItem(props: Post) {
             postId={_id}
             postUserId={author._id}
             likes={likes}
+            theme={theme}
           />
         </div>
         <div>
@@ -209,7 +230,9 @@ export default function PostDetailItem(props: Post) {
                   new Date(getDatetimeSortFormat(a.updatedAt)).getTime() -
                   new Date(getDatetimeSortFormat(b.updatedAt)).getTime()
               )
-              .map((item) => <CommentListItem key={item._id} {...item} />)}
+              .map((item) => (
+                <CommentListItem key={item._id} {...item} theme={theme} />
+              ))}
         </div>
       </div>
     </>
