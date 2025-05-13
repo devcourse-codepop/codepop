@@ -65,7 +65,8 @@ export default function Login({ theme }: { theme: Theme }) {
       const token = res.data.token;
       console.log(res.data);
       storeLogin(token);
-      navigate('/');
+
+      navigate(-1);
     } catch (err) {
       const error = err as AxiosError;
 

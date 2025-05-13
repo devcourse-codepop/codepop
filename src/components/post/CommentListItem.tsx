@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { Comment } from '../../types';
 import { useAuthStore } from '../../stores/authStore';
-import { deleteComments } from '../../api/post/post';
 import { useParams } from 'react-router-dom';
 import DOMPurify from 'dompurify';
+import CheckDeleteModal from './CheckDeleteModal';
 
 interface Theme {
   name: string;
@@ -17,7 +17,7 @@ interface CommentListItemProps extends Comment {
 }
 
 export default function CommentListItem(props: CommentListItemProps) {
-  const { _id, comment, author, post, updatedAt, theme } = props;
+  const { _id, comment, author, post, createdAt, theme } = props;
 
   const params = useParams();
   const channel = params.channelId;
@@ -31,6 +31,8 @@ export default function CommentListItem(props: CommentListItemProps) {
   const clickMenuHandler = () => {
     setIsOpen(!isOpen);
   };
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const editCodeStyle = (html: string): string => {
     const parser = new DOMParser();
@@ -50,9 +52,9 @@ export default function CommentListItem(props: CommentListItemProps) {
 
   const getElapsedTime = () => {
     const now = dayjs().add(9, 'hour');
-    const writeTime = dayjs(updatedAt).add(9, 'hour');
+    const writeTime = dayjs(createdAt).add(9, 'hour');
     // const now = dayjs();
-    // const writeTime = dayjs(updatedAt);
+    // const writeTime = dayjs(createdAt);
 
     const gap = now.diff(writeTime, 's');
     if (gap < 60) return `${gap}초 전`;
@@ -68,14 +70,12 @@ export default function CommentListItem(props: CommentListItemProps) {
     }
   };
 
-  const clickDeleteHandler = async () => {
-    try {
-      const { data } = await deleteComments(_id);
-      console.log(data);
-      window.location.href = `/channel/${channel}/post/${post}`;
-    } catch (e) {
-      console.log(e instanceof Error && e.message);
-    }
+  const clickDeleteHandler = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModalHanlder = () => {
+    setIsDeleteModalOpen(false);
   };
 
   useEffect(() => {
@@ -135,6 +135,15 @@ export default function CommentListItem(props: CommentListItemProps) {
         </div>
         <div className="flex justify-end items-center gap-1.5 px-4 pb-3"></div>
       </div>
+      {isDeleteModalOpen && (
+        <CheckDeleteModal
+          type="COMMENT"
+          channel={String(channel)}
+          post={post}
+          _id={_id}
+          closeDeleteModalHanlder={closeDeleteModalHanlder}
+        />
+      )}
     </>
   );
 }

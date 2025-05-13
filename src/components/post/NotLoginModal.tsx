@@ -8,16 +8,16 @@ interface Theme {
 }
 
 export default function NotLoginModal({
-  closeModalHanlder,
+  closeLoginModalHanlder,
   theme,
 }: {
-  closeModalHanlder: () => void;
+  closeLoginModalHanlder: () => void;
   theme: Theme;
 }) {
   const navigate = useNavigate();
 
   const handleLoginClick = () => {
-    navigate('/login', { state: { from: location.pathname } });
+    navigate('/login');
   };
 
   return (
@@ -37,13 +37,13 @@ export default function NotLoginModal({
                 src={`${theme.name === 'Dark' ? closeWhite : close}`}
                 alt="close"
                 className="w-4 h-4 cursor-pointer"
-                onClick={closeModalHanlder}
+                onClick={closeLoginModalHanlder}
               />
             </div>
             <hr className="opacity-30" />
           </div>
           <div className="opacity-80 text-[15px]">
-            로그인한 사용자만 볼 수 있습니다!
+            로그인이 필요한 서비스입니다!
           </div>
           <div className="flex justify-end mr-5">
             <Button
