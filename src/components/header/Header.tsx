@@ -1,17 +1,19 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/header/logo.svg';
 import Notification from '../notification/Notification';
 import { useAuthStore } from '../../stores/authStore';
 
 export default function Header() {
-  const { isLoggedIn, user, logout } = useAuthStore();
-  console.log(user?.coverImage);
+  const { isLoggedIn, logout } = useAuthStore();
+  const navigator = useNavigate();
+  const user = useAuthStore((state) => state.user);
+
   let imgSrc: string = '';
-  if (user?.coverImage === undefined || user?.coverImage === '') {
+  if (user?.image === undefined || user?.image === '') {
     imgSrc =
       'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg';
   } else {
-    imgSrc = user?.coverImage;
+    imgSrc = user?.image;
   }
   return (
     <>
@@ -34,7 +36,7 @@ export default function Header() {
               <img
                 src={imgSrc}
                 className='w-10 h-10 rounded-3xl overflow-hidden cursor-pointer'
-                onClick={() => (window.location.href = '/profile')}
+                onClick={() => navigator('/profile')}
               />
             </div>
           )}
