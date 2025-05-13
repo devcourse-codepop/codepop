@@ -5,6 +5,7 @@ export default function PhotoUploadModal({ isOpen, onClose, onSave }: PhotoUploa
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // 파일 변했을 때 URL 설정
   const handleFileChange = (file: File) => {
     setSelectedFile(file);
     const reader = new FileReader();
@@ -12,6 +13,7 @@ export default function PhotoUploadModal({ isOpen, onClose, onSave }: PhotoUploa
     reader.readAsDataURL(file);
   };
 
+  // 파일 드랍한 경우
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     if (e.dataTransfer.files?.[0]) {
@@ -19,8 +21,10 @@ export default function PhotoUploadModal({ isOpen, onClose, onSave }: PhotoUploa
     }
   };
 
+  // 클릭 시 숨겨진 파일 선택창 오픈하게
   const handleButtonClick = () => inputRef.current?.click();
 
+  // input에서 파일 선택한 경우
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.[0]) {
       handleFileChange(e.target.files[0]);
@@ -33,6 +37,7 @@ export default function PhotoUploadModal({ isOpen, onClose, onSave }: PhotoUploa
     onClose();
   };
 
+  // 파일과 URL 넘기기
   const handleSave = () => {
     if (!selectedFile || !previewUrl) return alert('파일을 선택해주세요.');
     onSave(selectedFile, previewUrl);

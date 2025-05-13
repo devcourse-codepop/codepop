@@ -27,11 +27,13 @@ export default function Avatar({ name, email, image, isOnline }: AvatarProps) {
           <span className="w-3 h-3 rounded-md bg-[#5FE3A4] absolute right-0 top-1"></span>
         )}
       </div>
-      <div className="flex flex-col">
-        <span className="text-sm font-semibold">
+      <div className="flex flex-col w-full pr-5 box-content">
+        <span className="text-sm font-semibold line-clamp-1 break-all">
           {name ? name : '탈퇴한 회원'}
         </span>
-        <span className="text-xs opacity-60 break-all leading-3">{email}</span>
+        <span className="text-xs opacity-60 break-all leading-[17px] line-clamp-2">
+          {email}
+        </span>
       </div>
     </div>
   );
