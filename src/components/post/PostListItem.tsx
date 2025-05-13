@@ -3,18 +3,20 @@ import LikeComment from '../reaction/LikeComment';
 //import CodeIcon from '../../assets/CodeEditIcon.svg';
 import { Post } from '../../types';
 import dayjs from 'dayjs';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 import { useState } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 import NotLoginModal from './NotLoginModal';
 import DOMPurify from 'dompurify';
+import DeletedUserModal from './DeletedUserModal';
+import { useChannelItemStore } from '../../stores/channelStore';
 
 export default function PostListItem(props: Post) {
-  const { _id, title, image, author, likes, comments, updatedAt } = props;
-
-  const params = useParams();
-  const channel = params.channelId;
+  const { _id, title, image, author, likes, comments, createdAt, channel } = props;
+  const { channels } = useChannelItemStore();
+  // const params = useParams();
+  // const channel = params.channelId;
 
   const navigate = useNavigate();
 
@@ -23,7 +25,8 @@ export default function PostListItem(props: Post) {
   // const [currentWidth, setCurrentWidth] = useState(0);
 
   const user = useAuthStore((state) => state.user);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 
   let codes;
 
@@ -47,21 +50,47 @@ export default function PostListItem(props: Post) {
     if (codes.length > 0) return codes.length;
   };
 
-  const getDatetimeFormat = () => {
-    const date = dayjs(updatedAt).add(9, 'hour');
-    return date.format('YYYY.MM.DD');
+  // const getDatetimeFormat = () => {
+  //   const date = dayjs(createdAt).add(9, 'hour');
+  //   return date.format('YYYY.MM.DD');
+  // };
+
+  const getElapsedTime = () => {
+    const now = dayjs().add(9, 'hour');
+    const writeTime = dayjs(createdAt).add(9, 'hour');
+    // const now = dayjs();
+    // const writeTime = dayjs(createdAt);
+
+    const gap = now.diff(writeTime, 's');
+    if (gap < 60) return `${gap}초 전`;
+    if (gap < 3600) return `${Math.floor(gap / 60)}분 전`;
+    if (gap < 86400) return `${Math.floor(gap / 3600)}시간 전`;
+    // return `${Math.floor(gap / 86400)}일 전`;
+    return writeTime.format('YYYY.MM.DD');
   };
 
   const clickPostHandler = () => {
     if (user) {
-      navigate(`/channel/${channel}/post/${_id}`);
+      if (!author) {
+        setIsUserModalOpen(true);
+      } else {
+        channels.map((cha) => {
+          if (cha.id === channel._id) {
+            navigate(`${cha.to}/post/${_id}`);
+          }
+        });
+      }
     } else {
-      setIsModalOpen(true);
+      setIsLoginModalOpen(true);
     }
   };
 
-  const closeModalHanlder = () => {
-    setIsModalOpen(false);
+  const closeLoginModalHanlder = () => {
+    setIsLoginModalOpen(false);
+  };
+
+  const closeUserModalHanlder = () => {
+    setIsUserModalOpen(false);
   };
 
   // useEffect(() => {
@@ -112,7 +141,10 @@ export default function PostListItem(props: Post) {
             </div>
           )}
         </div>
-        <div className='flex justify-end pr-5 pb-[9px] text-[#808080] text-sm font-light'>{getDatetimeFormat()}</div>
+        <div className='flex justify-end pr-5 pb-[9px] text-[#808080] text-sm font-light'>
+          {/* {getDatetimeFormat()} */}
+          {getElapsedTime()}
+        </div>
         <hr className='mx-[18px] text-[#b2b2b2]' />
         {/* <div className="flex justify-between h-[59px]"> */}
         <div className={twMerge('flex h-[59px]', setCodeCount() > 0 ? 'justify-between' : 'justify-end')}>
@@ -146,7 +178,8 @@ export default function PostListItem(props: Post) {
           />
         </div>
       </div>
-      {isModalOpen && <NotLoginModal closeModalHanlder={closeModalHanlder} />}
+      {isLoginModalOpen && <NotLoginModal closeLoginModalHanlder={closeLoginModalHanlder} />}
+      {isUserModalOpen && <DeletedUserModal closeUserModalHanlder={closeUserModalHanlder} />}
     </>
   );
 }

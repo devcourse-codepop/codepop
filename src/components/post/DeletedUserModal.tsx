@@ -1,18 +1,11 @@
-import { useNavigate } from 'react-router-dom';
 import Button from '../common/Button';
 import close from '../../assets/images/closeBtn.svg';
 
-export default function NotLoginModal({
-  closeLoginModalHanlder,
+export default function DeletedUserModal({
+  closeUserModalHanlder,
 }: {
-  closeLoginModalHanlder: () => void;
+  closeUserModalHanlder: () => void;
 }) {
-  const navigate = useNavigate();
-
-  const handleLoginClick = () => {
-    navigate('/login');
-  };
-
   return (
     <>
       <div className="fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-[1000]">
@@ -24,19 +17,19 @@ export default function NotLoginModal({
                 src={close}
                 alt="close"
                 className="w-4 h-4 cursor-pointer"
-                onClick={closeLoginModalHanlder}
+                onClick={closeUserModalHanlder}
               />
             </div>
             <hr className="opacity-30" />
           </div>
           <div className="opacity-80 text-[15px]">
-            로그인이 필요한 서비스입니다!
+            탈퇴한 회원의 게시글입니다!
           </div>
           <div className="flex justify-end mr-5">
             <Button
               className="button-style3 text-[12px]"
-              value="로그인 하러 가기"
-              onClick={handleLoginClick}
+              value="확인"
+              onClick={closeUserModalHanlder}
             ></Button>
           </div>
         </div>
