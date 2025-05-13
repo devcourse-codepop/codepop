@@ -4,6 +4,7 @@ import Button from "../../components/common/Button";
 import Editor from "../../components/editor/Editor";
 import { getPostData, updatePost } from "../../api/post/post";
 import { useNavigate, useParams } from "react-router-dom";
+import PollOptionsView from "../../components/poll/PollOptionsView";
 
 export default function UpdateVotePost() {
   const titleRef = useRef<HTMLInputElement>(null);
@@ -103,13 +104,13 @@ export default function UpdateVotePost() {
   // };
 
   return (
-    <div className="w-full flex relative">
+    <div className="w-full flex relative ">
       <div>
         <div className="pb-[30px]">
           <ChannelName channelId={channelId ?? "1"} />
         </div>
 
-        <div className="bg-white shadow-md rounded-[10px] p-5 relative">
+        <div className="bg-white shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto ">
           <input
             type="text"
             ref={titleRef}
@@ -124,7 +125,15 @@ export default function UpdateVotePost() {
             showPollButton={true}
             initialContent={content}
           />
-          <hr className="mb-[60px] opacity-30" />
+          <div className="mb-2.5">
+            {pollOptions.length > 0 && (
+              <div className="mt-6">
+                <h2 className="font-semibold text-gray-700 mb-2">투표 항목</h2>
+                <PollOptionsView options={pollOptions} />
+              </div>
+            )}
+          </div>
+          <hr className="opacity-30" />
 
           {/* 이미지 삭제 버튼 추가 */}
           {/* {imageToDeletePublicId && (
@@ -135,11 +144,13 @@ export default function UpdateVotePost() {
             />
           )} */}
 
-          <Button
-            value="수정 완료"
-            className="button-style2 absolute bottom-[15px] right-[20px]"
-            onClick={handleSubmit}
-          />
+          <div className="flex justify-end mt-6">
+            <Button
+              value="수정 완료"
+              className="button-style2"
+              onClick={handleSubmit}
+            />
+          </div>
         </div>
       </div>
     </div>
