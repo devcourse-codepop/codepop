@@ -1,28 +1,29 @@
-import { useEffect } from "react";
-import { useAuthStore } from "./stores/authStore";
-import { axiosInstance } from "./api/axios";
-import { Route, Routes } from "react-router-dom";
-import Login from "./pages/login/Login";
-import SignUp from "./pages/signup/SignUp";
-import Error from "./pages/Error";
-import MainLayout from "./layout/MainLayout";
-import MainContent from "./pages/MainContent";
-import PostList from "./pages/PostList";
-import PostDetail from "./pages/PostDetail";
-import WritePostRouter from "./route/WritePostRouter";
-import UpdatePostRouter from "./route/UpdatePostRouter";
-import ProfilePage from "./pages/profile/ProfilePage";
-import EditProfilePage from "./pages/profile/profile-edit/EditProfilePage";
+import { useEffect } from 'react';
+import { useAuthStore } from './stores/authStore';
+import { axiosInstance } from './api/axios';
+import { Route, Routes } from 'react-router-dom';
+import Login from './pages/login/Login';
+import SignUp from './pages/signup/SignUp';
+import Error from './pages/Error';
+import MainLayout from './layout/MainLayout';
+import MainContent from './pages/MainContent';
+import PostList from './pages/PostList';
+import PostDetail from './pages/PostDetail';
+import WritePostRouter from './route/WritePostRouter';
+import UpdatePostRouter from './route/UpdatePostRouter';
+import ProfilePage from './pages/profile/ProfilePage';
+import EditProfilePage from './pages/profile/profile-edit/EditProfilePage';
 
 export default function App() {
   const accessToken = useAuthStore((state) => state.accessToken);
   const setUser = useAuthStore((state) => state.setUser);
+  const user = useAuthStore((state) => state.user);
   //const resetUser = useAuthStore((state) => state.resetUser); // 추기
 
   useEffect(() => {
     if (accessToken) {
       axiosInstance
-        .get("/auth-user")
+        .get('/auth-user')
         .then((res) => {
           //resetUser(); // 추가
           setUser(res.data);
@@ -35,7 +36,7 @@ export default function App() {
     } else {
       useAuthStore.setState({ isLoading: false });
     }
-  }, [accessToken]);
+  }, [accessToken, user?.fullName]);
 
   return (
     <>
@@ -47,26 +48,17 @@ export default function App() {
       </Routes> */}
       <Routes>
         <Route element={<MainLayout />}>
-          <Route path="/" element={<MainContent />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/profile/edit" element={<EditProfilePage />} />
-          <Route path="/channel/:channelId" element={<PostList />} />
-          <Route
-            path="/channel/:channelId/post/:postId"
-            element={<PostDetail />}
-          />
-          <Route
-            path="/channel/:channelId/write"
-            element={<WritePostRouter />}
-          />
-          <Route
-            path="/channel/:channelId/update/:postId"
-            element={<UpdatePostRouter />}
-          />
+          <Route path='/' element={<MainContent />} />
+          <Route path='/profile' element={<ProfilePage />} />
+          <Route path='/profile/edit' element={<EditProfilePage />} />
+          <Route path='/channel/:channelId' element={<PostList />} />
+          <Route path='/channel/:channelId/post/:postId' element={<PostDetail />} />
+          <Route path='/channel/:channelId/write' element={<WritePostRouter />} />
+          <Route path='/channel/:channelId/update/:postId' element={<UpdatePostRouter />} />
         </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="*" element={<Error />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/signup' element={<SignUp />} />
+        <Route path='*' element={<Error />} />
       </Routes>
       {/* <Routes>
         

@@ -63,7 +63,7 @@ export default function ProfileRight({ userData, selectedTab }: UserPostInfo) {
 
         const postsWithMyLatestComment = commentPosts.map((post) => {
           const myComment = latestCommentsMap.get(post._id);
-          const myCommentCount = Math.max((commentCountMap.get(post._id) || 0) - 1, 0);
+          const myCommentCount = Math.max(commentCountMap.get(post._id) || 0, 0);
 
           return {
             ...post,
@@ -158,10 +158,9 @@ export default function ProfileRight({ userData, selectedTab }: UserPostInfo) {
                 <p className='font-semibold text-[15px] truncate max-w-[430px]'>{JSON.parse(userPosts.title).title}</p>
 
                 {selectedTab === 'comments' && userPosts.comments.length > 0 && (
-                  <div className='mt-1 text-[12px] text-gray-700 flex gap-[0.2vw]'>
+                  <div className='mt-1 text-[12px] text-gray-700 flex'>
                     <img src={comment} />
-                    <p className='truncate max-w-[400px]'>{JSON.parse(userPosts.comments[0].comment).content}</p>
-                    {(userPosts.myCommentCount ?? 0) > 0 && <p className='ml-[13px]'>+{userPosts.myCommentCount}개</p>}
+                    {<p className='ml-[5px]'>+{userPosts.myCommentCount}개</p>}
                   </div>
                 )}
               </div>
