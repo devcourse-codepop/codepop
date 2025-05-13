@@ -8,6 +8,7 @@ import { getPostList, getSearchPostList } from '../api/post/post';
 import { usePostStore } from '../stores/postStore';
 import { Post } from '../types';
 import dayjs from 'dayjs';
+import { useAuthStore } from '../stores/authStore';
 
 export default function PostList() {
   const params = useParams();
@@ -15,8 +16,10 @@ export default function PostList() {
 
   const navigate = useNavigate();
 
+  const user = useAuthStore((state) => state.user);
   const channelIdList = usePostStore((state) => state.channelIdList);
 
+  const [isLogin, setIsLogin] = useState(false);
   const [postListItem, setPostListItem] = useState<Post[]>([]);
 
   const [input, setInput] = useState('');
@@ -31,7 +34,7 @@ export default function PostList() {
 
   const getDatetimeFormat = (update: string): string => {
     const date = dayjs(update);
-    return date.format('YYYY-MM-DD');
+    return date.format('YYYY-MM-DD HH:mm:ss');
   };
 
   const createNewPost = () => {
@@ -70,8 +73,9 @@ export default function PostList() {
   };
 
   useEffect(() => {
+    if (user) setIsLogin(true);
     getPostListItem();
-  }, []);
+  }, [user]);
 
   return (
     <>
@@ -122,8 +126,8 @@ export default function PostList() {
               [...postListItem]
                 .sort(
                   (a, b) =>
-                    new Date(getDatetimeFormat(b.updatedAt)).getTime() -
-                    new Date(getDatetimeFormat(a.updatedAt)).getTime()
+                    new Date(getDatetimeFormat(b.createdAt)).getTime() -
+                    new Date(getDatetimeFormat(a.createdAt)).getTime()
                 )
                 .map((item) => <PostListItem key={item._id} {...item} />)}
             {postListItem.length !== 0 &&
@@ -138,9 +142,11 @@ export default function PostList() {
           </div>
         </div>
       </div>
-      <div className="absolute right-35 bottom-5 cursor-pointer">
-        <img src={postBtn} onClick={createNewPost} alt="게시글 작성 버튼" />
-      </div>
+      {isLogin && (
+        <div className="absolute right-35 bottom-5 cursor-pointer">
+          <img src={postBtn} onClick={createNewPost} alt="게시글 작성 버튼" />
+        </div>
+      )}
     </>
   );
 }
