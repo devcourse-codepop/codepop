@@ -17,16 +17,19 @@ export default function ProfileLeft({ userData, onSelectTab, userId }: UserInfo)
         <div className='pt-[0px]'>
           <p className='font-bold text-[20px] mt-[42px]'> {userData?.fullName}</p>
           <p className='font-normal text-[14px] mt-[11px]'>{userData?.email}</p>
-          <div className='flex gap-4 text-[16px] font-semibold mt-[38px]'>
-            <p className='cursor-pointer' onClick={() => onSelectTab('posts')}>
-              포스트 {userData?.posts.length}
-            </p>
-            <p className='cursor-pointer' onClick={() => onSelectTab('likes')}>
-              좋아요 {userData?.likes.length}
-            </p>
-            <p className='cursor-pointer' onClick={() => onSelectTab('comments')}>
-              댓글 {userData?.comments.length}
-            </p>
+          <div className='flex gap-8.5 text-[16px] font-semibold mt-[38px] '>
+            <div className='flex flex-col items-center cursor-pointer' onClick={() => onSelectTab('posts')}>
+              <span>포스트</span>
+              <span className=' mt-1'>{userData?.posts.length}</span>
+            </div>
+            <div className='flex flex-col items-center cursor-pointer' onClick={() => onSelectTab('likes')}>
+              <span>좋아요</span>
+              <span className=' mt-1'>{userData?.likes.length}</span>
+            </div>
+            <div className='flex flex-col items-center cursor-pointer' onClick={() => onSelectTab('comments')}>
+              <span>댓글</span>
+              <span className=' mt-1'>{userData?.comments.length}</span>
+            </div>
           </div>
           {user?._id === userId && (
             <div className='mt-[25px] flex gap-6'>
