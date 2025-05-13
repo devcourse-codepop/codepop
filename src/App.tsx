@@ -10,12 +10,14 @@ import MainContent from './pages/MainContent';
 import PostList from './pages/PostList';
 import PostDetail from './pages/PostDetail';
 import WritePostRouter from './route/WritePostRouter';
+import UpdatePostRouter from './route/UpdatePostRouter';
 import ProfilePage from './pages/profile/ProfilePage';
 import EditProfilePage from './pages/profile/profile-edit/EditProfilePage';
 
 export default function App() {
   const accessToken = useAuthStore((state) => state.accessToken);
   const setUser = useAuthStore((state) => state.setUser);
+  const user = useAuthStore((state) => state.user);
   //const resetUser = useAuthStore((state) => state.resetUser); // 추기
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export default function App() {
     } else {
       useAuthStore.setState({ isLoading: false });
     }
-  }, [accessToken]);
+  }, [accessToken, user?.fullName]);
 
   return (
     <>
@@ -46,23 +48,17 @@ export default function App() {
       </Routes> */}
       <Routes>
         <Route element={<MainLayout />}>
-          <Route path="/" element={<MainContent />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/profile/edit" element={<EditProfilePage />} />
-          <Route path="/channel/:channelId" element={<PostList />} />
-          <Route
-            path="/channel/:channelId/post/:postId"
-            element={<PostDetail />}
-          />
-          <Route
-            path="/channel/:channelId/write"
-            element={<WritePostRouter />}
-          />
-          <Route path="/channel/:channelId/update/:postId" element="" />
+          <Route path='/' element={<MainContent />} />
+          <Route path='/profile' element={<ProfilePage />} />
+          <Route path='/profile/edit' element={<EditProfilePage />} />
+          <Route path='/channel/:channelId' element={<PostList />} />
+          <Route path='/channel/:channelId/post/:postId' element={<PostDetail />} />
+          <Route path='/channel/:channelId/write' element={<WritePostRouter />} />
+          <Route path='/channel/:channelId/update/:postId' element={<UpdatePostRouter />} />
         </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="*" element={<Error />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/signup' element={<SignUp />} />
+        <Route path='*' element={<Error />} />
       </Routes>
       {/* <Routes>
         
