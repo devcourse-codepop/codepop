@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { Comment } from '../../types';
 import { useAuthStore } from '../../stores/authStore';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import CheckDeleteModal from './CheckDeleteModal';
 
