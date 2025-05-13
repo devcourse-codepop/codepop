@@ -68,6 +68,7 @@
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  white-space: normal;
   -webkit-box-orient: vertical;
 }
 .tabConstentItem > div > div:nth-child(2) > div > div:nth-child(2) {
