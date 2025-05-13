@@ -4,8 +4,6 @@ import menuIcon from '../../assets/MenuIcon.svg';
 import menuIconWhite from '../../assets/MenuIconWhite.svg';
 // import { useEffect, useState } from 'react';
 
-import dayjs from 'dayjs';
-
 import { useEffect, useState } from 'react';
 import { Comment, Post } from '../../types';
 import dayjs from 'dayjs';
