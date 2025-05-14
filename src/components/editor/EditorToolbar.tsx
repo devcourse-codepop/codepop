@@ -4,10 +4,7 @@ import ImageIcon from '../icon/ImageIcon';
 import BoldIcon from '../icon/BoldIcon';
 import ItalicIcon from '../icon/ItalicIcon';
 import VoteIcon from '../icon/VoteIcon';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
 
 interface Props {
   editor: Editor | null;

@@ -8,10 +8,8 @@ import { useAuthStore } from '../../stores/authStore';
 import { useParams } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import CheckDeleteModal from './CheckDeleteModal';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 interface CommentListItemProps extends Comment {
   theme: Theme;
@@ -42,10 +40,8 @@ export default function CommentListItem(props: CommentListItemProps) {
     const codes = doc.querySelectorAll('pre');
     const codeStr = '<span>&lt;/&gt;</span>';
     codes.forEach((code) => {
-      const dark = theme.name === 'Dark';
-
-      code.style.backgroundColor = dark ? '#1e1e1e' : '#ececec';
-      code.style.color = dark ? '#ffffff' : '#111111';
+      code.style.backgroundColor = dark(theme) ? '#1e1e1e' : '#ececec';
+      code.style.color = dark(theme) ? '#ffffff' : '#111111';
       code.style.padding = '20px';
       code.style.paddingTop = '2px';
       code.style.marginTop = '10px';
@@ -100,7 +96,7 @@ export default function CommentListItem(props: CommentListItemProps) {
     <>
       <div
         className={`h-auto rounded-[5px] border border-[#b4b4b4] mx-7 mb-[30px] relative ${
-          theme.name === 'Dark'
+          dark(theme)
             ? 'bg-[#2d2d2d] text-[#ffffff]'
             : 'bg-[#ffffff] text-[#111111]'
         }`}
@@ -124,9 +120,7 @@ export default function CommentListItem(props: CommentListItemProps) {
                 onClick={clickMenuHandler}
                 className="w-9 h-9 pr-2.5 cursor-pointer"
               >
-                <img
-                  src={`${theme.name === 'Dark' ? menuIconWhite : menuIcon}`}
-                />
+                <img src={dark(theme) ? menuIconWhite : menuIcon} />
               </div>
               {isOpen && (
                 <div

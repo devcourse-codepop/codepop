@@ -3,10 +3,8 @@ import { useChannelItemStore } from '../../stores/channelStore';
 import { getPopularPostData } from '../../api/post/post';
 import { Post } from '../../types';
 import PostListItem from '../post/PostListItem';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 export default function PopularPost({ theme }: { theme: Theme }) {
   const { channels, fetchChannels } = useChannelItemStore();
@@ -45,12 +43,12 @@ export default function PopularPost({ theme }: { theme: Theme }) {
     <>
       <div
         className={`w-full rounded-[10px] px-[30px] py-[25px] pt-[20px] shadow-md ${
-          theme.name === 'Dark' ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+          dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
         }`}
       >
         <h3
           className={`font-semibold  text-[18px] mb-[15px] ${
-            theme.name === 'Dark' ? 'text-[#acacaa]' : 'text-[#595956]'
+            dark(theme) ? 'text-[#acacaa]' : 'text-[#595956]'
           }`}
         >
           Popular Posts
@@ -72,14 +70,14 @@ export default function PopularPost({ theme }: { theme: Theme }) {
                 style={{
                   backgroundColor:
                     activeTab === index
-                      ? theme.name === 'Dark'
+                      ? dark(theme)
                         ? index === 0
                           ? '#19A9BE'
                           : index === 1
                           ? '#3380DE'
                           : '#9E68E9'
                         : channel.colorLight
-                      : theme.name === 'Dark'
+                      : dark(theme)
                       ? '#4B4B4B'
                       : '#E3E3E3',
                   color: activeTab === index ? '#fff' : '#6A6A6A',

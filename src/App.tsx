@@ -41,9 +41,17 @@ export default function App() {
 
   return (
     <DarkMode>
-      {(theme, nextTheme) => (
+      {(theme, nextTheme, nextThemeIndex) => (
         <Routes>
-          <Route element={<MainLayout theme={theme} nextTheme={nextTheme} />}>
+          <Route
+            element={
+              <MainLayout
+                theme={theme}
+                nextTheme={nextTheme}
+                nextThemeIndex={nextThemeIndex}
+              />
+            }
+          >
             <Route path="/" element={<MainContent theme={theme} />} />
             <Route path="/profile" element={<ProfilePage theme={theme} />} />
             <Route
@@ -64,7 +72,7 @@ export default function App() {
             />
             <Route
               path="/channel/:channelId/update/:postId"
-              element={<UpdatePostRouter />}
+              element={<UpdatePostRouter theme={theme} />}
             />
           </Route>
           <Route path="/login" element={<Login theme={theme} />} />

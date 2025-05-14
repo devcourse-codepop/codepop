@@ -13,15 +13,13 @@ import { useAuthStore } from '../../stores/authStore';
 import DOMPurify from 'dompurify';
 import PollOptionsVoteView from '../poll/PollOptionsVoteView';
 import CheckDeleteModal from './CheckDeleteModal';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 interface PollOption {
   id: string;
   text: string;
   voteCount: number;
-}
-
-interface Theme {
-  name: string;
 }
 
 interface PostDetailItemProps extends Post {
@@ -70,13 +68,11 @@ export default function PostDetailItem(props: PostDetailItemProps) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
 
-    const dark = theme.name === 'Dark';
-
     const codes = doc.querySelectorAll('pre');
     const codeStr = '<span>&lt;/&gt;</span>';
     codes.forEach((code) => {
-      code.style.backgroundColor = dark ? '#1e1e1e' : '#ececec';
-      code.style.color = dark ? '#ffffff' : '#111111';
+      code.style.backgroundColor = dark(theme) ? '#1e1e1e' : '#ececec';
+      code.style.color = dark(theme) ? '#ffffff' : '#111111';
       code.style.padding = '20px';
       code.style.paddingTop = '2px';
       code.style.marginTop = '10px';
@@ -171,7 +167,7 @@ export default function PostDetailItem(props: PostDetailItemProps) {
     <>
       <div
         className={`w-full h-auto rounded-[5px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative ${
-          theme.name === 'Dark' ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+          dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
         }`}
 
         //ref={divRef}
@@ -191,21 +187,31 @@ export default function PostDetailItem(props: PostDetailItemProps) {
                 onClick={clickMenuHandler}
                 className="w-9 h-9 pr-2.5 cursor-pointer"
               >
-                <img
-                  src={`${theme.name === 'Dark' ? menuIconWhite : menuIcon}`}
-                />
+                <img src={dark(theme) ? menuIconWhite : menuIcon} />
               </div>
               {isOpen && (
                 // shadow-[1px_2px_3px_rgba(0,0,0,0.25)]
 
-                <div className="flex flex-col w-[91px] h-[70px] rounded-[2px] border border-[#e5e5e5] absolute top-8 right-4">
+                <div
+                  className={`flex flex-col w-[91px] h-[70px] rounded-[2px]  absolute top-8 right-4  ${
+                    dark(theme)
+                      ? 'bg-[#2d2d2d] border border-white/40'
+                      : 'border border-[#e5e5e5]'
+                  }`}
+                >
                   <div
-                    className="flex justify-center items-center text-[12px] h-[34px] cursor-pointer"
+                    className={`flex justify-center items-center text-[12px] h-[34px] cursor-pointer ${
+                      dark(theme) ? 'text-[#ffffff] ' : ''
+                    }`}
                     onClick={clickUpdateHandler}
                   >
                     수정하기
                   </div>
-                  <hr className="opacity-10" />
+                  <hr
+                    className={` ${
+                      dark(theme) ? 'border-[#878787]' : 'opacity-10'
+                    }`}
+                  />
                   <div
                     className="flex justify-center items-center text-[12px] text-[#FF0404] h-[34px] cursor-pointer"
                     onClick={clickDeleteHandler}
@@ -220,7 +226,7 @@ export default function PostDetailItem(props: PostDetailItemProps) {
         <div className="flex flex-col px-[55px] py-[15px] gap-[22px]">
           <div
             className={`text-[20px] font-semibold ${
-              theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+              dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
             }`}
           >
             {JSON.parse(title).title}
@@ -233,7 +239,7 @@ export default function PostDetailItem(props: PostDetailItemProps) {
               ),
             }}
             className={`text-[15px] font-normal ${
-              theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+              dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
             }`}
           />
           {/* 투표 옵션이 있을 경우 */}
@@ -247,6 +253,7 @@ export default function PostDetailItem(props: PostDetailItemProps) {
                 originalContent={parsedTitle.content}
                 imageToDeletePublicId={imagePublicId || null}
                 imageFile={null}
+                theme={theme}
               />
             </div>
           )}

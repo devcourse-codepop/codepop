@@ -12,10 +12,8 @@ import DOMPurify from 'dompurify';
 import DeletedUserModal from './DeletedUserModal';
 import { useChannelItemStore } from '../../stores/channelStore';
 import PollOptionsView from '../poll/PollOptionsView';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 interface PostListItemProps extends Post {
   theme: Theme;
@@ -125,7 +123,7 @@ export default function PostListItem(props: PostListItemProps) {
     <>
       <div
         className={`w-full h-auto rounded-[5px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative ${
-          theme.name === 'Dark' ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+          dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
         }`}
       >
         <div className="flex justify-between h-[85px] pl-3 pt-2.5">
@@ -147,14 +145,14 @@ export default function PostListItem(props: PostListItemProps) {
           <div
             className={twMerge(
               `flex flex-col justify-center w-full gap-[22px] ${
-                theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+                dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
               }`,
               image && 'max-w-[635px]'
             )}
           >
             <div
               className={`postTitle text-[18px] font-semibold truncate ${
-                theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+                dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
               }`}
             >
               {JSON.parse(title).title}
@@ -170,7 +168,7 @@ export default function PostListItem(props: PostListItemProps) {
             {/* 투표 옵션이 있을 경우 */}
             {pollOptions && pollOptions.length > 0 && (
               <div className="mt-4">
-                <PollOptionsView options={pollOptions} />
+                <PollOptionsView options={pollOptions} theme={theme} />
               </div>
             )}
             {/* {setCodeCount() > 0 && (
@@ -188,7 +186,7 @@ export default function PostListItem(props: PostListItemProps) {
         </div>
         <div
           className={`flex justify-end pr-5 pb-[9px] text-[#808080] text-sm font-light ${
-            theme.name === 'Dark'
+            dark(theme)
               ? 'text-[#ffffff] opacity-50'
               : 'text-[#111111] opacity-50'
           }`}
@@ -197,7 +195,7 @@ export default function PostListItem(props: PostListItemProps) {
         </div>
         <hr
           className={`mx-[18px] ${
-            theme.name === 'Dark'
+            dark(theme)
               ? 'text-[#ffffff] opacity-50'
               : 'text-[#b2b2b2] opacity-50'
           }`}
@@ -229,7 +227,7 @@ export default function PostListItem(props: PostListItemProps) {
           {setCodeCount() > 0 && (
             <div
               className={`flex justify-center items-center text-[14px] opacity-70 ml-5 ${
-                theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+                dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
               }`}
             >
               +<span className="text-[#ff0000]">{setCodeCount()}</span>개의 코드

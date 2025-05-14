@@ -2,10 +2,7 @@ import { useParams } from 'react-router-dom';
 import UpdateCodePost from '../pages/update/UpdateCodePost';
 import UpdateSetPost from '../pages/update/UpdateSetPost';
 import UpdateVotePost from '../pages/update/UpdateVotePost';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../types/ darkModeTypes';
 
 const ChannelUpdateRouter: React.FC<{ theme: Theme }> = ({ theme }) => {
   const { channelId } = useParams<{ channelId: string }>();

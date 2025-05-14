@@ -2,10 +2,8 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import { useChannelItemStore } from '../../stores/channelStore';
 import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 export default function ChannelBox({ theme }: { theme: Theme }) {
   const pathName = useLocation().pathname;
@@ -26,14 +24,14 @@ export default function ChannelBox({ theme }: { theme: Theme }) {
     <>
       <div
         className={`w-[291px] h-[211px] rounded-[10px] pt-5 shadow-md font-semibold ${
-          theme.name === 'Dark'
+          dark(theme)
             ? 'bg-[#2d2d2d] text-[#ffffff]'
             : 'bg-[#ffffff] text-[#111111]'
         }`}
       >
         <h2
           className={`text-[20px] font-medium ml-7 mb-[14px] ${
-            theme.name === 'Dark' ? 'text-[#acacac]' : 'text-[#595956]'
+            dark(theme) ? 'text-[#acacac]' : 'text-[#595956]'
           }`}
         >
           Channel
@@ -51,8 +49,9 @@ export default function ChannelBox({ theme }: { theme: Theme }) {
                 <span
                   className={`w-1 h-8 rounded-sm mr-[7px]`}
                   style={{
-                    backgroundColor:
-                      theme.name === 'Dark' ? item.colorDark : item.colorLight,
+                    backgroundColor: dark(theme)
+                      ? item.colorDark
+                      : item.colorLight,
                   }}
                 ></span>
                 <span className="font-noto font-[18px] pt-1 relative z-1">
@@ -63,10 +62,9 @@ export default function ChannelBox({ theme }: { theme: Theme }) {
                       channelParams === item.to.split('/')[2] && 'w-full'
                     )}
                     style={{
-                      backgroundColor:
-                        theme.name === 'Dark'
-                          ? item.colorDark
-                          : item.colorLight,
+                      backgroundColor: dark(theme)
+                        ? item.colorDark
+                        : item.colorLight,
                       width: pathName === item.to ? '100%' : '',
                     }}
                   ></span>

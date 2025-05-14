@@ -4,10 +4,8 @@ import Button from '../../components/common/Button';
 import Editor from '../../components/editor/Editor';
 import { createCodePost } from '../../api/write/write';
 import { useNavigate, useParams } from 'react-router-dom';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 export default function CreateVotePost({ theme }: { theme: Theme }) {
   const titleRef = useRef<HTMLInputElement>(null);
@@ -71,7 +69,7 @@ export default function CreateVotePost({ theme }: { theme: Theme }) {
 
           <div
             className={`shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto ${
-              theme.name === 'Dark'
+              dark(theme)
                 ? 'bg-[#2d2d2d] text-[#ffffff]'
                 : 'bg-[#ffffff] text-[#111111]'
             }`}
@@ -85,7 +83,7 @@ export default function CreateVotePost({ theme }: { theme: Theme }) {
             />
             <hr
               className={`mt-[15px] mb-[15px] opacity-30 ${
-                theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+                dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
               }`}
             />
             <Editor
@@ -99,13 +97,13 @@ export default function CreateVotePost({ theme }: { theme: Theme }) {
             />
             <hr
               className={`mb-[60px] opacity-30 ${
-                theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+                dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
               }`}
             />
             <Button
               value="완료"
               className={`button-style2 absolute bottom-[15px] right-[20px] ${
-                theme.name === 'Dark' ? 'bg-[#ffffff] text-[#111111]' : ''
+                dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
               }`}
               onClick={handleSubmit} // 게시물 작성 완료 시 제출
             />

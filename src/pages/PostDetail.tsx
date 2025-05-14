@@ -6,10 +6,7 @@ import { getPostList } from '../api/post/post';
 import { usePostStore } from '../stores/postStore';
 import { useEffect, useState } from 'react';
 import { Post } from '../types';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../types/ darkModeTypes';
 
 export default function PostDetail({ theme }: { theme: Theme }) {
   const params = useParams();

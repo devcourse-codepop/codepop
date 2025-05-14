@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { postComments, postNotifications } from '../../api/post/post';
 import CommentEditor from '../editor/CommentEditor';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 export default function WriteCommentItem({
   channelId,
@@ -124,7 +122,7 @@ export default function WriteCommentItem({
     <>
       <div
         className={`relative w-full h-auto rounded-[5px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] ${
-          theme.name === 'Dark'
+          dark(theme)
             ? 'bg-[#2d2d2d] text-[#ffffff]'
             : 'bg-[#ffffff] text-[#111111]'
         }`}

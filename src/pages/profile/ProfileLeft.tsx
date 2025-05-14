@@ -3,10 +3,8 @@ import Button from '../../components/common/Button';
 import { useAuthStore } from '../../stores/authStore';
 import { useNavigate } from 'react-router-dom';
 import defaultProfileImage from '../../assets/images/profile/defaultProfileImage.jpg';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 interface ProfileLeftProps extends UserInfo {
   theme: Theme;
@@ -23,9 +21,9 @@ export default function ProfileLeft({
   return (
     <>
       <div
-        className={`w-[291px] h-[633px] rounded-bl-[10px] px-[50px] border-r-2 border-gray-300 ${
-          theme.name === 'Dark' ? '' : ''
-        }`}
+        className={`w-[291px] h-[633px] rounded-bl-[10px] px-[50px] border-r-2 border-gray-300
+    ${dark(theme) ? 'text-[#ffffff]' : ''}
+  `}
       >
         <img
           src={userData?.image || defaultProfileImage}
@@ -68,15 +66,13 @@ export default function ProfileLeft({
               <Button
                 value="프로필 수정"
                 className={`button-style3 ${
-                  theme.name === 'Dark' ? 'bg-[#ffffff] text-[#111111]' : ''
+                  dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
                 }`}
                 onClick={() => navigate('/profile/edit')}
               />
               <Mail
                 className={`w-[30px] h-[30px] cursor-pointer ${
-                  theme.name === 'Dark'
-                    ? 'text-[#ffffff] opacity-80'
-                    : 'text-[#111111]'
+                  dark(theme) ? 'text-[#ffffff] opacity-80' : 'text-[#111111]'
                 }`}
               />
             </div>

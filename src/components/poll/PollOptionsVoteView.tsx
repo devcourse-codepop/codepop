@@ -1,5 +1,7 @@
-import { useState } from "react";
-import { updatePost } from "../../api/post/post";
+import { useState } from 'react';
+import { updatePost } from '../../api/post/post';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 interface PollOption {
   id: string;
@@ -15,6 +17,7 @@ interface PollOptionsVoteViewProps {
   originalContent: string;
   imageToDeletePublicId?: string | null;
   imageFile?: File | null;
+  theme: Theme;
 }
 
 export default function PollOptionsVoteView({
@@ -22,6 +25,7 @@ export default function PollOptionsVoteView({
   postId,
   originalTitle,
   originalContent,
+  theme,
 }: PollOptionsVoteViewProps) {
   const [pollOptions, setPollOptions] = useState<PollOption[]>(
     options.map((option) => ({
@@ -65,29 +69,29 @@ export default function PollOptionsVoteView({
 
     // API 호출
     const formData = new FormData();
-    formData.append("postId", postId);
-    formData.append("channelId", "681b8570437f722b6908ab69");
+    formData.append('postId', postId);
+    formData.append('channelId', '681b8570437f722b6908ab69');
     formData.append(
-      "title",
+      'title',
       JSON.stringify({
         title: originalTitle,
         content: originalContent,
         pollOptions: updatedOptions,
       })
     );
-    formData.append("imageToDeletePublicId", "");
-    formData.append("image", "");
+    formData.append('imageToDeletePublicId', '');
+    formData.append('image', '');
 
-    console.log("📤 전송되는 FormData:");
+    console.log('📤 전송되는 FormData:');
     for (const [key, value] of formData.entries()) {
       console.log(`${key}:`, value);
     }
 
     try {
       await updatePost(formData);
-      console.log("투표 반영 성공");
+      console.log('투표 반영 성공');
     } catch (err) {
-      console.error("투표 반영 실패", err);
+      console.error('투표 반영 실패', err);
     }
   };
 
@@ -106,8 +110,11 @@ export default function PollOptionsVoteView({
             : Math.round((option.voteCount / totalVotes) * 100);
 
         const isTopOption = topOptionIds.includes(option.id);
+
+        const bgColor = dark(theme) ? '#8C8C8C' : '#d1d5db';
+        const topColor = dark(theme) ? '#1e1e1e' : '#3380DE';
         const barColor =
-          totalVotes === 0 ? "#d1d5db" : isTopOption ? "#60A7F7" : "#d1d5db";
+          totalVotes === 0 ? bgColor : isTopOption ? topColor : bgColor;
 
         const isVoted = option.id === votedOptionId;
 
@@ -115,7 +122,13 @@ export default function PollOptionsVoteView({
           <div
             key={option.id}
             className={`relative rounded overflow-hidden cursor-pointer border ${
-              isVoted ? "border-gray-400" : "border-gray-300"
+              dark(theme)
+                ? isVoted
+                  ? 'border-2.5 border-[#1e1e1e]'
+                  : 'border-2 border-[#1e1e1e]'
+                : isVoted
+                ? 'border-gray-400'
+                : 'border-gray-300'
             }`}
             onClick={() => handleVote(option.id)}
           >
@@ -124,10 +137,14 @@ export default function PollOptionsVoteView({
               style={{
                 width: `${percentage}%`,
                 backgroundColor: barColor,
-                transition: "width 0.3s ease",
+                transition: 'width 0.3s ease',
               }}
             />
-            <div className="relative flex justify-between items-center px-4 py-2 text-gray-800 z-10">
+            <div
+              className={`relative flex justify-between items-center px-4 py-2  z-10 ${
+                dark(theme) ? 'text-[#ffffff]' : 'text-gray-800'
+              }`}
+            >
               <span>{option.text}</span>
               <span>
                 {option.voteCount} votes ({percentage}%)
@@ -136,7 +153,11 @@ export default function PollOptionsVoteView({
           </div>
         );
       })}
-      <div className="mt-4 text-gray-700 font-medium">
+      <div
+        className={`mt-4  font-medium ${
+          dark(theme) ? 'text-[#ffffff]' : 'text-gray-700'
+        }`}
+      >
         Total Votes: {totalVotes}
       </div>
     </div>

@@ -1,6 +1,7 @@
 // import readAllImg from '../../assets/images/header/notifi.svg';
 import { useNavigate } from 'react-router-dom';
 import close from '../../assets/images/header/close.svg';
+import closeWhite from '../../assets/images/header/closeWhite.svg';
 import alarm from '../../assets/images/header/alarm.svg';
 import alarmWhite from '../../assets/images/header/alarm-white.svg';
 import redDot from '../../assets/RedDotIcon.svg';
@@ -11,10 +12,8 @@ import {
 } from '../../api/notification/notification';
 import { useChannelItemStore } from '../../stores/channelStore';
 import { twMerge } from 'tailwind-merge';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 export default function Notification({ theme }: { theme: Theme }) {
   const { channels } = useChannelItemStore();
@@ -102,7 +101,7 @@ export default function Notification({ theme }: { theme: Theme }) {
           setNotifiOpen(!notifiOpen);
         }}
       >
-        <img src={`${theme.name === 'Dark' ? alarmWhite : alarm}`} />
+        <img src={dark(theme) ? alarmWhite : alarm} />
         {newData > 0 && (
           <span className="block w-3.5 h-3.5 rounded-2xl bg-[#FF0000] absolute -right-1 top-0 text-[11px] text-white leading-3">
             {newData}
@@ -112,20 +111,18 @@ export default function Notification({ theme }: { theme: Theme }) {
       {notifiOpen && (
         <div
           className={`absolute gap-3 rounded-[10px] z-1 py-4 px-5 shadow-2xl w-[340px] z-10 -right-5 top-8.5 ${
-            theme.name === 'Dark' ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+            dark(theme)
+              ? 'bg-[#2d2d2d] text-[#ffffff]'
+              : 'bg-[#ffffff] text-[#111111]'
           }`}
         >
-          <span
-            className={`w-[12px] h-[12px] rounded-[2px] absolute rotate-135 -top-1.5 right-6 -z-2 ${
-              theme.name === 'Dark' ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+          <span className="w-[12px] h-[12px] rounded-[2px] absolute rotate-135 -top-1.5 right-6 -z-2"></span>
+          <div
+            className={`border-b  flex justify-between pb-3 ${
+              dark(theme) ? 'border-[#484848]' : 'border-[#cccccc]'
             }`}
-          ></span>
-          <div className="border-b border-[#cccccc] flex justify-between pb-3">
-            <h3
-              className={` text-base font-medium flex items-end gap-x-2${
-                theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#4D4D4D]'
-              }`}
-            >
+          >
+            <h3 className="text-base font-medium flex items-end gap-x-2">
               Notifications{' '}
               {/* <span className="inline-block bg-zinc-400 rounded-3xl px-2 py-1.5 mb-0.5 min-w-7 text-center text-white text-xs leading-1.5">
                 {newData}
@@ -137,11 +134,7 @@ export default function Notification({ theme }: { theme: Theme }) {
             className="notiList px-2 h-[200px] overflow-y-auto scroll-custom relative"
           >
             {notifications.length === 0 ? (
-              <p
-                className={`absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm ${
-                  theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#5c5c5c]'
-                }`}
-              >
+              <p className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm">
                 알림이 없습니다
               </p>
             ) : (
@@ -168,7 +161,7 @@ export default function Notification({ theme }: { theme: Theme }) {
                         <img
                           className={twMerge(
                             'absolute -left-0.5 top-2',
-                            notifi.seen && 'grayscale-100 opacity-30'
+                            notifi.seen ? 'opacity-40 grayscale' : 'opacity-100'
                           )}
                           src={redDot}
                         />
@@ -190,7 +183,10 @@ export default function Notification({ theme }: { theme: Theme }) {
                 closeHandler();
               }}
             >
-              <img src={close} className="opacity-60" />
+              <img
+                src={dark(theme) ? closeWhite : close}
+                className="opacity-60"
+              />
             </button>
           </div>
         </div>

@@ -7,11 +7,8 @@ import { useAuthStore } from '../../stores/authStore';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../api/auth/login';
 import { AxiosError } from 'axios';
-
-interface Theme {
-  name: string;
-  logo?: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 export default function Login({ theme }: { theme: Theme }) {
   const navigate = useNavigate();
@@ -143,24 +140,20 @@ export default function Login({ theme }: { theme: Theme }) {
         <Button
           value="Log In"
           className={`button-style1 mb-5 mt-2 ${
-            theme.name === 'Dark'
+            dark(theme)
               ? `w-[500px] h-[86px] text-[#ffffff] bg-[#2d2d2d] text-[23px] rounded-[10px] cursor-pointer`
               : ''
           }`}
           onClick={handleSubmit}
         />
         <p className="flex justify-center text-sm">
-          <span
-            className={`opacity-70 ${
-              theme.name === 'Dark' ? 'text-[#ffffff]' : ''
-            }`}
-          >
+          <span className={`opacity-70 ${dark(theme) ? 'text-[#ffffff]' : ''}`}>
             아직 회원이 아니신가요?
           </span>
           <a
             href="/signup"
             className={`ml-2 font-medium  ${
-              theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#1e293b]'
+              dark(theme) ? 'text-[#ffffff]' : 'text-[#1e293b]'
             }`}
           >
             회원가입

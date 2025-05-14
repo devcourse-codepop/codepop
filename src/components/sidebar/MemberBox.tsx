@@ -7,10 +7,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getAllUsersData } from '../../api/memberbox/member';
 import { useAuthStore } from '../../stores/authStore';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 export default function MemberBox({ theme }: { theme: Theme }) {
   const { isLoggedIn, user } = useAuthStore(); // 내 프로필
@@ -59,24 +57,24 @@ export default function MemberBox({ theme }: { theme: Theme }) {
   return (
     <div
       className={`w-[291px] max-h-[calc(100%-240px)] h-[580px] rounded-[10px] shadow-md pl-[30px] pr-[26px]  pt-[20px]  relative overflow-hidden ${
-        theme.name === 'Dark' ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+        dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
       }`}
     >
       <h2
-        className={`font-medium text-[18px] mb-[13px] ${
-          theme.name === 'Dark' ? 'text-[#ACACAA]' : 'text-[#595956]'
+        className={`font-medium text-[18px] mb-[13px]  ${
+          dark(theme) ? 'text-[#acacaa]' : 'text-[#595956]'
         }`}
       >
         Member
       </h2>
-      <div className="flex items-center text-[#898FA3] bg-[#F6F8FA] px-3 py-2 rounded-[5.54px] text-[14px] gap-4 mb-[13px]">
+      <div className="flex items-center px-3 py-2 rounded-[5.54px] text-[14px] gap-4 mb-[13px] bg-[#F6F8FA] text-[#898FA3]">
         <div>
-          <Search className="w-[19.94px] h-[19.94px] text-[#86879C]" />
+          <Search className="w-[19.94px] h-[19.94px] transition-colors duration-300text-[#86879C]" />
         </div>
         <input
           type="text"
           placeholder="멤버를 검색해 보세요"
-          className=" outline-none placeholder:text-[#898FA3] placeholder:text-[14px]w-full"
+          className="outline-none  placeholder:text-[14px]w-full placeholder:text-[#898FA3]"
           onChange={(e) => searchHandler(e)}
         />
       </div>
@@ -116,11 +114,17 @@ export default function MemberBox({ theme }: { theme: Theme }) {
               onClick={() => ToggleHandelr(user._id)}
             >
               <img
-                src={`${theme.name === 'Dark' ? menuIconWhite : menuIcon}`}
+                src={dark(theme) ? menuIconWhite : menuIcon}
                 className="rotate-90"
               />
               {openUser === user._id && (
-                <ul className="avatarMenu absolute text-xs w-27 right-5 top-0 bg-white rounded-[5px] border border-[#ddd] text-left z-2 py-1">
+                <ul
+                  className={`avatarMenu absolute text-xs w-27 right-5 top-0 rounded-[5px] text-left z-2 py-1 ${
+                    dark(theme)
+                      ? 'bg-[#2d2d2d] text-[#ffffff] border border-white/40'
+                      : 'bg-[#ffffff] border border-[#ddd]'
+                  }`}
+                >
                   <li>
                     <Link
                       className="px-3 py-1 block opacity-70 hover:opacity-100"

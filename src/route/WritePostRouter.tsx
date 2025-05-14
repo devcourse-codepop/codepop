@@ -2,10 +2,7 @@ import { useParams } from 'react-router-dom';
 import CreateCodePost from '../pages/write/CreateCodePost';
 import CreateSetPost from '../pages/write//CreateSetPost';
 import CreateVotePost from '../pages/write/CreateVotePost';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../types/ darkModeTypes';
 
 const ChannelWriteRouter: React.FC<{ theme: Theme }> = ({ theme }) => {
   const { channelId } = useParams<{ channelId: string }>();

@@ -1,7 +1,9 @@
 import ChannelName from '../components/channel/ChannelName';
 import PostListItem from '../components/post/PostListItem';
 import postBtn from '../assets/PostBtn.svg';
+import postBtnWhite from '../assets/PostBtnWhite.svg';
 import topBtn2 from '../assets/images/topBtn2.png';
+import topBtn2White from '../assets/images/topBtn2_white.png';
 import { useEffect, useRef, useState } from 'react';
 import { Search } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -10,10 +12,8 @@ import { usePostStore } from '../stores/postStore';
 import { Post } from '../types';
 import dayjs from 'dayjs';
 import { useAuthStore } from '../stores/authStore';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../types/ darkModeTypes';
+import { dark } from '../utils/ darkModeUtils';
 
 export default function PostList({ theme }: { theme: Theme }) {
   const params = useParams();
@@ -39,6 +39,8 @@ export default function PostList({ theme }: { theme: Theme }) {
 
   const [showTopButton, setShowTopButton] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  const imgSize = dark(theme) ? 'w-[32px] h-[32px]' : 'w-5 h-5';
 
   const getDatetimeFormat = (update: string): string => {
     const date = dayjs(update);
@@ -188,18 +190,26 @@ export default function PostList({ theme }: { theme: Theme }) {
         </div>
       </div>
       {showTopButton && (
-        <div className="absolute right-[39%] bottom-[38px] cursor-pointer flex justify-center items-center w-14 h-14 rounded-[50%] bg-white shadow-[1px_3px_3px_rgba(0,0,0,0.25)]">
+        <div
+          className={`absolute right-[39%] bottom-[38px] cursor-pointer flex justify-center items-center w-14 h-14 rounded-[50%]  shadow-[1px_3px_3px_rgba(0,0,0,0.25)] ${
+            dark(theme) ? 'bg-[#1e1e1e]' : 'bg-[#ffffff]'
+          }`}
+        >
           <img
-            src={topBtn2}
+            src={dark(theme) ? topBtn2White : topBtn2}
             onClick={scrollToTop}
             alt="top 버튼"
-            className="w-5 h-5"
+            className={`${imgSize} cursor-pointer`}
           />
         </div>
       )}
       {isLogin && (
         <div className="absolute right-35 bottom-5 cursor-pointer">
-          <img src={postBtn} onClick={createNewPost} alt="게시글 작성 버튼" />
+          <img
+            src={dark(theme) ? postBtnWhite : postBtn}
+            onClick={createNewPost}
+            alt="게시글 작성 버튼"
+          />
         </div>
       )}
     </>

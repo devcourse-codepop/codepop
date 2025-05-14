@@ -1,9 +1,7 @@
 import imageIcon from '../../assets/ImageIcon.svg';
 import imageIconWhite from '../../assets/ImageIconWhite.svg';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 export default function ImageIcon({
   onClick,
@@ -15,7 +13,7 @@ export default function ImageIcon({
   return (
     <>
       <img
-        src={`${theme.name === 'Dark' ? imageIconWhite : imageIcon}`}
+        src={dark(theme) ? imageIconWhite : imageIcon}
         className="w-[30px] h-[30px] inline-block cursor-pointer"
         onClick={onClick}
       />

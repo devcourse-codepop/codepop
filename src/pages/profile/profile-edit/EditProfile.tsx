@@ -11,10 +11,8 @@ import { useAuthStore } from '../../../stores/authStore';
 import defaultProfileImage from '../../../assets/images/profile/defaultProfileImage.jpg';
 import defaultCover from '../../../assets/images/profile/defaultCover.png';
 import { useNavigate } from 'react-router-dom';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../../types/ darkModeTypes';
+import { dark } from '../../../utils/ darkModeUtils';
 
 export default function EditProfile({
   userId,
@@ -223,7 +221,7 @@ export default function EditProfile({
     <>
       <div
         className={`w-full h-[calc(100vh-100px-30px)] rounded-[10px] shadow-md font-semibold ${
-          theme.name === 'Dark' ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+          dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
         }`}
       >
         <div className="relative h-[223px] rounded-t-[10px]">
@@ -247,6 +245,7 @@ export default function EditProfile({
                 onEdit={() => setIsModalOpen(true)}
                 onDelete={handleDelete}
                 onClose={() => setIsBackgroundMenuOpen(false)}
+                theme={theme}
               />
             )}
           </div>
@@ -274,6 +273,7 @@ export default function EditProfile({
                   onEdit={() => setIsModalOpen(true)}
                   onDelete={handleDelete}
                   onClose={() => setIsProfileMenuOpen(false)}
+                  theme={theme}
                 />
               )}
             </div>
@@ -285,7 +285,7 @@ export default function EditProfile({
           >
             <p
               className={`pt-[35px] font-bold text-[14px] ${
-                theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+                dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
               }`}
             >
               이름
@@ -293,9 +293,7 @@ export default function EditProfile({
             <Input
               type="text"
               value={enteredUserValues.myName}
-              className={`input-profile ${
-                theme.name === 'Dark' ? 'bg-[#ffffff]' : ''
-              }`}
+              className={`input-profile ${dark(theme) ? 'bg-[#ffffff]' : ''}`}
               onChange={(event) =>
                 handleInputChange('myName', event.target.value)
               }
@@ -306,7 +304,7 @@ export default function EditProfile({
 
             <p
               className={`mt-[22px] font-bold text-[14px] ${
-                theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+                dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
               }`}
             >
               이메일
@@ -316,13 +314,13 @@ export default function EditProfile({
               value={userData.email}
               readOnly
               className={`input-profile bg-[#e3e3e3] text-black/50 ${
-                theme.name === 'Dark' ? 'bg-[#e3e3e3] opacity-50' : ''
+                dark(theme) ? 'bg-[#e3e3e3] opacity-50' : ''
               }`}
             />
 
             <p
               className={`mt-[22px] font-bold text-[14px] ${
-                theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+                dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
               }`}
             >
               비밀번호
@@ -330,9 +328,7 @@ export default function EditProfile({
             <Input
               type="password"
               placeholder="Password"
-              className={`input-profile ${
-                theme.name === 'Dark' ? 'bg-[#ffffff]' : ''
-              }`}
+              className={`input-profile ${dark(theme) ? 'bg-[#ffffff]' : ''}`}
               value={enteredUserValues.password}
               onChange={(event) =>
                 handleInputChange('password', event.target.value)
@@ -343,7 +339,7 @@ export default function EditProfile({
             </p>
             <p
               className={`mt-[22px] font-bold text-[14px] ${
-                theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+                dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
               }`}
             >
               비밀번호 확인
@@ -351,9 +347,7 @@ export default function EditProfile({
             <Input
               type="password"
               placeholder="Password"
-              className={`input-profile ${
-                theme.name === 'Dark' ? 'bg-[#ffffff]' : ''
-              }`}
+              className={`input-profile ${dark(theme) ? 'bg-[#ffffff]' : ''}`}
               value={enteredUserValues.confirmPassword}
               onChange={(event) =>
                 handleInputChange('confirmPassword', event.target.value)
@@ -367,7 +361,7 @@ export default function EditProfile({
               <Button
                 value="수정"
                 className={`button-edit ${
-                  theme.name === 'Dark' ? 'bg-[#ffffff] text-[#111111]' : ''
+                  dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
                 }`}
               />
             </div>

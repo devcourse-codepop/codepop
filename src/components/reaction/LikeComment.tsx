@@ -8,10 +8,8 @@ import { Like } from '../../types';
 import { deleteLikes, postLikes, postNotifications } from '../../api/post/post';
 import { useAuthStore } from '../../stores/authStore';
 import NotLoginModal from '../post/NotLoginModal';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 interface LikeCommentProps {
   likeCount: number;
@@ -105,20 +103,14 @@ export default function LikeComment({
     <div className="flex justify-end items-center gap-5 p-4">
       <div className="flex items-center gap-1.5">
         <img
-          src={
-            checkLike
-              ? likeRed
-              : theme.name === 'Dark'
-              ? likeClickWhite
-              : likeClick
-          }
+          src={checkLike ? likeRed : dark(theme) ? likeClickWhite : likeClick}
           alt="좋아요"
           className="w-5 h-5 cursor-pointer"
           onClick={clickLikes}
         />
         <span
           className={`text-sm ${
-            theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+            dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
           }`}
         >
           {like}
@@ -127,13 +119,13 @@ export default function LikeComment({
 
       <div className="flex items-center gap-[10px]">
         <img
-          src={theme.name === 'Dark' ? commentWhite : comment}
+          src={dark(theme) ? commentWhite : comment}
           alt="댓글"
           className="w-5 h-5 relative top-[1px]"
         />
         <span
           className={`text-sm ${
-            theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+            dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
           }`}
         >
           {commentCount}

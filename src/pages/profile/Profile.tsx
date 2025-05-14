@@ -3,10 +3,8 @@ import ProfileLeft from './ProfileLeft';
 import ProfileRight from './ProfileRight';
 import { getUserData } from '../../api/profileInfo/profile';
 import defaultCover from '../../assets/images/profile/defaultCover.png';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 export default function Profile({
   userId,
@@ -44,7 +42,7 @@ export default function Profile({
   return (
     <div
       className={`w-full h-[calc(100vh-100px-30px)] rounded-[10px] shadow-md font-semibold overflow-hidden flex flex-col ${
-        theme.name === 'Dark' ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+        dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
       }`}
     >
       <div className="h-[223px] flex-shrink-0">

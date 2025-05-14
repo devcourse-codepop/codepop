@@ -1,11 +1,9 @@
 import { twMerge } from 'tailwind-merge';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 interface ChannelNameProps {
   channelId: string;
-}
-
-interface Theme {
-  name: string;
 }
 
 interface ChannelNameProps {
@@ -20,7 +18,7 @@ export default function ChannelName({ channelId, theme }: ChannelNameProps) {
     { subtitle: '"골라봐"', title: '선택의 갈림길에서 함께 답을 찾는 채널' },
   ];
 
-  const textColor = theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]';
+  const textColor = dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]';
 
   return (
     <div className="flex gap-3">
@@ -28,11 +26,11 @@ export default function ChannelName({ channelId, theme }: ChannelNameProps) {
         className={twMerge(
           'h-15 w-1 bg-blue-500 rounded-sm ',
           channelId === '1' &&
-            `${theme.name === 'Dark' ? 'bg-[#19a9be]' : 'bg-[#10215c]'}`,
+            `${dark(theme) ? 'bg-[#19a9be]' : 'bg-[#10215c]'}`,
           channelId === '2' &&
-            `${theme.name === 'Dark' ? 'bg-[#3380de]' : 'bg-[#3380DE]'}`,
+            `${dark(theme) ? 'bg-[#3380de]' : 'bg-[#3380DE]'}`,
           channelId === '3' &&
-            `${theme.name === 'Dark' ? 'bg-[#9e68e9]' : 'bg-[#60A7F7]'}`
+            `${dark(theme) ? 'bg-[#9e68e9]' : 'bg-[#60A7F7]'}`
         )}
       />
       <div className="flex flex-col items-start self-center">

@@ -1,8 +1,6 @@
 import { useRef, useState } from 'react';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../../types/ darkModeTypes';
+import { dark } from '../../../utils/ darkModeUtils';
 
 interface PhotoUploadModalProps2 extends PhotoUploadModalProps {
   theme: Theme;
@@ -67,7 +65,7 @@ export default function PhotoUploadModal({
       <div className="absolute inset-0 bg-black opacity-40 backdrop-blur-none"></div>
       <div
         className={`p-6 rounded-[5px] w-96 shadow-lg relative ${
-          theme.name === 'Dark' ? 'bg-[#2D2D2D]' : 'bg-[#ffffff]'
+          dark(theme) ? 'bg-[#2D2D2D]' : 'bg-[#ffffff]'
         }`}
         onClick={(e) => e.stopPropagation()}
         onDrop={handleDrop}
@@ -75,7 +73,7 @@ export default function PhotoUploadModal({
       >
         <h2
           className={`text-lg font-bold mb-4 ${
-            theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+            dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
           }`}
         >
           사진 업로드
@@ -93,9 +91,7 @@ export default function PhotoUploadModal({
           ) : (
             <p
               className={` ${
-                theme.name === 'Dark'
-                  ? 'text-[#ffffff] opacity-50'
-                  : 'text-gray-500'
+                dark(theme) ? 'text-[#ffffff] opacity-50' : 'text-gray-500'
               }`}
             >
               클릭하거나 파일을 드래그하여 업로드
@@ -112,7 +108,7 @@ export default function PhotoUploadModal({
         <div className="flex justify-end gap-2 mt-6">
           <button
             className={`px-4 py-2   cursor-pointer ${
-              theme.name === 'Dark'
+              dark(theme)
                 ? 'text-[#ffffff] opacity-60'
                 : 'text-gray-600 hover:text-gray-800'
             }`}
@@ -122,7 +118,7 @@ export default function PhotoUploadModal({
           </button>
           <button
             className={` px-4 py-2 rounded-[5px] cursor-pointer ${
-              theme.name === 'Dark'
+              dark(theme)
                 ? 'bg-[#ffffff] text-[#111111]'
                 : 'bg-[#1E293B] text-white'
             }`}

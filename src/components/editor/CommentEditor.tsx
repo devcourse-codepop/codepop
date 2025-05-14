@@ -5,10 +5,8 @@ import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import Button from '../common/Button';
 import CommentEditorToolbar from './CommentEditorToolbar';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 interface Props {
   channelId: string;
@@ -68,7 +66,7 @@ export default function CommentEditor({
     [&_.ProseMirror_pre]:whitespace-pre-wrap
 
     ${
-      theme.name === 'Dark'
+      dark(theme)
         ? '[&_.ProseMirror_pre]:bg-[#1e1e1e] [&_.ProseMirror_pre]:text-[#ffffff]'
         : '[&_.ProseMirror_pre]:bg-[#ececec] [&_.ProseMirror_pre]:text-[#111111]'
     }
@@ -89,7 +87,7 @@ export default function CommentEditor({
         <Button
           value="댓글 달기"
           className={`button-style3 ${
-            theme.name === 'Dark' ? 'bg-[#ffffff] text-[#111111]' : ''
+            dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
           }`}
           onClick={(e) => submitHandler(e)}
         />

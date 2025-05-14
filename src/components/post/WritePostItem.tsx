@@ -3,10 +3,8 @@ import Button from '../common/Button';
 import ImageIcon from '../icon/ImageIcon';
 import CodeEditIcon from '../icon/CodeEditIcon';
 import VoteIcon from '../icon/VoteIcon';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 export default function WritePostItem({
   channelId,
@@ -74,7 +72,7 @@ export default function WritePostItem({
     <>
       <div
         className={`w-full h-auto rounded-[5px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] ${
-          theme.name === 'Dark' ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+          dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
         }`}
       >
         <form onSubmit={(e) => submitHandler(e)}>

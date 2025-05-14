@@ -1,9 +1,6 @@
 import Banner from '../components/main-content/Banner';
 import PopularPost from '../components/main-content/PopularPost';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../types/ darkModeTypes';
 
 export default function MainContent({ theme }: { theme: Theme }) {
   return (

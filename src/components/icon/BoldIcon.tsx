@@ -1,9 +1,6 @@
 import boldIcon from '../../assets/BoldIcon.svg';
 import boldIconWhite from '../../assets/BoldIconWhite.svg';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
 
 export default function BoldIcon({ theme }: { theme: Theme }) {
   return (

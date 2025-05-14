@@ -1,9 +1,6 @@
 import { useAuthStore } from '../../../stores/authStore';
+import { Theme } from '../../../types/ darkModeTypes';
 import EditProfile from './EditProfile';
-
-interface Theme {
-  name: string;
-}
 
 export default function EditProfilePage({ theme }: { theme: Theme }) {
   const user = useAuthStore((state) => state.user);

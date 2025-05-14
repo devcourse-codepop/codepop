@@ -11,11 +11,8 @@ import {
   passwordRegex,
 } from '../../utils/validators';
 import { AxiosError } from 'axios';
-
-interface Theme {
-  name: string;
-  logo?: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 export default function SignUp({ theme }: { theme: Theme }) {
   const navigate = useNavigate();
@@ -345,7 +342,7 @@ export default function SignUp({ theme }: { theme: Theme }) {
         <Button
           value="Sign Up"
           className={`button-style1 mt-2 ${
-            theme.name === 'Dark'
+            dark(theme)
               ? `w-[500px] h-[86px] text-[#ffffff] bg-[#2d2d2d] text-[23px] rounded-[10px] cursor-pointer`
               : ''
           }`}

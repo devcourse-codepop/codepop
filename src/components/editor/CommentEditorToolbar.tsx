@@ -1,9 +1,6 @@
 import { Editor } from '@tiptap/react';
 import CodeEditIcon from '../icon/CodeEditIcon';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
 
 interface Props {
   editor: Editor | null;

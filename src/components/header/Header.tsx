@@ -3,18 +3,17 @@ import Notification from '../notification/Notification';
 import { useAuthStore } from '../../stores/authStore';
 import moon from '../../assets/images/toggle/moon.svg';
 import sun from '../../assets/images/toggle/sun.svg';
-
-interface Theme {
-  logo?: string;
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 export default function Header({
   theme,
   nextTheme,
+  nextThemeIndex,
 }: {
   theme: Theme;
   nextTheme: () => void;
+  nextThemeIndex: number;
 }) {
   const { isLoggedIn, logout } = useAuthStore();
   const navigator = useNavigate();
@@ -41,7 +40,7 @@ export default function Header({
             <Link
               to="/login"
               className={`text-[20px] ${
-                theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+                dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
               }`}
             >
               Login
@@ -54,7 +53,7 @@ export default function Header({
                 to="/"
                 onClick={logout}
                 className={`text-[20px] ${
-                  theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+                  dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
                 }`}
               >
                 Logout
@@ -73,7 +72,7 @@ export default function Header({
           {/* 다크모드 버튼 */}
           <div
             className={`w-10 h-10 rounded-full flex justify-center items-center transition-colors duration-300 ${
-              theme.name === 'Dark' ? 'bg-black' : 'bg-white'
+              nextThemeIndex === 1 ? 'bg-black' : 'bg-white'
             }`}
           >
             <button
@@ -81,7 +80,7 @@ export default function Header({
               className="w-full h-full flex justify-center items-center"
             >
               <img
-                src={theme.name === 'Dark' ? moon : sun}
+                src={nextThemeIndex === 1 ? moon : sun}
                 alt="해, 달 이미지"
                 className="w-6 h-6 transition-transform duration-300"
               />

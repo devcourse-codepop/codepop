@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react';
 import Pagination from 'react-js-pagination';
 import { getAuthorPostData, getPostData } from '../../api/post/post';
-// import comment from '../../assets/images/comment-outline.svg';
-// import commentWhite from '../../assets/images/commentWhite.svg';
+import commentWhite from '../../assets/images/commentWhite.svg';
 import commentIcon from '../../assets/images/comment-outline.svg';
 import { useNavigate } from 'react-router-dom';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 interface ProfileRightProps extends UserPostInfo {
   theme: Theme;
@@ -134,15 +131,25 @@ export default function ProfileRight({
     <div className="ml-[26px] ">
       <p
         className={`mt-[40px] font-semibold text-[18px] ${
-          theme.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+          dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
         }`}
       >
         {tabLabels[selectedTab]}
       </p>
 
-      <div className={'mt-[31px] w-[682px] min-h-[365px]'}>
+      <div
+        className={`mt-[31px] w-[682px] min-h-[365px] ${
+          dark(theme) ? 'text-[#ffffff]' : ''
+        }`}
+      >
         {userPostData && userPostData.length === 0 && (
-          <p className="text-center whitespace-pre-line text-gray-500 text-sm py-45 border-t-2 leading-[3rem]">
+          <p
+            className={`text-center whitespace-pre-line text-sm py-45 border-t-2 leading-[3rem] ${
+              dark(theme)
+                ? 'border-t-white/60 text-[#ffffff]/60'
+                : 'text-gray-500 '
+            }`}
+          >
             {emptyText[selectedTab]}
           </p>
         )}
@@ -155,10 +162,20 @@ export default function ProfileRight({
               className={`relative flex flex-col gap-2 border-b-2 
                 ${
                   i !== currentPosts.length - 1
-                    ? 'border-b-black/30'
+                    ? dark(theme)
+                      ? 'border-b-white/30'
+                      : 'border-b-black/30'
+                    : dark(theme)
+                    ? 'border-b-white/60'
                     : 'border-b-black/60'
                 }
-                ${i === 0 ? 'border-t-2 border-t-black/60' : ''} 
+                ${
+                  i === 0
+                    ? dark(theme)
+                      ? 'border-t-2 border-t-white/60'
+                      : 'border-t-2 border-t-black/60'
+                    : ''
+                } 
                 ${selectedTab === 'comments' ? 'py-[6px]' : 'py-4'}`}
             >
               <div className="relative flex items-center py-0.5">
@@ -179,8 +196,17 @@ export default function ProfileRight({
 
                   {selectedTab === 'comments' && post.comments.length > 0 && (
                     <div className="mt-1 text-[12px] text-gray-700 flex">
-                      <img src={commentIcon} />
-                      <p className="ml-[5px]">+{post.myCommentCount}개</p>
+                      <img
+                        src={dark(theme) ? commentWhite : commentIcon}
+                        className="w-5 h-5"
+                      />
+                      <p
+                        className={`ml-[5px] ${
+                          dark(theme) ? 'text-[#ffffff]' : ''
+                        }`}
+                      >
+                        +{post.myCommentCount}개
+                      </p>
                     </div>
                   )}
                 </div>
@@ -195,7 +221,11 @@ export default function ProfileRight({
       </div>
 
       {userPostData && userPostData.length > postsPerPage && (
-        <div className="mt-8 flex justify-center">
+        <div
+          className={`mt-8 flex justify-center ${
+            dark(theme) ? 'text-[#ffffff]' : ''
+          }`}
+        >
           <Pagination
             activePage={currentPage}
             itemsCountPerPage={postsPerPage}
@@ -224,7 +254,9 @@ export default function ProfileRight({
             }
             innerClass="flex gap-2 text-sm"
             itemClass="px-3 py-1 rounded-[5px] cursor-pointer"
-            activeClass="bg-[#1E293B] text-white"
+            activeClass={`bg-[#1E293B] text-white ${
+              dark(theme) ? 'bg-[#1e1e1e]' : ''
+            }`}
           />
         </div>
       )}

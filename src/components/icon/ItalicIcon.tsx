@@ -1,15 +1,13 @@
 import italicIcon from '../../assets/ItalicIcon.svg';
 import italicIconWhite from '../../assets/ItalicIconWhite.svg';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 export default function ItalicIcon({ theme }: { theme: Theme }) {
   return (
     <>
       <img
-        src={`${theme.name === 'Dark' ? italicIconWhite : italicIcon}`}
+        src={dark(theme) ? italicIconWhite : italicIcon}
         className="w-[30px] h-[30px] inline-block cursor-pointer"
       />
     </>

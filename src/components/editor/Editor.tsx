@@ -5,10 +5,8 @@ import EditorToolbar from './EditorToolbar';
 import { CustomImage } from './extensions/CustomImage';
 import { useState, useEffect } from 'react';
 import PollCreator from '../poll/PollCreater';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 interface Props {
   onChange: (html: string) => void;
@@ -74,7 +72,7 @@ export default function Editor({
           [&_.ProseMirror_img]:h-auto
 
           ${
-            theme.name === 'Dark'
+            dark(theme)
               ? '[&_.ProseMirror_pre]:bg-[#1e1e1e] [&_.ProseMirror_pre]:text-[#ffffff]'
               : '[&_.ProseMirror_pre]:bg-[#ececec] [&_.ProseMirror_pre]:text-[#111111]'
           }
@@ -84,7 +82,7 @@ export default function Editor({
       />
 
       {showPollCreator && onPollCreate && (
-        <PollCreator onCreate={onPollCreate} />
+        <PollCreator onCreate={onPollCreate} theme={theme} />
       )}
     </div>
   );

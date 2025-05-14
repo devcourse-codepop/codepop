@@ -1,8 +1,5 @@
-//import userImg from '../../assets/images/header/userImg.svg';
-
-interface Theme {
-  name: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 interface AvatarProps {
   name: string;
@@ -41,14 +38,14 @@ export default function Avatar({
       <div className="flex flex-col w-full pr-5 box-content">
         <span
           className={`text-sm font-semibold line-clamp-1 break-all ${
-            theme?.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+            dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
           }`}
         >
           {name ? name : '탈퇴한 회원'}
         </span>
         <span
           className={`text-xs opacity-60 break-all leading-[17px] line-clamp-2 ${
-            theme?.name === 'Dark' ? 'text-[#ffffff]' : 'text-[#111111]'
+            dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
           }`}
         >
           {email}
