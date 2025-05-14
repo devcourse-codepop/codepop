@@ -1,7 +1,7 @@
 import menuIcon from '../../assets/MenuIcon.svg';
 import { Search } from 'lucide-react';
 import Avatar from '../avatar/Avatar';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getAllUsersData } from '../../api/memberbox/member';
 import { useAuthStore } from '../../stores/authStore';
@@ -17,11 +17,15 @@ export default function MemberBox() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatTargetUser, setChatTargetUser] = useState<User1 | null>(null);
   const onClose = useChatClose(setIsChatOpen);
+  const modalRef = useRef<HTMLUListElement>(null);
+
+  // api 유저 요청, 접속 된 유저 먼저 정렬
   const fetchUsers = async () => {
     const result = await getAllUsersData();
     setUsers(
       result.data.sort((a, b) => {
         if (a.isOnline === b.isOnline) {
+          // 유저 이름 비교후 오름차순으로 정렬
           return a.fullName.localeCompare(b.fullName);
         }
         return a.isOnline ? -1 : 1;
@@ -29,6 +33,7 @@ export default function MemberBox() {
     );
   };
 
+  // 유저가져오기, 유저들 접속 감지를 위해 2초마다 갱신
   useEffect(() => {
     fetchUsers();
 
@@ -37,16 +42,19 @@ export default function MemberBox() {
     return () => clearInterval(interval);
   }, []);
 
+  // 검색창의 검색어 가져오기
   const searchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value.toUpperCase());
   };
 
+  // 유저 filter
   const filterUsers = users.filter(
     (user) =>
       user.fullName.toLowerCase().includes(searchKeyword.toLowerCase()) ||
       user.email.toLowerCase().includes(searchKeyword.toLowerCase())
   );
 
+  // 헤딩 id값의 modal 열기
   const ToggleHandelr = (id: string) => {
     if (openUser === id) {
       setOpenUser('');
@@ -54,6 +62,18 @@ export default function MemberBox() {
       setOpenUser(id);
     }
   };
+
+  // 해당 modal이 아닌 경우 열려 있는 modal 닫기
+  useEffect(() => {
+    const clickHandler = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        setOpenUser('');
+      }
+    };
+
+    window.addEventListener('mousedown', clickHandler);
+    return () => window.removeEventListener('mousedown', clickHandler);
+  }, [modalRef]);
 
   return (
     <div className='w-[291px] max-h-[calc(100%-240px)] h-[580px] bg-white rounded-[10px] shadow-md pl-[30px] pr-[26px]  pt-[20px]  relative overflow-hidden'>
@@ -87,15 +107,20 @@ export default function MemberBox() {
           height: isLoggedIn ? `calc(100% - 161px)` : `calc(100% - 91px)`,
         }}
       >
+        {/* 유저멤버 카드 */}
         {filterUsers.map((user) => (
-          <div className='relative' key={user._id}>
+          <div className='relative' key={user._id} id={user._id}>
             <div className='memberCard cursor-pointer' onClick={() => ToggleHandelr(user._id)}>
               <Avatar name={user.fullName} email={user.email} image={user.image} isOnline={user.isOnline}></Avatar>
             </div>
+            {/* 프로필 클릭시 나오는 modal */}
             <button className='absolute right-0 top-4 cursor-pointer' onClick={() => ToggleHandelr(user._id)}>
               <img src={menuIcon} className='rotate-90' />
               {openUser === user._id && (
-                <ul className='avatarMenu absolute text-xs w-27 right-5 top-0 bg-white rounded-[5px] border border-[#ddd] text-left z-2 py-1'>
+                <ul
+                  ref={modalRef}
+                  className='avatarMenu absolute text-xs w-27 right-5 top-0 bg-white rounded-[5px] border border-[#ddd] text-left z-2 py-1'
+                >
                   <li>
                     <Link
                       className='px-3 py-1 block opacity-70 hover:opacity-100'

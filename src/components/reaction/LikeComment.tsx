@@ -94,7 +94,7 @@ export default function LikeComment({
   }, [user, likes]);
 
   return (
-    <div className="flex justify-end items-center gap-5 p-4">
+    <div className="reaction flex justify-end items-center gap-5 p-4">
       <div className="flex items-center gap-1.5">
         <img
           src={checkLike ? likeRed : likeClick}
