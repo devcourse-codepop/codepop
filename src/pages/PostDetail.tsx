@@ -31,19 +31,15 @@ export default function PostDetail() {
 
   // 해당 게시글만 필터링
   const filteringItem = (data: Post[]) => {
-    console.log('filteringItem');
     for (const res of data) {
       if (res._id === post) {
         setPostItem(structuredClone(res));
-        console.log('setPostItem');
-        console.log('reloadTrigger :', reloadTrigger);
       }
     }
   };
 
   // 게시글 목록 불러오기 (게시글 id에 해당하는 게시글만 필터링)
   const getPostItem = async () => {
-    console.log('getPostItem');
     try {
       const { data } = await getPostList(channelIdList[Number(channel) - 1]);
       filteringItem(data);
