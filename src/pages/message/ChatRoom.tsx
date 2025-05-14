@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { User } from './ChatModal';
+import { User1 } from './ChatModal';
 import ChatHeader from './ChatHeader';
 import messageSendBtn from '../../assets/images/message-send-btn.svg';
 
 interface ChatRoomProps {
-  user: User;
+  user: User1;
   onBack: () => void;
   onClose: () => void;
 }
@@ -32,17 +32,17 @@ export default function ChatRoom({ user, onBack, onClose }: ChatRoomProps) {
       <ChatHeader userName={user.name} onBack={onBack} onClose={onClose} />
 
       {/* 대화 내용 */}
-      <div className='flex-1 overflow-y-auto p-2 font-normal px-[30px] space-y-3'>
-        <p className='text-center font-medium text-[13px] mt-[18px] '>2025.05.13 (화)</p>
+      <div className='flex-1 overflow-y-auto p-2 font-normal px-[30px] space-y-3 messageBox'>
+        <p className='text-center font-medium text-[13px] mt-[10px] mb-[30px]'>2025.05.13 (화)</p>
         {messages.map((msg, idx) => (
-          <div key={idx} className='flex justify-end'>
+          <div key={idx} className='flex justify-end '>
             {/* 읽음 표시 + 시간 */}
             <div className='flex flex-col justify-end items-end mr-2 text-xs font-normal'>
               <span className='text-[#1E293B]'>1</span>
               <span className='text-black/50'>11:11</span>
             </div>
             {/* 메시지 내용 */}
-            <div className='bg-[#1E293B] text-white p-2.5 rounded-b-[10px] rounded-tl-[10px] max-w-[75%] break-words'>
+            <div className='bg-[#1E293B] text-white p-2.5 rounded-b-[10px] rounded-tl-[10px]   max-w-[75%] break-words pl-3'>
               {msg}
             </div>
           </div>
