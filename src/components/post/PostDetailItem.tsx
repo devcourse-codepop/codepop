@@ -6,7 +6,7 @@ import { Comment, Post } from '../../types';
 import dayjs from 'dayjs';
 import { getPostList } from '../../api/post/post';
 import { usePostStore } from '../../stores/postStore';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import CommentListItem from './CommentListItem';
 import { useAuthStore } from '../../stores/authStore';
 import DOMPurify from 'dompurify';
@@ -178,12 +178,14 @@ export default function PostDetailItem({
     <>
       <div className="w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative">
         <div className="flex justify-between h-[85px] pl-3 pt-2.5">
-          <Avatar
-            name={author.fullName}
-            email={author.email}
-            image={author.image}
-            isOnline={author.isOnline}
-          />
+          <Link to={`/profile`} state={{ userid: author?._id }}>
+            <Avatar
+              name={author.fullName}
+              email={author.email}
+              image={author.image}
+              isOnline={author.isOnline}
+            />
+          </Link>
           {/* 로그인한 사용자 id 값과 해당 게시글 작성자 id 값이 일치할 경우 */}
           {isUser && (
             <>

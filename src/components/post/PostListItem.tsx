@@ -2,7 +2,7 @@ import Avatar from '../avatar/Avatar';
 import LikeComment from '../reaction/LikeComment';
 import { Post } from '../../types';
 import dayjs from 'dayjs';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 import { useState } from 'react';
 import { useAuthStore } from '../../stores/authStore';
@@ -102,13 +102,16 @@ export default function PostListItem(props: Post) {
     <>
       <div className="w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative">
         <div className="flex justify-between h-[85px] pl-3 pt-2.5">
-          <Avatar
-            name={author?.fullName}
-            email={author?.email}
-            image={author?.image}
-            isOnline={author?.isOnline}
-          />
+          <Link to={`/profile`} state={{ userid: author?._id }}>
+            <Avatar
+              name={author?.fullName}
+              email={author?.email}
+              image={author?.image}
+              isOnline={author?.isOnline}
+            />
+          </Link>
         </div>
+
         <div
           className={twMerge(
             'flex justify-between px-[55px] py-[15px] gap-[55px] cursor-pointer',

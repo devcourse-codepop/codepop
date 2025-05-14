@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 import { Comment } from '../../types';
 import { useAuthStore } from '../../stores/authStore';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import CheckDeleteModal from './CheckDeleteModal';
 
@@ -121,12 +121,20 @@ export default function CommentListItem({
       <div className="h-auto rounded-[5px] bg-white border border-[#b4b4b4] mx-7 mb-[30px] relative">
         <div className="flex justify-between pt-2.5">
           <div className="flex items-center gap-3 pl-4 pt-1">
-            <img
-              src={author.image ? author.image : userImg}
-              alt="사용자"
-              className="w-9 h-9 rounded-[50%]"
-            />
-            <span className="text-[13px] font-semibold">{author.fullName}</span>
+            <Link
+              to={`/profile`}
+              state={{ userid: author?._id }}
+              className="flex items-center gap-2"
+            >
+              <img
+                src={author.image ? author.image : userImg}
+                alt="사용자"
+                className="w-9 h-9 rounded-full"
+              />
+              <span className="text-[13px] font-semibold">
+                {author.fullName}
+              </span>
+            </Link>
             <span className="text-[11px] opacity-60 font-light">
               {getElapsedTime()}
             </span>
