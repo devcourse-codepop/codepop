@@ -36,6 +36,12 @@ export default function ChatRoom({ user, onBack, onClose }: ChatRoomProps) {
         <p className='text-center font-medium text-[13px] mt-[18px] '>2025.05.13 (화)</p>
         {messages.map((msg, idx) => (
           <div key={idx} className='flex justify-end'>
+            {/* 읽음 표시 + 시간 */}
+            <div className='flex flex-col justify-end items-end mr-2 text-xs font-normal'>
+              <span className='text-[#1E293B]'>1</span>
+              <span className='text-black/50'>11:11</span>
+            </div>
+            {/* 메시지 내용 */}
             <div className='bg-[#1E293B] text-white p-2.5 rounded-b-[10px] rounded-tl-[10px] max-w-[75%] break-words'>
               {msg}
             </div>
