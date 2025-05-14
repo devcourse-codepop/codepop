@@ -1,17 +1,17 @@
-import Avatar from "../avatar/Avatar";
-import LikeComment from "../reaction/LikeComment";
-import menuIcon from "../../assets/MenuIcon.svg";
-import { useEffect, useState } from "react";
-import { Comment, Post } from "../../types";
-import dayjs from "dayjs";
-import { getPostList } from "../../api/post/post";
-import { usePostStore } from "../../stores/postStore";
-import { useNavigate, useParams } from "react-router-dom";
-import CommentListItem from "./CommentListItem";
-import { useAuthStore } from "../../stores/authStore";
-import DOMPurify from "dompurify";
-import PollOptionsVoteView from "../poll/PollOptionsVoteView";
-import CheckDeleteModal from "./CheckDeleteModal";
+import Avatar from '../avatar/Avatar';
+import LikeComment from '../reaction/LikeComment';
+import menuIcon from '../../assets/MenuIcon.svg';
+import { useEffect, useState } from 'react';
+import { Comment, Post } from '../../types';
+import dayjs from 'dayjs';
+import { getPostList } from '../../api/post/post';
+import { usePostStore } from '../../stores/postStore';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import CommentListItem from './CommentListItem';
+import { useAuthStore } from '../../stores/authStore';
+import DOMPurify from 'dompurify';
+import PollOptionsVoteView from '../poll/PollOptionsVoteView';
+import CheckDeleteModal from './CheckDeleteModal';
 
 interface PollOption {
   id: string;
@@ -21,8 +21,7 @@ interface PollOption {
 
 export default function PostDetailItem(props: Post) {
   // image,
-  const { _id, title, author, likes, comments, createdAt, imagePublicId } =
-    props;
+  const { _id, title, author, likes, comments, createdAt, imagePublicId } = props;
 
   const params = useParams();
   const channel = params.channelId;
@@ -51,23 +50,31 @@ export default function PostDetailItem(props: Post) {
 
   const editCodeStyle = (html: string): string => {
     const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
+    const doc = parser.parseFromString(html, 'text/html');
 
-    const codes = doc.querySelectorAll("pre");
+    const codes = doc.querySelectorAll('pre');
+    const codeStr = '<span>&lt;/&gt;</span>';
     codes.forEach((code) => {
-      code.style.backgroundColor = "#ececec";
-      code.style.padding = "20px";
-      code.style.marginTop = "10px";
-      code.style.marginBottom = "10px";
-      code.style.borderRadius = "8px";
+      code.style.backgroundColor = '#ececec';
+      code.style.padding = '20px';
+      code.style.paddingTop = '2px';
+      code.style.marginTop = '10px';
+      code.style.marginBottom = '10px';
+      code.style.borderRadius = '8px';
+      code.innerHTML = codeStr + '<br/><br/>' + code.innerHTML;
+
+      const span = code.querySelector('span');
+      span!.style.fontSize = '12px';
+      span!.style.opacity = '30%';
+      span!.style.marginLeft = '-9px';
     });
 
     return doc.body.innerHTML;
   };
 
   const getDatetimeSortFormat = (update: string): string => {
-    const date = dayjs(update).add(9, "hour");
-    return date.format("YYYY-MM-DD HH:mm:ss");
+    const date = dayjs(update).add(9, 'hour');
+    return date.format('YYYY-MM-DD HH:mm:ss');
   };
 
   // const getDatetimeFormat = () => {
@@ -76,17 +83,17 @@ export default function PostDetailItem(props: Post) {
   // };
 
   const getElapsedTime = () => {
-    const now = dayjs().add(9, "hour");
-    const writeTime = dayjs(createdAt).add(9, "hour");
+    const now = dayjs().add(9, 'hour');
+    const writeTime = dayjs(createdAt).add(9, 'hour');
     // const now = dayjs();
     // const writeTime = dayjs(createdAt);
 
-    const gap = now.diff(writeTime, "s");
+    const gap = now.diff(writeTime, 's');
     if (gap < 60) return `${gap}초 전`;
     if (gap < 3600) return `${Math.floor(gap / 60)}분 전`;
     if (gap < 86400) return `${Math.floor(gap / 3600)}시간 전`;
     // return `${Math.floor(gap / 86400)}일 전`;
-    return writeTime.format("YYYY.MM.DD");
+    return writeTime.format('YYYY.MM.DD');
   };
 
   const checkPostUser = () => {
@@ -146,19 +153,13 @@ export default function PostDetailItem(props: Post) {
         //ref={divRef}
       >
         <div className='flex justify-between h-[85px] pl-3 pt-2.5'>
-          <Avatar
-            name={author.fullName}
-            email={author.email}
-            image={author.image}
-            isOnline={author.isOnline}
-          />
+          <Link to={`/profile`} state={{ userid: author?._id }}>
+            <Avatar name={author.fullName} email={author.email} image={author.image} isOnline={author.isOnline} />
+          </Link>
           {/* 사용자 이름과 글쓴이 이름이 일치할 경우 */}
           {isUser && (
             <>
-              <div
-                onClick={clickMenuHandler}
-                className='w-9 h-9 pr-2.5 cursor-pointer'
-              >
+              <div onClick={clickMenuHandler} className='w-9 h-9 pr-2.5 cursor-pointer'>
                 <img src={menuIcon} />
               </div>
               {isOpen && (
@@ -183,15 +184,11 @@ export default function PostDetailItem(props: Post) {
           )}
         </div>
         <div className='flex flex-col px-[55px] py-[15px] gap-[22px]'>
-          <div className='text-[20px] font-semibold'>
-            {JSON.parse(title).title}
-          </div>
+          <div className='text-[20px] font-semibold'>{JSON.parse(title).title}</div>
           {/* w-[500px] */}
           <div
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(
-                editCodeStyle(JSON.parse(title).content)
-              ),
+              __html: DOMPurify.sanitize(editCodeStyle(JSON.parse(title).content)),
             }}
             className='text-[15px] font-normal'
           />
@@ -201,7 +198,7 @@ export default function PostDetailItem(props: Post) {
               <PollOptionsVoteView
                 options={pollOptions}
                 postId={_id}
-                channelId={channel ?? ""}
+                channelId={channel ?? ''}
                 originalTitle={parsedTitle.title}
                 originalContent={parsedTitle.content}
                 imageToDeletePublicId={imagePublicId || null}

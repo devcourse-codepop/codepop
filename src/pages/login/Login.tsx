@@ -21,6 +21,7 @@ export default function Login() {
 
   const [loginError, setLoginError] = useState('');
 
+  // 이메일 입력값 저장, 기존 에러 메시지 초기화
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEmail(value);
@@ -30,6 +31,7 @@ export default function Login() {
     }
   };
 
+  // 비밀번호 입력값 저장, 기존 에러 메시지 초기화
   const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setPassword(value);
@@ -39,12 +41,9 @@ export default function Login() {
     }
   };
 
+  // 전체
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // console.clear();
-    // setEmailError('');
-    // setPasswordError('');
 
     if (!email) {
       setLoginError('이메일은 필수 입력 항목입니다.');
@@ -59,7 +58,6 @@ export default function Login() {
     try {
       const res = await login(email, password);
       const token = res.data.token;
-      console.log(res.data);
       storeLogin(token);
 
       navigate(-1);
