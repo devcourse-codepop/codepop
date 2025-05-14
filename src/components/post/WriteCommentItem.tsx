@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { postComments, postNotifications } from '../../api/post/post';
 import CommentEditor from '../editor/CommentEditor';
+import { useNavigate } from 'react-router-dom';
 
 export default function WriteCommentItem({
   channelId,
@@ -13,6 +14,8 @@ export default function WriteCommentItem({
   postUserId: string;
   updateReloadTrigger: () => void;
 }) {
+  const navigate = useNavigate();
+
   // 입력한 댓글 상태
   const [comment, setComment] = useState('');
   const changeCommentHandler = (value: string) => {
@@ -31,6 +34,10 @@ export default function WriteCommentItem({
       setResetTrigger((resetTrigger) => resetTrigger + 1);
       setComment('');
       sendCommentNotification(data._id);
+
+      navigate(`/channel/${channelId}/post/${postId}`, {
+        state: { scrollToComment: true },
+      });
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
