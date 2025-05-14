@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import defaultProfileImage from '../../assets/images/profile/defaultProfileImage.jpg';
 import { Theme } from '../../types/ darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
+import { useState } from 'react';
+import ChatModal from '../message/ChatModal';
+import useChatClose from '../../utils/changeMessageIcon';
 
 interface ProfileLeftProps extends UserInfo {
   theme: Theme;
@@ -17,6 +20,8 @@ export default function ProfileLeft({
   theme,
 }: ProfileLeftProps) {
   const user = useAuthStore((state) => state.user);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const onClose = useChatClose(setIsChatOpen);
   const navigate = useNavigate();
   return (
     <>
@@ -74,7 +79,10 @@ export default function ProfileLeft({
                 className={`w-[30px] h-[30px] cursor-pointer ${
                   dark(theme) ? 'text-[#ffffff] opacity-80' : 'text-[#111111]'
                 }`}
+                onClick={() => setIsChatOpen(true)}
               />
+
+              <ChatModal isOpen={isChatOpen} onClose={onClose} />
             </div>
           )}
         </div>

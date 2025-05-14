@@ -5,6 +5,10 @@ import moon from '../../assets/images/toggle/moon.svg';
 import sun from '../../assets/images/toggle/sun.svg';
 import { Theme } from '../../types/ darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
+import ChatModal from '../../pages/message/ChatModal';
+import { useState } from 'react';
+import { useMessageStore } from '../../stores/messageStore';
+import useChatClose from '../../utils/changeMessageIcon';
 
 export default function Header({
   theme,
@@ -18,6 +22,8 @@ export default function Header({
   const { isLoggedIn, logout } = useAuthStore();
   const navigator = useNavigate();
   const user = useAuthStore((state) => state.user);
+  const messageIcon = useMessageStore((state) => state.messageIcon);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   let imgSrc: string = '';
   if (user?.image === undefined || user?.image === '') {
@@ -26,6 +32,12 @@ export default function Header({
   } else {
     imgSrc = user?.image;
   }
+
+  const handleMessageClick = () => {
+    setIsChatOpen(true);
+  };
+
+  const onClose = useChatClose(setIsChatOpen);
   return (
     <>
       <header className="h-[100px] px-[60px] flex items-center justify-between">
@@ -62,6 +74,11 @@ export default function Header({
                 <Notification theme={theme} />
               </div>
               <img
+                src={messageIcon}
+                onClick={handleMessageClick}
+                className="cursor-pointer w-[28px] h-[28px]"
+              />
+              <img
                 src={imgSrc}
                 className="w-10 h-10 rounded-3xl overflow-hidden cursor-pointer"
                 onClick={() => navigator('/profile')}
@@ -88,6 +105,8 @@ export default function Header({
           </div>
         </div>
       </header>
+
+      <ChatModal isOpen={isChatOpen} onClose={onClose} />
     </>
   );
 }
