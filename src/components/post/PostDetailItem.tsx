@@ -6,15 +6,22 @@ import { Comment, Post } from '../../types';
 import dayjs from 'dayjs';
 import { getPostList } from '../../api/post/post';
 import { usePostStore } from '../../stores/postStore';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import CommentListItem from './CommentListItem';
 import { useAuthStore } from '../../stores/authStore';
 import DOMPurify from 'dompurify';
+import PollOptionsVoteView from '../poll/PollOptionsVoteView';
 import CheckDeleteModal from './CheckDeleteModal';
+
+interface PollOption {
+  id: string;
+  text: string;
+  voteCount: number;
+}
 
 export default function PostDetailItem(props: Post) {
   // image,
-  const { _id, title, author, likes, comments, createdAt } = props;
+  const { _id, title, author, likes, comments, createdAt, imagePublicId } = props;
 
   const params = useParams();
   const channel = params.channelId;
@@ -23,7 +30,8 @@ export default function PostDetailItem(props: Post) {
   const navigate = useNavigate();
 
   //const divRef = useRef<HTMLDivElement | null>(null);
-
+  const parsedTitle = JSON.parse(title); // ✅ 파싱 결과 저장
+  const pollOptions: PollOption[] = parsedTitle.pollOptions || [];
   const channelIdList = usePostStore((state) => state.channelIdList);
 
   const user = useAuthStore((state) => state.user);
@@ -45,12 +53,20 @@ export default function PostDetailItem(props: Post) {
     const doc = parser.parseFromString(html, 'text/html');
 
     const codes = doc.querySelectorAll('pre');
+    const codeStr = '<span>&lt;/&gt;</span>';
     codes.forEach((code) => {
       code.style.backgroundColor = '#ececec';
       code.style.padding = '20px';
+      code.style.paddingTop = '2px';
       code.style.marginTop = '10px';
       code.style.marginBottom = '10px';
       code.style.borderRadius = '8px';
+      code.innerHTML = codeStr + '<br/><br/>' + code.innerHTML;
+
+      const span = code.querySelector('span');
+      span!.style.fontSize = '12px';
+      span!.style.opacity = '30%';
+      span!.style.marginLeft = '-9px';
     });
 
     return doc.body.innerHTML;
@@ -133,37 +149,31 @@ export default function PostDetailItem(props: Post) {
   return (
     <>
       <div
-        className="w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative"
+        className='w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative'
         //ref={divRef}
       >
-        <div className="flex justify-between h-[85px] pl-3 pt-2.5">
-          <Avatar
-            name={author.fullName}
-            email={author.email}
-            image={author.image}
-            isOnline={author.isOnline}
-          />
+        <div className='flex justify-between h-[85px] pl-3 pt-2.5'>
+          <Link to={`/profile`} state={{ userid: author?._id }}>
+            <Avatar name={author.fullName} email={author.email} image={author.image} isOnline={author.isOnline} />
+          </Link>
           {/* 사용자 이름과 글쓴이 이름이 일치할 경우 */}
           {isUser && (
             <>
-              <div
-                onClick={clickMenuHandler}
-                className="w-9 h-9 pr-2.5 cursor-pointer"
-              >
+              <div onClick={clickMenuHandler} className='w-9 h-9 pr-2.5 cursor-pointer'>
                 <img src={menuIcon} />
               </div>
               {isOpen && (
                 // shadow-[1px_2px_3px_rgba(0,0,0,0.25)]
-                <div className="flex flex-col w-[91px] h-[70px] rounded-[2px] border border-[#e5e5e5] absolute top-8 right-4">
+                <div className='flex flex-col w-[91px] h-[70px] rounded-[2px] border border-[#e5e5e5] absolute top-8 right-4'>
                   <div
-                    className="flex justify-center items-center text-[12px] h-[34px] cursor-pointer"
+                    className='flex justify-center items-center text-[12px] h-[34px] cursor-pointer'
                     onClick={clickUpdateHandler}
                   >
                     수정하기
                   </div>
-                  <hr className="opacity-10" />
+                  <hr className='opacity-10' />
                   <div
-                    className="flex justify-center items-center text-[12px] text-[#FF0404] h-[34px] cursor-pointer"
+                    className='flex justify-center items-center text-[12px] text-[#FF0404] h-[34px] cursor-pointer'
                     onClick={clickDeleteHandler}
                   >
                     삭제하기
@@ -173,19 +183,29 @@ export default function PostDetailItem(props: Post) {
             </>
           )}
         </div>
-        <div className="flex flex-col px-[55px] py-[15px] gap-[22px]">
-          <div className="text-[20px] font-semibold">
-            {JSON.parse(title).title}
-          </div>
+        <div className='flex flex-col px-[55px] py-[15px] gap-[22px]'>
+          <div className='text-[20px] font-semibold'>{JSON.parse(title).title}</div>
           {/* w-[500px] */}
           <div
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(
-                editCodeStyle(JSON.parse(title).content)
-              ),
+              __html: DOMPurify.sanitize(editCodeStyle(JSON.parse(title).content)),
             }}
-            className="text-[15px] font-normal"
+            className='text-[15px] font-normal'
           />
+          {/* 투표 옵션이 있을 경우 */}
+          {pollOptions.length > 0 && (
+            <div className='mt-4'>
+              <PollOptionsVoteView
+                options={pollOptions}
+                postId={_id}
+                channelId={channel ?? ''}
+                originalTitle={parsedTitle.title}
+                originalContent={parsedTitle.content}
+                imageToDeletePublicId={imagePublicId || null}
+                imageFile={null}
+              />
+            </div>
+          )}
           {/* {image && (
             <div>
               <img
@@ -195,12 +215,12 @@ export default function PostDetailItem(props: Post) {
             </div>
           )} */}
         </div>
-        <div className="flex justify-end pr-5 pb-[9px] text-[#808080] text-sm font-light">
+        <div className='flex justify-end pr-5 pb-[9px] text-[#808080] text-sm font-light'>
           {/* {getDatetimeFormat()} */}
           {getElapsedTime()}
         </div>
-        <hr className="mx-[18px] text-[#b2b2b2]" />
-        <div className="h-[59px]">
+        <hr className='mx-[18px] text-[#b2b2b2]' />
+        <div className='h-[59px]'>
           <LikeComment
             likeCount={likes.length}
             commentCount={comments.length}
@@ -229,7 +249,7 @@ export default function PostDetailItem(props: Post) {
       </div>
       {isDeleteModalOpen && (
         <CheckDeleteModal
-          type="POST"
+          type='POST'
           channel={String(channel)}
           _id={_id}
           closeDeleteModalHanlder={closeDeleteModalHanlder}

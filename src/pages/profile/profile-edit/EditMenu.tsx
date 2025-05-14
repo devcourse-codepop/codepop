@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 export default function EditMenu({ onEdit, onDelete, onClose }: EditMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
 
+  //외부 클릭하면 닫기
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {

@@ -3,7 +3,7 @@ import LikeComment from '../reaction/LikeComment';
 //import CodeIcon from '../../assets/CodeEditIcon.svg';
 import { Post } from '../../types';
 import dayjs from 'dayjs';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 import { useState } from 'react';
 import { useAuthStore } from '../../stores/authStore';
@@ -11,10 +11,10 @@ import NotLoginModal from './NotLoginModal';
 import DOMPurify from 'dompurify';
 import DeletedUserModal from './DeletedUserModal';
 import { useChannelItemStore } from '../../stores/channelStore';
+import PollOptionsView from '../poll/PollOptionsView';
 
 export default function PostListItem(props: Post) {
-  const { _id, title, image, author, likes, comments, createdAt, channel } =
-    props;
+  const { _id, title, image, author, likes, comments, createdAt, channel } = props;
   const { channels } = useChannelItemStore();
   // const params = useParams();
   // const channel = params.channelId;
@@ -22,7 +22,7 @@ export default function PostListItem(props: Post) {
   const navigate = useNavigate();
 
   // const divRef = useRef<HTMLDivElement | null>(null);
-
+  const pollOptions = JSON.parse(title).pollOptions;
   // const [currentWidth, setCurrentWidth] = useState(0);
 
   const user = useAuthStore((state) => state.user);
@@ -105,17 +105,15 @@ export default function PostListItem(props: Post) {
   return (
     <>
       <div
-        className="w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative"
+        className='w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative'
         // ref={divRef}
       >
-        <div className="flex justify-between h-[85px] pl-3 pt-2.5">
-          <Avatar
-            name={author?.fullName}
-            email={author?.email}
-            image={author?.image}
-            isOnline={author?.isOnline}
-          />
+        <div className='flex justify-between h-[85px] pl-3 pt-2.5'>
+          <Link to={`/profile`} state={{ userid: author?._id }}>
+            <Avatar name={author?.fullName} email={author?.email} image={author?.image} isOnline={author?.isOnline} />
+          </Link>
         </div>
+
         <div
           className={twMerge(
             'flex justify-between px-[55px] py-[15px] gap-[55px] cursor-pointer',
@@ -123,23 +121,20 @@ export default function PostListItem(props: Post) {
           )}
           onClick={clickPostHandler}
         >
-          <div
-            className={twMerge(
-              'flex flex-col justify-center w-full gap-[22px] ',
-              image && 'max-w-[635px]'
-            )}
-          >
-            <div className="postTitle text-[18px] font-semibold truncate">
-              {JSON.parse(title).title}
-            </div>
+          <div className={twMerge('flex flex-col justify-center w-full gap-[22px] ', image && 'max-w-[635px]')}>
+            <div className='postTitle text-[18px] font-semibold truncate'>{JSON.parse(title).title}</div>
             <div
               dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(
-                  removeImgTags(JSON.parse(title).content)
-                ),
+                __html: DOMPurify.sanitize(removeImgTags(JSON.parse(title).content)),
               }}
-              className="postContent text-[15px] font-normal line-clamp-5"
+              className='postContent text-[15px] font-normal line-clamp-5'
             />
+            {/* 투표 옵션이 있을 경우 */}
+            {pollOptions && pollOptions.length > 0 && (
+              <div className='mt-4'>
+                <PollOptionsView options={pollOptions} />
+              </div>
+            )}
             {/* {setCodeCount() > 0 && (
               <div className="flex justify-end text-[14px] opacity-70">
                 +<span className="text-[#ff0000]">{setCodeCount()}</span>개의
@@ -148,23 +143,18 @@ export default function PostListItem(props: Post) {
             )} */}
           </div>
           {image && (
-            <div className="border border-[#e0e0e0] rounded-[5px]">
-              <img src={image} className="w-[226px] h-[226px]" />
+            <div className='border border-[#e0e0e0] rounded-[5px]'>
+              <img src={image} className='w-[226px] h-[226px]' />
             </div>
           )}
         </div>
-        <div className="flex justify-end pr-5 pb-[9px] text-[#808080] text-sm font-light">
+        <div className='flex justify-end pr-5 pb-[9px] text-[#808080] text-sm font-light'>
           {/* {getDatetimeFormat()} */}
           {getElapsedTime()}
         </div>
-        <hr className="mx-[18px] text-[#b2b2b2]" />
+        <hr className='mx-[18px] text-[#b2b2b2]' />
         {/* <div className="flex justify-between h-[59px]"> */}
-        <div
-          className={twMerge(
-            'flex h-[59px]',
-            setCodeCount() > 0 ? 'justify-between' : 'justify-end'
-          )}
-        >
+        <div className={twMerge('flex h-[59px]', setCodeCount() > 0 ? 'justify-between' : 'justify-end')}>
           {/* {setCodeCount() > 0 && (
             <div className="flex justify-center items-center text-[14px] opacity-70">
               +<span className="text-[#ff0000]">{setCodeCount()}</span>개의 코드
@@ -182,9 +172,8 @@ export default function PostListItem(props: Post) {
             </div>
           )} */}
           {setCodeCount() > 0 && (
-            <div className="flex justify-center items-center text-[14px] opacity-70 ml-5">
-              +<span className="text-[#ff0000]">{setCodeCount()}</span>개의 코드
-              블록
+            <div className='flex justify-center items-center text-[14px] opacity-70 ml-5'>
+              +<span className='text-[#ff0000]'>{setCodeCount()}</span>개의 코드 블록
             </div>
           )}
           <LikeComment
@@ -196,12 +185,8 @@ export default function PostListItem(props: Post) {
           />
         </div>
       </div>
-      {isLoginModalOpen && (
-        <NotLoginModal closeLoginModalHanlder={closeLoginModalHanlder} />
-      )}
-      {isUserModalOpen && (
-        <DeletedUserModal closeUserModalHanlder={closeUserModalHanlder} />
-      )}
+      {isLoginModalOpen && <NotLoginModal closeLoginModalHanlder={closeLoginModalHanlder} />}
+      {isUserModalOpen && <DeletedUserModal closeUserModalHanlder={closeUserModalHanlder} />}
     </>
   );
 }

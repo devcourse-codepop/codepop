@@ -86,14 +86,15 @@ export default function MemberBox() {
         />
       </div>
       {isLoggedIn && (
-        // 내 멤버 카드
         <div className="myInfoCard">
-          <Avatar
-            name={`(나) ${user !== null ? user.fullName : ''}`}
-            email={user !== null ? user.email : ''}
-            image={user !== null ? user.image : ''}
-            isOnline={user !== null ? user.isOnline : false}
-          ></Avatar>
+          <Link to={`/profile`} state={{ userid: user?._id }}>
+            <Avatar
+              name={`(나) ${user !== null ? user.fullName : ''}`}
+              email={user !== null ? user.email : ''}
+              image={user !== null ? user.image : ''}
+              isOnline={user !== null ? user.isOnline : false}
+            ></Avatar>
+          </Link>
         </div>
       )}
       <div

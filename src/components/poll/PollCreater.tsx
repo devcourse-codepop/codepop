@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 interface PollOption {
   id: number;
   text: string;
+  voteCount: number;
 }
 
 interface PollCreatorProps {
@@ -27,7 +28,11 @@ export default function PollCreator({ onCreate }: PollCreatorProps) {
     if (options.length >= 2) {
       const pollOptions = options
         .filter((opt) => opt.trim() !== "")
-        .map((text, idx) => ({ id: idx, text }));
+        .map((text, idx) => ({
+          id: idx,
+          text,
+          voteCount: 0, // 추가: 기본값
+        }));
       onCreate(pollOptions);
     }
   }, [options, onCreate]);
