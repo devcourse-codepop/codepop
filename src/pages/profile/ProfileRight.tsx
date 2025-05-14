@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import Pagination from 'react-js-pagination';
 import { getAuthorPostData, getPostData } from '../../api/post/post';
-import commentWhite from '../../assets/images/commentWhite.svg';
-import commentIcon from '../../assets/images/comment-outline.svg';
+import commentWhite from '../../assets/images/comment/commentWhite.svg';
+import commentIcon from '../../assets/images/comment/comment-outline.svg';
 import { useNavigate } from 'react-router-dom';
 import { Theme } from '../../types/ darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';

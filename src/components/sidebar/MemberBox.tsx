@@ -1,5 +1,5 @@
-import menuIcon from '../../assets/MenuIcon.svg';
-import menuIconWhite from '../../assets/MenuIconWhite.svg';
+import menuIcon from '../../assets/images/menu/MenuIcon.svg';
+import menuIconWhite from '../../assets/images/menu/MenuIconWhite.svg';
 
 import { Search } from 'lucide-react';
 import Avatar from '../avatar/Avatar';

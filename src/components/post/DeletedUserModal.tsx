@@ -1,5 +1,5 @@
 import Button from '../common/Button';
-import close from '../../assets/images/closeBtn.svg';
+import close from '../../assets/images/close/closeBtn.svg';
 
 export default function DeletedUserModal({
   closeUserModalHanlder,

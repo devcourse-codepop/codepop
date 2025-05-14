@@ -1,5 +1,5 @@
-import italicIcon from '../../assets/ItalicIcon.svg';
-import italicIconWhite from '../../assets/ItalicIconWhite.svg';
+import italicIcon from '../../assets/images/editor/ItalicIcon.svg';
+import italicIconWhite from '../../assets/images/editor/ItalicIconWhite.svg';
 import { Theme } from '../../types/ darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import ImageEditBtn from '../../../assets/ImageEditBtn.svg';
+import ImageEditBtn from '../../../assets/images/img-edit/ImageEditBtn.svg';
 import { fullNameRegex, passwordRegex } from '../../../utils/validators';
 import EditMenu from './EditMenu';
 import Input from '../../../components/common/Input';

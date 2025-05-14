@@ -1,5 +1,5 @@
-import codeEditIcon from '../../assets/CodeEditIcon.svg';
-import codeEditIconWhite from '../../assets/CodeEditionIconWhite.svg';
+import codeEditIcon from '../../assets/images/editor/CodeEditIcon.svg';
+import codeEditIconWhite from '../../assets/images/editor/CodeEditionIconWhite.svg';
 import { Theme } from '../../types/ darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 

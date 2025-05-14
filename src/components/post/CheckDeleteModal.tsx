@@ -1,6 +1,6 @@
 import Button from '../common/Button';
-import close from '../../assets/images/closeBtn.svg';
-import closeWhite from '../../assets/images/closeBtnWhite.svg';
+import close from '../../assets/images/close/closeBtn.svg';
+import closeWhite from '../../assets/images/close/closeBtnWhite.svg';
 import { deleteComments, deletePosts } from '../../api/post/post';
 import { Theme } from '../../types/ darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';

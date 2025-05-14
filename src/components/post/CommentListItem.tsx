@@ -1,5 +1,5 @@
-import menuIcon from '../../assets/MenuIcon.svg';
-import menuIconWhite from '../../assets/MenuIconWhite.svg';
+import menuIcon from '../../assets/images/menu/MenuIcon.svg';
+import menuIconWhite from '../../assets/images/menu/MenuIconWhite.svg';
 import userImg from '../../assets/images/header/userImg.svg';
 import { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';

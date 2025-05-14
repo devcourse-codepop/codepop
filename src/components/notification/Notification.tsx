@@ -4,7 +4,7 @@ import close from '../../assets/images/header/close.svg';
 import closeWhite from '../../assets/images/header/closeWhite.svg';
 import alarm from '../../assets/images/header/alarm.svg';
 import alarmWhite from '../../assets/images/header/alarm-white.svg';
-import redDot from '../../assets/RedDotIcon.svg';
+import redDot from '../../assets/images/header/RedDotIcon.svg';
 import { useEffect, useRef, useState } from 'react';
 import {
   getNotificationsData,

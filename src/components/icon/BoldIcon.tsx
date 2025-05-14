@@ -1,5 +1,5 @@
-import boldIcon from '../../assets/BoldIcon.svg';
-import boldIconWhite from '../../assets/BoldIconWhite.svg';
+import boldIcon from '../../assets/images/editor/BoldIcon.svg';
+import boldIconWhite from '../../assets/images/editor/BoldIconWhite.svg';
 import { Theme } from '../../types/ darkModeTypes';
 
 export default function BoldIcon({ theme }: { theme: Theme }) {

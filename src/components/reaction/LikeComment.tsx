@@ -1,8 +1,8 @@
-import likeClick from '../../assets/LikeClick.svg';
-import likeClickWhite from '../../assets/likeClickWhite.svg';
-import likeRed from '../../assets/images/LikeRed.svg';
-import comment from '../../assets/images/comment-outline.svg';
-import commentWhite from '../../assets/images/commentWhite.svg';
+import likeClick from '../../assets/images/like/LikeClick.svg';
+import likeClickWhite from '../../assets/images/like/likeClickWhite.svg';
+import likeRed from '../../assets/images/like/LikeRed.svg';
+import comment from '../../assets/images/comment/comment-outline.svg';
+import commentWhite from '../../assets/images/comment/commentWhite.svg';
 import { useEffect, useState } from 'react';
 import { Channel, Like, User } from '../../types';
 import { deleteLikes, postLikes, postNotifications } from '../../api/post/post';
