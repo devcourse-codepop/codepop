@@ -1,27 +1,21 @@
-import Avatar from '../avatar/Avatar';
-import LikeComment from '../reaction/LikeComment';
-import menuIcon from '../../assets/MenuIcon.svg';
-import { useEffect, useState } from 'react';
-import { Comment, Post } from '../../types';
-import dayjs from 'dayjs';
-import { getPostList } from '../../api/post/post';
-import { usePostStore } from '../../stores/postStore';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import CommentListItem from './CommentListItem';
-import { useAuthStore } from '../../stores/authStore';
-import DOMPurify from 'dompurify';
-import PollOptionsVoteView from '../poll/PollOptionsVoteView';
-import CheckDeleteModal from './CheckDeleteModal';
-
-interface PollOption {
-  id: string;
-  text: string;
-  voteCount: number;
-}
+import Avatar from "../avatar/Avatar";
+import LikeComment from "../reaction/LikeComment";
+import menuIcon from "../../assets/MenuIcon.svg";
+import { useEffect, useState } from "react";
+import { Comment, Post } from "../../types";
+import dayjs from "dayjs";
+import { getPostList } from "../../api/post/post";
+import { usePostStore } from "../../stores/postStore";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import CommentListItem from "./CommentListItem";
+import { useAuthStore } from "../../stores/authStore";
+import DOMPurify from "dompurify";
+import PollOptionsVoteView from "../poll/PollOptionsVoteView";
+import CheckDeleteModal from "./CheckDeleteModal";
 
 export default function PostDetailItem(props: Post) {
   // image,
-  const { _id, title, author, likes, comments, createdAt, imagePublicId } = props;
+  const { _id, title, author, likes, comments, createdAt } = props;
 
   const params = useParams();
   const channel = params.channelId;
@@ -30,8 +24,8 @@ export default function PostDetailItem(props: Post) {
   const navigate = useNavigate();
 
   //const divRef = useRef<HTMLDivElement | null>(null);
-  const parsedTitle = JSON.parse(title); // ✅ 파싱 결과 저장
-  const pollOptions: PollOption[] = parsedTitle.pollOptions || [];
+
+  const pollOptions = JSON.parse(title).pollOptions;
   const channelIdList = usePostStore((state) => state.channelIdList);
 
   const user = useAuthStore((state) => state.user);
@@ -50,31 +44,31 @@ export default function PostDetailItem(props: Post) {
 
   const editCodeStyle = (html: string): string => {
     const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
+    const doc = parser.parseFromString(html, "text/html");
 
-    const codes = doc.querySelectorAll('pre');
-    const codeStr = '<span>&lt;/&gt;</span>';
+    const codes = doc.querySelectorAll("pre");
+    const codeStr = "<span>&lt;/&gt;</span>";
     codes.forEach((code) => {
-      code.style.backgroundColor = '#ececec';
-      code.style.padding = '20px';
-      code.style.paddingTop = '2px';
-      code.style.marginTop = '10px';
-      code.style.marginBottom = '10px';
-      code.style.borderRadius = '8px';
-      code.innerHTML = codeStr + '<br/><br/>' + code.innerHTML;
+      code.style.backgroundColor = "#ececec";
+      code.style.padding = "20px";
+      code.style.paddingTop = "2px";
+      code.style.marginTop = "10px";
+      code.style.marginBottom = "10px";
+      code.style.borderRadius = "8px";
+      code.innerHTML = codeStr + "<br/><br/>" + code.innerHTML;
 
-      const span = code.querySelector('span');
-      span!.style.fontSize = '12px';
-      span!.style.opacity = '30%';
-      span!.style.marginLeft = '-9px';
+      const span = code.querySelector("span");
+      span!.style.fontSize = "12px";
+      span!.style.opacity = "30%";
+      span!.style.marginLeft = "-9px";
     });
 
     return doc.body.innerHTML;
   };
 
   const getDatetimeSortFormat = (update: string): string => {
-    const date = dayjs(update).add(9, 'hour');
-    return date.format('YYYY-MM-DD HH:mm:ss');
+    const date = dayjs(update).add(9, "hour");
+    return date.format("YYYY-MM-DD HH:mm:ss");
   };
 
   // const getDatetimeFormat = () => {
@@ -83,17 +77,17 @@ export default function PostDetailItem(props: Post) {
   // };
 
   const getElapsedTime = () => {
-    const now = dayjs().add(9, 'hour');
-    const writeTime = dayjs(createdAt).add(9, 'hour');
+    const now = dayjs().add(9, "hour");
+    const writeTime = dayjs(createdAt).add(9, "hour");
     // const now = dayjs();
     // const writeTime = dayjs(createdAt);
 
-    const gap = now.diff(writeTime, 's');
+    const gap = now.diff(writeTime, "s");
     if (gap < 60) return `${gap}초 전`;
     if (gap < 3600) return `${Math.floor(gap / 60)}분 전`;
     if (gap < 86400) return `${Math.floor(gap / 3600)}시간 전`;
     // return `${Math.floor(gap / 86400)}일 전`;
-    return writeTime.format('YYYY.MM.DD');
+    return writeTime.format("YYYY.MM.DD");
   };
 
   const checkPostUser = () => {
@@ -145,7 +139,6 @@ export default function PostDetailItem(props: Post) {
   //     setCurrentWidth(width);
   //   }
   // }, []);
-
   return (
     <>
       <div
@@ -154,12 +147,20 @@ export default function PostDetailItem(props: Post) {
       >
         <div className='flex justify-between h-[85px] pl-3 pt-2.5'>
           <Link to={`/profile`} state={{ userid: author?._id }}>
-            <Avatar name={author.fullName} email={author.email} image={author.image} isOnline={author.isOnline} />
+            <Avatar
+              name={author.fullName}
+              email={author.email}
+              image={author.image}
+              isOnline={author.isOnline}
+            />
           </Link>
           {/* 사용자 이름과 글쓴이 이름이 일치할 경우 */}
           {isUser && (
             <>
-              <div onClick={clickMenuHandler} className='w-9 h-9 pr-2.5 cursor-pointer'>
+              <div
+                onClick={clickMenuHandler}
+                className='w-9 h-9 pr-2.5 cursor-pointer'
+              >
                 <img src={menuIcon} />
               </div>
               {isOpen && (
@@ -184,28 +185,25 @@ export default function PostDetailItem(props: Post) {
           )}
         </div>
         <div className='flex flex-col px-[55px] py-[15px] gap-[22px]'>
-          <div className='text-[20px] font-semibold'>{JSON.parse(title).title}</div>
+          <div className='text-[20px] font-semibold'>
+            {JSON.parse(title).title}
+          </div>
           {/* w-[500px] */}
           <div
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(editCodeStyle(JSON.parse(title).content)),
+              __html: DOMPurify.sanitize(
+                editCodeStyle(JSON.parse(title).content)
+              ),
             }}
             className='text-[15px] font-normal'
           />
           {/* 투표 옵션이 있을 경우 */}
-          {pollOptions.length > 0 && (
+          {pollOptions && pollOptions.length > 0 && (
             <div className='mt-4'>
-              <PollOptionsVoteView
-                options={pollOptions}
-                postId={_id}
-                channelId={channel ?? ''}
-                originalTitle={parsedTitle.title}
-                originalContent={parsedTitle.content}
-                imageToDeletePublicId={imagePublicId || null}
-                imageFile={null}
-              />
+              <PollOptionsVoteView options={pollOptions} comments={comments} />
             </div>
           )}
+
           {/* {image && (
             <div>
               <img
@@ -223,7 +221,16 @@ export default function PostDetailItem(props: Post) {
         <div className='h-[59px]'>
           <LikeComment
             likeCount={likes.length}
-            commentCount={comments.length}
+            commentCount={
+              comments.filter((c) => {
+                try {
+                  const parsed = JSON.parse(c.comment);
+                  return parsed.type !== "vote";
+                } catch {
+                  return true;
+                }
+              }).length
+            }
             postId={_id}
             postUserId={author._id}
             likes={likes}
@@ -237,14 +244,23 @@ export default function PostDetailItem(props: Post) {
             // </div>
             <></>
           )}
-          {commentListItem.length !== 0 &&
-            [...commentListItem]
-              .sort(
-                (a, b) =>
-                  new Date(getDatetimeSortFormat(a.updatedAt)).getTime() -
-                  new Date(getDatetimeSortFormat(b.updatedAt)).getTime()
-              )
-              .map((item) => <CommentListItem key={item._id} {...item} />)}
+          {commentListItem
+            .filter((item) => {
+              try {
+                const parsed = JSON.parse(item.comment);
+                return parsed.type !== "vote";
+              } catch {
+                return true;
+              }
+            })
+            .sort(
+              (a, b) =>
+                new Date(getDatetimeSortFormat(a.updatedAt)).getTime() -
+                new Date(getDatetimeSortFormat(b.updatedAt)).getTime()
+            )
+            .map((item) => (
+              <CommentListItem key={item._id} {...item} />
+            ))}
         </div>
       </div>
       {isDeleteModalOpen && (
