@@ -85,7 +85,7 @@ export const postNotifications = (
   userId: string,
   postId: string
 ) => {
-  return axiosInstance.post('/notifications/create', {
+  return axiosInstance.post("/notifications/create", {
     notificationType,
     notificationTypeId,
     userId,
