@@ -4,28 +4,33 @@ import closeWhite from '../../assets/images/closeBtnWhite.svg';
 import { deleteComments, deletePosts } from '../../api/post/post';
 import { Theme } from '../../types/ darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
+import { useNavigate } from 'react-router-dom';
 
 export default function CheckDeleteModal({
   type,
   channel,
-  post,
   _id,
   closeDeleteModalHanlder,
   theme,
+  updateReloadTrigger,
 }: {
   type: string;
   channel: string;
-  post?: string;
   _id: string;
   closeDeleteModalHanlder: () => void;
   theme: Theme;
+  updateReloadTrigger: () => void;
 }) {
+  const navigate = useNavigate();
+
+  // 게시글이나 댓글 삭제하기
   const clickDeleteHandler = async () => {
     if (type === 'POST') {
       try {
         const { data } = await deletePosts(_id);
         console.log(data);
-        window.location.href = `/channel/${channel}`;
+        closeDeleteModalHanlder();
+        navigate(`/channel/${channel}`);
       } catch (e) {
         console.log(e instanceof Error && e.message);
       }
@@ -33,7 +38,8 @@ export default function CheckDeleteModal({
       try {
         const { data } = await deleteComments(_id);
         console.log(data);
-        window.location.href = `/channel/${channel}/post/${post}`;
+        updateReloadTrigger();
+        closeDeleteModalHanlder();
       } catch (e) {
         console.log(e instanceof Error && e.message);
       }

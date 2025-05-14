@@ -3,7 +3,7 @@ import LikeComment from '../reaction/LikeComment';
 import menuIcon from '../../assets/MenuIcon.svg';
 import menuIconWhite from '../../assets/MenuIconWhite.svg';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Comment, Post } from '../../types';
 import dayjs from 'dayjs';
 import { getPostList } from '../../api/post/post';
@@ -18,54 +18,63 @@ import CheckDeleteModal from './CheckDeleteModal';
 import { Theme } from '../../types/ darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 
+// 투표 옵션 타입
 interface PollOption {
   id: string;
   text: string;
   voteCount: number;
 }
 
+// updateReloadTrigger 타입 추가
 interface PostDetailItemProps extends Post {
+  updateReloadTrigger: () => void;
   theme: Theme;
 }
 
-export default function PostDetailItem(props: PostDetailItemProps) {
-  // image,
-  const {
-    _id,
-    title,
-    author,
-    likes,
-    comments,
-    createdAt,
-    theme,
-    imagePublicId,
-  } = props;
-
+export default function PostDetailItem({
+  _id,
+  title,
+  author,
+  likes,
+  comments,
+  createdAt,
+  channel,
+  imagePublicId,
+  updateReloadTrigger,
+  theme,
+}: PostDetailItemProps) {
   const params = useParams();
-  const channel = params.channelId;
+  const channelId = params.channelId;
   const post = params.postId;
 
   const navigate = useNavigate();
 
-  //const divRef = useRef<HTMLDivElement | null>(null);
-  const parsedTitle = JSON.parse(title); // ✅ 파싱 결과 저장
+  // 수정, 삭제 모달을 나타내는 div 요소
+  const modalRef = useRef<HTMLDivElement | null>(null);
+
+  // 파싱 결과 저장
+  const parsedTitle = JSON.parse(title);
   const pollOptions: PollOption[] = parsedTitle.pollOptions || [];
+
+  // 채널 id 값 받아오기
   const channelIdList = usePostStore((state) => state.channelIdList);
 
+  // 로그인한 사용자 정보 받아오기
   const user = useAuthStore((state) => state.user);
 
-  //const [currentWidth, setCurrentWidth] = useState(0);
-
+  // 댓글 목록 상태
   const [commentListItem, setCommentListItem] = useState<Comment[]>([]);
-
+  // 해당 게시글 작성자 여부 상태
   const [isUser, setIsUser] = useState(false);
-
+  // 수정, 삭제 모달 상태
   const [isOpen, setIsOpen] = useState(false);
   const clickMenuHandler = () => {
     setIsOpen(!isOpen);
   };
+  // 삭제할 건지 한 번 더 물어보는 모달 상태
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+  // 코드 블록 스타일 적용하기
   const editCodeStyle = (html: string): string => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
@@ -91,36 +100,32 @@ export default function PostDetailItem(props: PostDetailItemProps) {
     return doc.body.innerHTML;
   };
 
+  // 최신순 정렬을 위한 댓글 시간 포맷 설정
   const getDatetimeSortFormat = (update: string): string => {
     const date = dayjs(update).add(9, 'hour');
     return date.format('YYYY-MM-DD HH:mm:ss');
   };
 
-  // const getDatetimeFormat = () => {
-  //   const date = dayjs(createdAt).add(9, 'hour');
-  //   return date.format('YYYY.MM.DD');
-  // };
-
+  // 게시글 작성 시간 포맷 설정
   const getElapsedTime = () => {
     const now = dayjs().add(9, 'hour');
     const writeTime = dayjs(createdAt).add(9, 'hour');
-    // const now = dayjs();
-    // const writeTime = dayjs(createdAt);
 
     const gap = now.diff(writeTime, 's');
     if (gap < 60) return `${gap}초 전`;
     if (gap < 3600) return `${Math.floor(gap / 60)}분 전`;
     if (gap < 86400) return `${Math.floor(gap / 3600)}시간 전`;
-    // return `${Math.floor(gap / 86400)}일 전`;
     return writeTime.format('YYYY.MM.DD');
   };
 
+  // 로그인한 사용자가 해당 게시글 작성자인지 확인
   const checkPostUser = () => {
     if (author._id === user?._id) {
       setIsUser(true);
     }
   };
 
+  // 해당 게시글의 댓글 목록 필터링
   const filteringItem = (data: Post[]) => {
     for (const res of data) {
       if (res._id === post) {
@@ -128,26 +133,34 @@ export default function PostDetailItem(props: PostDetailItemProps) {
       }
     }
   };
-
+  // 게시글 목록 불러오기 (게시글 id에 해당하는 댓글만 필터링)
   const getPostItem = async () => {
     try {
-      const { data } = await getPostList(channelIdList[Number(channel) - 1]);
+      const { data } = await getPostList(channelIdList[Number(channelId) - 1]);
       filteringItem(data);
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
   };
 
+  // 수정 버튼 클릭 시, 게시글 수정 페이지로 이동하기
   const clickUpdateHandler = () => {
-    navigate(`/channel/${channel}/update/${post}`);
+    navigate(`/channel/${channelId}/update/${post}`);
   };
 
+  // 삭제 버튼 클릭 시, 삭제할 건지 한 번 더 물어보는 모달 띄우기
   const clickDeleteHandler = () => {
     setIsDeleteModalOpen(true);
   };
 
+  // 삭제할 건지 한 번 더 물어보는 모달 닫기
   const closeDeleteModalHanlder = () => {
     setIsDeleteModalOpen(false);
+  };
+
+  // 수정, 삭제 모달 닫기
+  const closeHandler = () => {
+    setIsOpen(false);
   };
 
   useEffect(() => {
@@ -155,15 +168,19 @@ export default function PostDetailItem(props: PostDetailItemProps) {
       getPostItem();
       checkPostUser();
     }
-  }, [user]);
+  }, [user, comments]);
 
-  // useEffect(() => {
-  //   if (divRef.current) {
-  //     const width = divRef.current.offsetWidth;
-  //     console.log('width:', width);
-  //     setCurrentWidth(width);
-  //   }
-  // }, []);
+  // 수정, 삭제 모달 밖 영역 클릭 시, 모달 닫기
+  useEffect(() => {
+    const clickHandler = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        closeHandler();
+      }
+    };
+
+    window.addEventListener('mousedown', clickHandler);
+    return () => window.removeEventListener('mousedown', clickHandler);
+  }, [modalRef]);
 
   return (
     <>
@@ -184,7 +201,7 @@ export default function PostDetailItem(props: PostDetailItemProps) {
               theme={theme}
             />
           </Link>
-          {/* 사용자 이름과 글쓴이 이름이 일치할 경우 */}
+          {/* 로그인한 사용자 id 값과 해당 게시글 작성자 id 값이 일치할 경우 */}
           {isUser && (
             <>
               <div
@@ -194,19 +211,16 @@ export default function PostDetailItem(props: PostDetailItemProps) {
                 <img src={dark(theme) ? menuIconWhite : menuIcon} />
               </div>
               {isOpen && (
-                // shadow-[1px_2px_3px_rgba(0,0,0,0.25)]
-
                 <div
                   className={`flex flex-col w-[91px] h-[70px] rounded-[2px]  absolute top-8 right-4  ${
                     dark(theme)
                       ? 'bg-[#2d2d2d] border border-white/40'
                       : 'border border-[#e5e5e5]'
                   }`}
+                  ref={modalRef}
                 >
                   <div
-                    className={`flex justify-center items-center text-[12px] h-[34px] cursor-pointer ${
-                      dark(theme) ? 'text-[#ffffff] ' : ''
-                    }`}
+                    className="flex justify-center items-center text-[12px] h-[34px] cursor-pointer"
                     onClick={clickUpdateHandler}
                   >
                     수정하기
@@ -216,6 +230,7 @@ export default function PostDetailItem(props: PostDetailItemProps) {
                       dark(theme) ? 'border-[#878787]' : 'opacity-10'
                     }`}
                   />
+
                   <div
                     className="flex justify-center items-center text-[12px] text-[#FF0404] h-[34px] cursor-pointer"
                     onClick={clickDeleteHandler}
@@ -237,6 +252,7 @@ export default function PostDetailItem(props: PostDetailItemProps) {
           </div>
 
           {/* w-[500px] */}
+
           <div
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(
@@ -253,7 +269,7 @@ export default function PostDetailItem(props: PostDetailItemProps) {
               <PollOptionsVoteView
                 options={pollOptions}
                 postId={_id}
-                channelId={channel ?? ''}
+                channelId={channelId ?? ''}
                 originalTitle={parsedTitle.title}
                 originalContent={parsedTitle.content}
                 imageToDeletePublicId={imagePublicId || null}
@@ -262,17 +278,8 @@ export default function PostDetailItem(props: PostDetailItemProps) {
               />
             </div>
           )}
-          {/* {image && (
-            <div>
-              <img
-                src={image}
-                className="max-w-[626px] max-h-[626px] border border-[#e0e0e0] rounded-[5px]"
-              />
-            </div>
-          )} */}
         </div>
         <div className="flex justify-end pr-5 pb-[9px] text-[#808080] text-sm font-light">
-          {/* {getDatetimeFormat()} */}
           {getElapsedTime()}
         </div>
         <hr className="mx-[18px] text-[#b2b2b2]" />
@@ -281,19 +288,14 @@ export default function PostDetailItem(props: PostDetailItemProps) {
             likeCount={likes.length}
             commentCount={comments.length}
             postId={_id}
-            postUserId={author._id}
             likes={likes}
             theme={theme}
+            author={author}
+            channel={channel}
           />
         </div>
         <div>
-          {commentListItem.length === 0 && (
-            // <div className="flex flex-col justify-center items-center gap-5 text-sm font-medium pb-12">
-            //   <div>댓글이 없습니다!</div>
-            //   <div>새로운 댓글을 작성해 보세요!</div>
-            // </div>
-            <></>
-          )}
+          {commentListItem.length === 0 && <></>}
           {commentListItem.length !== 0 &&
             [...commentListItem]
               .sort(
@@ -302,16 +304,22 @@ export default function PostDetailItem(props: PostDetailItemProps) {
                   new Date(getDatetimeSortFormat(b.updatedAt)).getTime()
               )
               .map((item) => (
-                <CommentListItem key={item._id} {...item} theme={theme} />
+                <CommentListItem
+                  key={item._id}
+                  {...item}
+                  updateReloadTrigger={updateReloadTrigger}
+                  theme={theme}
+                />
               ))}
         </div>
       </div>
       {isDeleteModalOpen && (
         <CheckDeleteModal
           type="POST"
-          channel={String(channel)}
+          channel={String(channelId)}
           _id={_id}
           closeDeleteModalHanlder={closeDeleteModalHanlder}
+          updateReloadTrigger={updateReloadTrigger}
           theme={theme}
         />
       )}

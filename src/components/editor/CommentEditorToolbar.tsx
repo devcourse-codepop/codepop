@@ -2,6 +2,7 @@ import { Editor } from '@tiptap/react';
 import CodeEditIcon from '../icon/CodeEditIcon';
 import { Theme } from '../../types/ darkModeTypes';
 
+// Props 타입
 interface Props {
   editor: Editor | null;
   showCodeButton?: boolean;

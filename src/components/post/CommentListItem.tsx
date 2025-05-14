@@ -1,7 +1,7 @@
 import menuIcon from '../../assets/MenuIcon.svg';
 import menuIconWhite from '../../assets/MenuIconWhite.svg';
 import userImg from '../../assets/images/header/userImg.svg';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 import { Comment } from '../../types';
 import { useAuthStore } from '../../stores/authStore';
@@ -11,28 +11,40 @@ import CheckDeleteModal from './CheckDeleteModal';
 import { Theme } from '../../types/ darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 
+// updateReloadTrigger 타입 추가
 interface CommentListItemProps extends Comment {
+  updateReloadTrigger: () => void;
   theme: Theme;
 }
 
-export default function CommentListItem(props: CommentListItemProps) {
-  const { _id, comment, author, post, createdAt, theme } = props;
-
+export default function CommentListItem({
+  _id,
+  comment,
+  author,
+  createdAt,
+  updateReloadTrigger,
+  theme,
+}: CommentListItemProps) {
   const params = useParams();
   const channel = params.channelId;
-  //const post = params.postId;
 
+  // 로그인한 사용자 정보 받아오기
   const user = useAuthStore((state) => state.user);
 
-  const [isUser, setIsUser] = useState(false);
+  // 삭제 모달을 나타내는 div 요소
+  const modalRef = useRef<HTMLDivElement | null>(null);
 
+  // 해당 댓글 작성자 여부 상태
+  const [isUser, setIsUser] = useState(false);
+  // 삭제 모달 상태
   const [isOpen, setIsOpen] = useState(false);
   const clickMenuHandler = () => {
     setIsOpen(!isOpen);
   };
-
+  // 삭제할 건지 한 번 더 물어보는 모달 상태
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+  // 코드 블록 스타일 적용하기
   const editCodeStyle = (html: string): string => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
@@ -58,32 +70,38 @@ export default function CommentListItem(props: CommentListItemProps) {
     return doc.body.innerHTML;
   };
 
+  // 댓글 작성 시간 포맷 설정
   const getElapsedTime = () => {
     const now = dayjs().add(9, 'hour');
     const writeTime = dayjs(createdAt).add(9, 'hour');
-    // const now = dayjs();
-    // const writeTime = dayjs(createdAt);
 
     const gap = now.diff(writeTime, 's');
     if (gap < 60) return `${gap}초 전`;
     if (gap < 3600) return `${Math.floor(gap / 60)}분 전`;
     if (gap < 86400) return `${Math.floor(gap / 3600)}시간 전`;
-    // return `${Math.floor(gap / 86400)}일 전`;
     return writeTime.format('YYYY.MM.DD');
   };
 
+  // 로그인한 사용자가 해당 댓글 작성자인지 확인
   const checkCommentUser = () => {
     if (author._id === user?._id) {
       setIsUser(true);
     }
   };
 
+  // 삭제 버튼 클릭 시, 삭제할 건지 한 번 더 물어보는 모달 띄우기
   const clickDeleteHandler = () => {
     setIsDeleteModalOpen(true);
   };
 
+  // 삭제할 건지 한 번 더 물어보는 모달 닫기
   const closeDeleteModalHanlder = () => {
     setIsDeleteModalOpen(false);
+  };
+
+  // 삭제 모달 닫기
+  const closeHandler = () => {
+    setIsOpen(false);
   };
 
   useEffect(() => {
@@ -91,6 +109,18 @@ export default function CommentListItem(props: CommentListItemProps) {
       checkCommentUser();
     }
   }, [user]);
+
+  // 삭제 모달 밖 영역 클릭 시, 모달 닫기
+  useEffect(() => {
+    const clickHandler = (e: MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        closeHandler();
+      }
+    };
+
+    window.addEventListener('mousedown', clickHandler);
+    return () => window.removeEventListener('mousedown', clickHandler);
+  }, [modalRef]);
 
   return (
     <>
@@ -121,7 +151,7 @@ export default function CommentListItem(props: CommentListItemProps) {
               {getElapsedTime()}
             </span>
           </div>
-          {/* 사용자 이름과 댓쓴이 이름이 일치할 경우 */}
+          {/* 로그인한 사용자 id 값과 해당 댓글 작성자 id 값이 일치할 경우 */}
           {isUser && (
             <>
               <div
@@ -132,8 +162,9 @@ export default function CommentListItem(props: CommentListItemProps) {
               </div>
               {isOpen && (
                 <div
-                  className="flex justify-center items-center text-[12px] text-[#FF0404] rounded-[2px] w-[91px] h-[34px] shadow-[1px_2px_3px_rgba(0,0,0,0.25)] cursor-pointer absolute top-8 right-4"
+                  className="flex justify-center items-center text-[12px] text-[#FF0404] rounded-[2px] w-[91px] h-[34px] border border-[#e5e5e5] cursor-pointer absolute top-8 right-4"
                   onClick={clickDeleteHandler}
+                  ref={modalRef}
                 >
                   삭제하기
                 </div>
@@ -157,10 +188,10 @@ export default function CommentListItem(props: CommentListItemProps) {
         <CheckDeleteModal
           type="COMMENT"
           channel={String(channel)}
-          post={post}
           _id={_id}
           closeDeleteModalHanlder={closeDeleteModalHanlder}
           theme={theme}
+          updateReloadTrigger={updateReloadTrigger}
         />
       )}
     </>

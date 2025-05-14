@@ -7,9 +7,12 @@ import Button from '../common/Button';
 import CommentEditorToolbar from './CommentEditorToolbar';
 import { Theme } from '../../types/ darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
+import { useEffect } from 'react';
 
+// Props 타입
 interface Props {
   channelId: string;
+  resetTrigger: number;
   submitHandler: (e: React.FormEvent<Element>) => void;
   onChange: (html: string) => void;
   showCodeButton?: boolean;
@@ -19,12 +22,14 @@ interface Props {
 
 export default function CommentEditor({
   channelId,
+  resetTrigger,
   submitHandler,
   onChange,
   showCodeButton = false,
   disableMinHeight = false,
   theme,
 }: Props) {
+  // 에디터 기본 설정
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -47,6 +52,13 @@ export default function CommentEditor({
       onChange(editor.getHTML());
     },
   });
+
+  // 댓글을 작성하면 resetTrigger 값이 변경되면서 댓글 에디터 부분 초기화
+  useEffect(() => {
+    if (editor) {
+      editor.commands.clearContent();
+    }
+  }, [resetTrigger]);
 
   return (
     <div className=" rounded-[5px] min-h-[100px] h-auto">

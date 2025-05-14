@@ -14,6 +14,7 @@ export default function NotLoginModal({
 }) {
   const navigate = useNavigate();
 
+  // 로그인 페이지로 이동
   const handleLoginClick = () => {
     navigate('/login');
   };
