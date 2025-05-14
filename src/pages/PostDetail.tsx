@@ -74,7 +74,7 @@ export default function PostDetail() {
           <ChannelName channelId={String(channel)} />
         </div>
         {postItem && (
-          <div className="flex flex-col gap-[30px] max-h-[calc(100vh-100px-120px)] overflow-auto">
+          <div className="flex flex-col gap-[30px] max-h-[calc(100vh-100px-120px)] overflow-auto scroll-custom">
             {/* <PostDetailItem key={postItem?._id} {...postItem} /> */}
             <PostDetailItem
               {...postItem}

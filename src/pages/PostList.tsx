@@ -162,7 +162,7 @@ export default function PostList() {
             </div>
           </div>
           <div
-            className="flex flex-col gap-[30px] pb-5 max-h-[calc(100vh-100px-120px)] overflow-auto"
+            className="flex flex-col gap-[30px] pb-5 max-h-[calc(100vh-100px-120px)] overflow-auto scroll-custom"
             ref={scrollRef}
           >
             {postListItem.length === 0 && (
