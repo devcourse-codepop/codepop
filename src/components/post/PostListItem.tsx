@@ -100,8 +100,8 @@ export default function PostListItem(props: Post) {
 
   return (
     <>
-      <div className="w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative">
-        <div className="flex justify-between h-[85px] pl-3 pt-2.5">
+      <div className="postListItem w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative">
+        <div className="postListItem-top flex justify-between h-[85px] pl-3 pt-2.5">
           <Link to={`/profile`} state={{ userid: author?._id }}>
             <Avatar
               name={author?.fullName}
@@ -114,14 +114,14 @@ export default function PostListItem(props: Post) {
 
         <div
           className={twMerge(
-            'flex justify-between px-[55px] py-[15px] gap-[55px] cursor-pointer',
+            'postListItem-content flex justify-between px-[55px] py-[15px] gap-[55px] cursor-pointer',
             !image && 'py-[23px]'
           )}
           onClick={clickPostHandler}
         >
           <div
             className={twMerge(
-              'flex flex-col justify-center w-full gap-[22px] ',
+              'postListItem-content-text flex flex-col justify-center w-full gap-[22px] ',
               image && 'max-w-[635px]'
             )}
           >
@@ -144,7 +144,7 @@ export default function PostListItem(props: Post) {
             )}
           </div>
           {image && (
-            <div className="border border-[#e0e0e0] rounded-[5px]">
+            <div className="postListItem-content-image border border-[#e0e0e0] rounded-[5px]">
               <img src={image} className="w-[226px] h-[226px]" />
             </div>
           )}
@@ -155,7 +155,7 @@ export default function PostListItem(props: Post) {
         <hr className="mx-[18px] text-[#b2b2b2]" />
         <div
           className={twMerge(
-            'flex h-[59px]',
+            'flex h-[59px] postListItem-bottom',
             setCodeCount() > 0 ? 'justify-between' : 'justify-end'
           )}
         >
