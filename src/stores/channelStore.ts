@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { axiosInstance } from '../api/axios';
 
+// 각 채널 id값, 해당 채널에 부여된 color값, 해당 채널 이름, 주소 params에 해당하는 to
 type ChannelItemType = {
   id: string;
   name: string;
@@ -27,23 +28,29 @@ export const useChannelItemStore = create<ChannelStore>((set) => ({
       let cColorDark = '';
       let cTo = '';
 
+      // api에 등록 된 채널명에 맞게 기타 정보 설정.. 여기에 없는 채널이 들어오면 기본 값은 들어가도록 설정
       switch (channel.name) {
         case 'MysteryCode':
           cName = '이거 왜 되지?';
           cColorLight = '#10215C';
           cColorDark = '#19A9BE';
+          cColor = '#10215C';
           cTo = '/channel/1';
           break;
         case 'DeskSetup':
           cName = '이거 왜 안 쓰지?';
           cColorLight = '#3380DE';
           cColorDark = '#3380DE';
+          cColor = '#3380DE';
+
           cTo = '/channel/2';
           break;
         case 'Vote':
           cName = '골라봐';
           cColorLight = '#60A7F7';
           cColorDark = '#9E68E9';
+
+          cColor = '#60A7F7';
           cTo = '/channel/3';
           break;
         default:

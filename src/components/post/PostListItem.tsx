@@ -29,10 +29,9 @@ export default function PostListItem(props: PostListItemProps) {
     likes,
     comments,
     createdAt,
-    theme,
     channel,
+    theme,
   } = props;
-
   const { channels } = useChannelItemStore();
   // const params = useParams();
   // const channel = params.channelId;
@@ -123,11 +122,12 @@ export default function PostListItem(props: PostListItemProps) {
   return (
     <>
       <div
-        className={`w-full h-auto rounded-[5px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative ${
+        className={`postListItem w-full h-auto rounded-[5px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative ${
           dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
         }`}
+        // ref={divRef}
       >
-        <div className="flex justify-between h-[85px] pl-3 pt-2.5">
+        <div className="postListItem-top flex justify-between h-[85px] pl-3 pt-2.5">
           <Link to={`/profile`} state={{ userid: author?._id }}>
             <Avatar
               name={author?.fullName}
@@ -141,14 +141,14 @@ export default function PostListItem(props: PostListItemProps) {
 
         <div
           className={twMerge(
-            'flex justify-between px-[55px] py-[15px] gap-[55px] cursor-pointer',
+            'postListItem-content flex justify-between px-[55px] py-[15px] gap-[55px] cursor-pointer',
             !image && 'py-[23px]'
           )}
           onClick={clickPostHandler}
         >
           <div
             className={twMerge(
-              `flex flex-col justify-center w-full gap-[22px] ${
+              `postListItem-content-text flex flex-col justify-center w-full gap-[22px] ${
                 dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
               }`,
               image && 'max-w-[635px]'
@@ -184,7 +184,7 @@ export default function PostListItem(props: PostListItemProps) {
             )} */}
           </div>
           {image && (
-            <div className="border border-[#e0e0e0] rounded-[5px]">
+            <div className="postListItem-content-image border border-[#e0e0e0] rounded-[5px]">
               <img src={image} className="w-[226px] h-[226px]" />
             </div>
           )}
@@ -210,7 +210,8 @@ export default function PostListItem(props: PostListItemProps) {
 
         <div
           className={twMerge(
-            'flex h-[59px]',
+            'flex h-[59px] ,postListItem-bottom',
+
             setCodeCount() > 0 ? 'justify-between' : 'justify-end'
           )}
         >

@@ -12,10 +12,12 @@ export default function ChannelBox({ theme }: { theme: Theme }) {
   const params = useParams();
   const [channelParams, setchannelParams] = useState(params.channelId);
 
+  // 채널 정보 가져오기
   useEffect(() => {
     fetchChannels();
   }, [fetchChannels]);
 
+  // 주소의 param값 확인해서 어떤 채널인지 state에 저장
   useEffect(() => {
     setchannelParams(params.channelId);
   }, [params]);
@@ -57,6 +59,7 @@ export default function ChannelBox({ theme }: { theme: Theme }) {
                 <span className="font-noto font-[18px] pt-1 relative z-1">
                   {item.name}
                   <span
+                    // 주소 param값이 해당 채널과 동일하면 해당 채널에 css 효과
                     className={twMerge(
                       `block w-0 h-3/7 opacity-30 absolute left-0 bottom-0 -z-1 group-hover:w-full duration-300 ease-out`,
                       channelParams === item.to.split('/')[2] && 'w-full'
