@@ -1,3 +1,4 @@
+/* 메인 컨텐츠 배너 */
 .swiper-slide {
   overflow: hidden;
   display: flex;
@@ -34,33 +35,34 @@
   background: #5aabeb;
 }
 
+/* 메인컨텐츠 인기글 */
 .tabConstentItem {
   min-width: 0;
   width: 100%;
 }
-.tabConstentItem > div {
+.tabConstentItem .postListItem {
   width: 100%;
   box-shadow: none;
   border: 1px solid #b3b3b3;
 }
-.tabConstentItem > div > div:nth-child(1) {
+.tabConstentItem .postListItem-top {
   padding: 5px;
   height: auto;
   padding-bottom: 0;
 }
-.tabConstentItem > div > div:nth-child(1) > div {
+.tabConstentItem .avartar-box {
   padding: 10px 16px;
 }
-.tabConstentItem > div > div:nth-child(2) {
+.tabConstentItem .postListItem-content {
   width: 100%;
   padding: 15px 45px;
   word-break: break-all;
   gap: 0;
 }
-.tabConstentItem > div > div:nth-child(2) > div {
+.tabConstentItem .postListItem-content .postListItem-content-text {
   gap: 5px;
 }
-.tabConstentItem > div > div:nth-child(2) > div > div:nth-child(1) {
+.tabConstentItem .postTitle {
   height: 2.65em;
   margin-bottom: 5px;
   line-height: 1.25em;
@@ -71,7 +73,7 @@
   white-space: normal;
   -webkit-box-orient: vertical;
 }
-.tabConstentItem > div > div:nth-child(2) > div > div:nth-child(2) {
+.tabConstentItem .postContent {
   width: 100%;
   line-height: 1.25em;
   height: 2.65em;
@@ -83,15 +85,13 @@
   -webkit-box-orient: vertical;
 }
 
-/* 리액션 부분을 감싸는 div에 클래스 이름 필요 */
-.tabConstentItem > div .h-\[59px\] {
+.tabConstentItem .postListItem-bottom {
   height: auto;
 }
-.tabConstentItem > div .h-\[59px\] > div {
+.tabConstentItem .reaction {
   padding: 10px 16px;
 }
 
-/* postListItem에 들어가는 이미지 삭제 */
-.tabConstentItem > div > div:nth-child(2) > .border {
+.tabConstentItem .postListItem-content-image {
   display: none;
 }
