@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import Avatar from '../avatar/Avatar';
 import LikeComment from '../reaction/LikeComment';
 import menuIcon from '../../assets/MenuIcon.svg';
@@ -11,34 +10,18 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import CommentListItem from './CommentListItem';
 import { useAuthStore } from '../../stores/authStore';
 import DOMPurify from 'dompurify';
+import PollOptionsVoteView from '../poll/PollOptionsVoteView';
 import CheckDeleteModal from './CheckDeleteModal';
-=======
-import Avatar from "../avatar/Avatar";
-import LikeComment from "../reaction/LikeComment";
-import menuIcon from "../../assets/MenuIcon.svg";
-import { useEffect, useState } from "react";
-import { Comment, Post } from "../../types";
-import dayjs from "dayjs";
-import { getPostList } from "../../api/post/post";
-import { usePostStore } from "../../stores/postStore";
-import { useNavigate, useParams } from "react-router-dom";
-import CommentListItem from "./CommentListItem";
-import { useAuthStore } from "../../stores/authStore";
-import DOMPurify from "dompurify";
-import PollOptionsVoteView from "../poll/PollOptionsVoteView";
-import CheckDeleteModal from "./CheckDeleteModal";
 
 interface PollOption {
   id: string;
   text: string;
   voteCount: number;
 }
->>>>>>> dev
 
 export default function PostDetailItem(props: Post) {
   // image,
-  const { _id, title, author, likes, comments, createdAt, imagePublicId } =
-    props;
+  const { _id, title, author, likes, comments, createdAt, imagePublicId } = props;
 
   const params = useParams();
   const channel = params.channelId;
@@ -67,8 +50,7 @@ export default function PostDetailItem(props: Post) {
 
   const editCodeStyle = (html: string): string => {
     const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-
+    const doc = parser.parseFromString(html, 'text/html');
 
     const codes = doc.querySelectorAll('pre');
     const codeStr = '<span>&lt;/&gt;</span>';
@@ -91,8 +73,8 @@ export default function PostDetailItem(props: Post) {
   };
 
   const getDatetimeSortFormat = (update: string): string => {
-    const date = dayjs(update).add(9, "hour");
-    return date.format("YYYY-MM-DD HH:mm:ss");
+    const date = dayjs(update).add(9, 'hour');
+    return date.format('YYYY-MM-DD HH:mm:ss');
   };
 
   // const getDatetimeFormat = () => {
@@ -101,17 +83,17 @@ export default function PostDetailItem(props: Post) {
   // };
 
   const getElapsedTime = () => {
-    const now = dayjs().add(9, "hour");
-    const writeTime = dayjs(createdAt).add(9, "hour");
+    const now = dayjs().add(9, 'hour');
+    const writeTime = dayjs(createdAt).add(9, 'hour');
     // const now = dayjs();
     // const writeTime = dayjs(createdAt);
 
-    const gap = now.diff(writeTime, "s");
+    const gap = now.diff(writeTime, 's');
     if (gap < 60) return `${gap}초 전`;
     if (gap < 3600) return `${Math.floor(gap / 60)}분 전`;
     if (gap < 86400) return `${Math.floor(gap / 3600)}시간 전`;
     // return `${Math.floor(gap / 86400)}일 전`;
-    return writeTime.format("YYYY.MM.DD");
+    return writeTime.format('YYYY.MM.DD');
   };
 
   const checkPostUser = () => {
@@ -216,7 +198,7 @@ export default function PostDetailItem(props: Post) {
               <PollOptionsVoteView
                 options={pollOptions}
                 postId={_id}
-                channelId={channel ?? ""}
+                channelId={channel ?? ''}
                 originalTitle={parsedTitle.title}
                 originalContent={parsedTitle.content}
                 imageToDeletePublicId={imagePublicId || null}

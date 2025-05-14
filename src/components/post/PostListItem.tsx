@@ -11,6 +11,7 @@ import NotLoginModal from './NotLoginModal';
 import DOMPurify from 'dompurify';
 import DeletedUserModal from './DeletedUserModal';
 import { useChannelItemStore } from '../../stores/channelStore';
+import PollOptionsView from '../poll/PollOptionsView';
 
 export default function PostListItem(props: Post) {
   const { _id, title, image, author, likes, comments, createdAt, channel } = props;
