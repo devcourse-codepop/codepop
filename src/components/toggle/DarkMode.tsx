@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import logoLight from '../../assets/images/header/logo.svg';
 import logoDark from '../../assets/images/header/logoWhite.svg';
-
-interface Theme {
-  name: string;
-  bg: string;
-  logo?: string;
-}
+import { Theme } from '../../types/ darkModeTypes';
 
 interface DarkModeProps {
-  children: (theme: Theme, nextTheme: () => void) => React.ReactNode;
+  children: (
+    theme: Theme,
+    nextTheme: () => void,
+    nextThemeIndex: number
+  ) => React.ReactNode;
 }
 
 export default function DarkMode({ children }: DarkModeProps) {
@@ -47,11 +46,13 @@ export default function DarkMode({ children }: DarkModeProps) {
     setThemeIndex((currentTheme) => (currentTheme + 1) % themes.length);
   };
 
+  // 다음 테마 계산 0->1 1->0
+  const nextThemeIndex = (themeIndex + 1) % 2;
   return (
     <div
       className={`min-h-screen ${theme.bg} transition-colors duration-300 flex flex-col`}
     >
-      <main>{children(theme, nextTheme)}</main>
+      <main>{children(theme, nextTheme, nextThemeIndex)}</main>
     </div>
   );
 }
