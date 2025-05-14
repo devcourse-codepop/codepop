@@ -186,6 +186,7 @@ export default function MemberBox({ theme }: { theme: Theme }) {
         initialUser={chatTargetUser}
         isOpen={isChatOpen}
         onClose={onClose}
+        theme={theme}
       />
     </div>
   );

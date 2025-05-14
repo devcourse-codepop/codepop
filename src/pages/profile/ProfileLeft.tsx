@@ -82,7 +82,7 @@ export default function ProfileLeft({
                 onClick={() => setIsChatOpen(true)}
               />
 
-              <ChatModal isOpen={isChatOpen} onClose={onClose} />
+              <ChatModal isOpen={isChatOpen} onClose={onClose} theme={theme} />
             </div>
           )}
         </div>

@@ -1,9 +1,13 @@
 import ChatHeader from './ChatHeader';
 import { User1 } from './ChatModal';
 import userImage from '../../assets/images/profile/defaultProfileImage.jpg';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
+
 interface ChatUserListProps {
   onSelectUser: (user: User1) => void;
   onClose: () => void;
+  theme: Theme;
 }
 
 const mockUsers: User1[] = [
@@ -42,15 +46,24 @@ const mockUsers: User1[] = [
 export default function ChatUserList({
   onSelectUser,
   onClose,
+  theme,
 }: ChatUserListProps) {
   return (
     <div className="h-[75vh] flex-1 flex flex-col">
-      <ChatHeader onClose={onClose} />
-      <div className="flex-1 overflow-y-auto messageBox">
+      <ChatHeader onClose={onClose} theme={theme} />
+      <div
+        className={`flex-1 overflow-y-auto messageBox ${
+          dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+        }`}
+      >
         {mockUsers.map((user) => (
           <div
             key={user.id}
-            className="w-full text-left flex py-[18px] px-[30px] bg-white border-b border-b-[#DEDEDE] rounded hover:bg-gray-200 cursor-pointer"
+            className={`w-full text-left flex py-[18px] px-[30px] rounded  cursor-pointer ${
+              dark(theme)
+                ? 'bg-[#2d2d2d]  border-b border-b-white/40 text-[#ffffff] hover:bg-[#3b3b3b]'
+                : 'bg-[#ffffff] border-b border-b-[#DEDEDE] hover:bg-gray-200'
+            }`}
             onClick={() => onSelectUser(user)}
           >
             {/* 상대 프로필, 이름, 마지막 대화 */}
@@ -61,13 +74,23 @@ export default function ChatUserList({
             />
             <div className="ml-[20px] pt-1.5">
               <p className="font-bold text-[14px]">{user.name}</p>
-              <p className="font-normal text-[#000000]/60 text-[12px] truncate w-[258px]">
+              <p
+                className={`font-normal  text-[12px] truncate w-[258px] ${
+                  dark(theme) ? 'text-[#ffffff]/60' : 'text-[#000000]/60'
+                }`}
+              >
                 {user.content}
               </p>
             </div>
             <div className="ml-[15px] pt-1 flex flex-col items-center w-[60px] shrink-0">
               {/* 보낸 시간  */}
-              <p className="font-medium text-[12px] text-black/40">14분 전</p>
+              <p
+                className={`font-medium text-[12px] ${
+                  dark(theme) ? 'text-[#ffffff]/40' : 'text-[#000000]/40'
+                }`}
+              >
+                14분 전
+              </p>
               {/* 메시지 온 표시 */}
               {user.count !== undefined && (
                 <p

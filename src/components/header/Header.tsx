@@ -76,7 +76,9 @@ export default function Header({
               <img
                 src={messageIcon}
                 onClick={handleMessageClick}
-                className="cursor-pointer w-[28px] h-[28px]"
+                className={`cursor-pointer w-[28px] h-[28px] ${
+                  dark(theme) ? 'invert' : ''
+                }`}
               />
               <img
                 src={imgSrc}
@@ -106,7 +108,7 @@ export default function Header({
         </div>
       </header>
 
-      <ChatModal isOpen={isChatOpen} onClose={onClose} />
+      <ChatModal isOpen={isChatOpen} onClose={onClose} theme={theme} />
     </>
   );
 }

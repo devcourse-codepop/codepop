@@ -3,11 +3,14 @@ import ChatRoom from './ChatRoom';
 import ChatUserList from './ChatUserList';
 import { useMessageStore } from '../../stores/messageStore';
 import MessageOpenIcon from '../../assets/images/message/messageOpenIcon.svg';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 interface ChatModalProps {
   isOpen: boolean;
   onClose: () => void;
   initialUser?: User1 | null;
+  theme: Theme;
 }
 
 export interface User1 {
@@ -21,6 +24,7 @@ export default function ChatModal({
   isOpen,
   onClose,
   initialUser,
+  theme,
 }: ChatModalProps) {
   const [selectedUser, setSelectedUser] = useState<User1 | null>(null);
   const changeMessageIcon = useMessageStore((state) => state.setMessageIcon);
@@ -28,7 +32,7 @@ export default function ChatModal({
   useEffect(() => {
     if (isOpen) {
       setSelectedUser(initialUser || null);
-      changeMessageIcon(MessageOpenIcon);
+      changeMessageIcon(dark(theme) ? MessageOpenIcon : MessageOpenIcon);
     }
   }, [isOpen, initialUser]);
 
@@ -48,9 +52,14 @@ export default function ChatModal({
             user={selectedUser}
             onBack={() => setSelectedUser(null)}
             onClose={onClose}
+            theme={theme}
           /> // 채팅방
         ) : (
-          <ChatUserList onSelectUser={setSelectedUser} onClose={onClose} /> // 대화했던 사람들 목록
+          <ChatUserList
+            onSelectUser={setSelectedUser}
+            onClose={onClose}
+            theme={theme}
+          /> // 대화했던 사람들 목록
         )}
       </div>
     </div>
