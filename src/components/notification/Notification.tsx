@@ -23,9 +23,11 @@ export default function Notification() {
     setNotifications(result.data);
   };
 
+  // 새로운 알림이 있는지 확인
   const newDataHandler = () => {
     let dataSum = 0;
     notifications.map((notification) => {
+      // seen값이 false고 like,comment가 삭제된 내용이 아니면 카운트 되도록
       if (
         notification.seen === false &&
         notification.like !== null &&
@@ -37,11 +39,13 @@ export default function Notification() {
     setNewData(dataSum);
   };
 
+  // 알림 확인 api 보내기
   const readHandler = async () => {
     await putNotificationSeenData();
     fetchNotifications();
   };
 
+  // 알림글 누르면 해당 포스트로 이동하는 navigate
   const navigateHandler = (notifi: NotificationType) => {
     channels.map((channel) => {
       if (notifi.like !== undefined) {
@@ -59,11 +63,12 @@ export default function Notification() {
   };
 
   const closeHandler = () => {
-    // 닫힐때는 읽음도 처리 되도록
+    // 닫힐때 읽음도 처리 되도록
     setNotifiOpen(false);
     readHandler();
   };
 
+  // 알림 api 요청, 실시간 알림 감지를 위해 2초마다 요청
   useEffect(() => {
     fetchNotifications();
     newDataHandler();
@@ -72,10 +77,12 @@ export default function Notification() {
     return () => clearInterval(interval);
   }, []);
 
+  // 알림목록 갱신되면 감지하고 newDataHandler 실행
   useEffect(() => {
     newDataHandler();
   }, [notifications]);
 
+  // 알림 modal 외의 외부 영역 누르면 모달이 닫히도록
   useEffect(() => {
     const clickHandler = (e: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
@@ -107,7 +114,7 @@ export default function Notification() {
           <span className="w-[12px] h-[12px] bg-white rounded-[2px] absolute rotate-135 -top-1.5 right-6 -z-2"></span>
           <div className="border-b border-[#cccccc] flex justify-between pb-3">
             <h3 className="text-[#4D4D4D] text-base font-medium flex items-end gap-x-2">
-              Notifications{' '}
+              Notifications
               {/* <span className="inline-block bg-zinc-400 rounded-3xl px-2 py-1.5 mb-0.5 min-w-7 text-center text-white text-xs leading-1.5">
                 {newData}
               </span> */}

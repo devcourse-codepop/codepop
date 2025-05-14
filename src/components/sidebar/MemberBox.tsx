@@ -13,11 +13,13 @@ export default function MemberBox() {
   const [users, setUsers] = useState<User[]>([]); // 모든 사용자
   const modalRef = useRef<HTMLUListElement>(null);
 
+  // api 유저 요청, 접속 된 유저 먼저 정렬
   const fetchUsers = async () => {
     const result = await getAllUsersData();
     setUsers(
       result.data.sort((a, b) => {
         if (a.isOnline === b.isOnline) {
+          // 유저 이름 비교후 오름차순으로 정렬
           return a.fullName.localeCompare(b.fullName);
         }
         return a.isOnline ? -1 : 1;
@@ -25,6 +27,7 @@ export default function MemberBox() {
     );
   };
 
+  // 유저가져오기, 유저들 접속 감지를 위해 2초마다 갱신
   useEffect(() => {
     fetchUsers();
 
@@ -33,16 +36,19 @@ export default function MemberBox() {
     return () => clearInterval(interval);
   }, []);
 
+  // 검색창의 검색어 가져오기
   const searchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value.toUpperCase());
   };
 
+  // 유저 filter
   const filterUsers = users.filter(
     (user) =>
       user.fullName.toLowerCase().includes(searchKeyword.toLowerCase()) ||
       user.email.toLowerCase().includes(searchKeyword.toLowerCase())
   );
 
+  // 헤딩 id값의 modal 열기
   const ToggleHandelr = (id: string) => {
     if (openUser === id) {
       setOpenUser('');
@@ -51,6 +57,7 @@ export default function MemberBox() {
     }
   };
 
+  // 해당 modal이 아닌 경우 열려 있는 modal 닫기
   useEffect(() => {
     const clickHandler = (e: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
@@ -79,6 +86,7 @@ export default function MemberBox() {
         />
       </div>
       {isLoggedIn && (
+        // 내 멤버 카드
         <div className="myInfoCard">
           <Avatar
             name={`(나) ${user !== null ? user.fullName : ''}`}
@@ -94,6 +102,7 @@ export default function MemberBox() {
           height: isLoggedIn ? `calc(100% - 161px)` : `calc(100% - 91px)`,
         }}
       >
+        {/* 유저멤버 카드 */}
         {filterUsers.map((user) => (
           <div className="relative" key={user._id} id={user._id}>
             <div
@@ -107,6 +116,7 @@ export default function MemberBox() {
                 isOnline={user.isOnline}
               ></Avatar>
             </div>
+            {/* 프로필 클릭시 나오는 modal */}
             <button
               className="absolute right-0 top-4 cursor-pointer"
               onClick={() => ToggleHandelr(user._id)}
