@@ -42,3 +42,11 @@
 .scroll-custom::-webkit-scrollbar-thumb {
   background: #939393;
 }
+
+.messageBox::-webkit-scrollbar {
+  width: 5px;
+  border-radius: 5px;
+}
+.messageBox::-webkit-scrollbar-thumb {
+  background: #adadad;
+}
