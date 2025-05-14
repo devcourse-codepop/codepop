@@ -49,6 +49,7 @@ export default function CommentEditor({
     onUpdate({ editor }) {
       onChange(editor.getHTML());
 
+      // 댓글 작성 중 다음 줄로 넘어가면 스크롤도 따라 이동
       bottomRef.current?.scrollIntoView({ behavior: 'auto' });
     },
   });
