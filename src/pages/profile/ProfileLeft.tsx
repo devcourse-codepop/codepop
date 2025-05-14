@@ -3,9 +3,12 @@ import Button from '../../components/common/Button';
 import { useAuthStore } from '../../stores/authStore';
 import { useNavigate } from 'react-router-dom';
 import defaultProfileImage from '../../assets/images/profile/defaultProfileImage.jpg';
+import { useState } from 'react';
+import ChatModal from '../message/ChatModal';
 
 export default function ProfileLeft({ userData, onSelectTab, userId }: UserInfo) {
   const user = useAuthStore((state) => state.user);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const navigate = useNavigate();
   return (
     <>
@@ -35,7 +38,8 @@ export default function ProfileLeft({ userData, onSelectTab, userId }: UserInfo)
           {user?._id === userId && (
             <div className='mt-[25px] flex gap-6'>
               <Button value='프로필 수정' className='button-style3' onClick={() => navigate('/profile/edit')} />
-              <Mail className='w-[30px] h-[30px] cursor-pointer' />
+              <Mail className='w-[30px] h-[30px] cursor-pointer' onClick={() => setIsChatOpen(true)} />
+              <ChatModal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
             </div>
           )}
         </div>
