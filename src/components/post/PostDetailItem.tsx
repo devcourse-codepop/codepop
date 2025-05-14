@@ -2,12 +2,14 @@ import Avatar from '../avatar/Avatar';
 import LikeComment from '../reaction/LikeComment';
 import menuIcon from '../../assets/MenuIcon.svg';
 import menuIconWhite from '../../assets/MenuIconWhite.svg';
+
 import { useEffect, useState } from 'react';
 import { Comment, Post } from '../../types';
 import dayjs from 'dayjs';
 import { getPostList } from '../../api/post/post';
 import { usePostStore } from '../../stores/postStore';
-import { useNavigate, useParams } from 'react-router-dom';
+
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import CommentListItem from './CommentListItem';
 import { useAuthStore } from '../../stores/authStore';
 import DOMPurify from 'dompurify';
@@ -173,13 +175,15 @@ export default function PostDetailItem(props: PostDetailItemProps) {
         //ref={divRef}
       >
         <div className="flex justify-between h-[85px] pl-3 pt-2.5">
-          <Avatar
-            name={author.fullName}
-            email={author.email}
-            image={author.image}
-            isOnline={author.isOnline}
-            theme={theme}
-          />
+          <Link to={`/profile`} state={{ userid: author?._id }}>
+            <Avatar
+              name={author.fullName}
+              email={author.email}
+              image={author.image}
+              isOnline={author.isOnline}
+              theme={theme}
+            />
+          </Link>
           {/* 사용자 이름과 글쓴이 이름이 일치할 경우 */}
           {isUser && (
             <>
@@ -231,6 +235,7 @@ export default function PostDetailItem(props: PostDetailItemProps) {
           >
             {JSON.parse(title).title}
           </div>
+
           {/* w-[500px] */}
           <div
             dangerouslySetInnerHTML={{

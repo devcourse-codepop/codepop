@@ -3,7 +3,8 @@ import LikeComment from '../reaction/LikeComment';
 //import CodeIcon from '../../assets/CodeEditIcon.svg';
 import { Post } from '../../types';
 import dayjs from 'dayjs';
-import { useNavigate } from 'react-router-dom';
+
+import { Link, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 import { useState } from 'react';
 import { useAuthStore } from '../../stores/authStore';
@@ -127,14 +128,17 @@ export default function PostListItem(props: PostListItemProps) {
         }`}
       >
         <div className="flex justify-between h-[85px] pl-3 pt-2.5">
-          <Avatar
-            name={author?.fullName}
-            email={author?.email}
-            image={author?.image}
-            isOnline={author?.isOnline}
-            theme={theme}
-          />
+          <Link to={`/profile`} state={{ userid: author?._id }}>
+            <Avatar
+              name={author?.fullName}
+              email={author?.email}
+              image={author?.image}
+              isOnline={author?.isOnline}
+              theme={theme}
+            />
+          </Link>
         </div>
+
         <div
           className={twMerge(
             'flex justify-between px-[55px] py-[15px] gap-[55px] cursor-pointer',
@@ -157,6 +161,7 @@ export default function PostListItem(props: PostListItemProps) {
             >
               {JSON.parse(title).title}
             </div>
+
             <div
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(
@@ -202,6 +207,7 @@ export default function PostListItem(props: PostListItemProps) {
         />
 
         {/* <div className="flex justify-between h-[59px]"> */}
+
         <div
           className={twMerge(
             'flex h-[59px]',

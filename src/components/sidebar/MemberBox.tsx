@@ -69,7 +69,7 @@ export default function MemberBox({ theme }: { theme: Theme }) {
       </h2>
       <div className="flex items-center px-3 py-2 rounded-[5.54px] text-[14px] gap-4 mb-[13px] bg-[#F6F8FA] text-[#898FA3]">
         <div>
-          <Search className="w-[19.94px] h-[19.94px] transition-colors duration-300text-[#86879C]" />
+          <Search className="w-[19.94px] h-[19.94px] text-[#86879C]" />
         </div>
         <input
           type="text"
@@ -80,13 +80,15 @@ export default function MemberBox({ theme }: { theme: Theme }) {
       </div>
       {isLoggedIn && (
         <div className="myInfoCard">
-          <Avatar
-            name={`(나) ${user !== null ? user.fullName : ''}`}
-            email={user !== null ? user.email : ''}
-            image={user !== null ? user.image : ''}
-            isOnline={user !== null ? user.isOnline : false}
-            theme={theme}
-          ></Avatar>
+          <Link to={`/profile`} state={{ userid: user?._id }}>
+            <Avatar
+              name={`(나) ${user !== null ? user.fullName : ''}`}
+              email={user !== null ? user.email : ''}
+              image={user !== null ? user.image : ''}
+              isOnline={user !== null ? user.isOnline : false}
+              theme={theme}
+            ></Avatar>
+          </Link>
         </div>
       )}
       <div
