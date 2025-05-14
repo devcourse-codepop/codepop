@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 export default function CreateCodePost() {
   const titleRef = useRef<HTMLInputElement>(null);
+  const [title, setTitle] = useState("");
   const [content, setContent] = useState(""); // Editor에서 본문 HTML을 받음
   const [pollOptions, setPollOptions] = useState<
     { id: number; text: string }[]
@@ -57,6 +58,7 @@ export default function CreateCodePost() {
     }
   };
 
+  const isSubmitDisabled = title.trim() === "" || content.trim() === "";
   // // 이미지 삭제 핸들러 추가
   // const handleImageDelete = () => {
   //   const newContent = content.replace(/<p[^>]*>\s*<img[^>]*>\s*<\/p>/g, "");
@@ -66,21 +68,23 @@ export default function CreateCodePost() {
   // };
 
   return (
-    <div className="w-full flex relative">
+    <div className='w-full flex relative'>
       <div>
-        <div className="pb-[30px]">
+        <div className='pb-[30px]'>
           <ChannelName channelId={channelId ?? "1"} />
         </div>
 
-        <div className=" bg-white shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto">
+        <div className=' bg-white shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto'>
           <input
-            type="text"
+            type='text'
+            value={title}
             ref={titleRef}
-            placeholder="제목을 입력하세요"
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder='제목을 입력하세요'
             autoFocus
-            className="w-[955px] font-semibold text-[25px] m-3 outline-none"
+            className='w-[955px] font-semibold text-[25px] m-3 outline-none'
           />
-          <hr className="mt-[15px] mb-[15px] opacity-30" />
+          <hr className='mt-[15px] mb-[15px] opacity-30' />
           <Editor
             onChange={setContent}
             onPollCreate={handlePollCreate}
@@ -88,7 +92,7 @@ export default function CreateCodePost() {
             showCodeButton={true}
             initialContent={content}
           />
-          <hr className="mb-[60px] opacity-30" />
+          <hr className='mb-[60px] opacity-30' />
 
           {/* {imageFile && (
             <Button
@@ -99,9 +103,17 @@ export default function CreateCodePost() {
           )} */}
 
           <Button
-            value="완료"
-            className="button-style2 absolute bottom-[15px] right-[20px]"
-            onClick={handleSubmit} // 게시물 작성 완료 시 제출
+            value='완료'
+            className={`absolute bottom-[15px] right-[20px] button-style2 ${
+              isSubmitDisabled ? "bg-gray-400 cursor-not-allowed" : ""
+            }`}
+            onClick={(e) => {
+              if (isSubmitDisabled) {
+                e.preventDefault(); // 아무 동작도 하지 않음
+                return;
+              }
+              handleSubmit(e);
+            }}
           />
         </div>
       </div>

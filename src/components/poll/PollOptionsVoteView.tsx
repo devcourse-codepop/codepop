@@ -78,10 +78,10 @@ export default function PollOptionsVoteView({
     formData.append("imageToDeletePublicId", "");
     formData.append("image", "");
 
-    console.log("📤 전송되는 FormData:");
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
-    }
+    // console.log("📤 전송되는 FormData:");
+    // for (const [key, value] of formData.entries()) {
+    //   console.log(`${key}:`, value);
+    // }
 
     try {
       await updatePost(formData);
@@ -98,7 +98,7 @@ export default function PollOptionsVoteView({
     .map((opt) => opt.id);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className='flex flex-col gap-2'>
       {pollOptions.map((option) => {
         const percentage =
           totalVotes === 0
@@ -120,14 +120,14 @@ export default function PollOptionsVoteView({
             onClick={() => handleVote(option.id)}
           >
             <div
-              className="absolute top-0 left-0 h-full"
+              className='absolute top-0 left-0 h-full'
               style={{
                 width: `${percentage}%`,
                 backgroundColor: barColor,
                 transition: "width 0.3s ease",
               }}
             />
-            <div className="relative flex justify-between items-center px-4 py-2 text-gray-800 z-10">
+            <div className='relative flex justify-between items-center px-4 py-2 text-gray-800 z-10'>
               <span>{option.text}</span>
               <span>
                 {option.voteCount} votes ({percentage}%)
@@ -136,7 +136,7 @@ export default function PollOptionsVoteView({
           </div>
         );
       })}
-      <div className="mt-4 text-gray-700 font-medium">
+      <div className='mt-4 text-gray-700 font-medium'>
         Total Votes: {totalVotes}
       </div>
     </div>
