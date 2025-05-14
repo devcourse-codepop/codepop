@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 
 // Props 타입
 interface Props {
+  bottomRef: React.RefObject<HTMLDivElement | null>;
   channelId: string;
   resetTrigger: number;
   submitHandler: (e: React.FormEvent<Element>) => void;
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export default function CommentEditor({
+  bottomRef,
   channelId,
   resetTrigger,
   submitHandler,
@@ -46,6 +48,8 @@ export default function CommentEditor({
     content: '<p></p>',
     onUpdate({ editor }) {
       onChange(editor.getHTML());
+
+      bottomRef.current?.scrollIntoView({ behavior: 'auto' });
     },
   });
 
