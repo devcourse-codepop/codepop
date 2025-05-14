@@ -5,13 +5,18 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getAllUsersData } from '../../api/memberbox/member';
 import { useAuthStore } from '../../stores/authStore';
+import ChatModal from '../../pages/message/ChatModal';
+import { User1 } from '../..//pages/message/ChatModal';
+import useChatClose from '../../utils/changeMessageIcon';
 
 export default function MemberBox() {
   const { isLoggedIn, user } = useAuthStore(); // 내 프로필
   const [searchKeyword, setSearchKeyword] = useState<string>(''); // 검색 키워드
   const [openUser, setOpenUser] = useState<string>(''); // 각 프로필 메뉴
   const [users, setUsers] = useState<User[]>([]); // 모든 사용자
-
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatTargetUser, setChatTargetUser] = useState<User1 | null>(null);
+  const onClose = useChatClose(setIsChatOpen);
   const fetchUsers = async () => {
     const result = await getAllUsersData();
     setUsers(
@@ -100,10 +105,14 @@ export default function MemberBox() {
                       프로필 보기
                     </Link>
                   </li>
-                  <li>
-                    <Link className='px-3 py-1 block  opacity-70 hover:opacity-100' to={`/message/`}>
-                      메세지 보내기
-                    </Link>
+                  <li
+                    className='px-3 py-1 block  opacity-70 hover:opacity-100'
+                    onClick={() => {
+                      setChatTargetUser({ id: user._id, name: user.fullName });
+                      setIsChatOpen(true);
+                    }}
+                  >
+                    메세지 보내기
                   </li>
                 </ul>
               )}
@@ -111,6 +120,7 @@ export default function MemberBox() {
           </div>
         ))}
       </div>
+      <ChatModal initialUser={chatTargetUser} isOpen={isChatOpen} onClose={onClose} />
     </div>
   );
 }
