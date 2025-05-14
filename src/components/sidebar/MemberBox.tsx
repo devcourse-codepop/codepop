@@ -98,7 +98,7 @@ export default function MemberBox({ theme }: { theme: Theme }) {
         />
       </div>
       {isLoggedIn && (
-        <div className="myInfoCard">
+        <div className={dark(theme) ? 'dark-myInfoCard' : 'myInfoCard'}>
           <Link to={`/profile`} state={{ userid: user?._id }}>
             <Avatar
               name={`(나) ${user !== null ? user.fullName : ''}`}
@@ -111,7 +111,9 @@ export default function MemberBox({ theme }: { theme: Theme }) {
         </div>
       )}
       <div
-        className="member-list overflow-y-auto pt-2"
+        className={` overflow-y-auto pt-2 ${
+          dark(theme) ? 'dark-member-list' : 'member-list'
+        }`}
         style={{
           height: isLoggedIn ? `calc(100% - 161px)` : `calc(100% - 91px)`,
         }}
