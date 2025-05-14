@@ -193,13 +193,11 @@ export default function PostList() {
         </div>
       </div>
       {showTopButton && (
-        <div className="absolute right-[39%] bottom-[38px] cursor-pointer flex justify-center items-center w-14 h-14 rounded-[50%] bg-white shadow-[1px_3px_3px_rgba(0,0,0,0.25)]">
-          <img
-            src={topBtn2}
-            onClick={scrollToTop}
-            alt="top 버튼"
-            className="w-5 h-5"
-          />
+        <div
+          className="absolute right-[39%] bottom-[38px] cursor-pointer flex justify-center items-center w-14 h-14 rounded-[50%] bg-white shadow-[1px_3px_3px_rgba(0,0,0,0.25)]"
+          onClick={scrollToTop}
+        >
+          <img src={topBtn2} alt="top 버튼" className="w-5 h-5" />
         </div>
       )}
       {isLogin && (
