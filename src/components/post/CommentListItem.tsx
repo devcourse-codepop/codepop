@@ -162,7 +162,11 @@ export default function CommentListItem({
               </div>
               {isOpen && (
                 <div
-                  className="flex justify-center items-center text-[12px] text-[#FF0404] rounded-[2px] w-[91px] h-[34px] border border-[#e5e5e5] cursor-pointer absolute top-8 right-4"
+                  className={`flex justify-center items-center text-[12px] text-[#FF0404] rounded-[2px] w-[91px] h-[34px]  cursor-pointer absolute top-8 right-4 ${
+                    dark(theme)
+                      ? 'bg-[#2d2d2d] border border-white/40'
+                      : 'border border-[#e5e5e5]'
+                  }`}
                   onClick={clickDeleteHandler}
                   ref={modalRef}
                 >

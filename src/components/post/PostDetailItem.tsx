@@ -220,7 +220,9 @@ export default function PostDetailItem({
                   ref={modalRef}
                 >
                   <div
-                    className="flex justify-center items-center text-[12px] h-[34px] cursor-pointer"
+                    className={`flex justify-center items-center text-[12px] h-[34px] cursor-pointer ${
+                      dark(theme) ? 'text-[#ffffff]/70' : ''
+                    }`}
                     onClick={clickUpdateHandler}
                   >
                     수정하기

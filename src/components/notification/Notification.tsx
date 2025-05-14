@@ -123,13 +123,21 @@ export default function Notification({ theme }: { theme: Theme }) {
               : 'bg-[#ffffff] text-[#111111]'
           }`}
         >
-          <span className="w-[12px] h-[12px] bg-white rounded-[2px] absolute rotate-135 -top-1.5 right-6 -z-2"></span>
+          <span
+            className={`w-[12px] h-[12px] rounded-[2px] absolute rotate-135 -top-1.5 right-6 -z-2 ${
+              dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+            }`}
+          ></span>
           <div
             className={`border-b  flex justify-between pb-3 ${
               dark(theme) ? 'border-[#484848]' : 'border-[#cccccc]'
             }`}
           >
-            <h3 className="text-[#4D4D4D] text-base font-medium flex items-end gap-x-2">
+            <h3
+              className={`text-[#4D4D4D] text-base font-medium flex items-end gap-x-2 ${
+                dark(theme) ? 'text-[#ffffff]' : 'text-[#4D4D4D]'
+              }`}
+            >
               Notifications
               {/* <span className="inline-block bg-zinc-400 rounded-3xl px-2 py-1.5 mb-0.5 min-w-7 text-center text-white text-xs leading-1.5">
                 {newData}
