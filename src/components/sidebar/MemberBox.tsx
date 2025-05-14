@@ -51,60 +51,49 @@ export default function MemberBox() {
   };
 
   return (
-    <div className="w-[291px] max-h-[calc(100%-240px)] h-[580px] bg-white rounded-[10px] shadow-md pl-[30px] pr-[26px]  pt-[20px]  relative overflow-hidden">
-      <h2 className="text-[#595656] font-medium text-[18px] mb-[13px]">
-        Member
-      </h2>
-      <div className="flex items-center text-[#898FA3] bg-[#F6F8FA] px-3 py-2 rounded-[5.54px] text-[14px] gap-4 mb-[13px]">
+    <div className='w-[291px] max-h-[calc(100%-240px)] h-[580px] bg-white rounded-[10px] shadow-md pl-[30px] pr-[26px]  pt-[20px]  relative overflow-hidden'>
+      <h2 className='text-[#595656] font-medium text-[18px] mb-[13px]'>Member</h2>
+      <div className='flex items-center text-[#898FA3] bg-[#F6F8FA] px-3 py-2 rounded-[5.54px] text-[14px] gap-4 mb-[13px]'>
         <div>
-          <Search className="w-[19.94px] h-[19.94px] text-[#86879C]" />
+          <Search className='w-[19.94px] h-[19.94px] text-[#86879C]' />
         </div>
         <input
-          type="text"
-          placeholder="멤버를 검색해 보세요"
-          className=" outline-none placeholder:text-[#898FA3] placeholder:text-[14px]w-full"
+          type='text'
+          placeholder='멤버를 검색해 보세요'
+          className=' outline-none placeholder:text-[#898FA3] placeholder:text-[14px]w-full'
           onChange={(e) => searchHandler(e)}
         />
       </div>
       {isLoggedIn && (
-        <div className="myInfoCard">
-          <Avatar
-            name={`(나) ${user !== null ? user.fullName : ''}`}
-            email={user !== null ? user.email : ''}
-            image={user !== null ? user.image : ''}
-            isOnline={user !== null ? user.isOnline : false}
-          ></Avatar>
+        <div className='myInfoCard'>
+          <Link to={`/profile`} state={{ userid: user?._id }}>
+            <Avatar
+              name={`(나) ${user !== null ? user.fullName : ''}`}
+              email={user !== null ? user.email : ''}
+              image={user !== null ? user.image : ''}
+              isOnline={user !== null ? user.isOnline : false}
+            ></Avatar>
+          </Link>
         </div>
       )}
       <div
-        className="member-list overflow-y-auto pt-2"
+        className='member-list overflow-y-auto pt-2'
         style={{
           height: isLoggedIn ? `calc(100% - 161px)` : `calc(100% - 91px)`,
         }}
       >
         {filterUsers.map((user) => (
-          <div className="relative" key={user._id}>
-            <div
-              className="memberCard cursor-pointer"
-              onClick={() => ToggleHandelr(user._id)}
-            >
-              <Avatar
-                name={user.fullName}
-                email={user.email}
-                image={user.image}
-                isOnline={user.isOnline}
-              ></Avatar>
+          <div className='relative' key={user._id}>
+            <div className='memberCard cursor-pointer' onClick={() => ToggleHandelr(user._id)}>
+              <Avatar name={user.fullName} email={user.email} image={user.image} isOnline={user.isOnline}></Avatar>
             </div>
-            <button
-              className="absolute right-0 top-4 cursor-pointer"
-              onClick={() => ToggleHandelr(user._id)}
-            >
-              <img src={menuIcon} className="rotate-90" />
+            <button className='absolute right-0 top-4 cursor-pointer' onClick={() => ToggleHandelr(user._id)}>
+              <img src={menuIcon} className='rotate-90' />
               {openUser === user._id && (
-                <ul className="avatarMenu absolute text-xs w-27 right-5 top-0 bg-white rounded-[5px] border border-[#ddd] text-left z-2 py-1">
+                <ul className='avatarMenu absolute text-xs w-27 right-5 top-0 bg-white rounded-[5px] border border-[#ddd] text-left z-2 py-1'>
                   <li>
                     <Link
-                      className="px-3 py-1 block opacity-70 hover:opacity-100"
+                      className='px-3 py-1 block opacity-70 hover:opacity-100'
                       to={`/profile`}
                       state={{ userid: user._id }}
                     >
@@ -112,10 +101,7 @@ export default function MemberBox() {
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      className="px-3 py-1 block  opacity-70 hover:opacity-100"
-                      to={`/message/`}
-                    >
+                    <Link className='px-3 py-1 block  opacity-70 hover:opacity-100' to={`/message/`}>
                       메세지 보내기
                     </Link>
                   </li>
