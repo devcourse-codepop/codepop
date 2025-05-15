@@ -7,7 +7,7 @@ import defaultCover from '../../assets/images/profile/defaultCover.png';
 export default function Profile({ userId }: { userId: string }) {
   const [userData, setUserData] = useState<User | null>(null);
 
-  const axiosList = async () => {
+  const fetchUserData = async () => {
     try {
       const { data: userData } = await getUserData(userId);
       setUserData(userData);
@@ -19,7 +19,7 @@ export default function Profile({ userId }: { userId: string }) {
   useEffect(() => {
     setUserData(null);
     if (userId) {
-      axiosList();
+      fetchUserData();
     }
   }, [userId]);
 
@@ -37,7 +37,7 @@ export default function Profile({ userId }: { userId: string }) {
         />
       </div>
       <div className=' flex  overflow-hidden'>
-        <ProfileLeft userData={userData} userId={userId} />
+        <ProfileLeft userData={userData} userId={userId} refetchUserData={fetchUserData} />
         <ProfileRight userData={userData} />
       </div>
     </div>

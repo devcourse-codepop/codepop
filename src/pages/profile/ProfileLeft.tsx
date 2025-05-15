@@ -3,22 +3,49 @@ import Button from '../../components/common/Button';
 import { useAuthStore } from '../../stores/authStore';
 import { useNavigate } from 'react-router-dom';
 import defaultProfileImage from '../../assets/images/profile/defaultProfileImage.jpg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ChatModal from '../message/ChatModal';
 import useChatClose from '../../utils/changeMessageIcon';
 import { postFollow, postUnfollow } from '../../api/follow/follow';
 
-export default function ProfileLeft({ userData, userId }: UserInfo) {
+export default function ProfileLeft({ userData, userId, refetchUserData }: UserInfo) {
   const user = useAuthStore((state) => state.user);
+  const setUser = useAuthStore((state) => state.setUser);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isFollowed, setIsFollowed] = useState(false);
   const onClose = useChatClose(setIsChatOpen);
   const navigate = useNavigate();
 
-  const isFollowing = () => {
-    return user?.following.some((followingUser) => followingUser.user === userId);
+  const handleFollow = async () => {
+    if (user && userId) {
+      const updatedUserData = await postFollow(userId);
+      const newFollowData: Follow = updatedUserData.data;
+      const updatedFollowing = [...user.following, newFollowData];
+      setUser({ ...user, following: updatedFollowing });
+      setIsFollowed(true);
+      await refetchUserData();
+    }
+  };
+  const handleUnfollow = async () => {
+    if (user && userId) {
+      const followToRemove = user.following.find((follow) => follow.user === userId && follow.follower === user._id);
+      if (!followToRemove) return;
+      console.log(followToRemove._id);
+      await postUnfollow(followToRemove._id);
+      const updatedFollowing = user.following.filter((follow) => follow._id !== followToRemove._id);
+      setUser({ ...user, following: updatedFollowing });
+      setIsFollowed(false);
+      await refetchUserData();
+    }
   };
 
-  const followed = isFollowing();
+  useEffect(() => {
+    if (user && userId) {
+      const checkFollow = user.following.some((f) => f.user === userId);
+      setIsFollowed(checkFollow);
+    }
+  }, [user, userId]);
+
   return (
     <>
       <div className='w-[291px] h-[633px] rounded-bl-[10px] px-[50px] border-r-2 border-gray-300 '>
@@ -49,16 +76,10 @@ export default function ProfileLeft({ userData, userId }: UserInfo) {
           ) : (
             <div className='mt-[25px]'>
               {userId &&
-                (followed ? (
-                  <Button
-                    value='언팔로우'
-                    className='button-style3'
-                    onClick={() => {
-                      postUnfollow(userId);
-                    }}
-                  />
+                (isFollowed ? (
+                  <Button value='언팔로우' className='button-style3' onClick={handleUnfollow} />
                 ) : (
-                  <Button value='팔로우' className='button-style3' onClick={() => postFollow(userId)} />
+                  <Button value='팔로우' className='button-style3' onClick={handleFollow} />
                 ))}
             </div>
           )}
