@@ -23,6 +23,7 @@ interface ChatRoomProps {
   theme: Theme;
 }
 
+// 한국어로 요일을 나타내기 위한 변환
 dayjs.locale('ko');
 
 export default function ChatRoom({
@@ -45,18 +46,17 @@ export default function ChatRoom({
 
   // 메시지 전송 후, 다음 줄로 넘어가면 스크롤도 따라가기 위한 div 요소
   const bottomRef = useRef<HTMLDivElement | null>(null);
+  // 채팅방 들어오면 메시지 입력창에 포커스 되도록 하기 위한 input 요소
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
+  // 입력한 내용이 존재할 시 메시지 전송하기
   const handleSend = () => {
-    //if (newMessage.trim()) {
-    //setMessages((prev) => [...prev, newMessage]);
-
     if (newMessage.trim() === '') return;
     createNewMessage();
-    //}
   };
 
-  let lastEnterTime = 0;
   // 엔터 입력 시에도 메시지 전송하기
+  let lastEnterTime = 0;
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       // 0.5초 이내 재입력 무시
@@ -123,6 +123,9 @@ export default function ChatRoom({
       const { data } = await getMessages(user._id);
       console.log(data);
       setMessages(data);
+
+      // 채팅방 들어오거나 메시지 전송 후, 메시지 입력창에 포커스
+      inputRef.current?.focus();
       setIsLoading(false);
     } catch (e) {
       console.log(e instanceof Error && e.message);
@@ -132,7 +135,7 @@ export default function ChatRoom({
   useEffect(() => {
     readUserMessages();
     getUserMessages();
-  }, [reloadTrigger]); // user, newMessage
+  }, [reloadTrigger]);
 
   // 채팅방 들어왔을 때와 메시지 전송했을 때, 가장 최신 메시지를 화면에 보여주기
   useEffect(() => {
@@ -161,7 +164,6 @@ export default function ChatRoom({
             }`}
           >
             {messages.map((msg, idx) => {
-              //console.log(msg);
               const isMyMessage: boolean = msg.sender._id === loginUser?._id;
 
               const currentDate = dayjs(msg.createdAt).format('YYYY-MM-DD');
@@ -268,6 +270,7 @@ export default function ChatRoom({
           >
             <input
               type="text"
+              ref={inputRef}
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyDown={handleKeyDown}
