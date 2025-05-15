@@ -61,8 +61,6 @@ export default function WriteCommentItem({
         postId
       );
       console.log(data);
-
-      //window.location.href = `/channel/${channelId}/post/${postId}`;
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }

@@ -29,6 +29,7 @@ export default function NotLoginModal({
           className={`p-5 rounded-[5px] text-center w-[300px] flex flex-col gap-10 ${
             dark(theme) ? 'bg-[#2d2d2d] text-[#ffffff]' : 'bg-[#ffffff]'
           }`}
+          onClick={(e) => e.stopPropagation()}
         >
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">

@@ -121,7 +121,7 @@ export default function PostList({ theme }: { theme: Theme }) {
   useEffect(() => {
     if (user) setIsLogin(true);
     getPostListItem();
-  }, [user]);
+  }, [user, channel]);
 
   // 스크롤 조작을 위한 이벤트 적용
   useEffect(() => {

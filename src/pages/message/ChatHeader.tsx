@@ -36,7 +36,7 @@ export default function ChatHeader({
         <div className="w-4" /> // 공간 맞춤용
       )}
 
-      <p className="text-[20px] font-medium flex-1 text-center">
+      <p className="text-[18px] font-medium flex-1 text-center">
         {userName || 'Message'}
       </p>
 

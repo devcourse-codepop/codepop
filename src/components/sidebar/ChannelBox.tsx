@@ -1,4 +1,4 @@
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useNavigate, useLocation, useParams } from 'react-router-dom';
 import { useChannelItemStore } from '../../stores/channelStore';
 import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -11,6 +11,8 @@ export default function ChannelBox({ theme }: { theme: Theme }) {
   const { channels, fetchChannels } = useChannelItemStore();
   const params = useParams();
   const [channelParams, setchannelParams] = useState(params.channelId);
+
+  const navigate = useNavigate();
 
   // 채널 정보 가져오기
   useEffect(() => {
@@ -42,8 +44,9 @@ export default function ChannelBox({ theme }: { theme: Theme }) {
           {channels.map((item) => (
             <li key={item.id}>
               <Link
-                onClick={() => {
-                  window.location.href = `${item.to}`;
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate(item.to);
                 }}
                 to={item.to}
                 className="flex items-start ml-[29px] group"

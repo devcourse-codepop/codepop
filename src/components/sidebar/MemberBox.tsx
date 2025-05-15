@@ -10,8 +10,9 @@ import { useAuthStore } from '../../stores/authStore';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
 import ChatModal from '../../pages/message/ChatModal';
-import { User1 } from '../..//pages/message/ChatModal';
+// import { User1 } from '../..//pages/message/ChatModal';
 import useChatClose from '../../utils/changeMessageIcon';
+import { User } from '../../types';
 
 export default function MemberBox({ theme }: { theme: Theme }) {
   const { isLoggedIn, user } = useAuthStore(); // 내 프로필
@@ -19,7 +20,7 @@ export default function MemberBox({ theme }: { theme: Theme }) {
   const [openUser, setOpenUser] = useState<string>(''); // 각 프로필 메뉴
   const [users, setUsers] = useState<User[]>([]); // 모든 사용자
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [chatTargetUser, setChatTargetUser] = useState<User1 | null>(null);
+  const [chatTargetUser, setChatTargetUser] = useState<User | null>(null);
   const onClose = useChatClose(setIsChatOpen);
   const modalRef = useRef<HTMLUListElement>(null);
 
@@ -170,7 +171,7 @@ export default function MemberBox({ theme }: { theme: Theme }) {
                   <li
                     className="px-3 py-1 block  opacity-70 hover:opacity-100"
                     onClick={() => {
-                      setChatTargetUser({ id: user._id, name: user.fullName });
+                      setChatTargetUser(user);
                       setIsChatOpen(true);
                     }}
                   >

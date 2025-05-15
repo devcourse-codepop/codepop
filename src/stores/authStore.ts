@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { Message } from '../types';
 
 interface User {
   _id: string;
@@ -10,6 +11,7 @@ interface User {
   emailVerified: boolean;
   banned: boolean;
   isOnline: boolean;
+  messages: Message[];
 }
 
 interface AuthStore {
@@ -56,6 +58,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
       emailVerified: true,
       banned: true,
       isOnline: true,
+      messages: userData.messages,
     };
     set({ user, isLoading: false, isLoggedIn: true });
   },
