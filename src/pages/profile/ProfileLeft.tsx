@@ -6,7 +6,7 @@ import defaultProfileImage from '../../assets/images/profile/defaultProfileImage
 import { useState } from 'react';
 import ChatModal from '../message/ChatModal';
 import useChatClose from '../../utils/changeMessageIcon';
-import { postFollow } from '../../api/follow/follow';
+import { postFollow, postUnfollow } from '../../api/follow/follow';
 
 export default function ProfileLeft({ userData, userId }: UserInfo) {
   const user = useAuthStore((state) => state.user);
@@ -50,7 +50,13 @@ export default function ProfileLeft({ userData, userId }: UserInfo) {
             <div className='mt-[25px]'>
               {userId &&
                 (followed ? (
-                  <Button value='언팔로우' className='button-style3' />
+                  <Button
+                    value='언팔로우'
+                    className='button-style3'
+                    onClick={() => {
+                      postUnfollow(userId);
+                    }}
+                  />
                 ) : (
                   <Button value='팔로우' className='button-style3' onClick={() => postFollow(userId)} />
                 ))}
