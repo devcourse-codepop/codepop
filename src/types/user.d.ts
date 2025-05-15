@@ -80,6 +80,7 @@ interface User {
 type UserInfo = {
   userData: User | null;
   userId?: string;
+  refetchUserData: () => void;
 };
 
 type UserPostInfo = {
