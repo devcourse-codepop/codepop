@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import ImageEditBtn from '../../../assets/images/img-edit/ImageEditBtn.svg';
+import ImageEditBtn from '../../../assets/images/img-edit/img-edit-btn.svg';
 import { fullNameRegex, passwordRegex } from '../../../utils/validators';
 import EditMenu from './EditMenu';
 import Input from '../../../components/common/Input';
@@ -8,8 +8,8 @@ import PhotoUploadModal from './PhotoUploadModal';
 import Button from '../../../components/common/Button';
 import { getUserData } from '../../../api/profileInfo/profile';
 import { useAuthStore } from '../../../stores/authStore';
-import defaultProfileImage from '../../../assets/images/profile/defaultProfileImage.jpg';
-import defaultCover from '../../../assets/images/profile/defaultCover.png';
+import defaultProfileImage from '../../../assets/images/profile/default-profile-img.jpg';
+import defaultCover from '../../../assets/images/profile/default-cover.png';
 import { useNavigate } from 'react-router-dom';
 import { Theme } from '../../../types/ darkModeTypes';
 import { dark } from '../../../utils/ darkModeUtils';

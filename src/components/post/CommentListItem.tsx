@@ -1,6 +1,6 @@
-import menuIcon from '../../assets/images/menu/MenuIcon.svg';
-import menuIconWhite from '../../assets/images/menu/MenuIconWhite.svg';
-import userImg from '../../assets/images/header/userImg.svg';
+import menuIcon from '../../assets/images/menu/menu-icon.svg';
+import menuIconWhite from '../../assets/images/menu/menu-icon-white.svg';
+import userImg from '../../assets/images/header/user-img.svg';
 import { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 import { Comment } from '../../types';

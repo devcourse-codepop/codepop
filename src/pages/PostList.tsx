@@ -1,9 +1,9 @@
 import ChannelName from '../components/channel/ChannelName';
 import PostListItem from '../components/post/PostListItem';
-import postBtn from '../assets/images/post/PostBtn.svg';
-import postBtnWhite from '../assets/images/post/PostBtnWhite.svg';
-import topBtn2 from '../assets/images/top-btn/topBtn2.png';
-import topBtn2White from '../assets/images/top-btn/topBtn2_white.png';
+import postBtn from '../assets/images/post/post-btn.svg';
+import postBtnWhite from '../assets/images/post/post-btn-white.svg';
+import topBtn2 from '../assets/images/top-btn/top-btn.png';
+import topBtn2White from '../assets/images/top-btn/top-btn-white.png';
 import { useEffect, useRef, useState } from 'react';
 import { Search } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';

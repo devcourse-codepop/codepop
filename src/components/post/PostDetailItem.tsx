@@ -1,7 +1,7 @@
 import Avatar from '../avatar/Avatar';
 import LikeComment from '../reaction/LikeComment';
-import menuIcon from '../../assets/images/menu/MenuIcon.svg';
-import menuIconWhite from '../../assets/images/menu/MenuIconWhite.svg';
+import menuIcon from '../../assets/images/menu/menu-icon.svg';
+import menuIconWhite from '../../assets/images/menu/menu-icon-white.svg';
 
 import { useEffect, useRef, useState } from 'react';
 import { Comment, Post } from '../../types';

@@ -1,10 +1,10 @@
 // import readAllImg from '../../assets/images/header/notifi.svg';
 import { useNavigate } from 'react-router-dom';
 import close from '../../assets/images/header/close.svg';
-import closeWhite from '../../assets/images/header/closeWhite.svg';
+import closeWhite from '../../assets/images/header/close-white.svg';
 import alarm from '../../assets/images/header/alarm.svg';
 import alarmWhite from '../../assets/images/header/alarm-white.svg';
-import redDot from '../../assets/images/header/RedDotIcon.svg';
+import redDot from '../../assets/images/header/red-dot-icon.svg';
 import { useEffect, useRef, useState } from 'react';
 import {
   getNotificationsData,

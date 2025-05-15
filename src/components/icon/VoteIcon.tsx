@@ -1,5 +1,5 @@
-import voteIcon from '../../assets/images/editor/VoteIcon.svg';
-import voteIconWhite from '../../assets/images/editor/VoteIconWhite.svg';
+import voteIcon from '../../assets/images/editor/vote-icon.svg';
+import voteIconWhite from '../../assets/images/editor/vote-icon-white.svg';
 import { Theme } from '../../types/ darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 

@@ -1,4 +1,4 @@
-import postBtn from '../../assets/images/post/PostBtn.svg';
+import postBtn from '../../assets/images/post/post-btn.svg';
 
 export default function PostBtn() {
   return (

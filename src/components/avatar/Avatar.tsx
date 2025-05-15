@@ -1,6 +1,6 @@
 import { Theme } from '../../types/ darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
-import userDefaultImg from '../../assets/images/profile/defaultProfileImage.jpg';
+import userDefaultImg from '../../assets/images/profile/default-profile-img.jpg';
 
 interface AvatarProps {
   name: string;

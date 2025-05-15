@@ -1,4 +1,4 @@
-import voteBtn from '../../assets/images/editor/VoteIcon.svg';
+import voteBtn from '../../assets/images/editor/vote-icon.svg';
 export default function VoteBtn() {
   return (
     <>
