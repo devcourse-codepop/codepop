@@ -4,7 +4,7 @@ import Delete from '../../assets/images/input-delete/input-delete.svg';
 
 import { useState } from 'react';
 import { useAuthStore } from '../../stores/authStore';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { login } from '../../api/auth/login';
 import { AxiosError } from 'axios';
 import { Theme } from '../../types/ darkModeTypes';
@@ -13,6 +13,9 @@ import { dark } from '../../utils/ darkModeUtils';
 export default function Login({ theme }: { theme: Theme }) {
   const navigate = useNavigate();
   const storeLogin = useAuthStore((state) => state.login);
+
+  const location = useLocation();
+  const from = location.state?.from?.pathname;
 
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -61,7 +64,7 @@ export default function Login({ theme }: { theme: Theme }) {
       const token = res.data.token;
       storeLogin(token);
 
-      navigate(-1);
+      navigate(from && from !== '/signup' ? from : '/');
     } catch (err) {
       const error = err as AxiosError;
 
