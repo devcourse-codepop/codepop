@@ -6,6 +6,6 @@ export const postFollow = (userId: string) => {
 
 export const postUnfollow = (followId: string) => {
   return axiosInstance.delete<Follow>('/follow/delete', {
-    data: { followId },
+    data: { id: followId },
   });
 };
