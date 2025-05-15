@@ -10,6 +10,8 @@ interface User {
   emailVerified: boolean;
   banned: boolean;
   isOnline: boolean;
+  followers: Follow[];
+  following: Follow[];
 }
 
 interface AuthStore {
@@ -56,6 +58,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
       emailVerified: true,
       banned: true,
       isOnline: true,
+      followers: userData.followers,
+      following: userData.following,
     };
     set({ user, isLoading: false, isLoggedIn: true });
   },
