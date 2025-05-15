@@ -10,6 +10,7 @@ import { usePostStore } from '../stores/postStore';
 import { Post } from '../types';
 import dayjs from 'dayjs';
 import { useAuthStore } from '../stores/authStore';
+import PostSkeleton from '../components/post/PostSkeleton';
 
 export default function PostList() {
   const params = useParams();
@@ -17,30 +18,42 @@ export default function PostList() {
 
   const navigate = useNavigate();
 
+  // 로그인한 사용자 정보 받아오기
   const user = useAuthStore((state) => state.user);
+  // 채널 id 값 받아오기
   const channelIdList = usePostStore((state) => state.channelIdList);
 
+  // 로딩 상태
+  const [isLoading, setIsLoading] = useState(true);
+  // 로그인 상태
   const [isLogin, setIsLogin] = useState(false);
+  // 게시글 목록 상태
   const [postListItem, setPostListItem] = useState<Post[]>([]);
 
+  // 검색한 내용 상태
   const [input, setInput] = useState('');
   const changeInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
 
+  // 정렬 상태 (최신순, 인기순)
   const [select, setSelect] = useState('recent');
   const changeSelectHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelect(e.target.value);
   };
 
+  // Top 버튼 표시 상태
   const [showTopButton, setShowTopButton] = useState(false);
+  // 전체 게시글 목록을 나타내는 div 요소
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
+  // 최신순 정렬을 위한 날짜 포맷 설정
   const getDatetimeFormat = (update: string): string => {
     const date = dayjs(update);
     return date.format('YYYY-MM-DD HH:mm:ss');
   };
 
+  // 스크롤 값에 따른 Top 버튼 표시 여부
   const scrollHandler = () => {
     const scrollElement = scrollRef.current;
     if (scrollElement) {
@@ -49,6 +62,7 @@ export default function PostList() {
     }
   };
 
+  // 스크롤을 최상단으로 올리기
   const scrollToTop = () => {
     if (scrollRef.current) {
       scrollRef.current.scrollTo({
@@ -58,10 +72,12 @@ export default function PostList() {
     }
   };
 
+  // 게시글 작성 페이지로 이동
   const createNewPost = () => {
     navigate(`/channel/${channel}/write`);
   };
 
+  // 검색한 내용에 해당하는 게시글만 필터링
   const filteringItem = (data: Post[]) => {
     const temp = [];
     for (const item of postListItem) {
@@ -74,6 +90,7 @@ export default function PostList() {
     setPostListItem(temp);
   };
 
+  // 검색한 결과 불러오기 (이 data에는 누락된 필드가 있으므로 다시 필터링을 거쳐서 해당 게시글들을 가져옴)
   const clickSearchHandler = async () => {
     try {
       const { data } = await getSearchPostList(input);
@@ -83,11 +100,13 @@ export default function PostList() {
     }
   };
 
+  // 채널의 전체 게시글 목록 가져오기
   const getPostListItem = async () => {
     try {
       const { data } = await getPostList(channelIdList[Number(channel) - 1]);
       console.log(data);
       setPostListItem(data);
+      setIsLoading(false);
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
@@ -98,6 +117,7 @@ export default function PostList() {
     getPostListItem();
   }, [user]);
 
+  // 스크롤 조작을 위한 이벤트 적용
   useEffect(() => {
     const scrollElement = scrollRef.current;
     if (scrollElement) {
@@ -113,9 +133,7 @@ export default function PostList() {
 
   return (
     <>
-      {/* mx-[60px] h-[calc(100vh-100px)] */}
       <div className="flex ">
-        {/* w-full ml-[50px]  */}
         <div className="w-full ">
           <div className="flex justify-between items-end pb-[30px]">
             <div>
@@ -147,46 +165,49 @@ export default function PostList() {
               </select>
             </div>
           </div>
-          {/* max-h-[605px] */}
           <div
-            className="flex flex-col gap-[30px] pb-5 max-h-[calc(100vh-100px-120px)] overflow-auto"
+            className="flex flex-col gap-[30px] pb-5 max-h-[calc(100vh-100px-120px)] overflow-auto scroll-custom"
             ref={scrollRef}
           >
-            {postListItem.length === 0 && (
-              <div className="flex flex-col justify-center items-center gap-5 text-lg font-semibold pt-16 opacity-60">
-                <div>게시글이 없습니다!</div>
-                <div>새로운 게시글을 작성해 보세요!</div>
-              </div>
+            {isLoading ? (
+              Array.from({ length: 5 }).map((_, i) => <PostSkeleton key={i} />)
+            ) : (
+              <>
+                {postListItem.length === 0 && (
+                  <div className="flex flex-col justify-center items-center gap-5 text-lg font-semibold pt-16 opacity-60">
+                    <div>게시글이 없습니다!</div>
+                    <div>새로운 게시글을 작성해 보세요!</div>
+                  </div>
+                )}
+                {postListItem.length !== 0 &&
+                  select === 'recent' &&
+                  [...postListItem]
+                    .sort(
+                      (a, b) =>
+                        new Date(getDatetimeFormat(b.createdAt)).getTime() -
+                        new Date(getDatetimeFormat(a.createdAt)).getTime()
+                    )
+                    .map((item) => <PostListItem key={item._id} {...item} />)}
+                {postListItem.length !== 0 &&
+                  select === 'popular' &&
+                  [...postListItem]
+                    .sort((a, b) => {
+                      if (b.likes.length - a.likes.length !== 0)
+                        return b.likes.length - a.likes.length;
+                      else return b.comments.length - a.comments.length;
+                    })
+                    .map((item) => <PostListItem key={item._id} {...item} />)}
+              </>
             )}
-            {postListItem.length !== 0 &&
-              select === 'recent' &&
-              [...postListItem]
-                .sort(
-                  (a, b) =>
-                    new Date(getDatetimeFormat(b.createdAt)).getTime() -
-                    new Date(getDatetimeFormat(a.createdAt)).getTime()
-                )
-                .map((item) => <PostListItem key={item._id} {...item} />)}
-            {postListItem.length !== 0 &&
-              select === 'popular' &&
-              [...postListItem]
-                .sort((a, b) => {
-                  if (b.likes.length - a.likes.length !== 0)
-                    return b.likes.length - a.likes.length;
-                  else return b.comments.length - a.comments.length;
-                })
-                .map((item) => <PostListItem key={item._id} {...item} />)}
           </div>
         </div>
       </div>
       {showTopButton && (
-        <div className="absolute right-[39%] bottom-[38px] cursor-pointer flex justify-center items-center w-14 h-14 rounded-[50%] bg-white shadow-[1px_3px_3px_rgba(0,0,0,0.25)]">
-          <img
-            src={topBtn2}
-            onClick={scrollToTop}
-            alt="top 버튼"
-            className="w-5 h-5"
-          />
+        <div
+          className="absolute right-[39%] bottom-[38px] cursor-pointer flex justify-center items-center w-14 h-14 rounded-[50%] bg-white shadow-[1px_3px_3px_rgba(0,0,0,0.25)]"
+          onClick={scrollToTop}
+        >
+          <img src={topBtn2} alt="top 버튼" className="w-5 h-5" />
         </div>
       )}
       {isLogin && (

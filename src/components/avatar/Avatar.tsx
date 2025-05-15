@@ -1,4 +1,4 @@
-//import userImg from '../../assets/images/header/userImg.svg';
+import userDefaultImg from '../../assets/images/profile/defaultProfileImage.jpg';
 
 interface AvatarProps {
   name: string;
@@ -8,18 +8,11 @@ interface AvatarProps {
 }
 
 export default function Avatar({ name, email, image, isOnline }: AvatarProps) {
-  let imgSrc: string = '';
-  if (image === undefined || image === '') {
-    imgSrc =
-      'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg';
-  } else {
-    imgSrc = image;
-  }
   return (
-    <div className="flex  items-center gap-x-4 gap-y-1 p-4">
+    <div className="avartar-box flex items-center gap-x-4 gap-y-1 p-4">
       <div className="relative shrink-0">
         <img
-          src={imgSrc}
+          src={image || userDefaultImg}
           alt="사용자"
           className="w-[50px] h-[50px] rounded-[50%] border border-[#ddd]"
         />

@@ -1,5 +1,5 @@
-/* side-bar */
-.myInfoCard > div {
+/* side-bar memberbox*/
+.myInfoCard .avartar-box {
   padding: 5px 10px 15px 0;
   border-bottom: 1px solid #ddd;
 }
@@ -12,10 +12,11 @@
   border-radius: 2px;
 }
 .member-list::-webkit-scrollbar-thumb {
-  background: #adadad;
+  background: #adadad50;
+  border-top: 5px solid #fff;
 }
 
-.memberCard > div {
+.memberCard .avartar-box {
   padding: 10px 0;
 }
 
@@ -40,4 +41,12 @@
 }
 .scroll-custom::-webkit-scrollbar-thumb {
   background: #939393;
+}
+
+.messageBox::-webkit-scrollbar {
+  width: 5px;
+  border-radius: 5px;
+}
+.messageBox::-webkit-scrollbar-thumb {
+  background: #adadad;
 }
