@@ -3,7 +3,7 @@ import { useChannelItemStore } from '../../stores/channelStore';
 import { getPopularPostData } from '../../api/post/post';
 import { Post } from '../../types';
 import PostListItem from '../post/PostListItem';
-import { Theme } from '../../types/ darkModeTypes';
+import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 
 export default function PopularPost({ theme }: { theme: Theme }) {

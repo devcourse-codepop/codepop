@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Theme } from '../../../types/ darkModeTypes';
+import { Theme } from '../../../types/darkModeTypes';
 import { dark } from '../../../utils/ darkModeUtils';
 
 interface PhotoUploadModalProps2 extends PhotoUploadModalProps {

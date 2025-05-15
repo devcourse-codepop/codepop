@@ -8,7 +8,7 @@ import { useAuthStore } from '../../stores/authStore';
 import { Link, useParams } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import CheckDeleteModal from './CheckDeleteModal';
-import { Theme } from '../../types/ darkModeTypes';
+import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 
 // updateReloadTrigger 타입 추가

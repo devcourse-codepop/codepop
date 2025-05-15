@@ -4,7 +4,7 @@ import Button from '../../components/common/Button';
 import Editor from '../../components/editor/Editor';
 import { getPostData, updatePost } from '../../api/post/post';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Theme } from '../../types/ darkModeTypes';
+import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 
 export default function UpdateCodePost({ theme }: { theme: Theme }) {

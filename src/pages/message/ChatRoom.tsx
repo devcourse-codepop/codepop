@@ -3,7 +3,7 @@ import { User1 } from './ChatModal';
 import ChatHeader from './ChatHeader';
 import messageSendBtn from '../../assets/images/message/message-send-btn.svg';
 import messageSendBtnWhite from '../../assets/images/message/message-send-btn-white.svg';
-import { Theme } from '../../types/ darkModeTypes';
+import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 
 interface ChatRoomProps {

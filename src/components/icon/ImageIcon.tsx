@@ -1,6 +1,6 @@
 import imageIcon from '../../assets/images/editor/img-icon.svg';
 import imageIconWhite from '../../assets/images/editor/img-icon-white.svg';
-import { Theme } from '../../types/ darkModeTypes';
+import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 
 export default function ImageIcon({

@@ -11,7 +11,7 @@ import DOMPurify from 'dompurify';
 import DeletedUserModal from './DeletedUserModal';
 import { useChannelItemStore } from '../../stores/channelStore';
 import PollOptionsView from '../poll/PollOptionsView';
-import { Theme } from '../../types/ darkModeTypes';
+import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 
 interface PostListItemProps extends Post {

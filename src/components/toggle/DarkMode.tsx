@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import logoLight from '../../assets/images/header/logo.svg';
 import logoDark from '../../assets/images/header/logo-white.svg';
-import { Theme } from '../../types/ darkModeTypes';
+import { Theme } from '../../types/darkModeTypes';
 
 interface DarkModeProps {
   children: (

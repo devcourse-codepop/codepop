@@ -1,4 +1,4 @@
-import { Theme } from '../../types/ darkModeTypes';
+import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 
 export default function PostSkeleton({ theme }: { theme: Theme }) {

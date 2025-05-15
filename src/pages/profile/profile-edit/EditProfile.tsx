@@ -11,7 +11,7 @@ import { useAuthStore } from '../../../stores/authStore';
 import defaultProfileImage from '../../../assets/images/profile/default-profile-img.jpg';
 import defaultCover from '../../../assets/images/profile/default-cover.png';
 import { useNavigate } from 'react-router-dom';
-import { Theme } from '../../../types/ darkModeTypes';
+import { Theme } from '../../../types/darkModeTypes';
 import { dark } from '../../../utils/ darkModeUtils';
 
 export default function EditProfile({

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Theme } from '../../types/ darkModeTypes';
+import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 import { useParams } from 'react-router-dom';
 import { voteComments, deleteComments } from '../../api/post/post';

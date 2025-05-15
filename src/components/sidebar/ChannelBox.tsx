@@ -2,7 +2,7 @@ import { Link, useLocation, useParams } from 'react-router-dom';
 import { useChannelItemStore } from '../../stores/channelStore';
 import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { Theme } from '../../types/ darkModeTypes';
+import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 
 export default function ChannelBox({ theme }: { theme: Theme }) {

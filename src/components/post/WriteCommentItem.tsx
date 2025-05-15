@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { postComments, postNotifications } from '../../api/post/post';
 import CommentEditor from '../editor/CommentEditor';
-import { Theme } from '../../types/ darkModeTypes';
+import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 import { useNavigate } from 'react-router-dom';
 

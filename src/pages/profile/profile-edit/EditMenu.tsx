@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Theme } from '../../../types/ darkModeTypes';
+import { Theme } from '../../../types/darkModeTypes';
 import { dark } from '../../../utils/ darkModeUtils';
 
 interface EditMenuProps2 extends EditMenuProps {

@@ -8,7 +8,7 @@ import { Channel, Like, User } from '../../types';
 import { deleteLikes, postLikes, postNotifications } from '../../api/post/post';
 import { useAuthStore } from '../../stores/authStore';
 import NotLoginModal from '../post/NotLoginModal';
-import { Theme } from '../../types/ darkModeTypes';
+import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 import { useNavigate } from 'react-router-dom';
 import { useChannelItemStore } from '../../stores/channelStore';

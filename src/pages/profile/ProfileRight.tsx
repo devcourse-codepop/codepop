@@ -4,7 +4,7 @@ import { getAuthorPostData, getPostData } from '../../api/post/post';
 import commentWhite from '../../assets/images/comment/comment-white.svg';
 import commentIcon from '../../assets/images/comment/comment-outline.svg';
 import { useNavigate } from 'react-router-dom';
-import { Theme } from '../../types/ darkModeTypes';
+import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 
 interface ProfileRightProps extends UserPostInfo {

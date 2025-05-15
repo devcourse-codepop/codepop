@@ -1,4 +1,4 @@
-import { Theme } from '../../types/ darkModeTypes';
+import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 import userDefaultImg from '../../assets/images/profile/default-profile-img.jpg';
 

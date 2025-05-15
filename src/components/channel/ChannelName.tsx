@@ -1,5 +1,5 @@
 import { twMerge } from 'tailwind-merge';
-import { Theme } from '../../types/ darkModeTypes';
+import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 
 interface ChannelNameProps {

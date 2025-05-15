@@ -12,7 +12,7 @@ import { usePostStore } from '../stores/postStore';
 import { Post } from '../types';
 import dayjs from 'dayjs';
 import { useAuthStore } from '../stores/authStore';
-import { Theme } from '../types/ darkModeTypes';
+import { Theme } from '../types/darkModeTypes';
 import { dark } from '../utils/ darkModeUtils';
 import PostSkeleton from '../components/post/PostSkeleton';
 

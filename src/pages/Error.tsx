@@ -2,7 +2,7 @@ import Button from '../components/common/Button';
 import error from '../assets/images/error/404.svg';
 import errorDark from '../assets/images/error/404-dark.svg';
 import { useNavigate } from 'react-router-dom';
-import { Theme } from '../types/ darkModeTypes';
+import { Theme } from '../types/darkModeTypes';
 import { dark } from '../utils/ darkModeUtils';
 
 export default function Error({ theme }: { theme: Theme }) {

@@ -3,7 +3,7 @@ import ChatRoom from './ChatRoom';
 import ChatUserList from './ChatUserList';
 import { useMessageStore } from '../../stores/messageStore';
 import MessageOpenIcon from '../../assets/images/message/message-open-icon.svg';
-import { Theme } from '../../types/ darkModeTypes';
+import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 
 interface ChatModalProps {

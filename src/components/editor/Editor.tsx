@@ -5,7 +5,7 @@ import EditorToolbar from './EditorToolbar';
 import { CustomImage } from './extensions/CustomImage';
 import { useState, useEffect } from 'react';
 import PollCreator from '../poll/PollCreater';
-import { Theme } from '../../types/ darkModeTypes';
+import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
 
 interface Props {
