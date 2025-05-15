@@ -1,5 +1,5 @@
 import { Theme } from '../../types/darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { dark } from '../../utils/darkModeUtils';
 
 interface PollOption {
   id: number;

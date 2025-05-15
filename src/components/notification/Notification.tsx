@@ -14,7 +14,7 @@ import { useChannelItemStore } from '../../stores/channelStore';
 import { twMerge } from 'tailwind-merge';
 import { useAuthStore } from '../../stores/authStore';
 import { Theme } from '../../types/darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { dark } from '../../utils/darkModeUtils';
 
 export default function Notification({ theme }: { theme: Theme }) {
   const { user } = useAuthStore();

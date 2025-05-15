@@ -4,7 +4,7 @@ import { useAuthStore } from '../../stores/authStore';
 import moon from '../../assets/images/toggle/moon.svg';
 import sun from '../../assets/images/toggle/sun.svg';
 import { Theme } from '../../types/darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { dark } from '../../utils/darkModeUtils';
 import ChatModal from '../../pages/message/ChatModal';
 import { useState } from 'react';
 import { useMessageStore } from '../../stores/messageStore';

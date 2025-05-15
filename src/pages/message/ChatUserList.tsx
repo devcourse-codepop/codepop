@@ -2,7 +2,7 @@ import ChatHeader from './ChatHeader';
 import { User1 } from './ChatModal';
 import userImage from '../../assets/images/profile/default-profile-img.jpg';
 import { Theme } from '../../types/darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { dark } from '../../utils/darkModeUtils';
 
 interface ChatUserListProps {
   onSelectUser: (user: User1) => void;

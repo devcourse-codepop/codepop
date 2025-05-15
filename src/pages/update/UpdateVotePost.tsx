@@ -6,7 +6,7 @@ import { getPostData, updatePost } from '../../api/post/post';
 import { useNavigate, useParams } from 'react-router-dom';
 import PollOptionsView from '../../components/poll/PollOptionsView';
 import { Theme } from '../../types/darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { dark } from '../../utils/darkModeUtils';
 import { usePostStore } from '../../stores/postStore';
 
 export default function UpdateVotePost({ theme }: { theme: Theme }) {

@@ -3,7 +3,7 @@ import Button from '../common/Button';
 import close from '../../assets/images/close/close-btn.svg';
 import closeWhite from '../../assets/images/close/close-btn-white.svg';
 import { Theme } from '../../types/darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { dark } from '../../utils/darkModeUtils';
 
 export default function NotLoginModal({
   closeLoginModalHanlder,

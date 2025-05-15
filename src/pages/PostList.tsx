@@ -13,7 +13,7 @@ import { Post } from '../types';
 import dayjs from 'dayjs';
 import { useAuthStore } from '../stores/authStore';
 import { Theme } from '../types/darkModeTypes';
-import { dark } from '../utils/ darkModeUtils';
+import { dark } from '../utils/darkModeUtils';
 import PostSkeleton from '../components/post/PostSkeleton';
 
 export default function PostList({ theme }: { theme: Theme }) {

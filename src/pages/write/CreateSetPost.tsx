@@ -5,7 +5,7 @@ import Editor from '../../components/editor/Editor';
 import { createCodePost } from '../../api/write/write';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Theme } from '../../types/darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { dark } from '../../utils/darkModeUtils';
 import { usePostStore } from '../../stores/postStore';
 
 export default function CreateSetPost({ theme }: { theme: Theme }) {

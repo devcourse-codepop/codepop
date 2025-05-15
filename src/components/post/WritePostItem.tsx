@@ -4,7 +4,7 @@ import ImageIcon from '../icon/ImageIcon';
 import CodeEditIcon from '../icon/CodeEditIcon';
 import VoteIcon from '../icon/VoteIcon';
 import { Theme } from '../../types/darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { dark } from '../../utils/darkModeUtils';
 
 export default function WritePostItem({
   channelId,

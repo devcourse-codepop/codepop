@@ -4,7 +4,7 @@ import { useAuthStore } from '../../stores/authStore';
 import { useNavigate } from 'react-router-dom';
 import defaultProfileImage from '../../assets/images/profile/default-profile-img.jpg';
 import { Theme } from '../../types/darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { dark } from '../../utils/darkModeUtils';
 import { useState } from 'react';
 import ChatModal from '../message/ChatModal';
 import useChatClose from '../../utils/changeMessageIcon';

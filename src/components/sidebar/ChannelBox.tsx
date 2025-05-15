@@ -3,7 +3,7 @@ import { useChannelItemStore } from '../../stores/channelStore';
 import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { Theme } from '../../types/darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { dark } from '../../utils/darkModeUtils';
 
 export default function ChannelBox({ theme }: { theme: Theme }) {
   const pathName = useLocation().pathname;

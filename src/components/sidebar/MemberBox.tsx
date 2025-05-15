@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { getAllUsersData } from '../../api/memberbox/member';
 import { useAuthStore } from '../../stores/authStore';
 import { Theme } from '../../types/darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { dark } from '../../utils/darkModeUtils';
 import ChatModal from '../../pages/message/ChatModal';
 import { User1 } from '../..//pages/message/ChatModal';
 import useChatClose from '../../utils/changeMessageIcon';

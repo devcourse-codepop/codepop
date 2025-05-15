@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { dark } from '../../../utils/ darkModeUtils';
+import { dark } from '../../../utils/darkModeUtils';
 import { Theme } from '../../../types/darkModeTypes';
 
 interface PhotoUploadModalProps2 extends PhotoUploadModalProps {

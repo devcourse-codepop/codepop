@@ -12,7 +12,7 @@ import {
 } from '../../utils/validators';
 import { AxiosError } from 'axios';
 import { Theme } from '../../types/darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { dark } from '../../utils/darkModeUtils';
 
 export default function SignUp({ theme }: { theme: Theme }) {
   const navigate = useNavigate();
