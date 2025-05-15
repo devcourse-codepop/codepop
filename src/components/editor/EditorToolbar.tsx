@@ -1,10 +1,10 @@
-import { Editor } from '@tiptap/react';
-import CodeEditIcon from '../icon/CodeEditIcon';
-import ImageIcon from '../icon/ImageIcon';
-import BoldIcon from '../icon/BoldIcon';
-import ItalicIcon from '../icon/ItalicIcon';
-import VoteIcon from '../icon/VoteIcon';
-import { Theme } from '../../types/ darkModeTypes';
+import { Editor } from "@tiptap/react";
+import CodeEditIcon from "../icon/CodeEditIcon";
+import ImageIcon from "../icon/ImageIcon";
+import BoldIcon from "../icon/BoldIcon";
+import ItalicIcon from "../icon/ItalicIcon";
+import VoteIcon from "../icon/VoteIcon";
+import { Theme } from "../../types/ darkModeTypes";
 
 interface Props {
   editor: Editor | null;
@@ -26,13 +26,13 @@ export default function EditorToolbar({
   if (!editor) return null;
 
   return (
-    <div className="flex gap-6 mb-4">
+    <div className='flex gap-6 mb-4'>
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         className={`cursor-pointer rounded-[5px]${
-          editor.isActive('bold')
-            ? 'font-bold bg-blue-400'
-            : ' hover:bg-gray-200'
+          editor.isActive("bold")
+            ? "font-bold bg-blue-400"
+            : " hover:bg-gray-200"
         }`}
       >
         <BoldIcon theme={theme} />
@@ -41,9 +41,9 @@ export default function EditorToolbar({
       <button
         onClick={() => editor.chain().focus().toggleItalic().run()}
         className={`cursor-pointer rounded-[5px] ${
-          editor.isActive('italic')
-            ? 'italic bg-blue-400'
-            : ' hover:bg-gray-200'
+          editor.isActive("italic")
+            ? "italic bg-blue-400"
+            : " hover:bg-gray-200"
         }`}
       >
         <ItalicIcon theme={theme} />
@@ -56,7 +56,7 @@ export default function EditorToolbar({
           }}
           className={`cursor-pointer rounded-[5px] 
           ${
-            editor.isActive('codeBlock') ? 'bg-blue-400' : 'hover:bg-gray-200'
+            editor.isActive("codeBlock") ? "bg-blue-400" : "hover:bg-gray-200"
           }`}
         >
           <CodeEditIcon theme={theme} />
@@ -64,8 +64,8 @@ export default function EditorToolbar({
       )}
 
       <input
-        type="file"
-        accept="image/*"
+        type='file'
+        accept='image/*'
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (file) {
@@ -73,21 +73,19 @@ export default function EditorToolbar({
             const reader = new FileReader();
             reader.onload = () => {
               const result = reader.result;
-
-              if (typeof result === 'string') {
-                editor?.chain().focus().insertContent('\n').run();
+              if (typeof result === "string") {
+                editor?.chain().focus().run();
 
                 editor
                   ?.chain()
                   .focus()
                   .insertContent([
                     {
-                      type: 'customImage',
+                      type: "customImage",
                       attrs: { src: result },
                     },
                     {
-                      type: 'text',
-                      text: ' ',
+                      type: "paragraph",
                     },
                   ])
                   .run();
@@ -95,14 +93,15 @@ export default function EditorToolbar({
             };
             reader.readAsDataURL(file);
           }
+          e.target.value = "";
         }}
-        className="hidden cursor-pointer rounded-[5px]"
-        id="image-upload"
+        className='hidden cursor-pointer rounded-[5px]'
+        id='image-upload'
       />
 
       <label
-        htmlFor="image-upload"
-        className="cursor-pointer rounded-[5px] flex items-center justify-center hover:bg-gray-200"
+        htmlFor='image-upload'
+        className='cursor-pointer rounded-[5px] flex items-center justify-center hover:bg-gray-200'
       >
         <ImageIcon theme={theme} />
       </label>
@@ -110,7 +109,7 @@ export default function EditorToolbar({
       {showPollButton && (
         <button
           onClick={onTogglePoll}
-          className="cursor-pointer rounded-[5px] hover:bg-gray-200"
+          className='cursor-pointer rounded-[5px] hover:bg-gray-200'
         >
           <VoteIcon theme={theme} />
         </button>
