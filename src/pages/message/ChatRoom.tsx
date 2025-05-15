@@ -111,7 +111,6 @@ export default function ChatRoom({
     try {
       const { data } = await putMessageSeen(user._id);
       console.log(data);
-      console.log('다 읽음');
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
