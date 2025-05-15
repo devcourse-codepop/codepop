@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ImageEditBtn from '../../../assets/images/img-edit/img-edit-btn.svg';
 import { fullNameRegex, passwordRegex } from '../../../utils/validators';
 import EditMenu from './EditMenu';
@@ -14,13 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { Theme } from '../../../types/darkModeTypes';
 import { dark } from '../../../utils/ darkModeUtils';
 
-export default function EditProfile({
-  userId,
-  theme,
-}: {
-  userId: string;
-  theme: Theme;
-}) {
+export default function EditProfile({ userId, theme }: { userId: string; theme: Theme }) {
   const navigator = useNavigate();
   const user = useAuthStore((state) => state.user);
   const setUser = useAuthStore((state) => state.setUser);
@@ -32,12 +26,11 @@ export default function EditProfile({
     confirmPassword: '',
   });
 
-  const [enteredErrorValues, setEnteredErrorValues] =
-    useState<EnteredErrorValues>({
-      myNameError: '',
-      passwordError: '',
-      confirmPasswordError: '',
-    });
+  const [enteredErrorValues, setEnteredErrorValues] = useState<EnteredErrorValues>({
+    myNameError: '',
+    passwordError: '',
+    confirmPasswordError: '',
+  });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isBackgroundMenuOpen, setIsBackgroundMenuOpen] = useState(false);
@@ -45,11 +38,23 @@ export default function EditProfile({
   const [isCover, setIsCover] = useState(false);
 
   const [coverImage, setCoverImage] = useState<File | null>(null);
-  const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(null);
   const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [profilePreviewUrl, setProfilePreviewUrl] = useState<string | null>(
-    null
-  );
+
+  // 보이는 이미지만 변경
+  const coverPreviewUrl = useMemo(() => {
+    return coverImage ? URL.createObjectURL(coverImage) : null;
+  }, [coverImage]);
+
+  const profilePreviewUrl = useMemo(() => {
+    return profileImage ? URL.createObjectURL(profileImage) : null;
+  }, [profileImage]);
+
+  useEffect(() => {
+    return () => {
+      if (coverPreviewUrl) URL.revokeObjectURL(coverPreviewUrl);
+      if (profilePreviewUrl) URL.revokeObjectURL(profilePreviewUrl);
+    };
+  }, [coverPreviewUrl, profilePreviewUrl]);
 
   const validateUsername = (name: string) => fullNameRegex.test(name);
   const validatePassword = (password: string) => passwordRegex.test(password);
@@ -59,28 +64,17 @@ export default function EditProfile({
     setEnteredUserValues((prev) => ({ ...prev, [identifier]: value }));
 
     let errorMessage = '';
-
     if (identifier === 'myName') {
-      if (!value) {
-        errorMessage = '이름은 필수 입력 항목입니다.';
-      } else if (!validateUsername(value)) {
-        errorMessage = '이름은 특수문자 없이 10글자 이하로 입력해주세요.';
-      }
+      if (!value) errorMessage = '이름은 필수 입력 항목입니다.';
+      else if (!validateUsername(value)) errorMessage = '이름은 특수문자 없이 10글자 이하로 입력해주세요.';
     }
-
     if (identifier === 'password') {
-      if (!value) {
-        errorMessage = '비밀번호는 필수 입력 항목입니다.';
-      } else if (!validatePassword(value)) {
-        errorMessage =
-          '비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.';
-      }
+      if (!value) errorMessage = '비밀번호는 필수 입력 항목입니다.';
+      else if (!validatePassword(value))
+        errorMessage = '비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.';
     }
-
     if (identifier === 'confirmPassword') {
-      if (value !== enteredUserValues.password) {
-        errorMessage = '비밀번호가 일치하지 않습니다.';
-      }
+      if (value !== enteredUserValues.password) errorMessage = '비밀번호가 일치하지 않습니다.';
     }
 
     setEnteredErrorValues((prevErrors) => ({
@@ -102,18 +96,12 @@ export default function EditProfile({
     if (userId) fetchUserData();
   }, [userId]);
 
-  if (!userData) {
-    return <div className="text-center py-10 text-gray-500">로딩 중...</div>;
-  }
-
-  // 모달로 받은 사진 미리 보기 및 저장
-  const handleSavePhoto = (file: File, previewUrl: string) => {
+  // 모달로 받은 사진 저장
+  const handleSavePhoto = (file: File) => {
     if (isCover) {
       setCoverImage(file);
-      setCoverPreviewUrl(previewUrl);
     } else {
       setProfileImage(file);
-      setProfilePreviewUrl(previewUrl);
     }
   };
 
@@ -130,12 +118,20 @@ export default function EditProfile({
 
     if (isCover) {
       setCoverImage(file);
-      setCoverPreviewUrl(URL.createObjectURL(file));
     } else {
       setProfileImage(file);
-      setProfilePreviewUrl(URL.createObjectURL(file));
     }
   };
+
+  // 파일 -> url 변경
+  function fileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  }
 
   // 제출할 때 에러 메시지 있으면 제출하지 않음. 제출 시 api 호출하여 정보 변경
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -149,27 +145,15 @@ export default function EditProfile({
       confirmPasswordError: '',
     };
 
-    if (!myName) {
-      newErrors.myNameError = '이름은 필수 입력 항목입니다.';
-    } else if (!validateUsername(myName)) {
-      newErrors.myNameError =
-        '이름은 특수문자 없이 10글자 이하로 입력해주세요.';
-    } else if (!password) {
-      newErrors.passwordError = '비밀번호는 필수 입력 항목입니다.';
-    } else if (!validatePassword(password)) {
-      newErrors.passwordError =
-        '비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.';
-    } else if (!confirmPassword) {
-      newErrors.confirmPasswordError = '비밀번호 확인은 필수 입력 항목입니다.';
-    } else if (confirmPassword !== password) {
-      newErrors.confirmPasswordError = '비밀번호가 일치하지 않습니다.';
-    }
+    if (!myName) newErrors.myNameError = '이름은 필수 입력 항목입니다.';
+    else if (!validateUsername(myName)) newErrors.myNameError = '이름은 특수문자 없이 10글자 이하로 입력해주세요.';
+    else if (!password) newErrors.passwordError = '비밀번호는 필수 입력 항목입니다.';
+    else if (!validatePassword(password))
+      newErrors.passwordError = '비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.';
+    else if (!confirmPassword) newErrors.confirmPasswordError = '비밀번호 확인은 필수 입력 항목입니다.';
+    else if (confirmPassword !== password) newErrors.confirmPasswordError = '비밀번호가 일치하지 않습니다.';
 
-    if (
-      newErrors.myNameError ||
-      newErrors.passwordError ||
-      newErrors.confirmPasswordError
-    ) {
+    if (newErrors.myNameError || newErrors.passwordError || newErrors.confirmPasswordError) {
       setEnteredErrorValues(newErrors);
       return;
     }
@@ -194,6 +178,7 @@ export default function EditProfile({
         });
       }
 
+      // 프로필 이미지는 헤더에도 보여서 주수탄드 변경
       if (profileImage) {
         const formDataProfile = new FormData();
         formDataProfile.append('image', profileImage);
@@ -202,9 +187,8 @@ export default function EditProfile({
           headers: { 'Content-Type': 'multipart/form-data' },
         });
         if (user) {
-          const { data: userData2 } = await getUserData(userId);
-          setUserData(userData2);
-          setUser({ ...user, image: userData2.image });
+          const base64 = await fileToBase64(profileImage);
+          setUser({ ...user, image: base64 });
         }
       }
       navigator('/profile');
@@ -214,7 +198,7 @@ export default function EditProfile({
   };
 
   if (!userData) {
-    return <div className="text-center py-10 text-gray-500">로딩 중...</div>;
+    return <div className='text-center py-10 text-gray-500'>로딩 중...</div>;
   }
 
   return (
@@ -224,17 +208,17 @@ export default function EditProfile({
           dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
         }`}
       >
-        <div className="relative h-[223px] rounded-t-[10px]">
+        <div className='relative h-[223px] rounded-t-[10px]'>
           <img
             src={coverPreviewUrl || userData.coverImage || defaultCover}
-            className="w-full h-full rounded-t-[10px]"
-            alt="Background"
+            className='w-full h-full rounded-t-[10px]'
+            alt='Background'
           />
-          <div className="relative">
+          <div className='relative'>
             <img
               src={ImageEditBtn}
-              alt="BackgroundEdit"
-              className="absolute cursor-pointer w-[30px] h-[30px] bottom-[19px] right-3"
+              alt='BackgroundEdit'
+              className='absolute cursor-pointer w-[30px] h-[30px] bottom-[19px] right-3'
               onClick={() => {
                 setIsBackgroundMenuOpen((prev) => !prev);
                 setIsCover(true);
@@ -251,18 +235,18 @@ export default function EditProfile({
           </div>
         </div>
 
-        <div className="flex justify-center items-center">
-          <div className="relative inline-block mt-[19px]">
+        <div className='flex justify-center items-center'>
+          <div className='relative inline-block mt-[19px]'>
             <img
               src={profilePreviewUrl || userData.image || defaultProfileImage}
-              className="w-[300px] h-[300px] rounded-[5px] ml-[100px] border border-[#E3E3E3] object-cover"
-              alt="Profile"
+              className='w-[300px] h-[300px] rounded-[5px] ml-[100px] border border-[#E3E3E3] object-cover'
+              alt='Profile'
             />
-            <div className="relative">
+            <div className='relative'>
               <img
                 src={ImageEditBtn}
-                alt="ProfileEdit"
-                className="absolute cursor-pointer w-[30px] h-[30px] bottom-[19px] right-3"
+                alt='ProfileEdit'
+                className='absolute cursor-pointer w-[30px] h-[30px] bottom-[19px] right-3'
                 onClick={() => {
                   setIsProfileMenuOpen((prev) => !prev);
                   setIsCover(false);
@@ -279,91 +263,53 @@ export default function EditProfile({
             </div>
           </div>
 
-          <form
-            onSubmit={handleSubmit}
-            className="w-full max-w-md pl-[50px] ml-[120px] mt-9"
-          >
-            <p
-              className={`pt-[35px] font-bold text-[14px] ${
-                dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
-              }`}
-            >
+          <form onSubmit={handleSubmit} className='w-full max-w-md pl-[50px] ml-[120px] mt-9'>
+            <p className={`pt-[35px] font-bold text-[14px] ${dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'}`}>
               이름
             </p>
             <Input
-              type="text"
+              type='text'
               value={enteredUserValues.myName}
               className={`input-profile ${dark(theme) ? 'bg-[#ffffff]' : ''}`}
-              onChange={(event) =>
-                handleInputChange('myName', event.target.value)
-              }
+              onChange={(event) => handleInputChange('myName', event.target.value)}
             />
-            <p className="text-[11px] text-red-500 pt-1 h-2.5">
-              {enteredErrorValues.myNameError || '\u00A0'}
-            </p>
+            <p className='text-[11px] text-red-500 pt-1 h-2.5'>{enteredErrorValues.myNameError || '\u00A0'}</p>
 
-            <p
-              className={`mt-[22px] font-bold text-[14px] ${
-                dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
-              }`}
-            >
+            <p className={`mt-[22px] font-bold text-[14px] ${dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'}`}>
               이메일
             </p>
             <Input
-              type="text"
+              type='text'
               value={userData.email}
               readOnly
-              className={`input-profile bg-[#e3e3e3] text-black/50 ${
-                dark(theme) ? 'bg-[#e3e3e3] opacity-50' : ''
-              }`}
+              className={`input-profile bg-[#e3e3e3] text-black/50 ${dark(theme) ? 'bg-[#e3e3e3] opacity-50' : ''}`}
             />
 
-            <p
-              className={`mt-[22px] font-bold text-[14px] ${
-                dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
-              }`}
-            >
+            <p className={`mt-[22px] font-bold text-[14px] ${dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'}`}>
               비밀번호
             </p>
             <Input
-              type="password"
-              placeholder="Password"
+              type='password'
+              placeholder='Password'
               className={`input-profile ${dark(theme) ? 'bg-[#ffffff]' : ''}`}
               value={enteredUserValues.password}
-              onChange={(event) =>
-                handleInputChange('password', event.target.value)
-              }
+              onChange={(event) => handleInputChange('password', event.target.value)}
             />
-            <p className="text-[11px] text-red-500 pt-1 h-2.5">
-              {enteredErrorValues.passwordError || '\u00A0'}
-            </p>
-            <p
-              className={`mt-[22px] font-bold text-[14px] ${
-                dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
-              }`}
-            >
+            <p className='text-[11px] text-red-500 pt-1 h-2.5'>{enteredErrorValues.passwordError || '\u00A0'}</p>
+            <p className={`mt-[22px] font-bold text-[14px] ${dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'}`}>
               비밀번호 확인
             </p>
             <Input
-              type="password"
-              placeholder="Password"
+              type='password'
+              placeholder='Password'
               className={`input-profile ${dark(theme) ? 'bg-[#ffffff]' : ''}`}
               value={enteredUserValues.confirmPassword}
-              onChange={(event) =>
-                handleInputChange('confirmPassword', event.target.value)
-              }
+              onChange={(event) => handleInputChange('confirmPassword', event.target.value)}
             />
-            <p className="text-[11px] text-red-500 pt-1 h-2.5">
-              {enteredErrorValues.confirmPasswordError || '\u00A0'}
-            </p>
+            <p className='text-[11px] text-red-500 pt-1 h-2.5'>{enteredErrorValues.confirmPasswordError || '\u00A0'}</p>
 
-            <div className="flex justify-end mr-[113px] mt-[25px] relative">
-              <Button
-                value="수정"
-                className={`button-edit ${
-                  dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
-                }`}
-              />
+            <div className='flex justify-end mr-[113px] mt-[25px] relative'>
+              <Button value='수정' className={`button-edit ${dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''}`} />
             </div>
           </form>
         </div>

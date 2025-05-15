@@ -1,6 +1,6 @@
-import { useRef, useState } from 'react';
-import { Theme } from '../../../types/darkModeTypes';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { dark } from '../../../utils/ darkModeUtils';
+import { Theme } from '../../../types/darkModeTypes';
 
 interface PhotoUploadModalProps2 extends PhotoUploadModalProps {
   theme: Theme;
@@ -12,16 +12,23 @@ export default function PhotoUploadModal({
   onSave,
   theme,
 }: PhotoUploadModalProps2) {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // 파일 변했을 때 URL 설정
+  // 파일 -> URL 설정
+  const previewUrl = useMemo(() => {
+    return selectedFile ? URL.createObjectURL(selectedFile) : null;
+  }, [selectedFile]);
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
+
+  // 파일 변했을 때 저장
   const handleFileChange = (file: File) => {
     setSelectedFile(file);
-    const reader = new FileReader();
-    reader.onloadend = () => setPreviewUrl(reader.result as string);
-    reader.readAsDataURL(file);
   };
 
   // 파일 드랍한 경우
@@ -44,14 +51,13 @@ export default function PhotoUploadModal({
 
   const handleCancel = () => {
     setSelectedFile(null);
-    setPreviewUrl(null);
     onClose();
   };
 
-  // 파일과 URL 넘기기
+  // 파일 넘기기
   const handleSave = () => {
-    if (!selectedFile || !previewUrl) return alert('파일을 선택해주세요.');
-    onSave(selectedFile, previewUrl);
+    if (!selectedFile) return alert('이미지 파일을 선택해주세요.');
+    onSave(selectedFile);
     handleCancel();
   };
 
@@ -123,7 +129,6 @@ export default function PhotoUploadModal({
                 : 'bg-[#1E293B] text-white'
             }`}
             onClick={handleSave}
-            disabled={!selectedFile}
           >
             변경
           </button>
