@@ -38,7 +38,7 @@ interface Post {
   myCommentCount?: number;
 }
 
-interface Follower {
+interface Follow {
   _id: string;
   user: string;
   follower: string;
