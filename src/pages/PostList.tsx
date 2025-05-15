@@ -176,7 +176,9 @@ export default function PostList({ theme }: { theme: Theme }) {
             ref={scrollRef}
           >
             {isLoading ? (
-              Array.from({ length: 5 }).map((_, i) => <PostSkeleton key={i} />)
+              Array.from({ length: 5 }).map((_, i) => (
+                <PostSkeleton key={i} theme={theme} />
+              ))
             ) : (
               <>
                 {postListItem.length === 0 && (
