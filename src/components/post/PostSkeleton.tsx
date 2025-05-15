@@ -1,5 +1,5 @@
-import { Theme } from '../../types/ darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 
 export default function PostSkeleton({ theme }: { theme: Theme }) {
   return (
@@ -35,7 +35,11 @@ export default function PostSkeleton({ theme }: { theme: Theme }) {
             dark(theme) ? 'bg-[#1e1e1e]' : 'bg-gray-100'
           }`}
         />
-        <hr className="mx-[18px] text-[#b2b2b2]" />
+        <hr
+          className={`mx-[18px]  ${
+            dark(theme) ? 'text-[#1e1e1e]' : 'text-[#b2b2b2]'
+          }`}
+        />
         {/* 하단 */}
         <div className="flex justify-between">
           <div

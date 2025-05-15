@@ -12,8 +12,8 @@ import { usePostStore } from '../stores/postStore';
 import { Post } from '../types';
 import dayjs from 'dayjs';
 import { useAuthStore } from '../stores/authStore';
-import { Theme } from '../types/ darkModeTypes';
-import { dark } from '../utils/ darkModeUtils';
+import { Theme } from '../types/darkModeTypes';
+import { dark } from '../utils/darkModeUtils';
 import PostSkeleton from '../components/post/PostSkeleton';
 
 export default function PostList({ theme }: { theme: Theme }) {
@@ -121,7 +121,7 @@ export default function PostList({ theme }: { theme: Theme }) {
   useEffect(() => {
     if (user) setIsLogin(true);
     getPostListItem();
-  }, [user]);
+  }, [user, channel]);
 
   // 스크롤 조작을 위한 이벤트 적용
   useEffect(() => {

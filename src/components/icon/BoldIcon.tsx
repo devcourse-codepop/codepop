@@ -1,6 +1,6 @@
 import boldIcon from '../../assets/images/editor/bold-icon.svg';
 import boldIconWhite from '../../assets/images/editor/bold-icon-white.svg';
-import { Theme } from '../../types/ darkModeTypes';
+import { Theme } from '../../types/darkModeTypes';
 
 export default function BoldIcon({ theme }: { theme: Theme }) {
   return (

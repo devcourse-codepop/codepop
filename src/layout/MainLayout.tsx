@@ -3,7 +3,7 @@ import Header from '../components/header/Header';
 import ChannelBox from '../components/sidebar/ChannelBox';
 import MemberBox from '../components/sidebar/MemberBox';
 import '../css/layout/layout.css';
-import { Theme } from '../types/ darkModeTypes';
+import { Theme } from '../types/darkModeTypes';
 
 export default function MainLayout({
   theme,

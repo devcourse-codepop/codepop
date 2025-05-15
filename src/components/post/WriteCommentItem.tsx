@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
 import { postComments, postNotifications } from '../../api/post/post';
 import CommentEditor from '../editor/CommentEditor';
-import { Theme } from '../../types/ darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 import { useNavigate } from 'react-router-dom';
 
 export default function WriteCommentItem({
@@ -61,8 +61,6 @@ export default function WriteCommentItem({
         postId
       );
       console.log(data);
-
-      //window.location.href = `/channel/${channelId}/post/${postId}`;
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }

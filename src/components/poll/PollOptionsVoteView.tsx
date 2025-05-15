@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { Theme } from '../../types/ darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { useState, useEffect } from 'react';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 import { useParams } from 'react-router-dom';
 import { voteComments, deleteComments } from '../../api/post/post';
 
@@ -28,23 +28,58 @@ export default function PollOptionsVoteView({
   onVoted,
 }: PollOptionsViewProps) {
   const { postId } = useParams<{ postId: string }>();
+
   const [selectedOptionId, setSelectedOptionId] = useState<number | null>(null);
   const [myCommentId, setMyCommentId] = useState<string | null>(null);
   const [pollOptions, setPollOptions] = useState(() =>
     options.map((opt) => ({
       ...opt,
-      voteCount: comments.filter((c) => {
-        try {
-          const parsed = JSON.parse(c.comment);
-          return (
-            parsed.type === 'vote' && Number(parsed.selectedOptionId) === opt.id
-          );
-        } catch {
-          return false;
-        }
-      }).length,
+      voteCount: 0,
     }))
   );
+
+  useEffect(() => {
+    const myVoteComment = comments.find((c) => {
+      try {
+        const parsed = JSON.parse(c.comment);
+        return parsed.type === 'vote';
+      } catch {
+        return false;
+      }
+    });
+
+    if (myVoteComment) {
+      try {
+        const parsed = JSON.parse(myVoteComment.comment);
+        setSelectedOptionId(Number(parsed.selectedOptionId));
+        setMyCommentId(myVoteComment._id);
+      } catch {
+        setSelectedOptionId(null);
+        setMyCommentId(null);
+      }
+    } else {
+      setSelectedOptionId(null);
+      setMyCommentId(null);
+    }
+
+    // 옵션별 투표 수 갱신
+    setPollOptions(
+      options.map((opt) => ({
+        ...opt,
+        voteCount: comments.filter((c) => {
+          try {
+            const parsed = JSON.parse(c.comment);
+            return (
+              parsed.type === 'vote' &&
+              Number(parsed.selectedOptionId) === opt.id
+            );
+          } catch {
+            return false;
+          }
+        }).length,
+      }))
+    );
+  }, [comments, options]);
 
   const totalVotes = pollOptions.reduce((acc, cur) => acc + cur.voteCount, 0);
 
@@ -52,7 +87,6 @@ export default function PollOptionsVoteView({
     if (!postId) return;
 
     try {
-      // 같은 항목 다시 클릭 => 삭제 후 해제
       if (selectedOptionId === optionId && myCommentId) {
         await deleteComments(myCommentId);
         setSelectedOptionId(null);
@@ -66,7 +100,6 @@ export default function PollOptionsVoteView({
         return;
       }
 
-      // 기존 댓글 삭제 (다른 항목을 누른 경우)
       if (myCommentId) {
         await deleteComments(myCommentId);
         setPollOptions((prev) =>
@@ -79,7 +112,6 @@ export default function PollOptionsVoteView({
       }
 
       const { data } = await voteComments(postId, String(optionId));
-
       setSelectedOptionId(optionId);
       setMyCommentId(data._id);
       setPollOptions((prev) =>
@@ -113,7 +145,7 @@ export default function PollOptionsVoteView({
         const borderColor = dark(theme)
           ? isSelected
             ? 'border-2 border-[#1e1e1e]'
-            : 'border-2 border-[#1e1e1e]'
+            : 'border-2 border-neutral-600'
           : isSelected
           ? 'border-gray-400'
           : 'border-gray-300';

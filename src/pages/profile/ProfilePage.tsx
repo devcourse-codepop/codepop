@@ -1,7 +1,7 @@
 import Profile from './Profile';
 import { useAuthStore } from '../../stores/authStore';
 import { useLocation } from 'react-router-dom';
-import { Theme } from '../../types/ darkModeTypes';
+import { Theme } from '../../types/darkModeTypes';
 
 export default function ProfilePage({ theme }: { theme: Theme }) {
   const location = useLocation();

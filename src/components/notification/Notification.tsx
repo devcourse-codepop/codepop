@@ -13,13 +13,14 @@ import {
 import { useChannelItemStore } from '../../stores/channelStore';
 import { twMerge } from 'tailwind-merge';
 import { useAuthStore } from '../../stores/authStore';
-import { Theme } from '../../types/ darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/ko';
 dayjs.extend(relativeTime);
 dayjs.locale('ko');
+
 export default function Notification({ theme }: { theme: Theme }) {
   const { user } = useAuthStore();
   const { channels } = useChannelItemStore();
@@ -92,9 +93,6 @@ export default function Notification({ theme }: { theme: Theme }) {
 
   useEffect(() => {
     notificationHandler();
-
-    const interval = setInterval(fetchNotifications, 10000);
-    return () => clearInterval(interval);
   }, [originNotifications, notificationHandler]);
   // 개별 알림에 변화가 있으면 새로운 카운트
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ImageEditBtn from '../../../assets/images/img-edit/img-edit-btn.svg';
 import { fullNameRegex, passwordRegex } from '../../../utils/validators';
 import EditMenu from './EditMenu';
@@ -11,8 +11,8 @@ import { useAuthStore } from '../../../stores/authStore';
 import defaultProfileImage from '../../../assets/images/profile/default-profile-img.jpg';
 import defaultCover from '../../../assets/images/profile/default-cover.png';
 import { useNavigate } from 'react-router-dom';
-import { Theme } from '../../../types/ darkModeTypes';
-import { dark } from '../../../utils/ darkModeUtils';
+import { Theme } from '../../../types/darkModeTypes';
+import { dark } from '../../../utils/darkModeUtils';
 
 export default function EditProfile({
   userId,
@@ -45,11 +45,23 @@ export default function EditProfile({
   const [isCover, setIsCover] = useState(false);
 
   const [coverImage, setCoverImage] = useState<File | null>(null);
-  const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(null);
   const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [profilePreviewUrl, setProfilePreviewUrl] = useState<string | null>(
-    null
-  );
+
+  // 보이는 이미지만 변경
+  const coverPreviewUrl = useMemo(() => {
+    return coverImage ? URL.createObjectURL(coverImage) : null;
+  }, [coverImage]);
+
+  const profilePreviewUrl = useMemo(() => {
+    return profileImage ? URL.createObjectURL(profileImage) : null;
+  }, [profileImage]);
+
+  useEffect(() => {
+    return () => {
+      if (coverPreviewUrl) URL.revokeObjectURL(coverPreviewUrl);
+      if (profilePreviewUrl) URL.revokeObjectURL(profilePreviewUrl);
+    };
+  }, [coverPreviewUrl, profilePreviewUrl]);
 
   const validateUsername = (name: string) => fullNameRegex.test(name);
   const validatePassword = (password: string) => passwordRegex.test(password);
@@ -59,28 +71,20 @@ export default function EditProfile({
     setEnteredUserValues((prev) => ({ ...prev, [identifier]: value }));
 
     let errorMessage = '';
-
     if (identifier === 'myName') {
-      if (!value) {
-        errorMessage = '이름은 필수 입력 항목입니다.';
-      } else if (!validateUsername(value)) {
+      if (!value) errorMessage = '이름은 필수 입력 항목입니다.';
+      else if (!validateUsername(value))
         errorMessage = '이름은 특수문자 없이 10글자 이하로 입력해주세요.';
-      }
     }
-
     if (identifier === 'password') {
-      if (!value) {
-        errorMessage = '비밀번호는 필수 입력 항목입니다.';
-      } else if (!validatePassword(value)) {
+      if (!value) errorMessage = '비밀번호는 필수 입력 항목입니다.';
+      else if (!validatePassword(value))
         errorMessage =
           '비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.';
-      }
     }
-
     if (identifier === 'confirmPassword') {
-      if (value !== enteredUserValues.password) {
+      if (value !== enteredUserValues.password)
         errorMessage = '비밀번호가 일치하지 않습니다.';
-      }
     }
 
     setEnteredErrorValues((prevErrors) => ({
@@ -102,18 +106,12 @@ export default function EditProfile({
     if (userId) fetchUserData();
   }, [userId]);
 
-  if (!userData) {
-    return <div className="text-center py-10 text-gray-500">로딩 중...</div>;
-  }
-
-  // 모달로 받은 사진 미리 보기 및 저장
-  const handleSavePhoto = (file: File, previewUrl: string) => {
+  // 모달로 받은 사진 저장
+  const handleSavePhoto = (file: File) => {
     if (isCover) {
       setCoverImage(file);
-      setCoverPreviewUrl(previewUrl);
     } else {
       setProfileImage(file);
-      setProfilePreviewUrl(previewUrl);
     }
   };
 
@@ -130,12 +128,20 @@ export default function EditProfile({
 
     if (isCover) {
       setCoverImage(file);
-      setCoverPreviewUrl(URL.createObjectURL(file));
     } else {
       setProfileImage(file);
-      setProfilePreviewUrl(URL.createObjectURL(file));
     }
   };
+
+  // 파일 -> url 변경
+  function fileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  }
 
   // 제출할 때 에러 메시지 있으면 제출하지 않음. 제출 시 api 호출하여 정보 변경
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -149,21 +155,19 @@ export default function EditProfile({
       confirmPasswordError: '',
     };
 
-    if (!myName) {
-      newErrors.myNameError = '이름은 필수 입력 항목입니다.';
-    } else if (!validateUsername(myName)) {
+    if (!myName) newErrors.myNameError = '이름은 필수 입력 항목입니다.';
+    else if (!validateUsername(myName))
       newErrors.myNameError =
         '이름은 특수문자 없이 10글자 이하로 입력해주세요.';
-    } else if (!password) {
+    else if (!password)
       newErrors.passwordError = '비밀번호는 필수 입력 항목입니다.';
-    } else if (!validatePassword(password)) {
+    else if (!validatePassword(password))
       newErrors.passwordError =
         '비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.';
-    } else if (!confirmPassword) {
+    else if (!confirmPassword)
       newErrors.confirmPasswordError = '비밀번호 확인은 필수 입력 항목입니다.';
-    } else if (confirmPassword !== password) {
+    else if (confirmPassword !== password)
       newErrors.confirmPasswordError = '비밀번호가 일치하지 않습니다.';
-    }
 
     if (
       newErrors.myNameError ||
@@ -194,6 +198,7 @@ export default function EditProfile({
         });
       }
 
+      // 프로필 이미지는 헤더에도 보여서 주수탄드 변경
       if (profileImage) {
         const formDataProfile = new FormData();
         formDataProfile.append('image', profileImage);
@@ -202,9 +207,8 @@ export default function EditProfile({
           headers: { 'Content-Type': 'multipart/form-data' },
         });
         if (user) {
-          const { data: userData2 } = await getUserData(userId);
-          setUserData(userData2);
-          setUser({ ...user, image: userData2.image });
+          const base64 = await fileToBase64(profileImage);
+          setUser({ ...user, image: base64 });
         }
       }
       navigator('/profile');

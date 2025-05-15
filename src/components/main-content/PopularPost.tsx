@@ -3,8 +3,8 @@ import { useChannelItemStore } from '../../stores/channelStore';
 import { getPopularPostData } from '../../api/post/post';
 import { Post } from '../../types';
 import PostListItem from '../post/PostListItem';
-import { Theme } from '../../types/ darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 
 export default function PopularPost({ theme }: { theme: Theme }) {
   const { channels, fetchChannels } = useChannelItemStore();
@@ -91,7 +91,7 @@ export default function PopularPost({ theme }: { theme: Theme }) {
             </li>
           ))}
         </ul>
-        <div>
+        <div className={`${dark(theme) ? 'dark' : ''}`}>
           {channels.map((_, cIndex) => (
             <div
               className="tab-content flex gap-x-7 gap-y-5 flex-wrap min-h-[260px] relative"
@@ -114,7 +114,7 @@ export default function PopularPost({ theme }: { theme: Theme }) {
                   return (
                     <div
                       key={`popular-${pIndex}`}
-                      className="tabConstentItem basis-[calc(50%-0.875rem)]  max-w-full"
+                      className="basis-[calc(50%-0.875rem)] max-w-full tabConstentItem"
                     >
                       <PostListItem {...parsePopular} theme={theme} />
                       {/* <PostList
