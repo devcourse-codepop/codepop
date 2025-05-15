@@ -6,8 +6,9 @@ import { getPostList } from '../api/post/post';
 import { usePostStore } from '../stores/postStore';
 import { useEffect, useRef, useState } from 'react';
 import { Post } from '../types';
+import { Theme } from '../types/ darkModeTypes';
 
-export default function PostDetail() {
+export default function PostDetail({ theme }: { theme: Theme }) {
   const params = useParams();
   const channel = params.channelId;
   const post = params.postId;
@@ -71,7 +72,7 @@ export default function PostDetail() {
     <>
       <div className="w-full">
         <div className="flex justify-between items-end pb-[30px]">
-          <ChannelName channelId={String(channel)} />
+          <ChannelName channelId={String(channel)} theme={theme} />
         </div>
         {postItem && (
           <div className="flex flex-col gap-[30px] max-h-[calc(100vh-100px-120px)] overflow-auto scroll-custom">
@@ -79,6 +80,7 @@ export default function PostDetail() {
             <PostDetailItem
               {...postItem}
               updateReloadTrigger={updateReloadTrigger}
+              theme={theme}
             />
             <div ref={commentRef}>
               <WriteCommentItem
@@ -86,6 +88,7 @@ export default function PostDetail() {
                 postId={String(post)}
                 postUserId={postItem.author._id}
                 updateReloadTrigger={updateReloadTrigger}
+                theme={theme}
               />
             </div>
           </div>

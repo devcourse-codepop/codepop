@@ -11,10 +11,25 @@ import DOMPurify from 'dompurify';
 import DeletedUserModal from './DeletedUserModal';
 import { useChannelItemStore } from '../../stores/channelStore';
 import PollOptionsView from '../poll/PollOptionsView';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
-export default function PostListItem(props: Post) {
-  const { _id, title, image, author, likes, comments, createdAt, channel } =
-    props;
+interface PostListItemProps extends Post {
+  theme: Theme;
+}
+
+export default function PostListItem(props: PostListItemProps) {
+  const {
+    _id,
+    title,
+    image,
+    author,
+    likes,
+    comments,
+    createdAt,
+    channel,
+    theme,
+  } = props;
   const { channels } = useChannelItemStore();
 
   const navigate = useNavigate();
@@ -100,7 +115,11 @@ export default function PostListItem(props: Post) {
 
   return (
     <>
-      <div className='postListItem w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative'>
+      <div
+        className={`postListItem w-full h-auto rounded-[5px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative ${
+          dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+        }`}
+      >
         <div className='postListItem-top flex justify-between h-[85px] pl-3 pt-2.5'>
           <Link to={`/profile`} state={{ userid: author?._id }}>
             <Avatar
@@ -108,6 +127,7 @@ export default function PostListItem(props: Post) {
               email={author?.email}
               image={author?.image}
               isOnline={author?.isOnline}
+              theme={theme}
             />
           </Link>
         </div>
@@ -121,13 +141,21 @@ export default function PostListItem(props: Post) {
         >
           <div
             className={twMerge(
-              'postListItem-content-text flex flex-col justify-center w-full gap-[22px] ',
+              `postListItem-content-text flex flex-col justify-center w-full gap-[22px] ${
+                dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
+              }`,
+
               image && 'max-w-[635px]'
             )}
           >
-            <div className='postTitle text-[18px] font-semibold truncate'>
+            <div
+              className={`postTitle text-[18px] font-semibold truncate ${
+                dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
+              }`}
+            >
               {JSON.parse(title).title}
             </div>
+
             <div
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(
@@ -139,7 +167,7 @@ export default function PostListItem(props: Post) {
             {/* 투표 옵션이 있을 경우 */}
             {pollOptions && pollOptions.length > 0 && (
               <div className='postPoll mt-4'>
-                <PollOptionsView options={pollOptions} />
+                <PollOptionsView options={pollOptions} theme={theme} />
               </div>
             )}
           </div>
@@ -149,19 +177,35 @@ export default function PostListItem(props: Post) {
             </div>
           )}
         </div>
-        <div className='flex justify-end pr-5 pb-[9px] text-[#808080] text-sm font-light'>
+        <div
+          className={`flex justify-end pr-5 pb-[9px] text-[#808080] text-sm font-light ${
+            dark(theme)
+              ? 'text-[#ffffff] opacity-50'
+              : 'text-[#111111] opacity-50'
+          }`}
+        >
           {getElapsedTime()}
         </div>
+        <hr
+          className={`mx-[18px] ${
+            dark(theme)
+              ? 'text-[#ffffff] opacity-50'
+              : 'text-[#b2b2b2] opacity-50'
+          }`}
+        />
 
-        <hr className='mx-[18px] text-[#b2b2b2]' />
         <div
           className={twMerge(
-            'flex h-[59px] postListItem-bottom',
+            'flex h-[59px] ,postListItem-bottom',
             setCodeCount() > 0 ? 'justify-between' : 'justify-end'
           )}
         >
           {setCodeCount() > 0 && (
-            <div className='flex justify-center items-center text-[14px] opacity-70 ml-5'>
+            <div
+              className={`flex justify-center items-center text-[14px] opacity-70 ml-5 ${
+                dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
+              }`}
+            >
               +<span className='text-[#ff0000]'>{setCodeCount()}</span>개의 코드
               블록
             </div>
@@ -180,13 +224,18 @@ export default function PostListItem(props: Post) {
             }
             postId={_id}
             likes={likes}
+            theme={theme}
             author={author}
             channel={channel}
           />
         </div>
       </div>
+
       {isLoginModalOpen && (
-        <NotLoginModal closeLoginModalHanlder={closeLoginModalHanlder} />
+        <NotLoginModal
+          closeLoginModalHanlder={closeLoginModalHanlder}
+          theme={theme}
+        />
       )}
       {isUserModalOpen && (
         <DeletedUserModal closeUserModalHanlder={closeUserModalHanlder} />

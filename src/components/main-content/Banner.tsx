@@ -5,8 +5,8 @@ import 'swiper/css/pagination';
 import banner1 from '../../assets/images/main-banner/banner1.svg';
 import banner2 from '../../assets/images/main-banner/banner2.svg';
 import banner3 from '../../assets/images/main-banner/banner3.svg';
-import stop from '../../assets/images/main-banner/icons_stop.svg';
-import play from '../../assets/images/main-banner/icons_play.svg';
+import stop from '../../assets/images/main-banner/icons-stop.svg';
+import play from '../../assets/images/main-banner/icons-play.svg';
 
 import { Autoplay, Navigation, Pagination, A11y } from 'swiper/modules';
 import { useRef, useState } from 'react';
