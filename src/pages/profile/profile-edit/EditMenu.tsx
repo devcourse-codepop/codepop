@@ -38,7 +38,7 @@ export default function EditMenu({
       <div
         className={`py-2 px-3 cursor-pointer  text-sm rounded-[5px]  ${
           dark(theme)
-            ? 'text-[#ffffff] hover:bg-neutral-500'
+            ? 'text-[#ffffff]/70 hover:bg-neutral-500'
             : 'text-black hover:bg-gray-100'
         }`}
         onClick={onEdit}
