@@ -165,7 +165,7 @@ export default function Notification() {
   return (
     <>
       <button
-        className="relative cursor-pointer block"
+        className='relative cursor-pointer block'
         onClick={(e) => {
           e.preventDefault();
           setNotifiOpen(!notifiOpen);
@@ -173,7 +173,7 @@ export default function Notification() {
       >
         <img src={alarm} />
         {newData > 0 && (
-          <span className="block w-3.5 h-3.5 rounded-2xl bg-[#FF0000] absolute -right-1 top-0 text-[11px] text-white leading-3">
+          <span className='block w-3.5 h-3.5 rounded-2xl bg-[#FF0000] absolute -right-1 top-0 text-[11px] text-white leading-3'>
             {newData}
           </span>
         )}
@@ -181,17 +181,17 @@ export default function Notification() {
       {notifiOpen && (
         <div
           ref={modalRef}
-          className="absolute gap-3 bg-white rounded-[10px] z-1 py-4 px-5 shadow-2xl w-[340px] z-10 -right-5 top-8.5"
+          className='absolute gap-3 bg-white rounded-[10px] z-1 py-4 px-5 shadow-2xl w-[340px] z-10 -right-5 top-8.5'
         >
-          <span className="w-[12px] h-[12px] bg-white rounded-[2px] absolute rotate-135 -top-1.5 right-6 -z-2"></span>
-          <div className="border-b border-[#cccccc] flex justify-between pb-3">
-            <h3 className="text-[#4D4D4D] text-base font-medium flex items-end gap-x-2">
+          <span className='w-[12px] h-[12px] bg-white rounded-[2px] absolute rotate-135 -top-1.5 right-6 -z-2'></span>
+          <div className='border-b border-[#cccccc] flex justify-between pb-3'>
+            <h3 className='text-[#4D4D4D] text-base font-medium flex items-end gap-x-2'>
               Notifications
             </h3>
           </div>
-          <div className="notiList pt-1 px-2 h-[200px] overflow-y-auto scroll-custom relative">
+          <div className='notiList pt-1 px-2 h-[200px] overflow-y-auto scroll-custom relative'>
             {notifications.length === 0 ? (
-              <p className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm text-[#5c5c5c]">
+              <p className='absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm text-[#5c5c5c]'>
                 알림이 없습니다
               </p>
             ) : (
@@ -217,7 +217,7 @@ export default function Notification() {
                         onClick={() => {
                           navigateHandler(notifi);
                         }}
-                        className="block relative pl-3.5 text-[13px] my-2.5 cursor-pointer text-left"
+                        className='block relative pl-3.5 text-[13px] my-2.5 cursor-pointer text-left'
                       >
                         <img
                           className={twMerge(
@@ -239,22 +239,22 @@ export default function Notification() {
               })
             )}
           </div>
-          <div className="text-right mt-1">
+          <div className='text-right mt-1'>
             <button
-              className="text-xs text-zinc-500 cursor-pointer"
+              className='text-xs text-zinc-500 cursor-pointer'
               onClick={readHandler}
             >
               전체읽기
             </button>
           </div>
-          <div className="absolute right-5 top-4">
+          <div className='absolute right-5 top-4'>
             <button
-              className="text-sm text-[#bbbbbb] cursor-pointer"
+              className='text-sm text-[#bbbbbb] cursor-pointer'
               onClick={() => {
                 closeHandler();
               }}
             >
-              <img src={close} className="opacity-60" />
+              <img src={close} className='opacity-60' />
             </button>
           </div>
         </div>

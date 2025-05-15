@@ -1,16 +1,16 @@
-import Avatar from "../avatar/Avatar";
-import LikeComment from "../reaction/LikeComment";
-import { Post } from "../../types";
-import dayjs from "dayjs";
-import { Link, useNavigate } from "react-router-dom";
-import { twMerge } from "tailwind-merge";
-import { useState } from "react";
-import { useAuthStore } from "../../stores/authStore";
-import NotLoginModal from "./NotLoginModal";
-import DOMPurify from "dompurify";
-import DeletedUserModal from "./DeletedUserModal";
-import { useChannelItemStore } from "../../stores/channelStore";
-import PollOptionsView from "../poll/PollOptionsView";
+import Avatar from '../avatar/Avatar';
+import LikeComment from '../reaction/LikeComment';
+import { Post } from '../../types';
+import dayjs from 'dayjs';
+import { Link, useNavigate } from 'react-router-dom';
+import { twMerge } from 'tailwind-merge';
+import { useState } from 'react';
+import { useAuthStore } from '../../stores/authStore';
+import NotLoginModal from './NotLoginModal';
+import DOMPurify from 'dompurify';
+import DeletedUserModal from './DeletedUserModal';
+import { useChannelItemStore } from '../../stores/channelStore';
+import PollOptionsView from '../poll/PollOptionsView';
 
 export default function PostListItem(props: Post) {
   const { _id, title, image, author, likes, comments, createdAt, channel } =
@@ -38,12 +38,12 @@ export default function PostListItem(props: Post) {
   // 게시글 content 필드에서 img 태그 내용 및 pre 태그 내용(코드 블록) 삭제
   const removeImgTags = (html: string): string => {
     const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
+    const doc = parser.parseFromString(html, 'text/html');
 
-    const imgs = doc.querySelectorAll("img");
+    const imgs = doc.querySelectorAll('img');
     imgs.forEach((img) => img.remove());
 
-    codes = doc.querySelectorAll("pre");
+    codes = doc.querySelectorAll('pre');
 
     codes.forEach((code) => {
       code.remove();
@@ -59,15 +59,15 @@ export default function PostListItem(props: Post) {
 
   // 게시글 작성 시간 포맷 설정
   const getElapsedTime = () => {
-    const now = dayjs().add(9, "hour");
-    const writeTime = dayjs(createdAt).add(9, "hour");
+    const now = dayjs().add(9, 'hour');
+    const writeTime = dayjs(createdAt).add(9, 'hour');
 
-    const gap = now.diff(writeTime, "s");
+    const gap = now.diff(writeTime, 's');
     if (gap < 60) return `${gap}초 전`;
     if (gap < 3600) return `${Math.floor(gap / 60)}분 전`;
     if (gap < 86400) return `${Math.floor(gap / 3600)}시간 전`;
 
-    return writeTime.format("YYYY.MM.DD");
+    return writeTime.format('YYYY.MM.DD');
   };
 
   // 게시글 클릭 시, 로그인하지 않은 사용자라면 로그인 관련 모달을, 탈퇴한 사용자 게시글이라면 탈퇴한 사용자 관련 모달을 띄워주기
@@ -114,15 +114,15 @@ export default function PostListItem(props: Post) {
 
         <div
           className={twMerge(
-            "postListItem-content flex justify-between px-[55px] py-[15px] gap-[55px] cursor-pointer",
-            !image && "py-[23px]"
+            'postListItem-content flex justify-between px-[55px] py-[15px] gap-[55px] cursor-pointer',
+            !image && 'py-[23px]'
           )}
           onClick={clickPostHandler}
         >
           <div
             className={twMerge(
-              "postListItem-content-text flex flex-col justify-center w-full gap-[22px] ",
-              image && "max-w-[635px]"
+              'postListItem-content-text flex flex-col justify-center w-full gap-[22px] ',
+              image && 'max-w-[635px]'
             )}
           >
             <div className='postTitle text-[18px] font-semibold truncate'>
@@ -138,7 +138,7 @@ export default function PostListItem(props: Post) {
             />
             {/* 투표 옵션이 있을 경우 */}
             {pollOptions && pollOptions.length > 0 && (
-              <div className='mt-4'>
+              <div className='postPoll mt-4'>
                 <PollOptionsView options={pollOptions} />
               </div>
             )}
@@ -156,8 +156,8 @@ export default function PostListItem(props: Post) {
         <hr className='mx-[18px] text-[#b2b2b2]' />
         <div
           className={twMerge(
-            "flex h-[59px] postListItem-bottom",
-            setCodeCount() > 0 ? "justify-between" : "justify-end"
+            'flex h-[59px] postListItem-bottom',
+            setCodeCount() > 0 ? 'justify-between' : 'justify-end'
           )}
         >
           {setCodeCount() > 0 && (
@@ -172,7 +172,7 @@ export default function PostListItem(props: Post) {
               comments.filter((c) => {
                 try {
                   const parsed = JSON.parse(c.comment);
-                  return parsed.type !== "vote";
+                  return parsed.type !== 'vote';
                 } catch {
                   return true;
                 }
