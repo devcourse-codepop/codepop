@@ -6,10 +6,11 @@ import { createCodePost } from '../../api/write/write';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
+import { usePostStore } from '../../stores/postStore';
 
 export default function CreateCodePost({ theme }: { theme: Theme }) {
   const titleRef = useRef<HTMLInputElement>(null);
-
+  const params = useParams();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState(''); // Editor에서 본문 HTML을 받음
   const [pollOptions, setPollOptions] = useState<
@@ -18,6 +19,8 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const navigate = useNavigate();
   const { channelId } = useParams();
+  const channel = params.channelId;
+  const channelIdList = usePostStore((state) => state.channelIdList);
 
   const handlePollCreate = useCallback(
     (options: { id: number; text: string }[]) => {
@@ -46,7 +49,7 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
         pollOptions: pollOptions,
       })
     );
-    formData.append('channelId', '681b84d4437f722b6908ab61');
+    formData.append('channelId', channelIdList[Number(channel) - 1]);
 
     if (imageFile) {
       formData.append('image', imageFile); // 이미지 파일 추가
@@ -120,7 +123,6 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
               onClick={handleImageDelete}
             />
           )} */}
-
           <Button
             value="완료"
             className={`absolute bottom-[15px] right-[20px] button-style2 ${

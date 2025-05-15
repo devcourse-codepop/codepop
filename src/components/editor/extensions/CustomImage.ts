@@ -3,8 +3,8 @@ import { Node, mergeAttributes } from "@tiptap/core";
 
 export const CustomImage = Node.create({
   name: "customImage",
-  group: "inline",
-  inline: true,
+  group: "block",
+  inline: false,
   draggable: true,
   atom: true,
 
@@ -25,22 +25,28 @@ export const CustomImage = Node.create({
 
   addNodeView() {
     return ({ node, editor, getPos }) => {
-      const dom = document.createElement("span");
-      dom.style.position = "relative";
+      const wrapper = document.createElement("div");
+      wrapper.style.position = "relative";
+      wrapper.style.display = "inline-block";
+      wrapper.style.width = "100%"; // 고정 크기
+      wrapper.style.height = "100%"; // 고정 크기
+      wrapper.style.overflow = "hidden"; // 내부 넘침 방지
 
       const img = document.createElement("img");
       img.src = node.attrs.src;
       img.alt = node.attrs.alt || "";
-      img.style.maxWidth = "20%";
-      img.style.maxHeight = "20%";
+      img.style.width = "100%";
+      img.style.height = "100%";
+      img.style.objectFit = "cover"; // 비율 맞춤
       img.style.display = "block";
+      img.style.borderRadius = "8px";
 
       const button = document.createElement("button");
       button.textContent = "✕";
       Object.assign(button.style, {
         position: "absolute",
-        top: "0",
-        right: "0",
+        top: "4px",
+        left: "4px",
         background: "black",
         color: "white",
         border: "none",
@@ -49,7 +55,10 @@ export const CustomImage = Node.create({
         height: "20px",
         cursor: "pointer",
         fontSize: "12px",
-        transform: "translate(50%, -50%)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: "10",
       });
 
       button.onclick = (e) => {
@@ -64,11 +73,11 @@ export const CustomImage = Node.create({
         }
       };
 
-      dom.appendChild(img);
-      dom.appendChild(button);
+      wrapper.appendChild(img);
+      wrapper.appendChild(button);
 
       return {
-        dom,
+        dom: wrapper,
       };
     };
   },

@@ -73,9 +73,8 @@ export default function EditorToolbar({
             const reader = new FileReader();
             reader.onload = () => {
               const result = reader.result;
-
               if (typeof result === 'string') {
-                editor?.chain().focus().insertContent('\n').run();
+                editor?.chain().focus().run();
 
                 editor
                   ?.chain()
@@ -86,8 +85,7 @@ export default function EditorToolbar({
                       attrs: { src: result },
                     },
                     {
-                      type: 'text',
-                      text: ' ',
+                      type: 'paragraph',
                     },
                   ])
                   .run();
@@ -95,6 +93,7 @@ export default function EditorToolbar({
             };
             reader.readAsDataURL(file);
           }
+          e.target.value = '';
         }}
         className="hidden cursor-pointer rounded-[5px]"
         id="image-upload"

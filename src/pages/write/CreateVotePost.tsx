@@ -6,16 +6,22 @@ import { createCodePost } from '../../api/write/write';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
+import { usePostStore } from '../../stores/postStore';
 
 export default function CreateVotePost({ theme }: { theme: Theme }) {
+  const params = useParams();
+  const [title, setTitle] = useState('');
   const titleRef = useRef<HTMLInputElement>(null);
   const [content, setContent] = useState(''); // Editor에서 본문 HTML을 받음
+
   const [pollOptions, setPollOptions] = useState<
     { id: number; text: string }[]
   >([]);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const navigate = useNavigate();
   const { channelId } = useParams();
+  const channel = params.channelId;
+  const channelIdList = usePostStore((state) => state.channelIdList);
 
   const handlePollCreate = useCallback(
     (options: { id: number; text: string }[]) => {
@@ -44,7 +50,7 @@ export default function CreateVotePost({ theme }: { theme: Theme }) {
         pollOptions: pollOptions,
       })
     );
-    formData.append('channelId', '681b8570437f722b6908ab69');
+    formData.append('channelId', channelIdList[Number(channel) - 1]);
 
     if (imageFile) {
       formData.append('image', imageFile); // 이미지 파일 추가
@@ -59,6 +65,7 @@ export default function CreateVotePost({ theme }: { theme: Theme }) {
     }
   };
 
+  const isSubmitDisabled = title.trim() === '' || content.trim() === '';
   return (
     <>
       <div className="w-full flex relative">
@@ -77,6 +84,7 @@ export default function CreateVotePost({ theme }: { theme: Theme }) {
             <input
               type="text"
               ref={titleRef}
+              onChange={(e) => setTitle(e.target.value)}
               placeholder="제목을 입력하세요"
               autoFocus
               className="w-[955px] font-semibold text-[25px] m-3 outline-none"
@@ -100,13 +108,23 @@ export default function CreateVotePost({ theme }: { theme: Theme }) {
                 dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
               }`}
             />
-            <Button
-              value="완료"
-              className={`button-style2 absolute bottom-[15px] right-[20px] ${
-                dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
-              }`}
-              onClick={handleSubmit} // 게시물 작성 완료 시 제출
-            />
+
+            <hr className="opacity-30" />
+            <div className="flex justify-end mt-6">
+              <Button
+                value="완료"
+                className={`button-style2 absolute bottom-[15px] right-[20px] ${
+                  dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
+                }`}
+                onClick={(e) => {
+                  if (isSubmitDisabled) {
+                    e.preventDefault(); // 아무 동작도 하지 않음
+                    return;
+                  }
+                  handleSubmit(e);
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
