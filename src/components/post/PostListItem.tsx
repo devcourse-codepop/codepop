@@ -196,7 +196,7 @@ export default function PostListItem(props: PostListItemProps) {
 
         <div
           className={twMerge(
-            'flex h-[59px] ,postListItem-bottom',
+            'flex h-[59px] postListItem-bottom',
             setCodeCount() > 0 ? 'justify-between' : 'justify-end'
           )}
         >
