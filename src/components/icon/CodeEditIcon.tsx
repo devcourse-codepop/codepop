@@ -1,4 +1,4 @@
-import codeEditIcon from '../../assets/images/editor/code-editIcon.svg';
+import codeEditIcon from '../../assets/images/editor/code-edition-icon.svg';
 import codeEditIconWhite from '../../assets/images/editor/code-edition-icon-white.svg';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
@@ -14,7 +14,7 @@ export default function CodeEditIcon({
     <>
       <img
         src={dark(theme) ? codeEditIconWhite : codeEditIcon}
-        className="w-[30px] h-[30px] inline-block cursor-pointer p-1"
+        className="w-[35px] h-[35px] inline-block cursor-pointer p-1 stroke-[1.5]"
         onClick={onClick}
       />
     </>
