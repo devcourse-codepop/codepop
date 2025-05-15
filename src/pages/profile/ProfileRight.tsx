@@ -4,9 +4,10 @@ import { getAuthorPostData, getPostData } from '../../api/post/post';
 import commentIcon from '../../assets/images/comment-outline.svg';
 import { useNavigate } from 'react-router-dom';
 
-export default function ProfileRight({ userData, selectedTab }: UserPostInfo) {
+export default function ProfileRight({ userData }: UserPostInfo) {
   const userId = userData?._id;
   const [userPostData, setUserPostData] = useState<Post[] | null>(null);
+  const [selectedTab, setSelectedTab] = useState<'posts' | 'likes' | 'comments'>('posts');
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 6;
   const navigate = useNavigate();
@@ -84,10 +85,10 @@ export default function ProfileRight({ userData, selectedTab }: UserPostInfo) {
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = userPostData?.slice(indexOfFirstPost, indexOfLastPost) || [];
 
-  const tabLabels: Record<string, string> = {
-    posts: '작성한 글',
-    likes: '좋아요한 글',
-    comments: '댓글 단 글',
+  const totalTab: Record<string, number> = {
+    posts: userData?.posts.length ?? 0,
+    likes: userData?.likes.length ?? 0,
+    comments: userData?.comments.length ?? 0,
   };
 
   const emptyText: Record<string, string> = {
@@ -107,24 +108,52 @@ export default function ProfileRight({ userData, selectedTab }: UserPostInfo) {
 
   return (
     <div className='ml-[26px]'>
-      <p className='mt-[40px] font-semibold text-[18px]'>{tabLabels[selectedTab]}</p>
+      <div className='flex justify-between items-center mt-[40px] text-[18px] font-semibold'>
+        <div className='flex pb-[10px]'>
+          <div
+            className={`cursor-pointer mb-[-13px] px-4 ${
+              selectedTab === 'posts' ? 'border-b-4 border-black' : 'opacity-30'
+            }`}
+            onClick={() => setSelectedTab('posts')}
+          >
+            <p className='pb-[12px]'>포스트</p>
+          </div>
+          <div
+            className={`cursor-pointer mb-[-13px] px-4 ${
+              selectedTab === 'likes' ? 'border-b-4 border-black' : 'opacity-30'
+            }`}
+            onClick={() => setSelectedTab('likes')}
+          >
+            <p className='pb-[12px]'>좋아요</p>
+          </div>
+          <div
+            className={`cursor-pointer mb-[-13px] px-4 ${
+              selectedTab === 'comments' ? 'border-b-4 border-black' : 'opacity-30'
+            }`}
+            onClick={() => setSelectedTab('comments')}
+          >
+            <p className='pb-[12px]'>댓글</p>
+          </div>
+        </div>
 
-      <div className='mt-[31px] w-[682px] min-h-[365px]'>
+        <p className='font-normal text-[12px] text-black/60 '>전체 : {totalTab[selectedTab]}</p>
+      </div>
+
+      <div className='w-[682px] min-h-[365px]  border-t-2 border-t-black/30'>
         {userPostData && userPostData.length === 0 && (
-          <p className='text-center whitespace-pre-line text-gray-500 text-sm py-45 border-t-2 leading-[3rem]'>
+          <p className='text-center whitespace-pre-line text-gray-500 text-sm py-45  leading-[3rem]'>
             {emptyText[selectedTab]}
           </p>
         )}
 
-        {currentPosts.map((post, i) => {
+        {currentPosts.map((post) => {
           const { id, label, bg } = getChannelInfo(post.channel.name);
           return (
             <div
               key={post._id}
-              className={`relative flex flex-col gap-2 border-b-2 
-                ${i !== currentPosts.length - 1 ? 'border-b-black/30' : 'border-b-black/60'}
-                ${i === 0 ? 'border-t-2 border-t-black/60' : ''} 
-                ${selectedTab === 'comments' ? 'py-[6px]' : 'py-4'}`}
+              className={`relative flex flex-col  border-b-2  border-b-black/30 ${
+                selectedTab === 'comments' ? 'py-[6px]' : 'py-4'
+              }`}
             >
               <div className='relative flex items-center py-0.5'>
                 <div

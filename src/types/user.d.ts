@@ -79,13 +79,11 @@ interface User {
 
 type UserInfo = {
   userData: User | null;
-  onSelectTab: React.Dispatch<React.SetStateAction<'posts' | 'likes' | 'comments'>>;
   userId?: string;
 };
 
 type UserPostInfo = {
   userData: User | null;
-  selectedTab: 'posts' | 'likes' | 'comments';
 };
 
 //Conversation, Notification 제외

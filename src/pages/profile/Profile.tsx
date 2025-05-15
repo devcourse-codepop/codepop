@@ -6,7 +6,6 @@ import defaultCover from '../../assets/images/profile/defaultCover.png';
 
 export default function Profile({ userId }: { userId: string }) {
   const [userData, setUserData] = useState<User | null>(null);
-  const [selectedTab, setSelectedTab] = useState<'posts' | 'likes' | 'comments'>('posts');
 
   const axiosList = async () => {
     try {
@@ -21,7 +20,6 @@ export default function Profile({ userId }: { userId: string }) {
     setUserData(null);
     if (userId) {
       axiosList();
-      setSelectedTab('posts');
     }
   }, [userId]);
 
@@ -39,8 +37,8 @@ export default function Profile({ userId }: { userId: string }) {
         />
       </div>
       <div className=' flex  overflow-hidden'>
-        <ProfileLeft userData={userData} onSelectTab={setSelectedTab} userId={userId} />
-        <ProfileRight userData={userData} selectedTab={selectedTab} />
+        <ProfileLeft userData={userData} userId={userId} />
+        <ProfileRight userData={userData} />
       </div>
     </div>
   );
