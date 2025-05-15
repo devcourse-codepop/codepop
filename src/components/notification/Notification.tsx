@@ -223,7 +223,6 @@ export default function Notification({ theme }: { theme: Theme }) {
                         )}
                         src={redDot}
                       />
-                      {i}
                       {notifi.like !== undefined &&
                         `[${notifi.author['fullName']}] 님이 당신의 게시물을 좋아합니다.`}
                       {notifi.comment !== undefined &&
