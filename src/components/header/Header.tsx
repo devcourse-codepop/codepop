@@ -96,7 +96,7 @@ export default function Header({
           >
             <button
               onClick={nextTheme}
-              className="w-full h-full flex justify-center items-center"
+              className="w-full h-full flex justify-center items-center cursor-pointer"
             >
               <img
                 src={nextThemeIndex === 1 ? moon : sun}
