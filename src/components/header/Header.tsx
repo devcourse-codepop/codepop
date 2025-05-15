@@ -3,8 +3,8 @@ import Notification from '../notification/Notification';
 import { useAuthStore } from '../../stores/authStore';
 import moon from '../../assets/images/toggle/moon.svg';
 import sun from '../../assets/images/toggle/sun.svg';
-import { Theme } from '../../types/ darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 import ChatModal from '../../pages/message/ChatModal';
 import { useState } from 'react';
 import { useMessageStore } from '../../stores/messageStore';
@@ -96,7 +96,7 @@ export default function Header({
           >
             <button
               onClick={nextTheme}
-              className="w-full h-full flex justify-center items-center"
+              className="w-full h-full flex justify-center items-center cursor-pointer"
             >
               <img
                 src={nextThemeIndex === 1 ? moon : sun}

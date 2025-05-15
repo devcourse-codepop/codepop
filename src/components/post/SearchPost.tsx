@@ -1,7 +1,7 @@
 import { Search } from 'lucide-react';
 import { useState } from 'react';
-import { Theme } from '../../types/ darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 
 export default function SearchPost({ theme }: { theme: Theme }) {
   const [input, setInput] = useState('');

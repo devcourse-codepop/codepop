@@ -13,8 +13,8 @@ import {
 import { useChannelItemStore } from '../../stores/channelStore';
 import { twMerge } from 'tailwind-merge';
 import { useAuthStore } from '../../stores/authStore';
-import { Theme } from '../../types/ darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 
 export default function Notification({ theme }: { theme: Theme }) {
   const { user } = useAuthStore();
@@ -170,7 +170,7 @@ export default function Notification({ theme }: { theme: Theme }) {
   return (
     <>
       <button
-        className='relative cursor-pointer block'
+        className="relative cursor-pointer block"
         onClick={(e) => {
           e.preventDefault();
           setNotifiOpen(!notifiOpen);
@@ -178,7 +178,7 @@ export default function Notification({ theme }: { theme: Theme }) {
       >
         <img src={dark(theme) ? alarmWhite : alarm} />
         {newData > 0 && (
-          <span className='block w-3.5 h-3.5 rounded-2xl bg-[#FF0000] absolute -right-1 top-0 text-[11px] text-white leading-3'>
+          <span className="block w-3.5 h-3.5 rounded-2xl bg-[#FF0000] absolute -right-1 top-0 text-[11px] text-white leading-3">
             {newData}
           </span>
         )}
@@ -210,9 +210,9 @@ export default function Notification({ theme }: { theme: Theme }) {
               Notifications
             </h3>
           </div>
-          <div className='notiList pt-1 px-2 h-[200px] overflow-y-auto scroll-custom relative'>
+          <div className="notiList pt-1 px-2 h-[200px] overflow-y-auto scroll-custom relative">
             {notifications.length === 0 ? (
-              <p className='absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm'>
+              <p className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm">
                 알림이 없습니다
               </p>
             ) : (
@@ -238,7 +238,7 @@ export default function Notification({ theme }: { theme: Theme }) {
                         onClick={() => {
                           navigateHandler(notifi);
                         }}
-                        className='block relative pl-3.5 text-[13px] my-2.5 cursor-pointer text-left'
+                        className="block relative pl-3.5 text-[13px] my-2.5 cursor-pointer text-left"
                       >
                         <img
                           className={twMerge(
@@ -260,24 +260,24 @@ export default function Notification({ theme }: { theme: Theme }) {
               })
             )}
           </div>
-          <div className='text-right mt-1'>
+          <div className="text-right mt-1">
             <button
-              className='text-xs text-zinc-500 cursor-pointer'
+              className="text-xs text-zinc-500 cursor-pointer"
               onClick={readHandler}
             >
               전체읽기
             </button>
           </div>
-          <div className='absolute right-5 top-4'>
+          <div className="absolute right-5 top-4">
             <button
-              className='text-sm text-[#bbbbbb] cursor-pointer'
+              className="text-sm text-[#bbbbbb] cursor-pointer"
               onClick={() => {
                 closeHandler();
               }}
             >
               <img
                 src={dark(theme) ? closeWhite : close}
-                className='opacity-60'
+                className="opacity-60"
               />
             </button>
           </div>

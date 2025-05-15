@@ -1,5 +1,5 @@
 import { useAuthStore } from '../../../stores/authStore';
-import { Theme } from '../../../types/ darkModeTypes';
+import { Theme } from '../../../types/darkModeTypes';
 import EditProfile from './EditProfile';
 
 export default function EditProfilePage({ theme }: { theme: Theme }) {

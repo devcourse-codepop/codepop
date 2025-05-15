@@ -13,8 +13,8 @@ import { useAuthStore } from '../../stores/authStore';
 import DOMPurify from 'dompurify';
 import PollOptionsVoteView from '../poll/PollOptionsVoteView';
 import CheckDeleteModal from './CheckDeleteModal';
-import { Theme } from '../../types/ darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 
 // updateReloadTrigger 타입 추가
 interface PostDetailItemProps extends Post {

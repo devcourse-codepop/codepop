@@ -2,8 +2,8 @@ import Button from '../common/Button';
 import close from '../../assets/images/close/close-btn.svg';
 import closeWhite from '../../assets/images/close/close-btn-white.svg';
 import { deleteComments, deletePosts } from '../../api/post/post';
-import { Theme } from '../../types/ darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 import { useNavigate } from 'react-router-dom';
 
 export default function CheckDeleteModal({

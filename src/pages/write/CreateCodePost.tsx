@@ -1,18 +1,18 @@
-import { useCallback, useRef, useState } from "react";
-import ChannelName from "../../components/channel/ChannelName";
-import Button from "../../components/common/Button";
-import Editor from "../../components/editor/Editor";
-import { createCodePost } from "../../api/write/write";
-import { useNavigate, useParams } from "react-router-dom";
-import { Theme } from "../../types/ darkModeTypes";
-import { dark } from "../../utils/ darkModeUtils";
-import { usePostStore } from "../../stores/postStore";
+import { useCallback, useRef, useState } from 'react';
+import ChannelName from '../../components/channel/ChannelName';
+import Button from '../../components/common/Button';
+import Editor from '../../components/editor/Editor';
+import { createCodePost } from '../../api/write/write';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
+import { usePostStore } from '../../stores/postStore';
 
 export default function CreateCodePost({ theme }: { theme: Theme }) {
   const titleRef = useRef<HTMLInputElement>(null);
   const params = useParams();
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState(""); // Editor에서 본문 HTML을 받음
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState(''); // Editor에서 본문 HTML을 받음
   const [pollOptions, setPollOptions] = useState<
     { id: number; text: string }[]
   >([]);
@@ -32,39 +32,39 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     navigate(`/channel/${channelId}`);
-    const titleText = titleRef.current?.value || "";
+    const titleText = titleRef.current?.value || '';
 
     if (!channelId) {
-      console.error("채널 ID가 없습니다.");
+      console.error('채널 ID가 없습니다.');
       return;
     }
 
     const formData = new FormData();
 
     formData.append(
-      "title",
+      'title',
       JSON.stringify({
         title: titleText,
         content: content,
         pollOptions: pollOptions,
       })
     );
-    formData.append("channelId", channelIdList[Number(channel) - 1]);
+    formData.append('channelId', channelIdList[Number(channel) - 1]);
 
     if (imageFile) {
-      formData.append("image", imageFile); // 이미지 파일 추가
+      formData.append('image', imageFile); // 이미지 파일 추가
     }
 
     try {
       const res = await createCodePost(formData);
-      console.log("작성 성공:", res.data);
+      console.log('작성 성공:', res.data);
       // 성공 시 이동 등 처리
     } catch (err) {
-      console.error("작성 실패", err);
+      console.error('작성 실패', err);
     }
   };
 
-  const isSubmitDisabled = title.trim() === "" || content.trim() === "";
+  const isSubmitDisabled = title.trim() === '' || content.trim() === '';
   // // 이미지 삭제 핸들러 추가
   // const handleImageDelete = () => {
   //   const newContent = content.replace(/<p[^>]*>\s*<img[^>]*>\s*<\/p>/g, "");
@@ -74,31 +74,31 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
   // };
 
   return (
-    <div className='w-full flex relative'>
+    <div className="w-full flex relative">
       <div>
-        <div className='pb-[30px]'>
-          <ChannelName channelId={channelId ?? "1"} theme={theme} />
+        <div className="pb-[30px]">
+          <ChannelName channelId={channelId ?? '1'} theme={theme} />
         </div>
 
         <div
           className={`shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto ${
             dark(theme)
-              ? "bg-[#2d2d2d] text-[#ffffff]"
-              : "bg-[#ffffff] text-[#111111]"
+              ? 'bg-[#2d2d2d] text-[#ffffff]'
+              : 'bg-[#ffffff] text-[#111111]'
           }`}
         >
           <input
-            type='text'
+            type="text"
             value={title}
             ref={titleRef}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder='제목을 입력하세요'
+            placeholder="제목을 입력하세요"
             autoFocus
-            className='w-[955px] font-semibold text-[25px] m-3 outline-none'
+            className="w-[955px] font-semibold text-[25px] m-3 outline-none"
           />
           <hr
             className={`mt-[15px] mb-[15px] opacity-30 ${
-              dark(theme) ? "text-[#ffffff]" : "text-[#111111]"
+              dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
             }`}
           />
 
@@ -112,7 +112,7 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
           />
           <hr
             className={`mb-[60px] opacity-30 ${
-              dark(theme) ? "text-[#ffffff]" : "text-[#111111]"
+              dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
             }`}
           />
 
@@ -124,13 +124,13 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
             />
           )} */}
           <Button
-            value='완료'
+            value="완료"
             className={`absolute bottom-[15px] right-[20px] button-style2 ${
               isSubmitDisabled
                 ? dark(theme)
-                  ? "bg-[#3a3a3a] text-[#777777] cursor-not-allowed"
-                  : "bg-gray-400 text-white cursor-not-allowed"
-                : "bg-[#1e1e1e] text-[#ffffff]"
+                  ? 'bg-[#3a3a3a] text-[#777777] cursor-not-allowed'
+                  : 'bg-gray-400 text-white cursor-not-allowed'
+                : 'bg-[#1e1e1e] text-[#ffffff]'
             }`}
             onClick={(e) => {
               if (isSubmitDisabled) {
