@@ -1,20 +1,35 @@
-import Avatar from "../avatar/Avatar";
-import LikeComment from "../reaction/LikeComment";
-import { Post } from "../../types";
-import dayjs from "dayjs";
-import { Link, useNavigate } from "react-router-dom";
-import { twMerge } from "tailwind-merge";
-import { useState } from "react";
-import { useAuthStore } from "../../stores/authStore";
-import NotLoginModal from "./NotLoginModal";
-import DOMPurify from "dompurify";
-import DeletedUserModal from "./DeletedUserModal";
-import { useChannelItemStore } from "../../stores/channelStore";
-import PollOptionsView from "../poll/PollOptionsView";
+import Avatar from '../avatar/Avatar';
+import LikeComment from '../reaction/LikeComment';
+import { Post } from '../../types';
+import dayjs from 'dayjs';
+import { Link, useNavigate } from 'react-router-dom';
+import { twMerge } from 'tailwind-merge';
+import { useState } from 'react';
+import { useAuthStore } from '../../stores/authStore';
+import NotLoginModal from './NotLoginModal';
+import DOMPurify from 'dompurify';
+import DeletedUserModal from './DeletedUserModal';
+import { useChannelItemStore } from '../../stores/channelStore';
+import PollOptionsView from '../poll/PollOptionsView';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
-export default function PostListItem(props: Post) {
-  const { _id, title, image, author, likes, comments, createdAt, channel } =
-    props;
+interface PostListItemProps extends Post {
+  theme: Theme;
+}
+
+export default function PostListItem(props: PostListItemProps) {
+  const {
+    _id,
+    title,
+    image,
+    author,
+    likes,
+    comments,
+    createdAt,
+    channel,
+    theme,
+  } = props;
   const { channels } = useChannelItemStore();
 
   const navigate = useNavigate();
@@ -38,12 +53,12 @@ export default function PostListItem(props: Post) {
   // 게시글 content 필드에서 img 태그 내용 및 pre 태그 내용(코드 블록) 삭제
   const removeImgTags = (html: string): string => {
     const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
+    const doc = parser.parseFromString(html, 'text/html');
 
-    const imgs = doc.querySelectorAll("img");
+    const imgs = doc.querySelectorAll('img');
     imgs.forEach((img) => img.remove());
 
-    codes = doc.querySelectorAll("pre");
+    codes = doc.querySelectorAll('pre');
 
     codes.forEach((code) => {
       code.remove();
@@ -59,15 +74,15 @@ export default function PostListItem(props: Post) {
 
   // 게시글 작성 시간 포맷 설정
   const getElapsedTime = () => {
-    const now = dayjs().add(9, "hour");
-    const writeTime = dayjs(createdAt).add(9, "hour");
+    const now = dayjs().add(9, 'hour');
+    const writeTime = dayjs(createdAt).add(9, 'hour');
 
-    const gap = now.diff(writeTime, "s");
+    const gap = now.diff(writeTime, 's');
     if (gap < 60) return `${gap}초 전`;
     if (gap < 3600) return `${Math.floor(gap / 60)}분 전`;
     if (gap < 86400) return `${Math.floor(gap / 3600)}시간 전`;
 
-    return writeTime.format("YYYY.MM.DD");
+    return writeTime.format('YYYY.MM.DD');
   };
 
   // 게시글 클릭 시, 로그인하지 않은 사용자라면 로그인 관련 모달을, 탈퇴한 사용자 게시글이라면 탈퇴한 사용자 관련 모달을 띄워주기
@@ -100,69 +115,98 @@ export default function PostListItem(props: Post) {
 
   return (
     <>
-      <div className='postListItem w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative'>
-        <div className='postListItem-top flex justify-between h-[85px] pl-3 pt-2.5'>
+      <div
+        className={`postListItem w-full h-auto rounded-[5px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative ${
+          dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+        }`}
+      >
+        <div className="postListItem-top flex justify-between h-[85px] pl-3 pt-2.5">
           <Link to={`/profile`} state={{ userid: author?._id }}>
             <Avatar
               name={author?.fullName}
               email={author?.email}
               image={author?.image}
               isOnline={author?.isOnline}
+              theme={theme}
             />
           </Link>
         </div>
 
         <div
           className={twMerge(
-            "postListItem-content flex justify-between px-[55px] py-[15px] gap-[55px] cursor-pointer",
-            !image && "py-[23px]"
+            'postListItem-content flex justify-between px-[55px] py-[15px] gap-[55px] cursor-pointer',
+            !image && 'py-[23px]'
           )}
           onClick={clickPostHandler}
         >
           <div
             className={twMerge(
-              "postListItem-content-text flex flex-col justify-center w-full gap-[22px] ",
-              image && "max-w-[635px]"
+              `postListItem-content-text flex flex-col justify-center w-full gap-[22px] ${
+                dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
+              }`,
+              image && 'max-w-[635px]'
             )}
           >
-            <div className='postTitle text-[18px] font-semibold truncate'>
+            <div
+              className={`postTitle text-[18px] font-semibold truncate ${
+                dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
+              }`}
+            >
               {JSON.parse(title).title}
             </div>
+
             <div
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(
                   removeImgTags(JSON.parse(title).content)
                 ),
               }}
-              className='postContent text-[15px] font-normal line-clamp-5'
+              className="postContent text-[15px] font-normal line-clamp-5"
             />
             {/* 투표 옵션이 있을 경우 */}
             {pollOptions && pollOptions.length > 0 && (
-              <div className='mt-4'>
-                <PollOptionsView options={pollOptions} />
+              <div className="mt-4">
+                <PollOptionsView options={pollOptions} theme={theme} />
               </div>
             )}
           </div>
           {image && (
-            <div className='postListItem-content-image border border-[#e0e0e0] rounded-[5px]'>
-              <img src={image} className='w-[226px] h-[226px]' />
+            <div className="postListItem-content-image border border-[#e0e0e0] rounded-[5px]">
+              <img src={image} className="w-[226px] h-[226px]" />
             </div>
           )}
         </div>
-        <div className='flex justify-end pr-5 pb-[9px] text-[#808080] text-sm font-light'>
+        <div
+          className={`flex justify-end pr-5 pb-[9px] text-[#808080] text-sm font-light ${
+            dark(theme)
+              ? 'text-[#ffffff] opacity-50'
+              : 'text-[#111111] opacity-50'
+          }`}
+        >
           {getElapsedTime()}
         </div>
+        <hr
+          className={`mx-[18px] ${
+            dark(theme)
+              ? 'text-[#ffffff] opacity-50'
+              : 'text-[#b2b2b2] opacity-50'
+          }`}
+        />
 
-        <hr className='mx-[18px] text-[#b2b2b2]' />
         <div
           className={twMerge(
-            "flex h-[59px] postListItem-bottom",
-            setCodeCount() > 0 ? "justify-between" : "justify-end"
+            'flex h-[59px] ,postListItem-bottom',
+
+            setCodeCount() > 0 ? 'justify-between' : 'justify-end'
           )}
         >
           {setCodeCount() > 0 && (
-            <div className='flex justify-center items-center text-[14px] opacity-70 ml-5'>
-              +<span className='text-[#ff0000]'>{setCodeCount()}</span>개의 코드
+            <div
+              className={`flex justify-center items-center text-[14px] opacity-70 ml-5 ${
+                dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
+              }`}
+            >
+              +<span className="text-[#ff0000]">{setCodeCount()}</span>개의 코드
               블록
             </div>
           )}
@@ -172,7 +216,7 @@ export default function PostListItem(props: Post) {
               comments.filter((c) => {
                 try {
                   const parsed = JSON.parse(c.comment);
-                  return parsed.type !== "vote";
+                  return parsed.type !== 'vote';
                 } catch {
                   return true;
                 }
@@ -180,13 +224,18 @@ export default function PostListItem(props: Post) {
             }
             postId={_id}
             likes={likes}
+            theme={theme}
             author={author}
             channel={channel}
           />
         </div>
       </div>
+
       {isLoginModalOpen && (
-        <NotLoginModal closeLoginModalHanlder={closeLoginModalHanlder} />
+        <NotLoginModal
+          closeLoginModalHanlder={closeLoginModalHanlder}
+          theme={theme}
+        />
       )}
       {isUserModalOpen && (
         <DeletedUserModal closeUserModalHanlder={closeUserModalHanlder} />

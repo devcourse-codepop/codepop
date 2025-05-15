@@ -1,5 +1,6 @@
-import menuIcon from '../../assets/MenuIcon.svg';
-import userImg from '../../assets/images/header/userImg.svg';
+import menuIcon from '../../assets/images/menu/menu-icon.svg';
+import menuIconWhite from '../../assets/images/menu/menu-icon-white.svg';
+import userImg from '../../assets/images/header/user-img.svg';
 import { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
 import { Comment } from '../../types';
@@ -7,10 +8,13 @@ import { useAuthStore } from '../../stores/authStore';
 import { Link, useParams } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import CheckDeleteModal from './CheckDeleteModal';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 // updateReloadTrigger 타입 추가
 interface CommentListItemProps extends Comment {
   updateReloadTrigger: () => void;
+  theme: Theme;
 }
 
 export default function CommentListItem({
@@ -19,6 +23,7 @@ export default function CommentListItem({
   author,
   createdAt,
   updateReloadTrigger,
+  theme,
 }: CommentListItemProps) {
   const params = useParams();
   const channel = params.channelId;
@@ -47,7 +52,8 @@ export default function CommentListItem({
     const codes = doc.querySelectorAll('pre');
     const codeStr = '<span>&lt;/&gt;</span>';
     codes.forEach((code) => {
-      code.style.backgroundColor = '#ececec';
+      code.style.backgroundColor = dark(theme) ? '#1e1e1e' : '#ececec';
+      code.style.color = dark(theme) ? '#ffffff' : '#111111';
       code.style.padding = '20px';
       code.style.paddingTop = '2px';
       code.style.marginTop = '10px';
@@ -118,7 +124,13 @@ export default function CommentListItem({
 
   return (
     <>
-      <div className="h-auto rounded-[5px] bg-white border border-[#b4b4b4] mx-7 mb-[30px] relative">
+      <div
+        className={`h-auto rounded-[5px] border border-[#b4b4b4] mx-7 mb-[30px] relative ${
+          dark(theme)
+            ? 'bg-[#2d2d2d] text-[#ffffff]'
+            : 'bg-[#ffffff] text-[#111111]'
+        }`}
+      >
         <div className="flex justify-between pt-2.5">
           <div className="flex items-center gap-3 pl-4 pt-1">
             <Link
@@ -146,11 +158,15 @@ export default function CommentListItem({
                 onClick={clickMenuHandler}
                 className="w-9 h-9 pr-2.5 cursor-pointer"
               >
-                <img src={menuIcon} />
+                <img src={dark(theme) ? menuIconWhite : menuIcon} />
               </div>
               {isOpen && (
                 <div
-                  className="flex justify-center items-center text-[12px] text-[#FF0404] rounded-[2px] w-[91px] h-[34px] border border-[#e5e5e5] cursor-pointer absolute top-8 right-4"
+                  className={`flex justify-center items-center text-[12px] text-[#FF0404] rounded-[2px] w-[91px] h-[34px]  cursor-pointer absolute top-8 right-4 ${
+                    dark(theme)
+                      ? 'bg-[#2d2d2d] border border-white/40'
+                      : 'border border-[#e5e5e5]'
+                  }`}
                   onClick={clickDeleteHandler}
                   ref={modalRef}
                 >
@@ -178,6 +194,7 @@ export default function CommentListItem({
           channel={String(channel)}
           _id={_id}
           closeDeleteModalHanlder={closeDeleteModalHanlder}
+          theme={theme}
           updateReloadTrigger={updateReloadTrigger}
         />
       )}

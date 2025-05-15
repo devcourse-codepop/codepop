@@ -1,13 +1,22 @@
-import userDefaultImg from '../../assets/images/profile/defaultProfileImage.jpg';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
+import userDefaultImg from '../../assets/images/profile/default-profile-img.jpg';
 
 interface AvatarProps {
   name: string;
   email: string;
   image: string;
   isOnline?: boolean;
+  theme: Theme;
 }
 
-export default function Avatar({ name, email, image, isOnline }: AvatarProps) {
+export default function Avatar({
+  name,
+  email,
+  image,
+  isOnline,
+  theme,
+}: AvatarProps) {
   return (
     <div className="avartar-box flex items-center gap-x-4 gap-y-1 p-4">
       <div className="relative shrink-0">
@@ -21,10 +30,18 @@ export default function Avatar({ name, email, image, isOnline }: AvatarProps) {
         )}
       </div>
       <div className="flex flex-col w-full pr-5 box-content">
-        <span className="text-sm font-semibold line-clamp-1 break-all">
+        <span
+          className={`text-sm font-semibold line-clamp-1 break-all ${
+            dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
+          }`}
+        >
           {name ? name : '탈퇴한 회원'}
         </span>
-        <span className="text-xs opacity-60 break-all leading-[17px] line-clamp-2">
+        <span
+          className={`text-xs opacity-60 break-all leading-[17px] line-clamp-2 ${
+            dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
+          }`}
+        >
           {email}
         </span>
       </div>
