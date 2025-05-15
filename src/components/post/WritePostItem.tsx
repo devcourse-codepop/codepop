@@ -1,12 +1,20 @@
-import { useState } from "react";
-import Button from "../common/Button";
-import ImageIcon from "../icon/ImageIcon";
-import CodeEditIcon from "../icon/CodeEditIcon";
-import VoteIcon from "../icon/VoteIcon";
+import { useState } from 'react';
+import Button from '../common/Button';
+import ImageIcon from '../icon/ImageIcon';
+import CodeEditIcon from '../icon/CodeEditIcon';
+import VoteIcon from '../icon/VoteIcon';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
-export default function WritePostItem({ channelId }: { channelId: string }) {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+export default function WritePostItem({
+  channelId,
+  theme,
+}: {
+  channelId: string;
+  theme: Theme;
+}) {
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
   // const [tag, setTag] = useState("");
 
   // const titleRef = useRef<HTMLTextAreaElement | null>(null);
@@ -51,18 +59,22 @@ export default function WritePostItem({ channelId }: { channelId: string }) {
     //   )
     // );
     formData.append(
-      "title",
-      new Blob([JSON.stringify(json)], { type: "application/json" })
+      'title',
+      new Blob([JSON.stringify(json)], { type: 'application/json' })
     );
     // formData.append("image", );
-    formData.append("channelId", channelId);
+    formData.append('channelId', channelId);
 
     // axios
   };
 
   return (
     <>
-      <div className="w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)]">
+      <div
+        className={`w-full h-auto rounded-[5px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] ${
+          dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+        }`}
+      >
         <form onSubmit={(e) => submitHandler(e)}>
           <textarea
             id="title"
@@ -76,9 +88,9 @@ export default function WritePostItem({ channelId }: { channelId: string }) {
           <hr className="mx-[22px] text-[#b2b2b2]" />
           <div className="w-full h-[66px] flex justify-end items-center">
             <div className="pr-[25px]">
-              {channelId === "1" && <CodeEditIcon />}
-              {channelId === "3" && <VoteIcon />}
-              <ImageIcon />
+              {channelId === '1' && <CodeEditIcon theme={theme} />}
+              {channelId === '3' && <VoteIcon theme={theme} />}
+              <ImageIcon theme={theme} />
             </div>
           </div>
           <textarea

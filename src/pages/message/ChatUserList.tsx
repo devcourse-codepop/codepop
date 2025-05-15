@@ -1,20 +1,24 @@
 import ChatHeader from './ChatHeader';
-//import userImage from '../../assets/images/profile/defaultProfileImage.jpg';
 import { getMessageList, getMessages } from '../../api/message/message';
 import { useEffect, useState } from 'react';
 import { Conversation, Message, User } from '../../types';
 import dayjs from 'dayjs';
 import { twMerge } from 'tailwind-merge';
 import { useAuthStore } from '../../stores/authStore';
+// import userImage from '../../assets/images/profile/default-profile-img.jpg';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 interface ChatUserListProps {
   onSelectUser?: (user: User) => void;
   onClose: () => void;
+  theme: Theme;
 }
 
 export default function ChatUserList({
   onSelectUser,
   onClose,
+  theme,
 }: ChatUserListProps) {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [notSeenCounts, setNotSeenCounts] = useState<{
@@ -97,11 +101,15 @@ export default function ChatUserList({
 
   return (
     <div className="h-[75vh] flex-1 flex flex-col">
-      <ChatHeader onClose={onClose} />
+      <ChatHeader onClose={onClose} theme={theme} />
       {isLoading || isCountLoading ? (
         <></>
       ) : (
-        <div className="flex-1 overflow-y-auto messageBox">
+        <div
+          className={`flex-1 overflow-y-auto messageBox ${
+            dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+          }`}
+        >
           {conversations.map((con) => {
             const opponentId = getOpponentId(con._id);
             const opponentUser = getOpponentUser(con, opponentId);
@@ -110,7 +118,11 @@ export default function ChatUserList({
             return (
               <div
                 //key={con._id}
-                className="w-full text-left flex py-[18px] px-[30px] bg-white border-b border-b-[#DEDEDE] rounded hover:bg-gray-200 cursor-pointer"
+                className={`w-full text-left flex py-[18px] px-[30px] rounded cursor-pointer ${
+                  dark(theme)
+                    ? 'bg-[#2d2d2d]  border-b border-b-white/40 text-[#ffffff] hover:bg-[#3b3b3b]'
+                    : 'bg-[#ffffff] border-b border-b-[#DEDEDE] hover:bg-gray-200'
+                }`}
                 onClick={() => onSelectUser?.(opponentUser)}
               >
                 {/* 상대 프로필, 이름, 마지막 대화 */}
@@ -123,13 +135,21 @@ export default function ChatUserList({
                   <p className="font-bold text-[14px]">
                     {opponentUser.fullName}
                   </p>
-                  <p className="font-normal text-[#000000]/60 text-[12px] truncate w-[258px]">
+                  <p
+                    className={`font-normal  text-[12px] truncate w-[258px] ${
+                      dark(theme) ? 'text-[#ffffff]/60' : 'text-[#000000]/60'
+                    }`}
+                  >
                     {con.message}
                   </p>
                 </div>
                 <div className="ml-[15px] pt-1 flex flex-col items-center w-[60px] shrink-0">
                   {/* 보낸 시간  */}
-                  <p className="font-medium text-[12px] text-black/40">
+                  <p
+                    className={`font-medium text-[12px] ${
+                      dark(theme) ? 'text-[#ffffff]/40' : 'text-[#000000]/40'
+                    }`}
+                  >
                     {getElapsedTime(con.createdAt)}
                   </p>
                   {/* 메시지 온 표시 */}

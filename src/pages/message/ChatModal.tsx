@@ -2,26 +2,23 @@ import { useState, useEffect } from 'react';
 import ChatRoom from './ChatRoom';
 import ChatUserList from './ChatUserList';
 import { useMessageStore } from '../../stores/messageStore';
-import MessageOpenIcon from '../../assets/images/messageOpenIcon.svg';
+import MessageOpenIcon from '../../assets/images/message/message-open-icon.svg';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 import { User } from '../../types';
 
 interface ChatModalProps {
   isOpen: boolean;
   onClose: () => void;
   initialUser?: User | null;
+  theme: Theme;
 }
-
-// export interface User1 {
-//   id: string;
-//   name: string;
-//   content?: string;
-//   count?: number;
-// }
 
 export default function ChatModal({
   isOpen,
   onClose,
   initialUser,
+  theme,
 }: ChatModalProps) {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const changeMessageIcon = useMessageStore((state) => state.setMessageIcon);
@@ -32,11 +29,8 @@ export default function ChatModal({
   useEffect(() => {
     if (isOpen) {
       setSelectedUser(initialUser || null);
-      console.log('initialUser :', initialUser);
-      console.log('selectedUser :', selectedUser);
       setIsLoading(false);
-      //setSelectedUser(null);
-      changeMessageIcon(MessageOpenIcon);
+      changeMessageIcon(dark(theme) ? MessageOpenIcon : MessageOpenIcon);
     }
   }, [isOpen, initialUser]);
 
@@ -56,14 +50,18 @@ export default function ChatModal({
             <ChatRoom
               user={selectedUser}
               onBack={() => setSelectedUser(null)}
-              // onClose={onClose}
               onClose={() => {
                 setSelectedUser(null);
                 onClose();
               }}
+              theme={theme}
             /> // 채팅방
           ) : (
-            <ChatUserList onSelectUser={setSelectedUser} onClose={onClose} /> // 대화했던 사람들 목록
+            <ChatUserList
+              onSelectUser={setSelectedUser}
+              onClose={onClose}
+              theme={theme}
+            /> // 대화했던 사람들 목록
           )}
         </div>
       </div>

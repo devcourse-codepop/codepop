@@ -1,10 +1,12 @@
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import EditorToolbar from "./EditorToolbar";
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import EditorToolbar from './EditorToolbar';
 
-import { CustomImage } from "./extensions/CustomImage";
-import { useState, useEffect } from "react";
-import PollCreator from "../poll/PollCreater";
+import { CustomImage } from './extensions/CustomImage';
+import { useState, useEffect } from 'react';
+import PollCreator from '../poll/PollCreater';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 interface Props {
   onChange: (html: string) => void;
@@ -14,6 +16,7 @@ interface Props {
   showCodeButton?: boolean;
   disableMinHeight?: boolean;
   initialContent: string; // 추가된 부분
+  theme: Theme;
 }
 
 export default function Editor({
@@ -24,10 +27,11 @@ export default function Editor({
   showCodeButton = false,
   disableMinHeight = false,
   initialContent, // 추가된 부분
+  theme,
 }: Props) {
   const editor = useEditor({
     extensions: [StarterKit, CustomImage],
-    content: "", // 빈 문자열로 시작
+    content: '', // 빈 문자열로 시작
     onUpdate({ editor }) {
       onChange(editor.getHTML());
     },
@@ -50,15 +54,15 @@ export default function Editor({
         onImageSelect={onImageSelect}
         showPollButton={showPollButton}
         showCodeButton={showCodeButton}
+        theme={theme}
       />
       <EditorContent
         editor={editor}
         className={`
           prose max-w-none [&_.ProseMirror]:outline-none
-          ${disableMinHeight ? "" : "[&_.ProseMirror]:min-h-[365px]"}
+          ${disableMinHeight ? '' : '[&_.ProseMirror]:min-h-[365px]'}
           [&_.ProseMirror]:h-auto
 
-          [&_.ProseMirror_pre]:bg-[#ececec]
           [&_.ProseMirror_pre]:p-4
           [&_.ProseMirror_pre]:rounded-lg
           [&_.ProseMirror_pre]:font-mono
@@ -66,11 +70,19 @@ export default function Editor({
 
           [&_.ProseMirror_img]:max-w-[30%]
           [&_.ProseMirror_img]:h-auto
+
+          ${
+            dark(theme)
+              ? '[&_.ProseMirror_pre]:bg-[#1e1e1e] [&_.ProseMirror_pre]:text-[#ffffff]'
+              : '[&_.ProseMirror_pre]:bg-[#ececec] [&_.ProseMirror_pre]:text-[#111111]'
+          }
+
+          
         `}
       />
 
       {showPollCreator && onPollCreate && (
-        <PollCreator onCreate={onPollCreate} />
+        <PollCreator onCreate={onPollCreate} theme={theme} />
       )}
     </div>
   );

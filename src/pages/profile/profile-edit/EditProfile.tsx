@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import ImageEditBtn from '../../../assets/ImageEditBtn.svg';
+import { useEffect, useMemo, useState } from 'react';
+import ImageEditBtn from '../../../assets/images/img-edit/img-edit-btn.svg';
 import { fullNameRegex, passwordRegex } from '../../../utils/validators';
 import EditMenu from './EditMenu';
 import Input from '../../../components/common/Input';
@@ -8,11 +8,13 @@ import PhotoUploadModal from './PhotoUploadModal';
 import Button from '../../../components/common/Button';
 import { getUserData } from '../../../api/profileInfo/profile';
 import { useAuthStore } from '../../../stores/authStore';
-import defaultProfileImage from '../../../assets/images/profile/defaultProfileImage.jpg';
-import defaultCover from '../../../assets/images/profile/defaultCover.png';
+import defaultProfileImage from '../../../assets/images/profile/default-profile-img.jpg';
+import defaultCover from '../../../assets/images/profile/default-cover.png';
 import { useNavigate } from 'react-router-dom';
+import { Theme } from '../../../types/ darkModeTypes';
+import { dark } from '../../../utils/ darkModeUtils';
 
-export default function EditProfile({ userId }: { userId: string }) {
+export default function EditProfile({ userId, theme }: { userId: string; theme: Theme }) {
   const navigator = useNavigate();
   const user = useAuthStore((state) => state.user);
   const setUser = useAuthStore((state) => state.setUser);
@@ -36,9 +38,23 @@ export default function EditProfile({ userId }: { userId: string }) {
   const [isCover, setIsCover] = useState(false);
 
   const [coverImage, setCoverImage] = useState<File | null>(null);
-  const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(null);
   const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [profilePreviewUrl, setProfilePreviewUrl] = useState<string | null>(null);
+
+  // 보이는 이미지만 변경
+  const coverPreviewUrl = useMemo(() => {
+    return coverImage ? URL.createObjectURL(coverImage) : null;
+  }, [coverImage]);
+
+  const profilePreviewUrl = useMemo(() => {
+    return profileImage ? URL.createObjectURL(profileImage) : null;
+  }, [profileImage]);
+
+  useEffect(() => {
+    return () => {
+      if (coverPreviewUrl) URL.revokeObjectURL(coverPreviewUrl);
+      if (profilePreviewUrl) URL.revokeObjectURL(profilePreviewUrl);
+    };
+  }, [coverPreviewUrl, profilePreviewUrl]);
 
   const validateUsername = (name: string) => fullNameRegex.test(name);
   const validatePassword = (password: string) => passwordRegex.test(password);
@@ -48,27 +64,17 @@ export default function EditProfile({ userId }: { userId: string }) {
     setEnteredUserValues((prev) => ({ ...prev, [identifier]: value }));
 
     let errorMessage = '';
-
     if (identifier === 'myName') {
-      if (!value) {
-        errorMessage = '이름은 필수 입력 항목입니다.';
-      } else if (!validateUsername(value)) {
-        errorMessage = '이름은 특수문자 없이 10글자 이하로 입력해주세요.';
-      }
+      if (!value) errorMessage = '이름은 필수 입력 항목입니다.';
+      else if (!validateUsername(value)) errorMessage = '이름은 특수문자 없이 10글자 이하로 입력해주세요.';
     }
-
     if (identifier === 'password') {
-      if (!value) {
-        errorMessage = '비밀번호는 필수 입력 항목입니다.';
-      } else if (!validatePassword(value)) {
+      if (!value) errorMessage = '비밀번호는 필수 입력 항목입니다.';
+      else if (!validatePassword(value))
         errorMessage = '비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.';
-      }
     }
-
     if (identifier === 'confirmPassword') {
-      if (value !== enteredUserValues.password) {
-        errorMessage = '비밀번호가 일치하지 않습니다.';
-      }
+      if (value !== enteredUserValues.password) errorMessage = '비밀번호가 일치하지 않습니다.';
     }
 
     setEnteredErrorValues((prevErrors) => ({
@@ -90,14 +96,12 @@ export default function EditProfile({ userId }: { userId: string }) {
     if (userId) fetchUserData();
   }, [userId]);
 
-  // 모달로 받은 사진 미리 보기 및 저장
-  const handleSavePhoto = (file: File, previewUrl: string) => {
+  // 모달로 받은 사진 저장
+  const handleSavePhoto = (file: File) => {
     if (isCover) {
       setCoverImage(file);
-      setCoverPreviewUrl(previewUrl);
     } else {
       setProfileImage(file);
-      setProfilePreviewUrl(previewUrl);
     }
   };
 
@@ -114,12 +118,20 @@ export default function EditProfile({ userId }: { userId: string }) {
 
     if (isCover) {
       setCoverImage(file);
-      setCoverPreviewUrl(URL.createObjectURL(file));
     } else {
       setProfileImage(file);
-      setProfilePreviewUrl(URL.createObjectURL(file));
     }
   };
+
+  // 파일 -> url 변경
+  function fileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  }
 
   // 제출할 때 에러 메시지 있으면 제출하지 않음. 제출 시 api 호출하여 정보 변경
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -133,19 +145,13 @@ export default function EditProfile({ userId }: { userId: string }) {
       confirmPasswordError: '',
     };
 
-    if (!myName) {
-      newErrors.myNameError = '이름은 필수 입력 항목입니다.';
-    } else if (!validateUsername(myName)) {
-      newErrors.myNameError = '이름은 특수문자 없이 10글자 이하로 입력해주세요.';
-    } else if (!password) {
-      newErrors.passwordError = '비밀번호는 필수 입력 항목입니다.';
-    } else if (!validatePassword(password)) {
+    if (!myName) newErrors.myNameError = '이름은 필수 입력 항목입니다.';
+    else if (!validateUsername(myName)) newErrors.myNameError = '이름은 특수문자 없이 10글자 이하로 입력해주세요.';
+    else if (!password) newErrors.passwordError = '비밀번호는 필수 입력 항목입니다.';
+    else if (!validatePassword(password))
       newErrors.passwordError = '비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.';
-    } else if (!confirmPassword) {
-      newErrors.confirmPasswordError = '비밀번호 확인은 필수 입력 항목입니다.';
-    } else if (confirmPassword !== password) {
-      newErrors.confirmPasswordError = '비밀번호가 일치하지 않습니다.';
-    }
+    else if (!confirmPassword) newErrors.confirmPasswordError = '비밀번호 확인은 필수 입력 항목입니다.';
+    else if (confirmPassword !== password) newErrors.confirmPasswordError = '비밀번호가 일치하지 않습니다.';
 
     if (newErrors.myNameError || newErrors.passwordError || newErrors.confirmPasswordError) {
       setEnteredErrorValues(newErrors);
@@ -153,7 +159,10 @@ export default function EditProfile({ userId }: { userId: string }) {
     }
 
     try {
-      await axiosInstance.put('/settings/update-user', { fullName: myName, username: myName });
+      await axiosInstance.put('/settings/update-user', {
+        fullName: myName,
+        username: myName,
+      });
       await axiosInstance.put('/settings/update-password', { password });
 
       if (user) {
@@ -169,6 +178,7 @@ export default function EditProfile({ userId }: { userId: string }) {
         });
       }
 
+      // 프로필 이미지는 헤더에도 보여서 주수탄드 변경
       if (profileImage) {
         const formDataProfile = new FormData();
         formDataProfile.append('image', profileImage);
@@ -177,9 +187,8 @@ export default function EditProfile({ userId }: { userId: string }) {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
         if (user) {
-          const { data: userData2 } = await getUserData(userId);
-          setUserData(userData2);
-          setUser({ ...user, image: userData2.image });
+          const base64 = await fileToBase64(profileImage);
+          setUser({ ...user, image: base64 });
         }
       }
       navigator('/profile');
@@ -194,7 +203,11 @@ export default function EditProfile({ userId }: { userId: string }) {
 
   return (
     <>
-      <div className='w-full h-[calc(100vh-100px-30px)] bg-white rounded-[10px] shadow-md font-semibold '>
+      <div
+        className={`w-full h-[calc(100vh-100px-30px)] rounded-[10px] shadow-md font-semibold ${
+          dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+        }`}
+      >
         <div className='relative h-[223px] rounded-t-[10px]'>
           <img
             src={coverPreviewUrl || userData.coverImage || defaultCover}
@@ -216,6 +229,7 @@ export default function EditProfile({ userId }: { userId: string }) {
                 onEdit={() => setIsModalOpen(true)}
                 onDelete={handleDelete}
                 onClose={() => setIsBackgroundMenuOpen(false)}
+                theme={theme}
               />
             )}
           </div>
@@ -243,53 +257,71 @@ export default function EditProfile({ userId }: { userId: string }) {
                   onEdit={() => setIsModalOpen(true)}
                   onDelete={handleDelete}
                   onClose={() => setIsProfileMenuOpen(false)}
+                  theme={theme}
                 />
               )}
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className='w-full max-w-md pl-[50px] ml-[120px] mt-9'>
-            <p className='pt-[35px] font-bold text-[14px]'>이름</p>
+            <p className={`pt-[35px] font-bold text-[14px] ${dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'}`}>
+              이름
+            </p>
             <Input
               type='text'
               value={enteredUserValues.myName}
-              className='input-profile'
+              className={`input-profile ${dark(theme) ? 'bg-[#ffffff]' : ''}`}
               onChange={(event) => handleInputChange('myName', event.target.value)}
             />
             <p className='text-[11px] text-red-500 pt-1 h-2.5'>{enteredErrorValues.myNameError || '\u00A0'}</p>
 
-            <p className='mt-[22px] font-bold text-[14px]'>이메일</p>
-            <Input type='text' value={userData.email} readOnly className='input-profile bg-[#E3E3E3] text-black/50' />
+            <p className={`mt-[22px] font-bold text-[14px] ${dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'}`}>
+              이메일
+            </p>
+            <Input
+              type='text'
+              value={userData.email}
+              readOnly
+              className={`input-profile bg-[#e3e3e3] text-black/50 ${dark(theme) ? 'bg-[#e3e3e3] opacity-50' : ''}`}
+            />
 
-            <p className='mt-[22px] font-bold text-[14px]'>비밀번호</p>
+            <p className={`mt-[22px] font-bold text-[14px] ${dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'}`}>
+              비밀번호
+            </p>
             <Input
               type='password'
               placeholder='Password'
-              className='input-profile'
+              className={`input-profile ${dark(theme) ? 'bg-[#ffffff]' : ''}`}
               value={enteredUserValues.password}
               onChange={(event) => handleInputChange('password', event.target.value)}
             />
             <p className='text-[11px] text-red-500 pt-1 h-2.5'>{enteredErrorValues.passwordError || '\u00A0'}</p>
-
-            <p className='mt-[22px] font-bold text-[14px]'>비밀번호 확인</p>
+            <p className={`mt-[22px] font-bold text-[14px] ${dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'}`}>
+              비밀번호 확인
+            </p>
             <Input
               type='password'
               placeholder='Password'
-              className='input-profile'
+              className={`input-profile ${dark(theme) ? 'bg-[#ffffff]' : ''}`}
               value={enteredUserValues.confirmPassword}
               onChange={(event) => handleInputChange('confirmPassword', event.target.value)}
             />
             <p className='text-[11px] text-red-500 pt-1 h-2.5'>{enteredErrorValues.confirmPasswordError || '\u00A0'}</p>
 
             <div className='flex justify-end mr-[113px] mt-[25px] relative'>
-              <Button value='수정' className='button-edit' />
+              <Button value='수정' className={`button-edit ${dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''}`} />
             </div>
           </form>
         </div>
       </div>
 
       {isModalOpen && (
-        <PhotoUploadModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={handleSavePhoto} />
+        <PhotoUploadModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSave={handleSavePhoto}
+          theme={theme}
+        />
       )}
     </>
   );

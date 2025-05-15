@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 //import { User1 } from './ChatModal';
 import ChatHeader from './ChatHeader';
-import messageSendBtn from '../../assets/images/message-send-btn.svg';
 import {
   getMessages,
   postMessages,
@@ -12,16 +11,26 @@ import { Message, User } from '../../types';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import { useAuthStore } from '../../stores/authStore';
+import messageSendBtn from '../../assets/images/message/message-send-btn.svg';
+import messageSendBtnWhite from '../../assets/images/message/message-send-btn-white.svg';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 interface ChatRoomProps {
   user: User;
   onBack: () => void;
   onClose: () => void;
+  theme: Theme;
 }
 
 dayjs.locale('ko');
 
-export default function ChatRoom({ user, onBack, onClose }: ChatRoomProps) {
+export default function ChatRoom({
+  user,
+  onBack,
+  onClose,
+  theme,
+}: ChatRoomProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState<string>('');
 
@@ -134,7 +143,12 @@ export default function ChatRoom({ user, onBack, onClose }: ChatRoomProps) {
 
   return (
     <div className="flex flex-col h-full">
-      <ChatHeader userName={user.fullName} onBack={onBack} onClose={onClose} />
+      <ChatHeader
+        userName={user.fullName}
+        onBack={onBack}
+        onClose={onClose}
+        theme={theme}
+      />
 
       {/* 대화 내용 */}
       {isLoading ? (
@@ -142,8 +156,9 @@ export default function ChatRoom({ user, onBack, onClose }: ChatRoomProps) {
       ) : (
         <>
           <div
-            className="flex-1 overflow-y-auto p-2 font-normal px-[30px] space-y-3 messageBox"
-            //ref={bottomRef}
+            className={`flex-1 overflow-y-auto p-2 font-normal px-[30px] space-y-3 messageBox ${
+              dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
+            }`}
           >
             {messages.map((msg, idx) => {
               //console.log(msg);
@@ -169,16 +184,32 @@ export default function ChatRoom({ user, onBack, onClose }: ChatRoomProps) {
                       {/* 읽음 표시 + 시간 */}
                       <div className="flex flex-col justify-end items-end mr-2 text-[12px] font-normal">
                         {!msg.seen && (
-                          <span className="text-[#1E293B] font-semibold">
+                          <span
+                            className={`font-semibold ${
+                              dark(theme) ? 'text-[#ffffff]' : 'text-[#1E293B]'
+                            }`}
+                          >
                             1
                           </span>
                         )}
-                        <span className="text-black/50">
+                        <span
+                          className={` ${
+                            dark(theme)
+                              ? 'text-[#ffffff]/50'
+                              : 'text-[#111111]/50'
+                          }`}
+                        >
                           {getWriteDatetimeFormat(msg.createdAt)}
                         </span>
                       </div>
                       {/* 메시지 내용 */}
-                      <div className="bg-[#1E293B] text-white text-[14px] p-2.5 rounded-b-[10px] rounded-tl-[10px] max-w-[300px] break-words pl-3">
+                      <div
+                        className={`text-[14px] p-2.5 rounded-b-[10px] rounded-tl-[10px] max-w-[300px] break-words pl-3 ${
+                          dark(theme)
+                            ? 'bg-[#ffffff] text-[#111111]'
+                            : 'bg-[#1E293B] text-white'
+                        }`}
+                      >
                         {msg.message}
                       </div>
                     </div>
@@ -197,13 +228,25 @@ export default function ChatRoom({ user, onBack, onClose }: ChatRoomProps) {
                         <p className="font-normal text-[12px] mb-[5px] ml-[2px]">
                           {msg.sender.fullName}
                         </p>
-                        <div className="bg-[#1E293B] text-white text-[14px] p-2.5 rounded-b-[10px] rounded-tr-[10px] max-w-[300px] break-words pl-3">
+                        <div
+                          className={`text-[14px] p-2.5 rounded-b-[10px] rounded-tl-[10px] max-w-[300px] break-words pl-3 ${
+                            dark(theme)
+                              ? 'bg-[#ffffff] text-[#111111]'
+                              : 'bg-[#1E293B] text-white'
+                          }`}
+                        >
                           {msg.message}
                         </div>
                       </div>
                       {/* 시간 */}
                       <div className="flex justify-end items-end ml-2 text-[12px] font-normal">
-                        <span className="text-black/50">
+                        <span
+                          className={` ${
+                            dark(theme)
+                              ? 'text-[#ffffff]/50'
+                              : 'text-[#111111]/50'
+                          }`}
+                        >
                           {getWriteDatetimeFormat(msg.createdAt)}
                         </span>
                       </div>
@@ -216,7 +259,13 @@ export default function ChatRoom({ user, onBack, onClose }: ChatRoomProps) {
           </div>
 
           {/* 메시지 입력 */}
-          <div className="flex p-4 border-t border-t-[#DEDEDE] bg-white rounded-b-[5px]">
+          <div
+            className={`flex p-4 rounded-b-[5px] ${
+              dark(theme)
+                ? 'bg-[#2d2d2d] border-t border-t-white/40'
+                : 'bg-[#ffffff] border-t border-t-[#DEDEDE]'
+            }`}
+          >
             <input
               type="text"
               value={newMessage}
@@ -226,7 +275,7 @@ export default function ChatRoom({ user, onBack, onClose }: ChatRoomProps) {
               placeholder="메시지를 입력해주세요..."
             />
             <img
-              src={messageSendBtn}
+              src={`${dark(theme) ? messageSendBtnWhite : messageSendBtn}`}
               className="ml-[12px] w-[50px] h-[50px] rounded-[5px] cursor-pointer"
               onClick={handleSend}
             />

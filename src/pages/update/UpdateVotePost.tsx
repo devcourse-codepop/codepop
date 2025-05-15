@@ -1,14 +1,16 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import ChannelName from "../../components/channel/ChannelName";
-import Button from "../../components/common/Button";
-import Editor from "../../components/editor/Editor";
-import { getPostData, updatePost } from "../../api/post/post";
-import { useNavigate, useParams } from "react-router-dom";
-import PollOptionsView from "../../components/poll/PollOptionsView";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import ChannelName from '../../components/channel/ChannelName';
+import Button from '../../components/common/Button';
+import Editor from '../../components/editor/Editor';
+import { getPostData, updatePost } from '../../api/post/post';
+import { useNavigate, useParams } from 'react-router-dom';
+import PollOptionsView from '../../components/poll/PollOptionsView';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
-export default function UpdateVotePost() {
+export default function UpdateVotePost({ theme }: { theme: Theme }) {
   const titleRef = useRef<HTMLInputElement>(null);
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState('');
   const [pollOptions, setPollOptions] = useState<
     { id: number; text: string }[]
   >([]);
@@ -35,7 +37,7 @@ export default function UpdateVotePost() {
         // 만약 게시물에 이미지가 있다면, 해당 이미지 ID를 설정
         setImageToDeletePublicId(res.data.imagePublicId || null);
       } catch (err) {
-        console.error("게시물 데이터를 불러오지 못했습니다", err);
+        console.error('게시물 데이터를 불러오지 못했습니다', err);
       }
     };
 
@@ -52,21 +54,21 @@ export default function UpdateVotePost() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     navigate(`/channel/${channelId}`);
-    const titleText = titleRef.current?.value || "";
+    const titleText = titleRef.current?.value || '';
 
     if (!channelId || !postId) {
-      console.error("채널 ID 또는 게시물 ID가 없습니다.");
+      console.error('채널 ID 또는 게시물 ID가 없습니다.');
       return;
     }
 
     const formData = new FormData();
 
     // ✅ 필수값 추가
-    formData.append("postId", postId);
-    formData.append("channelId", "681b8570437f722b6908ab69");
+    formData.append('postId', postId);
+    formData.append('channelId', '681b8570437f722b6908ab69');
 
     formData.append(
-      "title",
+      'title',
       JSON.stringify({
         title: titleText,
         content: content,
@@ -76,21 +78,21 @@ export default function UpdateVotePost() {
 
     // 이미지 삭제할 경우 imageToDeletePublicId 추가
     if (imageToDeletePublicId) {
-      formData.append("imageToDeletePublicId", imageToDeletePublicId);
+      formData.append('imageToDeletePublicId', imageToDeletePublicId);
     }
 
     if (imageFile) {
-      formData.append("image", imageFile);
+      formData.append('image', imageFile);
     } else {
       // 백엔드에 명시적으로 빈 파일로라도 전달해야 할 경우
-      formData.append("image", "");
+      formData.append('image', '');
     }
 
     try {
       const res = await updatePost(formData);
-      console.log("수정 성공:", res.data);
+      console.log('수정 성공:', res.data);
     } catch (err) {
-      console.error("수정 실패", err);
+      console.error('수정 실패', err);
     }
   };
 
@@ -107,29 +109,47 @@ export default function UpdateVotePost() {
     <div className="w-full flex relative ">
       <div>
         <div className="pb-[30px]">
-          <ChannelName channelId={channelId ?? "1"} />
+          <ChannelName channelId={channelId ?? '1'} theme={theme} />
         </div>
 
-        <div className="bg-white shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto ">
+        <div
+          className={`shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto ${
+            dark(theme)
+              ? 'bg-[#2d2d2d] text-[#ffffff]'
+              : 'bg-[#ffffff] text-[#111111]'
+          }`}
+        >
           <input
             type="text"
             ref={titleRef}
             placeholder="제목을 입력하세요"
+            autoFocus
             className="w-[955px] font-semibold text-[25px] m-3 outline-none"
           />
-          <hr className="mt-[15px] mb-[15px] opacity-30" />
+          <hr
+            className={`mt-[15px] mb-[15px] opacity-30 ${
+              dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
+            }`}
+          />
           <Editor
             onChange={setContent}
             onPollCreate={handlePollCreate}
             onImageSelect={(file) => setImageFile(file)}
             showPollButton={true}
             initialContent={content}
+            theme={theme}
           />
+          <hr
+            className={`mb-[60px] opacity-30 ${
+              dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
+            }`}
+          />
+
           <div className="mb-2.5">
             {pollOptions.length > 0 && (
               <div className="mt-6">
                 <h2 className="font-semibold text-gray-700 mb-2">투표 항목</h2>
-                <PollOptionsView options={pollOptions} />
+                <PollOptionsView options={pollOptions} theme={theme} />
               </div>
             )}
           </div>
@@ -146,9 +166,11 @@ export default function UpdateVotePost() {
 
           <div className="flex justify-end mt-6">
             <Button
-              value="수정 완료"
-              className="button-style2"
-              onClick={handleSubmit}
+              value="완료"
+              className={`button-style2 absolute bottom-[15px] right-[20px] ${
+                dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
+              }`}
+              onClick={handleSubmit} // 게시물 작성 완료 시 제출
             />
           </div>
         </div>

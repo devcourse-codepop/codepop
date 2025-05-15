@@ -1,11 +1,16 @@
 import { useNavigate } from 'react-router-dom';
 import Button from '../common/Button';
-import close from '../../assets/images/closeBtn.svg';
+import close from '../../assets/images/close/close-btn.svg';
+import closeWhite from '../../assets/images/close/close-btn-white.svg';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 export default function NotLoginModal({
   closeLoginModalHanlder,
+  theme,
 }: {
   closeLoginModalHanlder: () => void;
+  theme: Theme;
 }) {
   const navigate = useNavigate();
 
@@ -21,14 +26,16 @@ export default function NotLoginModal({
         onClick={closeLoginModalHanlder}
       >
         <div
-          className="bg-white p-5 rounded-[5px] text-center w-[300px] flex flex-col gap-10"
+          className={`p-5 rounded-[5px] text-center w-[300px] flex flex-col gap-10 ${
+            dark(theme) ? 'bg-[#2d2d2d] text-[#ffffff]' : 'bg-[#ffffff]'
+          }`}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
               <div className="opacity-70 text-[13px]">Notice</div>
               <img
-                src={close}
+                src={dark(theme) ? closeWhite : close}
                 alt="close"
                 className="w-4 h-4 cursor-pointer"
                 onClick={closeLoginModalHanlder}
@@ -41,7 +48,9 @@ export default function NotLoginModal({
           </div>
           <div className="flex justify-end mr-5">
             <Button
-              className="button-style3 text-[12px]"
+              className={`button-style3 text-[12px] ${
+                dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
+              }`}
               value="로그인 하러 가기"
               onClick={handleLoginClick}
             ></Button>

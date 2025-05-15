@@ -1,16 +1,20 @@
-import menuIcon from '../../assets/MenuIcon.svg';
+import menuIcon from '../../assets/images/menu/menu-icon.svg';
+import menuIconWhite from '../../assets/images/menu/menu-icon-white.svg';
+
 import { Search } from 'lucide-react';
 import Avatar from '../avatar/Avatar';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getAllUsersData } from '../../api/memberbox/member';
 import { useAuthStore } from '../../stores/authStore';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 import ChatModal from '../../pages/message/ChatModal';
 // import { User1 } from '../..//pages/message/ChatModal';
 import useChatClose from '../../utils/changeMessageIcon';
 import { User } from '../../types';
 
-export default function MemberBox() {
+export default function MemberBox({ theme }: { theme: Theme }) {
   const { isLoggedIn, user } = useAuthStore(); // 내 프로필
   const [searchKeyword, setSearchKeyword] = useState<string>(''); // 검색 키워드
   const [openUser, setOpenUser] = useState<string>(''); // 각 프로필 메뉴
@@ -77,8 +81,16 @@ export default function MemberBox() {
   }, [modalRef]);
 
   return (
-    <div className="w-[291px] max-h-[calc(100%-240px)] h-[580px] bg-white rounded-[10px] shadow-md pl-[30px] pr-[26px]  pt-[20px]  relative overflow-hidden">
-      <h2 className="text-[#595656] font-medium text-[18px] mb-[13px]">
+    <div
+      className={`w-[291px] max-h-[calc(100%-240px)] h-[580px] rounded-[10px] shadow-md pl-[30px] pr-[26px]  pt-[20px]  relative overflow-hidden ${
+        dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+      }`}
+    >
+      <h2
+        className={`font-medium text-[18px] mb-[13px]  ${
+          dark(theme) ? 'text-[#acacaa]' : 'text-[#595956]'
+        }`}
+      >
         Member
       </h2>
       <div className="flex items-center text-[#898FA3] bg-[#F6F8FA] px-3 py-2 rounded-[5.54px] text-[14px] gap-4 mb-[13px]">
@@ -93,19 +105,22 @@ export default function MemberBox() {
         />
       </div>
       {isLoggedIn && (
-        <div className="myInfoCard">
+        <div className={dark(theme) ? 'dark-myInfoCard' : 'myInfoCard'}>
           <Link to={`/profile`} state={{ userid: user?._id }}>
             <Avatar
               name={`(나) ${user !== null ? user.fullName : ''}`}
               email={user !== null ? user.email : ''}
               image={user !== null ? user.image : ''}
               isOnline={user !== null ? user.isOnline : false}
+              theme={theme}
             ></Avatar>
           </Link>
         </div>
       )}
       <div
-        className="member-list overflow-y-auto pt-2"
+        className={` overflow-y-auto pt-2 ${
+          dark(theme) ? 'dark-member-list' : 'member-list'
+        }`}
         style={{
           height: isLoggedIn ? `calc(100% - 161px)` : `calc(100% - 91px)`,
         }}
@@ -122,18 +137,27 @@ export default function MemberBox() {
                 email={user.email}
                 image={user.image}
                 isOnline={user.isOnline}
+                theme={theme}
               ></Avatar>
             </div>
+
             {/* 프로필 클릭시 나오는 modal */}
             <button
               className="absolute right-0 top-4 cursor-pointer"
               onClick={() => ToggleHandelr(user._id)}
             >
-              <img src={menuIcon} className="rotate-90" />
+              <img
+                src={dark(theme) ? menuIconWhite : menuIcon}
+                className="rotate-90"
+              />
               {openUser === user._id && (
                 <ul
                   ref={modalRef}
-                  className="avatarMenu absolute text-xs w-27 right-5 top-0 bg-white rounded-[5px] border border-[#ddd] text-left z-2 py-1"
+                  className={`avatarMenu absolute text-xs w-27 right-5 top-0 rounded-[5px] text-left z-2 py-1 ${
+                    dark(theme)
+                      ? 'bg-[#2d2d2d] text-[#ffffff] border border-white/40'
+                      : 'bg-[#ffffff] border border-[#ddd]'
+                  }`}
                 >
                   <li>
                     <Link
@@ -163,6 +187,7 @@ export default function MemberBox() {
         initialUser={chatTargetUser}
         isOpen={isChatOpen}
         onClose={onClose}
+        theme={theme}
       />
     </div>
   );
