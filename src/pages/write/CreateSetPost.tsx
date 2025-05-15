@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 export default function CreateSetPost() {
   const titleRef = useRef<HTMLInputElement>(null);
+  const [title, setTitle] = useState("");
   const [content, setContent] = useState(""); // Editor에서 본문 HTML을 받음
   const [pollOptions, setPollOptions] = useState<
     { id: number; text: string }[]
@@ -57,35 +58,48 @@ export default function CreateSetPost() {
     }
   };
 
+  const isSubmitDisabled = title.trim() === "" || content.trim() === "";
+
   return (
     <>
-      <div className="w-full flex relative">
+      <div className='w-full flex relative'>
         <div>
-          <div className="pb-[30px]">
+          <div className='pb-[30px]'>
             <ChannelName channelId={channelId ?? "2"} />
           </div>
 
-          <div className=" bg-white shadow-md rounded-[10px] p-5 relative  max-h-[697px] overflow-y-auto">
+          <div className=' bg-white shadow-md rounded-[10px] p-5 relative  max-h-[697px] overflow-y-auto'>
             <input
-              type="text"
+              type='text'
               ref={titleRef}
-              placeholder="제목을 입력하세요"
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder='제목을 입력하세요'
               autoFocus
-              className="w-[955px] font-semibold text-[25px] m-3 outline-none"
+              className='w-[955px] font-semibold text-[25px] m-3 outline-none'
             />
-            <hr className="mt-[15px] mb-[15px] opacity-30" />
+            <hr className='mt-[15px] mb-[15px] opacity-30' />
             <Editor
               onChange={setContent}
               onPollCreate={handlePollCreate}
               onImageSelect={(file) => setImageFile(file)} // 이미지 저장
               initialContent={content}
             />
-            <hr className="mb-[60px] opacity-30" />
-            <Button
-              value="완료"
-              className="button-style2 absolute bottom-[15px] right-[20px]"
-              onClick={handleSubmit} // 게시물 작성 완료 시 제출
-            />
+            <hr className='opacity-30' />
+            <div className='flex justify-end mt-6'>
+              <Button
+                value='완료'
+                className={`button-style2 ${
+                  isSubmitDisabled ? "bg-gray-400 cursor-not-allowed" : ""
+                }`}
+                onClick={(e) => {
+                  if (isSubmitDisabled) {
+                    e.preventDefault(); // 아무 동작도 하지 않음
+                    return;
+                  }
+                  handleSubmit(e);
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>

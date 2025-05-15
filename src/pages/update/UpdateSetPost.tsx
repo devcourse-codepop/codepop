@@ -103,27 +103,27 @@ export default function UpdateSetPost() {
   // };
 
   return (
-    <div className="w-full flex relative">
+    <div className='w-full flex relative'>
       <div>
-        <div className="pb-[30px]">
+        <div className='pb-[30px]'>
           <ChannelName channelId={channelId ?? "1"} />
         </div>
 
-        <div className="bg-white shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto">
+        <div className='bg-white shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto'>
           <input
-            type="text"
+            type='text'
             ref={titleRef}
-            placeholder="제목을 입력하세요"
-            className="w-[955px] font-semibold text-[25px] m-3 outline-none"
+            placeholder='제목을 입력하세요'
+            className='w-[955px] font-semibold text-[25px] m-3 outline-none'
           />
-          <hr className="mt-[15px] mb-[15px] opacity-30" />
+          <hr className='mt-[15px] mb-[15px] opacity-30' />
           <Editor
             onChange={setContent}
             onPollCreate={handlePollCreate}
             onImageSelect={(file) => setImageFile(file)}
             initialContent={content}
           />
-          <hr className="mb-[60px] opacity-30" />
+          <hr className='opacity-30' />
 
           {/* 이미지 삭제 버튼 추가 */}
           {/* {imageToDeletePublicId && (
@@ -134,11 +134,13 @@ export default function UpdateSetPost() {
             />
           )} */}
 
-          <Button
-            value="수정 완료"
-            className="button-style2 absolute bottom-[15px] right-[20px]"
-            onClick={handleSubmit}
-          />
+          <div className='flex justify-end mt-6'>
+            <Button
+              value='수정 완료'
+              className='button-style2'
+              onClick={handleSubmit}
+            />
+          </div>
         </div>
       </div>
     </div>

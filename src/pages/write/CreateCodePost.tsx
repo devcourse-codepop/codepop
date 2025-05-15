@@ -92,7 +92,7 @@ export default function CreateCodePost() {
             showCodeButton={true}
             initialContent={content}
           />
-          <hr className='mb-[60px] opacity-30' />
+          <hr className='opacity-30' />
 
           {/* {imageFile && (
             <Button
@@ -101,20 +101,21 @@ export default function CreateCodePost() {
               onClick={handleImageDelete}
             />
           )} */}
-
-          <Button
-            value='완료'
-            className={`absolute bottom-[15px] right-[20px] button-style2 ${
-              isSubmitDisabled ? "bg-gray-400 cursor-not-allowed" : ""
-            }`}
-            onClick={(e) => {
-              if (isSubmitDisabled) {
-                e.preventDefault(); // 아무 동작도 하지 않음
-                return;
-              }
-              handleSubmit(e);
-            }}
-          />
+          <div className='flex justify-end mt-6'>
+            <Button
+              value='완료'
+              className={`button-style2 ${
+                isSubmitDisabled ? "bg-gray-400 cursor-not-allowed" : ""
+              }`}
+              onClick={(e) => {
+                if (isSubmitDisabled) {
+                  e.preventDefault(); // 아무 동작도 하지 않음
+                  return;
+                }
+                handleSubmit(e);
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
