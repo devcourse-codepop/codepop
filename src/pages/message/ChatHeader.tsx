@@ -2,8 +2,8 @@ import backBtn from '../../assets/images/message/arrow-back-outline.svg';
 import backBtnWhite from '../../assets/images/message/arrow-back-white.svg';
 import closeBtn from '../../assets/images/message/close-outline.svg';
 import closeBtnWhite from '../../assets/images/message/close-white.svg';
-import { Theme } from '../../types/ darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 
 interface ChatHeaderProps {
   userName?: string;

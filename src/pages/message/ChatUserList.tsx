@@ -6,8 +6,8 @@ import dayjs from 'dayjs';
 import { twMerge } from 'tailwind-merge';
 import { useAuthStore } from '../../stores/authStore';
 // import userImage from '../../assets/images/profile/default-profile-img.jpg';
-import { Theme } from '../../types/ darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 
 interface ChatUserListProps {
   onSelectUser?: (user: User) => void;

@@ -7,8 +7,8 @@ import { useAuthStore } from '../../stores/authStore';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { login } from '../../api/auth/login';
 import { AxiosError } from 'axios';
-import { Theme } from '../../types/ darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 
 export default function Login({ theme }: { theme: Theme }) {
   const navigate = useNavigate();

@@ -4,12 +4,17 @@ import Button from '../../components/common/Button';
 import Editor from '../../components/editor/Editor';
 import { getPostData, updatePost } from '../../api/post/post';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Theme } from '../../types/ darkModeTypes';
-import { dark } from '../../utils/ darkModeUtils';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
+import { usePostStore } from '../../stores/postStore';
 
 export default function UpdateSetPost({ theme }: { theme: Theme }) {
+  const params = useParams();
   const titleRef = useRef<HTMLInputElement>(null);
   const [content, setContent] = useState('');
+  const channel = params.channelId;
+  const channelIdList = usePostStore((state) => state.channelIdList);
+
   const [pollOptions, setPollOptions] = useState<
     { id: number; text: string }[]
   >([]);
@@ -64,7 +69,7 @@ export default function UpdateSetPost({ theme }: { theme: Theme }) {
 
     // ✅ 필수값 추가
     formData.append('postId', postId);
-    formData.append('channelId', '681b850d437f722b6908ab65');
+    formData.append('channelId', channelIdList[Number(channel) - 1]);
 
     formData.append(
       'title',
@@ -143,6 +148,8 @@ export default function UpdateSetPost({ theme }: { theme: Theme }) {
             }`}
           />
 
+          <hr className="opacity-30" />
+
           {/* 이미지 삭제 버튼 추가 */}
           {/* {imageToDeletePublicId && (
             <Button
@@ -152,13 +159,15 @@ export default function UpdateSetPost({ theme }: { theme: Theme }) {
             />
           )} */}
 
-          <Button
-            value="완료"
-            className={`button-style2 absolute bottom-[15px] right-[20px] ${
-              dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
-            }`}
-            onClick={handleSubmit} // 게시물 작성 완료 시 제출
-          />
+          <div className="flex justify-end mt-6">
+            <Button
+              value="완료"
+              className={`button-style2 ${
+                dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
+              }`}
+              onClick={handleSubmit}
+            />
+          </div>
         </div>
       </div>
     </div>

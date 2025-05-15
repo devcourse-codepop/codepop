@@ -138,6 +138,7 @@
   font-size: 0px;
   overflow: hidden;
 }
+
 .tabConstentItem .postPoll::before {
   content: '';
   display: block;
@@ -172,4 +173,20 @@
 }
 .postListItem-content:hover .postPoll {
   display: block;
+}
+
+.dark .tabConstentItem .postPoll {
+  background-color: #1e1e1e;
+  border: 1px solid #555;
+}
+
+.dark .tabConstentItem .postPoll::before {
+  opacity: 0.25;
+  background: url(../../assets/images/editor/vote-icon-white.svg) no-repeat
+    center center / 80% 80%;
+}
+
+.dark .tabConstentItem .postListItem-content-image {
+  background-color: #2a2a2a;
+  border-color: #555;
 }
