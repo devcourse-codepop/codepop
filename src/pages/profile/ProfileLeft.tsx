@@ -13,6 +13,12 @@ export default function ProfileLeft({ userData, userId }: UserInfo) {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const onClose = useChatClose(setIsChatOpen);
   const navigate = useNavigate();
+
+  const isFollowing = () => {
+    return user?.following.some((followingUser) => followingUser.user === userId);
+  };
+
+  const followed = isFollowing();
   return (
     <>
       <div className='w-[291px] h-[633px] rounded-bl-[10px] px-[50px] border-r-2 border-gray-300 '>
@@ -27,11 +33,11 @@ export default function ProfileLeft({ userData, userId }: UserInfo) {
           <div className='flex gap-8.5 text-[16px] font-medium mt-[40px] '>
             <div className='flex  items-center cursor-pointer'>
               <span>팔로워</span>
-              <span className='ml-[8px]'>{userData?.posts.length}</span>
+              <span className='ml-[8px]'>{userData?.followers.length}</span>
             </div>
             <div className='flex  items-center cursor-pointer'>
               <span>팔로잉</span>
-              <span className='ml-[8px]'>{userData?.likes.length}</span>
+              <span className='ml-[8px]'>{userData?.following.length}</span>
             </div>
           </div>
           {user?._id === userId ? (
@@ -42,14 +48,12 @@ export default function ProfileLeft({ userData, userId }: UserInfo) {
             </div>
           ) : (
             <div className='mt-[25px]'>
-              <Button
-                value='팔로우'
-                className='button-style3'
-                onClick={() => {
-                  if (userId) postFollow(userId);
-                  else return;
-                }}
-              />
+              {userId &&
+                (followed ? (
+                  <Button value='언팔로우' className='button-style3' />
+                ) : (
+                  <Button value='팔로우' className='button-style3' onClick={() => postFollow(userId)} />
+                ))}
             </div>
           )}
         </div>
