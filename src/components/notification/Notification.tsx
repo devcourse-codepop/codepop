@@ -204,7 +204,7 @@ export default function Notification({ theme }: { theme: Theme }) {
                 알림이 없습니다
               </p>
             ) : (
-              notifications.map((notifi, i) => {
+              notifications.map((notifi) => {
                 return (
                   <div
                     key={notifi._id}
