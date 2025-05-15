@@ -5,6 +5,8 @@ import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import Button from '../common/Button';
 import CommentEditorToolbar from './CommentEditorToolbar';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 import { useEffect } from 'react';
 
 // Props 타입
@@ -16,6 +18,7 @@ interface Props {
   onChange: (html: string) => void;
   showCodeButton?: boolean;
   disableMinHeight?: boolean;
+  theme: Theme;
 }
 
 export default function CommentEditor({
@@ -26,6 +29,7 @@ export default function CommentEditor({
   onChange,
   showCodeButton = false,
   disableMinHeight = false,
+  theme,
 }: Props) {
   // 에디터 기본 설정
   const editor = useEditor({
@@ -66,32 +70,42 @@ export default function CommentEditor({
       <EditorContent
         editor={editor}
         className={`
-        prose max-w-none [&_.ProseMirror]:outline-none
-        [&_.ProseMirror]:h-auto
-        ${disableMinHeight ? '' : '[&_.ProseMirror]:min-h-[50px]'}
+    prose max-w-none 
+    [&_.ProseMirror]:outline-none 
+    [&_.ProseMirror]:h-auto
+    ${disableMinHeight ? '' : '[&_.ProseMirror]:min-h-[50px]'}
 
-        [&_.ProseMirror_pre]:bg-[#ececec]
-        [&_.ProseMirror_pre]:p-4
-        [&_.ProseMirror_pre]:rounded-lg
-        [&_.ProseMirror_pre]:font-mono
-        [&_.ProseMirror_pre]:whitespace-pre-wrap
+    p-6 pb-3
 
-        p-6
-        pb-3
-        `}
+    [&_.ProseMirror_pre]:p-4
+    [&_.ProseMirror_pre]:rounded-lg
+    [&_.ProseMirror_pre]:font-mono
+    [&_.ProseMirror_pre]:whitespace-pre-wrap
+
+    ${
+      dark(theme)
+        ? '[&_.ProseMirror_pre]:bg-[#1e1e1e] [&_.ProseMirror_pre]:text-[#ffffff]'
+        : '[&_.ProseMirror_pre]:bg-[#ececec] [&_.ProseMirror_pre]:text-[#111111]'
+    }
+  `}
       />
       <div className="w-full h-[50px] flex justify-end items-center gap-6 pr-6 pb-4">
         {channelId === '1' && (
           <CommentEditorToolbar
             editor={editor}
             showCodeButton={showCodeButton}
+            theme={theme}
           />
         )}
-        {channelId !== '1' && <CommentEditorToolbar editor={editor} />}
+        {channelId !== '1' && (
+          <CommentEditorToolbar editor={editor} theme={theme} />
+        )}
 
         <Button
           value="댓글 달기"
-          className="button-style3"
+          className={`button-style3 ${
+            dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
+          }`}
           onClick={(e) => submitHandler(e)}
         />
       </div>

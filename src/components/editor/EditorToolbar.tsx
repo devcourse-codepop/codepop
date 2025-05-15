@@ -4,6 +4,7 @@ import ImageIcon from "../icon/ImageIcon";
 import BoldIcon from "../icon/BoldIcon";
 import ItalicIcon from "../icon/ItalicIcon";
 import VoteIcon from "../icon/VoteIcon";
+import { Theme } from "../../types/ darkModeTypes";
 
 interface Props {
   editor: Editor | null;
@@ -11,6 +12,7 @@ interface Props {
   onImageSelect?: (file: File) => void; // 추가
   showPollButton?: boolean;
   showCodeButton?: boolean;
+  theme: Theme;
 }
 
 export default function EditorToolbar({
@@ -19,6 +21,7 @@ export default function EditorToolbar({
   onImageSelect,
   showPollButton = false,
   showCodeButton = false,
+  theme,
 }: Props) {
   if (!editor) return null;
 
@@ -32,7 +35,7 @@ export default function EditorToolbar({
             : " hover:bg-gray-200"
         }`}
       >
-        <BoldIcon />
+        <BoldIcon theme={theme} />
       </button>
 
       <button
@@ -43,7 +46,7 @@ export default function EditorToolbar({
             : " hover:bg-gray-200"
         }`}
       >
-        <ItalicIcon />
+        <ItalicIcon theme={theme} />
       </button>
 
       {showCodeButton && (
@@ -56,7 +59,7 @@ export default function EditorToolbar({
             editor.isActive("codeBlock") ? "bg-blue-400" : "hover:bg-gray-200"
           }`}
         >
-          <CodeEditIcon />
+          <CodeEditIcon theme={theme} />
         </button>
       )}
 
@@ -100,7 +103,7 @@ export default function EditorToolbar({
         htmlFor='image-upload'
         className='cursor-pointer rounded-[5px] flex items-center justify-center hover:bg-gray-200'
       >
-        <ImageIcon />
+        <ImageIcon theme={theme} />
       </label>
 
       {showPollButton && (
@@ -108,7 +111,7 @@ export default function EditorToolbar({
           onClick={onTogglePoll}
           className='cursor-pointer rounded-[5px] hover:bg-gray-200'
         >
-          <VoteIcon />
+          <VoteIcon theme={theme} />
         </button>
       )}
     </div>

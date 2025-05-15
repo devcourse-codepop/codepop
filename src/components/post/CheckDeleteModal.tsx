@@ -1,6 +1,9 @@
 import Button from '../common/Button';
-import close from '../../assets/images/closeBtn.svg';
+import close from '../../assets/images/close/close-btn.svg';
+import closeWhite from '../../assets/images/close/close-btn-white.svg';
 import { deleteComments, deletePosts } from '../../api/post/post';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 import { useNavigate } from 'react-router-dom';
 
 export default function CheckDeleteModal({
@@ -8,12 +11,14 @@ export default function CheckDeleteModal({
   channel,
   _id,
   closeDeleteModalHanlder,
+  theme,
   updateReloadTrigger,
 }: {
   type: string;
   channel: string;
   _id: string;
   closeDeleteModalHanlder: () => void;
+  theme: Theme;
   updateReloadTrigger: () => void;
 }) {
   const navigate = useNavigate();
@@ -47,12 +52,16 @@ export default function CheckDeleteModal({
         className="fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-[1000]"
         onClick={closeDeleteModalHanlder}
       >
-        <div className="bg-white p-5 rounded-[5px] text-center w-[300px] flex flex-col gap-10">
+        <div
+          className={`p-5 rounded-[5px] text-center w-[300px] flex flex-col gap-10 ${
+            dark(theme) ? 'bg-[#2d2d2d] text-[#ffffff]' : 'bg-[#ffffff]'
+          }`}
+        >
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
               <div className="opacity-70 text-[13px]">Notice</div>
               <img
-                src={close}
+                src={dark(theme) ? closeWhite : close}
                 alt="close"
                 className="w-4 h-4 cursor-pointer"
                 onClick={closeDeleteModalHanlder}
@@ -63,7 +72,9 @@ export default function CheckDeleteModal({
           <div className="opacity-80 text-[15px]">삭제하시겠습니까?</div>
           <div className="flex justify-center gap-8">
             <Button
-              className="button-style3 w-[80px] text-[12px]"
+              className={`button-style3 w-[80px] text-[12px] ${
+                dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
+              }`}
               value="취소"
               onClick={closeDeleteModalHanlder}
             ></Button>

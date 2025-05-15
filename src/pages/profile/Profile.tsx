@@ -2,11 +2,21 @@ import { useEffect, useState } from 'react';
 import ProfileLeft from './ProfileLeft';
 import ProfileRight from './ProfileRight';
 import { getUserData } from '../../api/profileInfo/profile';
-import defaultCover from '../../assets/images/profile/defaultCover.png';
+import defaultCover from '../../assets/images/profile/default-cover.png';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
-export default function Profile({ userId }: { userId: string }) {
+export default function Profile({
+  userId,
+  theme,
+}: {
+  userId: string;
+  theme: Theme;
+}) {
   const [userData, setUserData] = useState<User | null>(null);
-  const [selectedTab, setSelectedTab] = useState<'posts' | 'likes' | 'comments'>('posts');
+  const [selectedTab, setSelectedTab] = useState<
+    'posts' | 'likes' | 'comments'
+  >('posts');
 
   const axiosList = async () => {
     try {
@@ -26,21 +36,34 @@ export default function Profile({ userId }: { userId: string }) {
   }, [userId]);
 
   if (!userData) {
-    return <div className='text-center py-10 text-gray-500'>로딩 중...</div>;
+    return <div className="text-center py-10 text-gray-500">로딩 중...</div>;
   }
 
   return (
-    <div className='w-full h-[calc(100vh-100px-30px)] bg-white rounded-[10px] shadow-md font-semibold overflow-hidden flex flex-col'>
-      <div className='h-[223px] flex-shrink-0'>
+    <div
+      className={`w-full h-[calc(100vh-100px-30px)] rounded-[10px] shadow-md font-semibold overflow-hidden flex flex-col ${
+        dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+      }`}
+    >
+      <div className="h-[223px] flex-shrink-0">
         <img
           src={userData?.coverImage || defaultCover}
-          className='w-full h-full rounded-t-[10px] object-fill'
-          alt='BackgroundImage '
+          className="w-full h-full rounded-t-[10px] object-fill"
+          alt="BackgroundImage "
         />
       </div>
-      <div className=' flex  overflow-hidden'>
-        <ProfileLeft userData={userData} onSelectTab={setSelectedTab} userId={userId} />
-        <ProfileRight userData={userData} selectedTab={selectedTab} />
+      <div className=" flex  overflow-hidden">
+        <ProfileLeft
+          userData={userData}
+          onSelectTab={setSelectedTab}
+          userId={userId}
+          theme={theme}
+        />
+        <ProfileRight
+          userData={userData}
+          selectedTab={selectedTab}
+          theme={theme}
+        />
       </div>
     </div>
   );

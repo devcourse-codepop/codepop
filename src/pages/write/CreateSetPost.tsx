@@ -4,13 +4,16 @@ import Button from "../../components/common/Button";
 import Editor from "../../components/editor/Editor";
 import { createCodePost } from "../../api/write/write";
 import { useNavigate, useParams } from "react-router-dom";
+import { Theme } from "../../types/ darkModeTypes";
+import { dark } from "../../utils/ darkModeUtils";
 import { usePostStore } from "../../stores/postStore";
 
-export default function CreateSetPost() {
+export default function CreateSetPost({ theme }: { theme: Theme }) {
   const params = useParams();
   const titleRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState(""); // Editor에서 본문 HTML을 받음
+
   const [pollOptions, setPollOptions] = useState<
     { id: number; text: string }[]
   >([]);
@@ -69,10 +72,16 @@ export default function CreateSetPost() {
       <div className='w-full flex relative'>
         <div>
           <div className='pb-[30px]'>
-            <ChannelName channelId={channelId ?? "2"} />
+            <ChannelName channelId={channelId ?? "2"} theme={theme} />
           </div>
 
-          <div className=' bg-white shadow-md rounded-[10px] p-5 relative  max-h-[697px] overflow-y-auto'>
+          <div
+            className={`shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto ${
+              dark(theme)
+                ? "bg-[#2d2d2d] text-[#ffffff]"
+                : "bg-[#ffffff] text-[#111111]"
+            }`}
+          >
             <input
               type='text'
               ref={titleRef}
@@ -81,19 +90,28 @@ export default function CreateSetPost() {
               autoFocus
               className='w-[955px] font-semibold text-[25px] m-3 outline-none'
             />
-            <hr className='mt-[15px] mb-[15px] opacity-30' />
+            <hr
+              className={`mt-[15px] mb-[15px] opacity-30 ${
+                dark(theme) ? "text-[#ffffff]" : "text-[#111111]"
+              }`}
+            />
             <Editor
               onChange={setContent}
               onPollCreate={handlePollCreate}
               onImageSelect={(file) => setImageFile(file)} // 이미지 저장
               initialContent={content}
+              theme={theme}
             />
-            <hr className='opacity-30' />
+            <hr
+              className={`pacity-30 ${
+                dark(theme) ? "text-[#ffffff]" : "text-[#111111]"
+              }`}
+            />
             <div className='flex justify-end mt-6'>
               <Button
                 value='완료'
                 className={`button-style2 ${
-                  isSubmitDisabled ? "bg-gray-400 cursor-not-allowed" : ""
+                  dark(theme) ? "bg-[#ffffff] text-[#111111]" : ""
                 }`}
                 onClick={(e) => {
                   if (isSubmitDisabled) {

@@ -3,8 +3,10 @@ import { useChannelItemStore } from '../../stores/channelStore';
 import { getPopularPostData } from '../../api/post/post';
 import { Post } from '../../types';
 import PostListItem from '../post/PostListItem';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
-export default function PopularPost() {
+export default function PopularPost({ theme }: { theme: Theme }) {
   const { channels, fetchChannels } = useChannelItemStore();
   const [activeTab, setActiveTab] = useState(0);
   const [sortPopulars, setSortPopulars] = useState<Post[]>([]);
@@ -39,8 +41,16 @@ export default function PopularPost() {
 
   return (
     <>
-      <div className="bg-white w-full rounded-[10px] px-[30px] py-[25px] pt-[20px] shadow-md">
-        <h3 className="font-semibold text-[#595956] text-[18px] mb-[15px]">
+      <div
+        className={`w-full rounded-[10px] px-[30px] py-[25px] pt-[20px] shadow-md ${
+          dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+        }`}
+      >
+        <h3
+          className={`font-semibold  text-[18px] mb-[15px] ${
+            dark(theme) ? 'text-[#acacaa]' : 'text-[#595956]'
+          }`}
+        >
           Popular Posts
         </h3>
         <ul className="flex relative gap-x-5 gap-y-2.5 mb-4.5 flex-wrap">
@@ -59,7 +69,17 @@ export default function PopularPost() {
                 }}
                 style={{
                   backgroundColor:
-                    activeTab === index ? channel.color : '#E3E3E3',
+                    activeTab === index
+                      ? dark(theme)
+                        ? index === 0
+                          ? '#19A9BE'
+                          : index === 1
+                          ? '#3380DE'
+                          : '#9E68E9'
+                        : channel.colorLight
+                      : dark(theme)
+                      ? '#4B4B4B'
+                      : '#E3E3E3',
                   color: activeTab === index ? '#fff' : '#6A6A6A',
                   fontWeight: activeTab === index ? 'bold' : 'normal',
                   boxShadow:
@@ -96,7 +116,15 @@ export default function PopularPost() {
                       key={`popular-${pIndex}`}
                       className="tabConstentItem basis-[calc(50%-0.875rem)]  max-w-full"
                     >
-                      <PostListItem {...parsePopular} />
+                      <PostListItem {...parsePopular} theme={theme} />
+                      {/* <PostList
+                        title={{
+                          title: `${postTitle}`,
+                          content: `${postContent}`,
+                          tag: `아마 태그 없앴던거 같음`,
+                        }}
+                        updatedAt={popular.createdAt.split("T")[0]}
+                      /> */}
                     </div>
                   );
                 })
