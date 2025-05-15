@@ -13,7 +13,7 @@ interface Props {
   showPollButton?: boolean;
   showCodeButton?: boolean;
   disableMinHeight?: boolean;
-  initialContent: string; // 추가된 부분
+  initialContent: string;
 }
 
 export default function Editor({
@@ -23,7 +23,7 @@ export default function Editor({
   showPollButton = false,
   showCodeButton = false,
   disableMinHeight = false,
-  initialContent, // 추가된 부분
+  initialContent,
 }: Props) {
   const editor = useEditor({
     extensions: [StarterKit, CustomImage],
@@ -43,7 +43,7 @@ export default function Editor({
   }, [editor, initialContent, hasSetInitialContent]);
 
   return (
-    <div className="p-4 rounded-lg min-h-[100px] h-auto mb-12">
+    <div className='p-4 rounded-lg min-h-[100px] h-auto mb-12'>
       <EditorToolbar
         editor={editor}
         onTogglePoll={() => setShowPollCreator((prev) => !prev)}

@@ -1,6 +1,7 @@
 import { Editor } from '@tiptap/react';
 import CodeEditIcon from '../icon/CodeEditIcon';
 
+// Props 타입
 interface Props {
   editor: Editor | null;
   showCodeButton?: boolean;
