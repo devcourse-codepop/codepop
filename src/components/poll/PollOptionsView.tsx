@@ -22,7 +22,7 @@ export default function PollOptionsView({
           key={option.id}
           className={`px-4 py-2  rounded  cursor-default ${
             dark(theme)
-              ? 'bg-[#1e1e1e] text-[#ffffff] border border-gray-900'
+              ? 'bg-[#1e1e1e] text-[#ffffff] border border-neutral-600'
               : 'border border-gray-300  text-gray-700 bg-gray-100'
           }`}
         >
