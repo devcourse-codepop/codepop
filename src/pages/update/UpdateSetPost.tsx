@@ -4,10 +4,14 @@ import Button from "../../components/common/Button";
 import Editor from "../../components/editor/Editor";
 import { getPostData, updatePost } from "../../api/post/post";
 import { useNavigate, useParams } from "react-router-dom";
+import { usePostStore } from "../../stores/postStore";
 
 export default function UpdateSetPost() {
+  const params = useParams();
   const titleRef = useRef<HTMLInputElement>(null);
   const [content, setContent] = useState("");
+  const channel = params.channelId;
+  const channelIdList = usePostStore((state) => state.channelIdList);
   const [pollOptions, setPollOptions] = useState<
     { id: number; text: string }[]
   >([]);
@@ -62,7 +66,7 @@ export default function UpdateSetPost() {
 
     // ✅ 필수값 추가
     formData.append("postId", postId);
-    formData.append("channelId", "681b850d437f722b6908ab65");
+    formData.append("channelId", channelIdList[Number(channel) - 1]);
 
     formData.append(
       "title",

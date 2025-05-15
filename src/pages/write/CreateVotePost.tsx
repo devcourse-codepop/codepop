@@ -4,8 +4,10 @@ import Button from "../../components/common/Button";
 import Editor from "../../components/editor/Editor";
 import { createCodePost } from "../../api/write/write";
 import { useNavigate, useParams } from "react-router-dom";
+import { usePostStore } from "../../stores/postStore";
 
 export default function CreateVotePost() {
+  const params = useParams();
   const titleRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState(""); // Editor에서 본문 HTML을 받음
@@ -15,6 +17,8 @@ export default function CreateVotePost() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const navigate = useNavigate();
   const { channelId } = useParams();
+  const channel = params.channelId;
+  const channelIdList = usePostStore((state) => state.channelIdList);
 
   const handlePollCreate = useCallback(
     (options: { id: number; text: string }[]) => {
@@ -43,7 +47,7 @@ export default function CreateVotePost() {
         pollOptions: pollOptions,
       })
     );
-    formData.append("channelId", "681b8570437f722b6908ab69");
+    formData.append("channelId", channelIdList[Number(channel) - 1]);
 
     if (imageFile) {
       formData.append("image", imageFile); // 이미지 파일 추가

@@ -5,10 +5,14 @@ import Editor from "../../components/editor/Editor";
 import { getPostData, updatePost } from "../../api/post/post";
 import { useNavigate, useParams } from "react-router-dom";
 import PollOptionsView from "../../components/poll/PollOptionsView";
+import { usePostStore } from "../../stores/postStore";
 
 export default function UpdateVotePost() {
+  const params = useParams();
   const titleRef = useRef<HTMLInputElement>(null);
   const [content, setContent] = useState("");
+  const channel = params.channelId;
+  const channelIdList = usePostStore((state) => state.channelIdList);
   const [pollOptions, setPollOptions] = useState<
     { id: number; text: string }[]
   >([]);
@@ -63,7 +67,7 @@ export default function UpdateVotePost() {
 
     // ✅ 필수값 추가
     formData.append("postId", postId);
-    formData.append("channelId", "681b8570437f722b6908ab69");
+    formData.append("channelId", channelIdList[Number(channel) - 1]);
 
     formData.append(
       "title",
@@ -104,20 +108,20 @@ export default function UpdateVotePost() {
   // };
 
   return (
-    <div className="w-full flex relative ">
+    <div className='w-full flex relative '>
       <div>
-        <div className="pb-[30px]">
+        <div className='pb-[30px]'>
           <ChannelName channelId={channelId ?? "1"} />
         </div>
 
-        <div className="bg-white shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto ">
+        <div className='bg-white shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto '>
           <input
-            type="text"
+            type='text'
             ref={titleRef}
-            placeholder="제목을 입력하세요"
-            className="w-[955px] font-semibold text-[25px] m-3 outline-none"
+            placeholder='제목을 입력하세요'
+            className='w-[955px] font-semibold text-[25px] m-3 outline-none'
           />
-          <hr className="mt-[15px] mb-[15px] opacity-30" />
+          <hr className='mt-[15px] mb-[15px] opacity-30' />
           <Editor
             onChange={setContent}
             onPollCreate={handlePollCreate}
@@ -125,15 +129,15 @@ export default function UpdateVotePost() {
             showPollButton={true}
             initialContent={content}
           />
-          <div className="mb-2.5">
+          <div className='mb-2.5'>
             {pollOptions.length > 0 && (
-              <div className="mt-6">
-                <h2 className="font-semibold text-gray-700 mb-2">투표 항목</h2>
+              <div className='mt-6'>
+                <h2 className='font-semibold text-gray-700 mb-2'>투표 항목</h2>
                 <PollOptionsView options={pollOptions} />
               </div>
             )}
           </div>
-          <hr className="opacity-30" />
+          <hr className='opacity-30' />
 
           {/* 이미지 삭제 버튼 추가 */}
           {/* {imageToDeletePublicId && (
@@ -144,10 +148,10 @@ export default function UpdateVotePost() {
             />
           )} */}
 
-          <div className="flex justify-end mt-6">
+          <div className='flex justify-end mt-6'>
             <Button
-              value="수정 완료"
-              className="button-style2"
+              value='수정 완료'
+              className='button-style2'
               onClick={handleSubmit}
             />
           </div>
