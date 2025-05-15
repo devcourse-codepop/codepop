@@ -229,7 +229,7 @@ export default function ChatRoom({
                           {msg.sender.fullName}
                         </p>
                         <div
-                          className={`text-[14px] p-2.5 rounded-b-[10px] rounded-tl-[10px] max-w-[300px] break-words pl-3 ${
+                          className={`text-[14px] p-2.5 rounded-b-[10px] rounded-tr-[10px] max-w-[300px] break-words pl-3 ${
                             dark(theme)
                               ? 'bg-[#ffffff] text-[#111111]'
                               : 'bg-[#1E293B] text-white'
