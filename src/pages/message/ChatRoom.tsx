@@ -37,6 +37,8 @@ export default function ChatRoom({
 
   // 메시지 전송한 후, 화면을 리렌더링하기 위한 트리거
   const [reloadTrigger, setReloadTrigger] = useState(0);
+  // 스크롤 아래로 내려가는 조건 상태
+  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(false);
 
   // 로딩 상태
   const [isLoading, setIsLoading] = useState(true);
@@ -79,13 +81,13 @@ export default function ChatRoom({
   // 메시지 전송하기
   const createNewMessage = async () => {
     try {
-      const { data } = await postMessages(newMessage, user._id);
-      console.log(data);
+      await postMessages(newMessage, user._id);
+      // console.log(data);
       // sendMessageNotification(data._id);
       setReloadTrigger((reloadTrigger) => reloadTrigger + 1);
+      setShouldScrollToBottom(true);
 
       setNewMessage('');
-      console.log('전송 완료!');
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
@@ -109,8 +111,8 @@ export default function ChatRoom({
   // 채팅방 입장 시 메시지 읽음 처리하기
   const readUserMessages = async () => {
     try {
-      const { data } = await putMessageSeen(user._id);
-      console.log(data);
+      await putMessageSeen(user._id);
+      // console.log(data);
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
@@ -120,8 +122,9 @@ export default function ChatRoom({
   const getUserMessages = async () => {
     try {
       const { data } = await getMessages(user._id);
-      console.log(data);
+      // console.log(data);
       setMessages(data);
+      setShouldScrollToBottom(true);
 
       // 채팅방 들어오거나 메시지 전송 후, 메시지 입력창에 포커스
       inputRef.current?.focus();
@@ -131,6 +134,22 @@ export default function ChatRoom({
     }
   };
 
+  // 상대방이 보내는 메시지 실시간으로 채팅방에 보여주고 읽음 처리하기
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        await readUserMessages();
+        const { data } = await getMessages(user._id);
+        setMessages(data);
+        setShouldScrollToBottom(false);
+      } catch (e) {
+        console.error(e instanceof Error ? e.message : e);
+      }
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [user._id]);
+
   useEffect(() => {
     readUserMessages();
     getUserMessages();
@@ -138,10 +157,11 @@ export default function ChatRoom({
 
   // 채팅방 들어왔을 때와 메시지 전송했을 때, 가장 최신 메시지를 화면에 보여주기
   useEffect(() => {
-    if (bottomRef) {
+    if (bottomRef && shouldScrollToBottom) {
       bottomRef.current?.scrollIntoView({ behavior: 'auto', block: 'end' });
+      setShouldScrollToBottom(false);
     }
-  }, [reloadTrigger, bottomRef, messages]);
+  }, [reloadTrigger, bottomRef, messages, shouldScrollToBottom]);
 
   return (
     <div className="flex flex-col h-full">
@@ -158,7 +178,7 @@ export default function ChatRoom({
       ) : (
         <>
           <div
-            className={`flex-1 overflow-y-auto p-2 font-normal px-[30px] space-y-3 messageBox ${
+            className={`flex-1 overflow-y-auto p-2 font-normal px-[16px] space-y-3 messageBox ${
               dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
             }`}
           >
@@ -205,7 +225,7 @@ export default function ChatRoom({
                       </div>
                       {/* 메시지 내용 */}
                       <div
-                        className={`text-[14px] p-2.5 rounded-b-[10px] rounded-tl-[10px] max-w-[300px] break-words pl-3 ${
+                        className={`text-[14px] p-2.5 rounded-b-[10px] rounded-tl-[10px] max-w-[300px] break-words pl-3 w-fit ${
                           dark(theme)
                             ? 'bg-[#ffffff] text-[#111111]'
                             : 'bg-[#1E293B] text-white'
@@ -225,12 +245,12 @@ export default function ChatRoom({
                         />
                       </div>
                       {/* 이름 + 메시지 내용 */}
-                      <div className="ml-[5px] pt-1.5">
-                        <p className="font-normal text-[12px] mb-[5px] ml-[2px]">
+                      <div className="flex flex-col ml-[5px] pt-1.5">
+                        <div className="font-normal text-[12px] mb-[5px] ml-[2px] w-fit">
                           {msg.sender.fullName}
-                        </p>
+                        </div>
                         <div
-                          className={`text-[14px] p-2.5 rounded-b-[10px] rounded-tr-[10px] max-w-[300px] break-words pl-3 ${
+                          className={`text-[14px] p-2.5 rounded-b-[10px] rounded-tr-[10px] max-w-[300px] break-words pl-3 w-fit ${
                             dark(theme)
                               ? 'bg-[#ffffff] text-[#111111]'
                               : 'bg-[#1E293B] text-white'
