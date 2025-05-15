@@ -113,8 +113,6 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
             }`}
           />
 
-          <hr className="mb-[60px] opacity-30" />
-
           {/* {imageFile && (
             <Button
               value="이미지 삭제"
@@ -126,7 +124,11 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
           <Button
             value="완료"
             className={`absolute bottom-[15px] right-[20px] button-style2 ${
-              isSubmitDisabled ? 'bg-gray-400 cursor-not-allowed' : ''
+              isSubmitDisabled
+                ? dark(theme)
+                  ? 'bg-[#3a3a3a] text-[#777777] cursor-not-allowed'
+                  : 'bg-gray-400 text-white cursor-not-allowed'
+                : 'bg-[#1e1e1e] text-[#ffffff]'
             }`}
             onClick={(e) => {
               if (isSubmitDisabled) {

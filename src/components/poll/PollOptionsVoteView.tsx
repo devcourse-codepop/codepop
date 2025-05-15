@@ -106,23 +106,40 @@ export default function PollOptionsVoteView({
         const isSelected = option.id === selectedOptionId;
         const isTop = topOptionIds.includes(option.id);
 
+        const bgColor = dark(theme) ? '#8c8c8c' : '#d1d6db';
+        const topColor = dark(theme) ? '#1e1e1e' : '#60AfF7';
+        const barColor = isTop ? topColor : bgColor;
+
+        const borderColor = dark(theme)
+          ? isSelected
+            ? 'border-2 border-[#1e1e1e]'
+            : 'border-2 border-[#1e1e1e]'
+          : isSelected
+          ? 'border-gray-400'
+          : 'border-gray-300';
+
+        const hoverBg = dark(theme)
+          ? 'hover:bg-[#2c2c2c]'
+          : 'hover:bg-gray-100';
+
+        const textColor = dark(theme) ? 'text-white' : 'text-gray-800';
+        const subTextColor = dark(theme) ? 'text-gray-300' : 'text-gray-600';
+
         return (
           <div key={option.id} className="flex flex-col gap-2">
             <div
               onClick={() => handleVote(option.id)}
-              className={`relative px-4 py-2  border border-gray-300 rounded flex justify-between items-center cursor-pointer transition overflow-hidden ${
-                isSelected ? 'border-gray-400' : 'hover:bg-gray-100'
-              }`}
+              className={`relative px-4 py-2 border rounded flex justify-between items-center cursor-pointer transition overflow-hidden ${borderColor} ${hoverBg}`}
             >
               <div
                 className="absolute left-0 top-0 h-full transition-all duration-300"
                 style={{
                   width: `${ratio}%`,
-                  backgroundColor: isTop ? '#60A7F7' : '#d1d5db',
+                  backgroundColor: barColor,
                 }}
               />
-              <span className="z-10">{option.text}</span>
-              <span className="z-10 text-sm text-gray-600">
+              <span className={`z-10 ${textColor}`}>{option.text}</span>
+              <span className={`z-10 text-sm ${subTextColor}`}>
                 {option.voteCount}표 ({ratio.toFixed(1)}%)
               </span>
             </div>
