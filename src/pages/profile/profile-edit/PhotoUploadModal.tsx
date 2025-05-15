@@ -45,7 +45,7 @@ export default function PhotoUploadModal({ isOpen, onClose, onSave }: PhotoUploa
 
   // 파일 넘기기
   const handleSave = () => {
-    if (!selectedFile) return alert('파일을 선택해주세요.');
+    if (!selectedFile) return alert('이미지 파일을 선택해주세요.');
     onSave(selectedFile);
     handleCancel();
   };
@@ -77,11 +77,7 @@ export default function PhotoUploadModal({ isOpen, onClose, onSave }: PhotoUploa
           <button className='px-4 py-2 text-gray-600 hover:text-gray-800 cursor-pointer' onClick={handleCancel}>
             취소
           </button>
-          <button
-            className='bg-[#1E293B] text-white px-4 py-2 rounded-[5px] cursor-pointer'
-            onClick={handleSave}
-            disabled={!selectedFile}
-          >
+          <button className='bg-[#1E293B] text-white px-4 py-2 rounded-[5px] cursor-pointer' onClick={handleSave}>
             변경
           </button>
         </div>
