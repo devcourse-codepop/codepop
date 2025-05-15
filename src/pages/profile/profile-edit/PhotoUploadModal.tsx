@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+
 import { dark } from '../../../utils/ darkModeUtils';
 import { Theme } from '../../../types/darkModeTypes';
 
