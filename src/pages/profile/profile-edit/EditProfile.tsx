@@ -121,6 +121,16 @@ export default function EditProfile({ userId }: { userId: string }) {
     }
   };
 
+  // 파일 -> url 변경
+  function fileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  }
+
   // 제출할 때 에러 메시지 있으면 제출하지 않음. 제출 시 api 호출하여 정보 변경
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -163,6 +173,7 @@ export default function EditProfile({ userId }: { userId: string }) {
         });
       }
 
+      // 프로필 이미지는 헤더에도 보여서 주수탄드 변경
       if (profileImage) {
         const formDataProfile = new FormData();
         formDataProfile.append('image', profileImage);
@@ -171,9 +182,8 @@ export default function EditProfile({ userId }: { userId: string }) {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
         if (user) {
-          const { data: userData2 } = await getUserData(userId);
-          setUserData(userData2);
-          setUser({ ...user, image: userData2.image });
+          const base64 = await fileToBase64(profileImage);
+          setUser({ ...user, image: base64 });
         }
       }
       navigator('/profile');
