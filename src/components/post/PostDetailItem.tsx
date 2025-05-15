@@ -258,7 +258,7 @@ export default function PostDetailItem({
         </div>
         <div>
           {commentListItem.length === 0 && <></>}
-          {commentListItem.length !== 0 &&
+          {/* {commentListItem.length !== 0 &&
             [...commentListItem]
               .sort(
                 (a, b) =>
@@ -271,9 +271,9 @@ export default function PostDetailItem({
                   {...item}
                   updateReloadTrigger={updateReloadTrigger}
                 />
-              ))}
+              ))} */}
 
-          {/* {commentListItem
+          {commentListItem
             .filter((item) => {
               try {
                 const parsed = JSON.parse(item.comment);
@@ -288,8 +288,12 @@ export default function PostDetailItem({
                 new Date(getDatetimeSortFormat(b.updatedAt)).getTime()
             )
             .map((item) => (
-              <CommentListItem key={item._id} {...item} />
-            ))} */}
+              <CommentListItem
+                key={item._id}
+                {...item}
+                updateReloadTrigger={updateReloadTrigger}
+              />
+            ))}
         </div>
       </div>
       {isDeleteModalOpen && (
