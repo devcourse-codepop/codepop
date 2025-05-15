@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ImageEditBtn from '../../../assets/ImageEditBtn.svg';
 import { fullNameRegex, passwordRegex } from '../../../utils/validators';
 import EditMenu from './EditMenu';
@@ -36,9 +36,23 @@ export default function EditProfile({ userId }: { userId: string }) {
   const [isCover, setIsCover] = useState(false);
 
   const [coverImage, setCoverImage] = useState<File | null>(null);
-  const [coverPreviewUrl, setCoverPreviewUrl] = useState<string | null>(null);
   const [profileImage, setProfileImage] = useState<File | null>(null);
-  const [profilePreviewUrl, setProfilePreviewUrl] = useState<string | null>(null);
+
+  // 보이는 이미지만 변경
+  const coverPreviewUrl = useMemo(() => {
+    return coverImage ? URL.createObjectURL(coverImage) : null;
+  }, [coverImage]);
+
+  const profilePreviewUrl = useMemo(() => {
+    return profileImage ? URL.createObjectURL(profileImage) : null;
+  }, [profileImage]);
+
+  useEffect(() => {
+    return () => {
+      if (coverPreviewUrl) URL.revokeObjectURL(coverPreviewUrl);
+      if (profilePreviewUrl) URL.revokeObjectURL(profilePreviewUrl);
+    };
+  }, [coverPreviewUrl, profilePreviewUrl]);
 
   const validateUsername = (name: string) => fullNameRegex.test(name);
   const validatePassword = (password: string) => passwordRegex.test(password);
@@ -48,27 +62,17 @@ export default function EditProfile({ userId }: { userId: string }) {
     setEnteredUserValues((prev) => ({ ...prev, [identifier]: value }));
 
     let errorMessage = '';
-
     if (identifier === 'myName') {
-      if (!value) {
-        errorMessage = '이름은 필수 입력 항목입니다.';
-      } else if (!validateUsername(value)) {
-        errorMessage = '이름은 특수문자 없이 10글자 이하로 입력해주세요.';
-      }
+      if (!value) errorMessage = '이름은 필수 입력 항목입니다.';
+      else if (!validateUsername(value)) errorMessage = '이름은 특수문자 없이 10글자 이하로 입력해주세요.';
     }
-
     if (identifier === 'password') {
-      if (!value) {
-        errorMessage = '비밀번호는 필수 입력 항목입니다.';
-      } else if (!validatePassword(value)) {
+      if (!value) errorMessage = '비밀번호는 필수 입력 항목입니다.';
+      else if (!validatePassword(value))
         errorMessage = '비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.';
-      }
     }
-
     if (identifier === 'confirmPassword') {
-      if (value !== enteredUserValues.password) {
-        errorMessage = '비밀번호가 일치하지 않습니다.';
-      }
+      if (value !== enteredUserValues.password) errorMessage = '비밀번호가 일치하지 않습니다.';
     }
 
     setEnteredErrorValues((prevErrors) => ({
@@ -90,14 +94,12 @@ export default function EditProfile({ userId }: { userId: string }) {
     if (userId) fetchUserData();
   }, [userId]);
 
-  // 모달로 받은 사진 미리 보기 및 저장
-  const handleSavePhoto = (file: File, previewUrl: string) => {
+  // 모달로 받은 사진 저장
+  const handleSavePhoto = (file: File) => {
     if (isCover) {
       setCoverImage(file);
-      setCoverPreviewUrl(previewUrl);
     } else {
       setProfileImage(file);
-      setProfilePreviewUrl(previewUrl);
     }
   };
 
@@ -114,10 +116,8 @@ export default function EditProfile({ userId }: { userId: string }) {
 
     if (isCover) {
       setCoverImage(file);
-      setCoverPreviewUrl(URL.createObjectURL(file));
     } else {
       setProfileImage(file);
-      setProfilePreviewUrl(URL.createObjectURL(file));
     }
   };
 
@@ -133,19 +133,13 @@ export default function EditProfile({ userId }: { userId: string }) {
       confirmPasswordError: '',
     };
 
-    if (!myName) {
-      newErrors.myNameError = '이름은 필수 입력 항목입니다.';
-    } else if (!validateUsername(myName)) {
-      newErrors.myNameError = '이름은 특수문자 없이 10글자 이하로 입력해주세요.';
-    } else if (!password) {
-      newErrors.passwordError = '비밀번호는 필수 입력 항목입니다.';
-    } else if (!validatePassword(password)) {
+    if (!myName) newErrors.myNameError = '이름은 필수 입력 항목입니다.';
+    else if (!validateUsername(myName)) newErrors.myNameError = '이름은 특수문자 없이 10글자 이하로 입력해주세요.';
+    else if (!password) newErrors.passwordError = '비밀번호는 필수 입력 항목입니다.';
+    else if (!validatePassword(password))
       newErrors.passwordError = '비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.';
-    } else if (!confirmPassword) {
-      newErrors.confirmPasswordError = '비밀번호 확인은 필수 입력 항목입니다.';
-    } else if (confirmPassword !== password) {
-      newErrors.confirmPasswordError = '비밀번호가 일치하지 않습니다.';
-    }
+    else if (!confirmPassword) newErrors.confirmPasswordError = '비밀번호 확인은 필수 입력 항목입니다.';
+    else if (confirmPassword !== password) newErrors.confirmPasswordError = '비밀번호가 일치하지 않습니다.';
 
     if (newErrors.myNameError || newErrors.passwordError || newErrors.confirmPasswordError) {
       setEnteredErrorValues(newErrors);
@@ -194,7 +188,7 @@ export default function EditProfile({ userId }: { userId: string }) {
 
   return (
     <>
-      <div className='w-full h-[calc(100vh-100px-30px)] bg-white rounded-[10px] shadow-md font-semibold '>
+      <div className='w-full h-[calc(100vh-100px-30px)] bg-white rounded-[10px] shadow-md font-semibold'>
         <div className='relative h-[223px] rounded-t-[10px]'>
           <img
             src={coverPreviewUrl || userData.coverImage || defaultCover}

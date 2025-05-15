@@ -1,16 +1,23 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 
 export default function PhotoUploadModal({ isOpen, onClose, onSave }: PhotoUploadModalProps) {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // 파일 변했을 때 URL 설정
+  // 파일 -> URL 설정
+  const previewUrl = useMemo(() => {
+    return selectedFile ? URL.createObjectURL(selectedFile) : null;
+  }, [selectedFile]);
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
+
+  // 파일 변했을 때 저장
   const handleFileChange = (file: File) => {
     setSelectedFile(file);
-    const reader = new FileReader();
-    reader.onloadend = () => setPreviewUrl(reader.result as string);
-    reader.readAsDataURL(file);
   };
 
   // 파일 드랍한 경우
@@ -33,14 +40,13 @@ export default function PhotoUploadModal({ isOpen, onClose, onSave }: PhotoUploa
 
   const handleCancel = () => {
     setSelectedFile(null);
-    setPreviewUrl(null);
     onClose();
   };
 
-  // 파일과 URL 넘기기
+  // 파일 넘기기
   const handleSave = () => {
-    if (!selectedFile || !previewUrl) return alert('파일을 선택해주세요.');
-    onSave(selectedFile, previewUrl);
+    if (!selectedFile) return alert('파일을 선택해주세요.');
+    onSave(selectedFile);
     handleCancel();
   };
 
