@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 
 // Props 타입
 interface Props {
+  bottomRef: React.RefObject<HTMLDivElement | null>;
   channelId: string;
   resetTrigger: number;
   submitHandler: (e: React.FormEvent<Element>) => void;
@@ -21,6 +22,7 @@ interface Props {
 }
 
 export default function CommentEditor({
+  bottomRef,
   channelId,
   resetTrigger,
   submitHandler,
@@ -50,6 +52,9 @@ export default function CommentEditor({
     content: '<p></p>',
     onUpdate({ editor }) {
       onChange(editor.getHTML());
+
+      // 댓글 작성 중 다음 줄로 넘어가면 스크롤도 따라 이동
+      bottomRef.current?.scrollIntoView({ behavior: 'auto' });
     },
   });
 

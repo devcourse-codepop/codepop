@@ -21,7 +21,10 @@ export default function NotLoginModal({
 
   return (
     <>
-      <div className="fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-[1000]">
+      <div
+        className="fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-[1000]"
+        onClick={closeLoginModalHanlder}
+      >
         <div
           className={`p-5 rounded-[5px] text-center w-[300px] flex flex-col gap-10 ${
             dark(theme) ? 'bg-[#2d2d2d] text-[#ffffff]' : 'bg-[#ffffff]'

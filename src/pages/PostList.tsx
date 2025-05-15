@@ -14,6 +14,7 @@ import dayjs from 'dayjs';
 import { useAuthStore } from '../stores/authStore';
 import { Theme } from '../types/ darkModeTypes';
 import { dark } from '../utils/ darkModeUtils';
+import PostSkeleton from '../components/post/PostSkeleton';
 
 export default function PostList({ theme }: { theme: Theme }) {
   const params = useParams();
@@ -26,6 +27,8 @@ export default function PostList({ theme }: { theme: Theme }) {
   // 채널 id 값 받아오기
   const channelIdList = usePostStore((state) => state.channelIdList);
 
+  // 로딩 상태
+  const [isLoading, setIsLoading] = useState(true);
   // 로그인 상태
   const [isLogin, setIsLogin] = useState(false);
   // 게시글 목록 상태
@@ -109,6 +112,7 @@ export default function PostList({ theme }: { theme: Theme }) {
       const { data } = await getPostList(channelIdList[Number(channel) - 1]);
       console.log(data);
       setPostListItem(data);
+      setIsLoading(false);
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
@@ -171,11 +175,39 @@ export default function PostList({ theme }: { theme: Theme }) {
             className="flex flex-col gap-[30px] pb-5 max-h-[calc(100vh-100px-120px)] overflow-auto scroll-custom"
             ref={scrollRef}
           >
-            {postListItem.length === 0 && (
-              <div className="flex flex-col justify-center items-center gap-5 text-lg font-semibold pt-16 opacity-60">
-                <div>게시글이 없습니다!</div>
-                <div>새로운 게시글을 작성해 보세요!</div>
-              </div>
+            {isLoading ? (
+              Array.from({ length: 5 }).map((_, i) => <PostSkeleton key={i} />)
+            ) : (
+              <>
+                {postListItem.length === 0 && (
+                  <div className="flex flex-col justify-center items-center gap-5 text-lg font-semibold pt-16 opacity-60">
+                    <div>게시글이 없습니다!</div>
+                    <div>새로운 게시글을 작성해 보세요!</div>
+                  </div>
+                )}
+                {postListItem.length !== 0 &&
+                  select === 'recent' &&
+                  [...postListItem]
+                    .sort(
+                      (a, b) =>
+                        new Date(getDatetimeFormat(b.createdAt)).getTime() -
+                        new Date(getDatetimeFormat(a.createdAt)).getTime()
+                    )
+                    .map((item) => (
+                      <PostListItem key={item._id} {...item} theme={theme} />
+                    ))}
+                {postListItem.length !== 0 &&
+                  select === 'popular' &&
+                  [...postListItem]
+                    .sort((a, b) => {
+                      if (b.likes.length - a.likes.length !== 0)
+                        return b.likes.length - a.likes.length;
+                      else return b.comments.length - a.comments.length;
+                    })
+                    .map((item) => (
+                      <PostListItem key={item._id} {...item} theme={theme} />
+                    ))}
+              </>
             )}
             {postListItem.length !== 0 &&
               select === 'recent' &&

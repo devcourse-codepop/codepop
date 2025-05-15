@@ -8,7 +8,10 @@ export default function DeletedUserModal({
 }) {
   return (
     <>
-      <div className="fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-[1000]">
+      <div
+        className="fixed top-0 left-0 w-full h-full bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-[1000]"
+        onClick={closeUserModalHanlder}
+      >
         <div className="bg-white p-5 rounded-[5px] text-center w-[300px] flex flex-col gap-10">
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
