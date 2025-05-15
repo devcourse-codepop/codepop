@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import ImageEditBtn from '../../../assets/ImageEditBtn.svg';
+import ImageEditBtn from '../../../assets/images/img-edit/img-edit-btn.svg';
 import { fullNameRegex, passwordRegex } from '../../../utils/validators';
 import EditMenu from './EditMenu';
 import Input from '../../../components/common/Input';
@@ -8,11 +8,13 @@ import PhotoUploadModal from './PhotoUploadModal';
 import Button from '../../../components/common/Button';
 import { getUserData } from '../../../api/profileInfo/profile';
 import { useAuthStore } from '../../../stores/authStore';
-import defaultProfileImage from '../../../assets/images/profile/defaultProfileImage.jpg';
-import defaultCover from '../../../assets/images/profile/defaultCover.png';
+import defaultProfileImage from '../../../assets/images/profile/default-profile-img.jpg';
+import defaultCover from '../../../assets/images/profile/default-cover.png';
 import { useNavigate } from 'react-router-dom';
+import { Theme } from '../../../types/ darkModeTypes';
+import { dark } from '../../../utils/ darkModeUtils';
 
-export default function EditProfile({ userId }: { userId: string }) {
+export default function EditProfile({ userId, theme }: { userId: string; theme: Theme }) {
   const navigator = useNavigate();
   const user = useAuthStore((state) => state.user);
   const setUser = useAuthStore((state) => state.setUser);
@@ -157,7 +159,10 @@ export default function EditProfile({ userId }: { userId: string }) {
     }
 
     try {
-      await axiosInstance.put('/settings/update-user', { fullName: myName, username: myName });
+      await axiosInstance.put('/settings/update-user', {
+        fullName: myName,
+        username: myName,
+      });
       await axiosInstance.put('/settings/update-password', { password });
 
       if (user) {
@@ -198,7 +203,11 @@ export default function EditProfile({ userId }: { userId: string }) {
 
   return (
     <>
-      <div className='w-full h-[calc(100vh-100px-30px)] bg-white rounded-[10px] shadow-md font-semibold'>
+      <div
+        className={`w-full h-[calc(100vh-100px-30px)] rounded-[10px] shadow-md font-semibold ${
+          dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+        }`}
+      >
         <div className='relative h-[223px] rounded-t-[10px]'>
           <img
             src={coverPreviewUrl || userData.coverImage || defaultCover}
@@ -220,6 +229,7 @@ export default function EditProfile({ userId }: { userId: string }) {
                 onEdit={() => setIsModalOpen(true)}
                 onDelete={handleDelete}
                 onClose={() => setIsBackgroundMenuOpen(false)}
+                theme={theme}
               />
             )}
           </div>
@@ -247,53 +257,71 @@ export default function EditProfile({ userId }: { userId: string }) {
                   onEdit={() => setIsModalOpen(true)}
                   onDelete={handleDelete}
                   onClose={() => setIsProfileMenuOpen(false)}
+                  theme={theme}
                 />
               )}
             </div>
           </div>
 
           <form onSubmit={handleSubmit} className='w-full max-w-md pl-[50px] ml-[120px] mt-9'>
-            <p className='pt-[35px] font-bold text-[14px]'>이름</p>
+            <p className={`pt-[35px] font-bold text-[14px] ${dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'}`}>
+              이름
+            </p>
             <Input
               type='text'
               value={enteredUserValues.myName}
-              className='input-profile'
+              className={`input-profile ${dark(theme) ? 'bg-[#ffffff]' : ''}`}
               onChange={(event) => handleInputChange('myName', event.target.value)}
             />
             <p className='text-[11px] text-red-500 pt-1 h-2.5'>{enteredErrorValues.myNameError || '\u00A0'}</p>
 
-            <p className='mt-[22px] font-bold text-[14px]'>이메일</p>
-            <Input type='text' value={userData.email} readOnly className='input-profile bg-[#E3E3E3] text-black/50' />
+            <p className={`mt-[22px] font-bold text-[14px] ${dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'}`}>
+              이메일
+            </p>
+            <Input
+              type='text'
+              value={userData.email}
+              readOnly
+              className={`input-profile bg-[#e3e3e3] text-black/50 ${dark(theme) ? 'bg-[#e3e3e3] opacity-50' : ''}`}
+            />
 
-            <p className='mt-[22px] font-bold text-[14px]'>비밀번호</p>
+            <p className={`mt-[22px] font-bold text-[14px] ${dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'}`}>
+              비밀번호
+            </p>
             <Input
               type='password'
               placeholder='Password'
-              className='input-profile'
+              className={`input-profile ${dark(theme) ? 'bg-[#ffffff]' : ''}`}
               value={enteredUserValues.password}
               onChange={(event) => handleInputChange('password', event.target.value)}
             />
             <p className='text-[11px] text-red-500 pt-1 h-2.5'>{enteredErrorValues.passwordError || '\u00A0'}</p>
-
-            <p className='mt-[22px] font-bold text-[14px]'>비밀번호 확인</p>
+            <p className={`mt-[22px] font-bold text-[14px] ${dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'}`}>
+              비밀번호 확인
+            </p>
             <Input
               type='password'
               placeholder='Password'
-              className='input-profile'
+              className={`input-profile ${dark(theme) ? 'bg-[#ffffff]' : ''}`}
               value={enteredUserValues.confirmPassword}
               onChange={(event) => handleInputChange('confirmPassword', event.target.value)}
             />
             <p className='text-[11px] text-red-500 pt-1 h-2.5'>{enteredErrorValues.confirmPasswordError || '\u00A0'}</p>
 
             <div className='flex justify-end mr-[113px] mt-[25px] relative'>
-              <Button value='수정' className='button-edit' />
+              <Button value='수정' className={`button-edit ${dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''}`} />
             </div>
           </form>
         </div>
       </div>
 
       {isModalOpen && (
-        <PhotoUploadModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={handleSavePhoto} />
+        <PhotoUploadModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSave={handleSavePhoto}
+          theme={theme}
+        />
       )}
     </>
   );

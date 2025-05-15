@@ -1,6 +1,5 @@
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
-import logo from '../../assets/images/header/logo.svg';
 import Delete from '../../assets/images/input-delete/input-delete.svg';
 
 import { useState } from 'react';
@@ -12,8 +11,10 @@ import {
   passwordRegex,
 } from '../../utils/validators';
 import { AxiosError } from 'axios';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
-export default function SignUp() {
+export default function SignUp({ theme }: { theme: Theme }) {
   const navigate = useNavigate();
 
   const [fullName, setFullName] = useState('');
@@ -223,7 +224,7 @@ export default function SignUp() {
 
   return (
     <div className="flex flex-col justify-center items-center h-screen gap-15">
-      <img src={logo} alt="Signup 로고" className="w-50" />
+      <img src={theme.logo} alt="로고" className="w-50" />
 
       <form className="flex flex-col">
         <div className="mb-5">
@@ -340,7 +341,11 @@ export default function SignUp() {
 
         <Button
           value="Sign Up"
-          className="button-style1 mt-2"
+          className={`button-style1 mt-2 ${
+            dark(theme)
+              ? `w-[500px] h-[86px] text-[#ffffff] bg-[#2d2d2d] text-[23px] rounded-[10px] cursor-pointer`
+              : ''
+          }`}
           onClick={handleSubmit}
         />
       </form>

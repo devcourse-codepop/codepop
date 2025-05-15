@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import messageIcon from '../assets/images/messageIcon.svg';
+import messageIcon from '../assets/images/message/message-icon.svg';
 
 interface Message {
   messageIcon: string;

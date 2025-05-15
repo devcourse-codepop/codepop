@@ -1,13 +1,17 @@
-import { useCallback, useRef, useState } from "react";
-import ChannelName from "../../components/channel/ChannelName";
-import Button from "../../components/common/Button";
-import Editor from "../../components/editor/Editor";
-import { createCodePost } from "../../api/write/write";
-import { useNavigate, useParams } from "react-router-dom";
+import { useCallback, useRef, useState } from 'react';
+import ChannelName from '../../components/channel/ChannelName';
+import Button from '../../components/common/Button';
+import Editor from '../../components/editor/Editor';
+import { createCodePost } from '../../api/write/write';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
-export default function CreateCodePost() {
+export default function CreateCodePost({ theme }: { theme: Theme }) {
   const titleRef = useRef<HTMLInputElement>(null);
-  const [content, setContent] = useState(""); // Editor에서 본문 HTML을 받음
+
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState(''); // Editor에서 본문 HTML을 받음
   const [pollOptions, setPollOptions] = useState<
     { id: number; text: string }[]
   >([]);
@@ -25,38 +29,39 @@ export default function CreateCodePost() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     navigate(`/channel/${channelId}`);
-    const titleText = titleRef.current?.value || "";
+    const titleText = titleRef.current?.value || '';
 
     if (!channelId) {
-      console.error("채널 ID가 없습니다.");
+      console.error('채널 ID가 없습니다.');
       return;
     }
 
     const formData = new FormData();
 
     formData.append(
-      "title",
+      'title',
       JSON.stringify({
         title: titleText,
         content: content,
         pollOptions: pollOptions,
       })
     );
-    formData.append("channelId", "681b84d4437f722b6908ab61");
+    formData.append('channelId', '681b84d4437f722b6908ab61');
 
     if (imageFile) {
-      formData.append("image", imageFile); // 이미지 파일 추가
+      formData.append('image', imageFile); // 이미지 파일 추가
     }
 
     try {
       const res = await createCodePost(formData);
-      console.log("작성 성공:", res.data);
+      console.log('작성 성공:', res.data);
       // 성공 시 이동 등 처리
     } catch (err) {
-      console.error("작성 실패", err);
+      console.error('작성 실패', err);
     }
   };
 
+  const isSubmitDisabled = title.trim() === '' || content.trim() === '';
   // // 이미지 삭제 핸들러 추가
   // const handleImageDelete = () => {
   //   const newContent = content.replace(/<p[^>]*>\s*<img[^>]*>\s*<\/p>/g, "");
@@ -69,26 +74,44 @@ export default function CreateCodePost() {
     <div className="w-full flex relative">
       <div>
         <div className="pb-[30px]">
-          <ChannelName channelId={channelId ?? "1"} />
+          <ChannelName channelId={channelId ?? '1'} theme={theme} />
         </div>
 
-        <div className=" bg-white shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto">
+        <div
+          className={`shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto ${
+            dark(theme)
+              ? 'bg-[#2d2d2d] text-[#ffffff]'
+              : 'bg-[#ffffff] text-[#111111]'
+          }`}
+        >
           <input
             type="text"
+            value={title}
             ref={titleRef}
+            onChange={(e) => setTitle(e.target.value)}
             placeholder="제목을 입력하세요"
             autoFocus
             className="w-[955px] font-semibold text-[25px] m-3 outline-none"
           />
-          <hr className="mt-[15px] mb-[15px] opacity-30" />
+          <hr
+            className={`mt-[15px] mb-[15px] opacity-30 ${
+              dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
+            }`}
+          />
+
           <Editor
             onChange={setContent}
             onPollCreate={handlePollCreate}
             onImageSelect={(file) => setImageFile(file)} // 이미지 저장
             showCodeButton={true}
             initialContent={content}
+            theme={theme}
           />
-          <hr className="mb-[60px] opacity-30" />
+          <hr
+            className={`mb-[60px] opacity-30 ${
+              dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
+            }`}
+          />
 
           {/* {imageFile && (
             <Button
@@ -100,8 +123,20 @@ export default function CreateCodePost() {
 
           <Button
             value="완료"
-            className="button-style2 absolute bottom-[15px] right-[20px]"
-            onClick={handleSubmit} // 게시물 작성 완료 시 제출
+            className={`absolute bottom-[15px] right-[20px] button-style2 ${
+              isSubmitDisabled
+                ? dark(theme)
+                  ? 'bg-[#3a3a3a] text-[#777777] cursor-not-allowed'
+                  : 'bg-gray-400 text-white cursor-not-allowed'
+                : 'bg-[#1e1e1e] text-[#ffffff]'
+            }`}
+            onClick={(e) => {
+              if (isSubmitDisabled) {
+                e.preventDefault(); // 아무 동작도 하지 않음
+                return;
+              }
+              handleSubmit(e);
+            }}
           />
         </div>
       </div>

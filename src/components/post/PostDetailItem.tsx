@@ -1,6 +1,7 @@
 import Avatar from '../avatar/Avatar';
 import LikeComment from '../reaction/LikeComment';
-import menuIcon from '../../assets/MenuIcon.svg';
+import menuIcon from '../../assets/images/menu/menu-icon.svg';
+import menuIconWhite from '../../assets/images/menu/menu-icon-white.svg';
 import { useEffect, useRef, useState } from 'react';
 import { Comment, Post } from '../../types';
 import dayjs from 'dayjs';
@@ -12,17 +13,13 @@ import { useAuthStore } from '../../stores/authStore';
 import DOMPurify from 'dompurify';
 import PollOptionsVoteView from '../poll/PollOptionsVoteView';
 import CheckDeleteModal from './CheckDeleteModal';
-
-// 투표 옵션 타입
-interface PollOption {
-  id: string;
-  text: string;
-  voteCount: number;
-}
+import { Theme } from '../../types/ darkModeTypes';
+import { dark } from '../../utils/ darkModeUtils';
 
 // updateReloadTrigger 타입 추가
 interface PostDetailItemProps extends Post {
   updateReloadTrigger: () => void;
+  theme: Theme;
 }
 
 export default function PostDetailItem({
@@ -33,8 +30,8 @@ export default function PostDetailItem({
   comments,
   createdAt,
   channel,
-  imagePublicId,
   updateReloadTrigger,
+  theme,
 }: PostDetailItemProps) {
   const params = useParams();
   const channelId = params.channelId;
@@ -46,10 +43,11 @@ export default function PostDetailItem({
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   // 파싱 결과 저장
-  const parsedTitle = JSON.parse(title);
-  const pollOptions: PollOption[] = parsedTitle.pollOptions || [];
+
+  const pollOptions = JSON.parse(title).pollOptions;
 
   // 채널 id 값 받아오기
+
   const channelIdList = usePostStore((state) => state.channelIdList);
 
   // 로그인한 사용자 정보 받아오기
@@ -75,7 +73,8 @@ export default function PostDetailItem({
     const codes = doc.querySelectorAll('pre');
     const codeStr = '<span>&lt;/&gt;</span>';
     codes.forEach((code) => {
-      code.style.backgroundColor = '#ececec';
+      code.style.backgroundColor = dark(theme) ? '#1e1e1e' : '#ececec';
+      code.style.color = dark(theme) ? '#ffffff' : '#111111';
       code.style.padding = '20px';
       code.style.paddingTop = '2px';
       code.style.marginTop = '10px';
@@ -107,6 +106,7 @@ export default function PostDetailItem({
     if (gap < 60) return `${gap}초 전`;
     if (gap < 3600) return `${Math.floor(gap / 60)}분 전`;
     if (gap < 86400) return `${Math.floor(gap / 3600)}시간 전`;
+
     return writeTime.format('YYYY.MM.DD');
   };
 
@@ -176,7 +176,13 @@ export default function PostDetailItem({
 
   return (
     <>
-      <div className="w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative">
+      <div
+        className={`w-full h-auto rounded-[5px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative ${
+          dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+        }`}
+
+        //ref={divRef}
+      >
         <div className="flex justify-between h-[85px] pl-3 pt-2.5">
           <Link to={`/profile`} state={{ userid: author?._id }}>
             <Avatar
@@ -184,6 +190,7 @@ export default function PostDetailItem({
               email={author.email}
               image={author.image}
               isOnline={author.isOnline}
+              theme={theme}
             />
           </Link>
           {/* 로그인한 사용자 id 값과 해당 게시글 작성자 id 값이 일치할 경우 */}
@@ -193,20 +200,31 @@ export default function PostDetailItem({
                 onClick={clickMenuHandler}
                 className="w-9 h-9 pr-2.5 cursor-pointer"
               >
-                <img src={menuIcon} />
+                <img src={dark(theme) ? menuIconWhite : menuIcon} />
               </div>
               {isOpen && (
                 <div
-                  className="flex flex-col w-[91px] h-[70px] rounded-[2px] border border-[#e5e5e5] absolute top-8 right-4"
+                  className={`flex flex-col w-[91px] h-[70px] rounded-[2px]  absolute top-8 right-4  ${
+                    dark(theme)
+                      ? 'bg-[#2d2d2d] border border-white/40'
+                      : 'border border-[#e5e5e5]'
+                  }`}
                   ref={modalRef}
                 >
                   <div
-                    className="flex justify-center items-center text-[12px] h-[34px] cursor-pointer"
+                    className={`flex justify-center items-center text-[12px] h-[34px] cursor-pointer ${
+                      dark(theme) ? 'text-[#ffffff]/70' : ''
+                    }`}
                     onClick={clickUpdateHandler}
                   >
                     수정하기
                   </div>
-                  <hr className="opacity-10" />
+                  <hr
+                    className={` ${
+                      dark(theme) ? 'border-[#878787]' : 'opacity-10'
+                    }`}
+                  />
+
                   <div
                     className="flex justify-center items-center text-[12px] text-[#FF0404] h-[34px] cursor-pointer"
                     onClick={clickDeleteHandler}
@@ -219,28 +237,33 @@ export default function PostDetailItem({
           )}
         </div>
         <div className="flex flex-col px-[55px] py-[15px] gap-[22px]">
-          <div className="text-[20px] font-semibold">
+          <div
+            className={`text-[20px] font-semibold ${
+              dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
+            }`}
+          >
             {JSON.parse(title).title}
           </div>
+
+          {/* w-[500px] */}
+
           <div
             dangerouslySetInnerHTML={{
               __html: DOMPurify.sanitize(
                 editCodeStyle(JSON.parse(title).content)
               ),
             }}
-            className="text-[15px] font-normal"
+            className={`text-[15px] font-normal ${
+              dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
+            }`}
           />
           {/* 투표 옵션이 있을 경우 */}
           {pollOptions.length > 0 && (
             <div className="mt-4">
               <PollOptionsVoteView
                 options={pollOptions}
-                postId={_id}
-                channelId={channelId ?? ''}
-                originalTitle={parsedTitle.title}
-                originalContent={parsedTitle.content}
-                imageToDeletePublicId={imagePublicId || null}
-                imageFile={null}
+                comments={comments}
+                theme={theme}
               />
             </div>
           )}
@@ -252,16 +275,26 @@ export default function PostDetailItem({
         <div className="h-[59px]">
           <LikeComment
             likeCount={likes.length}
-            commentCount={comments.length}
+            commentCount={
+              comments.filter((c) => {
+                try {
+                  const parsed = JSON.parse(c.comment);
+                  return parsed.type !== 'vote';
+                } catch {
+                  return true;
+                }
+              }).length
+            }
             postId={_id}
             likes={likes}
+            theme={theme}
             author={author}
             channel={channel}
           />
         </div>
         <div>
           {commentListItem.length === 0 && <></>}
-          {commentListItem.length !== 0 &&
+          {/* {commentListItem.length !== 0 &&
             [...commentListItem]
               .sort(
                 (a, b) =>
@@ -273,8 +306,32 @@ export default function PostDetailItem({
                   key={item._id}
                   {...item}
                   updateReloadTrigger={updateReloadTrigger}
+                  theme={theme}
                 />
-              ))}
+              ))} */}
+
+          {commentListItem
+            .filter((item) => {
+              try {
+                const parsed = JSON.parse(item.comment);
+                return parsed.type !== 'vote';
+              } catch {
+                return true;
+              }
+            })
+            .sort(
+              (a, b) =>
+                new Date(getDatetimeSortFormat(a.updatedAt)).getTime() -
+                new Date(getDatetimeSortFormat(b.updatedAt)).getTime()
+            )
+            .map((item) => (
+              <CommentListItem
+                key={item._id}
+                {...item}
+                updateReloadTrigger={updateReloadTrigger}
+                theme={theme}
+              />
+            ))}
         </div>
       </div>
       {isDeleteModalOpen && (
@@ -284,6 +341,7 @@ export default function PostDetailItem({
           _id={_id}
           closeDeleteModalHanlder={closeDeleteModalHanlder}
           updateReloadTrigger={updateReloadTrigger}
+          theme={theme}
         />
       )}
     </>
