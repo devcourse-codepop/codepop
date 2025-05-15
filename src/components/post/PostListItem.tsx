@@ -2,7 +2,6 @@ import Avatar from '../avatar/Avatar';
 import LikeComment from '../reaction/LikeComment';
 import { Post } from '../../types';
 import dayjs from 'dayjs';
-
 import { Link, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 import { useState } from 'react';
@@ -31,7 +30,6 @@ export default function PostListItem(props: PostListItemProps) {
     channel,
     theme,
   } = props;
-
   const { channels } = useChannelItemStore();
 
   const navigate = useNavigate();
@@ -61,6 +59,7 @@ export default function PostListItem(props: PostListItemProps) {
     imgs.forEach((img) => img.remove());
 
     codes = doc.querySelectorAll('pre');
+
     codes.forEach((code) => {
       code.remove();
     });
@@ -82,6 +81,7 @@ export default function PostListItem(props: PostListItemProps) {
     if (gap < 60) return `${gap}초 전`;
     if (gap < 3600) return `${Math.floor(gap / 60)}분 전`;
     if (gap < 86400) return `${Math.floor(gap / 3600)}시간 전`;
+
     return writeTime.format('YYYY.MM.DD');
   };
 
@@ -212,7 +212,16 @@ export default function PostListItem(props: PostListItemProps) {
           )}
           <LikeComment
             likeCount={likes.length}
-            commentCount={comments.length}
+            commentCount={
+              comments.filter((c) => {
+                try {
+                  const parsed = JSON.parse(c.comment);
+                  return parsed.type !== 'vote';
+                } catch {
+                  return true;
+                }
+              }).length
+            }
             postId={_id}
             likes={likes}
             theme={theme}

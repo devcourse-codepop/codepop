@@ -9,6 +9,8 @@ import { dark } from '../../utils/ darkModeUtils';
 
 export default function CreateCodePost({ theme }: { theme: Theme }) {
   const titleRef = useRef<HTMLInputElement>(null);
+
+  const [title, setTitle] = useState('');
   const [content, setContent] = useState(''); // Editor에서 본문 HTML을 받음
   const [pollOptions, setPollOptions] = useState<
     { id: number; text: string }[]
@@ -59,6 +61,7 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
     }
   };
 
+  const isSubmitDisabled = title.trim() === '' || content.trim() === '';
   // // 이미지 삭제 핸들러 추가
   // const handleImageDelete = () => {
   //   const newContent = content.replace(/<p[^>]*>\s*<img[^>]*>\s*<\/p>/g, "");
@@ -83,7 +86,9 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
         >
           <input
             type="text"
+            value={title}
             ref={titleRef}
+            onChange={(e) => setTitle(e.target.value)}
             placeholder="제목을 입력하세요"
             autoFocus
             className="w-[955px] font-semibold text-[25px] m-3 outline-none"
@@ -93,6 +98,7 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
               dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
             }`}
           />
+
           <Editor
             onChange={setContent}
             onPollCreate={handlePollCreate}
@@ -107,6 +113,8 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
             }`}
           />
 
+          <hr className="mb-[60px] opacity-30" />
+
           {/* {imageFile && (
             <Button
               value="이미지 삭제"
@@ -117,10 +125,16 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
 
           <Button
             value="완료"
-            className={`button-style2 absolute bottom-[15px] right-[20px] ${
-              dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
+            className={`absolute bottom-[15px] right-[20px] button-style2 ${
+              isSubmitDisabled ? 'bg-gray-400 cursor-not-allowed' : ''
             }`}
-            onClick={handleSubmit} // 게시물 작성 완료 시 제출
+            onClick={(e) => {
+              if (isSubmitDisabled) {
+                e.preventDefault(); // 아무 동작도 하지 않음
+                return;
+              }
+              handleSubmit(e);
+            }}
           />
         </div>
       </div>

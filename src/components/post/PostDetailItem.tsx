@@ -2,13 +2,11 @@ import Avatar from '../avatar/Avatar';
 import LikeComment from '../reaction/LikeComment';
 import menuIcon from '../../assets/images/menu/menu-icon.svg';
 import menuIconWhite from '../../assets/images/menu/menu-icon-white.svg';
-
 import { useEffect, useRef, useState } from 'react';
 import { Comment, Post } from '../../types';
 import dayjs from 'dayjs';
 import { getPostList } from '../../api/post/post';
 import { usePostStore } from '../../stores/postStore';
-
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import CommentListItem from './CommentListItem';
 import { useAuthStore } from '../../stores/authStore';
@@ -17,13 +15,6 @@ import PollOptionsVoteView from '../poll/PollOptionsVoteView';
 import CheckDeleteModal from './CheckDeleteModal';
 import { Theme } from '../../types/ darkModeTypes';
 import { dark } from '../../utils/ darkModeUtils';
-
-// 투표 옵션 타입
-interface PollOption {
-  id: string;
-  text: string;
-  voteCount: number;
-}
 
 // updateReloadTrigger 타입 추가
 interface PostDetailItemProps extends Post {
@@ -39,7 +30,6 @@ export default function PostDetailItem({
   comments,
   createdAt,
   channel,
-  imagePublicId,
   updateReloadTrigger,
   theme,
 }: PostDetailItemProps) {
@@ -53,10 +43,11 @@ export default function PostDetailItem({
   const modalRef = useRef<HTMLDivElement | null>(null);
 
   // 파싱 결과 저장
-  const parsedTitle = JSON.parse(title);
-  const pollOptions: PollOption[] = parsedTitle.pollOptions || [];
+
+  const pollOptions = JSON.parse(title).pollOptions;
 
   // 채널 id 값 받아오기
+
   const channelIdList = usePostStore((state) => state.channelIdList);
 
   // 로그인한 사용자 정보 받아오기
@@ -115,6 +106,7 @@ export default function PostDetailItem({
     if (gap < 60) return `${gap}초 전`;
     if (gap < 3600) return `${Math.floor(gap / 60)}분 전`;
     if (gap < 86400) return `${Math.floor(gap / 3600)}시간 전`;
+
     return writeTime.format('YYYY.MM.DD');
   };
 
@@ -270,12 +262,7 @@ export default function PostDetailItem({
             <div className="mt-4">
               <PollOptionsVoteView
                 options={pollOptions}
-                postId={_id}
-                channelId={channelId ?? ''}
-                originalTitle={parsedTitle.title}
-                originalContent={parsedTitle.content}
-                imageToDeletePublicId={imagePublicId || null}
-                imageFile={null}
+                comments={comments}
                 theme={theme}
               />
             </div>
@@ -288,7 +275,16 @@ export default function PostDetailItem({
         <div className="h-[59px]">
           <LikeComment
             likeCount={likes.length}
-            commentCount={comments.length}
+            commentCount={
+              comments.filter((c) => {
+                try {
+                  const parsed = JSON.parse(c.comment);
+                  return parsed.type !== 'vote';
+                } catch {
+                  return true;
+                }
+              }).length
+            }
             postId={_id}
             likes={likes}
             theme={theme}
@@ -298,7 +294,7 @@ export default function PostDetailItem({
         </div>
         <div>
           {commentListItem.length === 0 && <></>}
-          {commentListItem.length !== 0 &&
+          {/* {commentListItem.length !== 0 &&
             [...commentListItem]
               .sort(
                 (a, b) =>
@@ -312,7 +308,30 @@ export default function PostDetailItem({
                   updateReloadTrigger={updateReloadTrigger}
                   theme={theme}
                 />
-              ))}
+              ))} */}
+
+          {commentListItem
+            .filter((item) => {
+              try {
+                const parsed = JSON.parse(item.comment);
+                return parsed.type !== 'vote';
+              } catch {
+                return true;
+              }
+            })
+            .sort(
+              (a, b) =>
+                new Date(getDatetimeSortFormat(a.updatedAt)).getTime() -
+                new Date(getDatetimeSortFormat(b.updatedAt)).getTime()
+            )
+            .map((item) => (
+              <CommentListItem
+                key={item._id}
+                {...item}
+                updateReloadTrigger={updateReloadTrigger}
+                theme={theme}
+              />
+            ))}
         </div>
       </div>
       {isDeleteModalOpen && (

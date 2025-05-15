@@ -73,14 +73,23 @@ export default function EditorToolbar({
             const reader = new FileReader();
             reader.onload = () => {
               const result = reader.result;
+
               if (typeof result === 'string') {
+                editor?.chain().focus().insertContent('\n').run();
+
                 editor
                   ?.chain()
                   .focus()
-                  .insertContent({
-                    type: 'customImage',
-                    attrs: { src: result },
-                  })
+                  .insertContent([
+                    {
+                      type: 'customImage',
+                      attrs: { src: result },
+                    },
+                    {
+                      type: 'text',
+                      text: ' ',
+                    },
+                  ])
                   .run();
               }
             };
