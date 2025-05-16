@@ -221,28 +221,6 @@ export default function PostList({ theme }: { theme: Theme }) {
                     ))}
               </>
             )}
-            {postListItem.length !== 0 &&
-              select === 'recent' &&
-              [...postListItem]
-                .sort(
-                  (a, b) =>
-                    new Date(getDatetimeFormat(b.createdAt)).getTime() -
-                    new Date(getDatetimeFormat(a.createdAt)).getTime()
-                )
-                .map((item) => (
-                  <PostListItem key={item._id} {...item} theme={theme} />
-                ))}
-            {postListItem.length !== 0 &&
-              select === 'popular' &&
-              [...postListItem]
-                .sort((a, b) => {
-                  if (b.likes.length - a.likes.length !== 0)
-                    return b.likes.length - a.likes.length;
-                  else return b.comments.length - a.comments.length;
-                })
-                .map((item) => (
-                  <PostListItem key={item._id} {...item} theme={theme} />
-                ))}
           </div>
         </div>
       </div>
