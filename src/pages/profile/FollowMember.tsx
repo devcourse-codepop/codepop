@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { getAllUsersData } from '../../api/memberbox/member';
 import { useAuthStore } from '../../stores/authStore';
 import ChatModal from '../../pages/message/ChatModal';
-// import { User1 } from '../../pages/message/ChatModal';
 import useChatClose from '../../utils/changeMessageIcon';
 import { handleFollow, handleUnfollow } from '../../utils/followHandlers';
 import { Theme } from '../../types/darkModeTypes';
@@ -30,7 +29,7 @@ export default function FollowerMember({
   const [openUser, setOpenUser] = useState<string>('');
   const [users, setUsers] = useState<User[]>([]);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [chatTargetUser, setChatTargetUser] = useState<User1 | null>(null);
+  const [chatTargetUser, setChatTargetUser] = useState<User | null>(null);
   const [activeTab, setActiveTab] = useState<'following' | 'follower'>(followType);
   const onClose = useChatClose(setIsChatOpen);
   const modalRef = useRef<HTMLUListElement>(null);
@@ -168,7 +167,7 @@ export default function FollowerMember({
                     <li
                       className='px-3 py-1 block  opacity-70 hover:opacity-100'
                       onClick={() => {
-                        setChatTargetUser({ id: listedUser._id, name: listedUser.fullName });
+                        setChatTargetUser(listedUser);
                         setIsChatOpen(true);
                       }}
                     >
@@ -226,7 +225,7 @@ export default function FollowerMember({
                     <li
                       className='px-3 py-1 block  opacity-70 hover:opacity-100'
                       onClick={() => {
-                        setChatTargetUser({ id: listedUser._id, name: listedUser.fullName });
+                        setChatTargetUser(listedUser);
                         setIsChatOpen(true);
                       }}
                     >

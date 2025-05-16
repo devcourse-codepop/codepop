@@ -68,9 +68,10 @@ interface User {
   isOnline: boolean;
   posts?: Post[];
   likes?: Like[];
+  notifications?: Notification[];
   comments?: Comment[];
-  followers: Follower[];
-  following: Follower[];
+  followers: Follow[];
+  following: Follow[];
   messages?: Message[];
   createdAt?: string;
   updatedAt?: string;
@@ -86,7 +87,14 @@ type UserPostInfo = {
   userData: User | null;
 };
 
-//Conversation, Notification 제외
+interface Conversation {
+  _id: string[];
+  message: string;
+  sender: User;
+  receiver: User;
+  seen: boolean;
+  createdAt: string;
+}
 
 type EnteredValues = {
   myName: string;
@@ -134,3 +142,8 @@ declare module 'react-js-pagination' {
 
   export default class Pagination extends React.Component<PaginationProps> {}
 }
+
+type ChatTargetUser = {
+  id: string;
+  name: string;
+};
