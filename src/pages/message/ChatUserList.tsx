@@ -59,6 +59,7 @@ export default function ChatUserList({
     try {
       const { data } = await getMessageList();
       // console.log(data);
+
       setConversations(data);
       setIsLoading(false);
     } catch (e) {
