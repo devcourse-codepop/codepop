@@ -6,37 +6,25 @@ import defaultProfileImage from '../../assets/images/profile/defaultProfileImage
 import { useEffect, useState } from 'react';
 import ChatModal from '../message/ChatModal';
 import useChatClose from '../../utils/changeMessageIcon';
-import { postFollow, postUnfollow } from '../../api/follow/follow';
+import FollowModal from './FollowModal';
+import followIcon from '../../assets/images/profile/follow-icon.svg';
+import { handleFollow, handleUnfollow } from '../../utils/followHandlers';
 
 export default function ProfileLeft({ userData, userId, refetchUserData }: UserInfo) {
   const user = useAuthStore((state) => state.user);
   const setUser = useAuthStore((state) => state.setUser);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFollowed, setIsFollowed] = useState(false);
+  const [followData, setFollowData] = useState<Follow[]>([]);
+  const [followType, setFollowType] = useState<'follower' | 'following'>('follower');
   const onClose = useChatClose(setIsChatOpen);
   const navigate = useNavigate();
 
-  const handleFollow = async () => {
-    if (user && userId) {
-      const updatedUserData = await postFollow(userId);
-      const newFollowData: Follow = updatedUserData.data;
-      const updatedFollowing = [...user.following, newFollowData];
-      setUser({ ...user, following: updatedFollowing });
-      setIsFollowed(true);
-      await refetchUserData();
-    }
-  };
-  const handleUnfollow = async () => {
-    if (user && userId) {
-      const followToRemove = user.following.find((follow) => follow.user === userId && follow.follower === user._id);
-      if (!followToRemove) return;
-      console.log(followToRemove._id);
-      await postUnfollow(followToRemove._id);
-      const updatedFollowing = user.following.filter((follow) => follow._id !== followToRemove._id);
-      setUser({ ...user, following: updatedFollowing });
-      setIsFollowed(false);
-      await refetchUserData();
-    }
+  const openModalWithData = (data: Follow[] | undefined) => {
+    if (!data) return;
+    setFollowData(data);
+    setIsModalOpen(true);
   };
 
   useEffect(() => {
@@ -58,11 +46,25 @@ export default function ProfileLeft({ userData, userId, refetchUserData }: UserI
           <p className='font-bold text-[20px] mt-[40px]'> {userData?.fullName}</p>
           <p className='font-normal text-[14px] mt-[3px] w-[200px] break-words'>{userData?.email}</p>
           <div className='flex gap-8.5 text-[16px] font-medium mt-[40px] '>
-            <div className='flex  items-center cursor-pointer'>
+            <div
+              className='flex  items-center cursor-pointer'
+              onClick={() => {
+                console.log('팔로워 리스트:', userData?.followers);
+                openModalWithData(userData?.followers);
+                setFollowType('follower');
+              }}
+            >
               <span>팔로워</span>
               <span className='ml-[8px]'>{userData?.followers.length}</span>
             </div>
-            <div className='flex  items-center cursor-pointer'>
+            <div
+              className='flex  items-center cursor-pointer'
+              onClick={() => {
+                console.log('팔로잉 리스트:', userData?.following);
+                openModalWithData(userData?.following);
+                setFollowType('following');
+              }}
+            >
               <span>팔로잉</span>
               <span className='ml-[8px]'>{userData?.following.length}</span>
             </div>
@@ -77,13 +79,41 @@ export default function ProfileLeft({ userData, userId, refetchUserData }: UserI
             <div className='mt-[25px]'>
               {userId &&
                 (isFollowed ? (
-                  <Button value='언팔로우' className='button-style3' onClick={handleUnfollow} />
+                  <Button
+                    value='팔로우 취소'
+                    className='button-style3'
+                    onClick={() => {
+                      if (!user) return;
+                      handleUnfollow(user, userId, setUser, refetchUserData);
+                    }}
+                  />
                 ) : (
-                  <Button value='팔로우' className='button-style3' onClick={handleFollow} />
+                  <Button
+                    value='팔로우'
+                    className='button-style3'
+                    onClick={() => {
+                      if (!user) return;
+                      handleFollow(user, userId, setUser, refetchUserData);
+                    }}
+                    imageSrc={followIcon}
+                    imageAlt='팔로우 아이콘'
+                  />
                 ))}
             </div>
           )}
         </div>
+        {isModalOpen && (
+          <FollowModal
+            isOpen={isModalOpen}
+            onClose={async () => {
+              setIsModalOpen(false);
+              refetchUserData();
+            }}
+            followData={followData}
+            followType={followType}
+            targetUserId={userId}
+          />
+        )}
       </div>
     </>
   );
