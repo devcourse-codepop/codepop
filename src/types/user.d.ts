@@ -66,15 +66,14 @@ interface User {
   emailVerified: boolean;
   banned: boolean;
   isOnline: boolean;
-  posts: Post[];
-  likes: Like[];
-  comments: Comment[];
+  posts?: Post[];
+  likes?: Like[];
+  comments?: Comment[];
   followers: Follower[];
   following: Follower[];
-  messages: Message[];
-  createdAt: string;
-  updatedAt: string;
-  image: string;
+  messages?: Message[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 type UserInfo = {
