@@ -119,7 +119,7 @@ export default function PostList({ theme }: { theme: Theme }) {
   const getPostListItem = async () => {
     try {
       const { data } = await getPostList(channelIdList[Number(channel) - 1]);
-      console.log(data);
+      // console.log(data);
       setPostListItem(data);
       setIsLoading(false);
     } catch (e) {
