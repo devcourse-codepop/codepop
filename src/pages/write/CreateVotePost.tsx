@@ -32,7 +32,6 @@ export default function CreateVotePost({ theme }: { theme: Theme }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     const titleText = titleRef.current?.value || '';
 
     if (!channelId) {
@@ -53,13 +52,13 @@ export default function CreateVotePost({ theme }: { theme: Theme }) {
     formData.append('channelId', channelIdList[Number(channel) - 1]);
 
     if (imageFile) {
-      formData.append('image', imageFile);
+      formData.append('image', imageFile); // 이미지 파일 추가
     }
 
     try {
       const res = await createCodePost(formData);
-
       console.log('작성 성공:', res.data);
+      // 성공 시 이동
       navigate(`/channel/${channelId}`);
     } catch (err) {
       console.error('작성 실패', err);

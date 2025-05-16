@@ -10,7 +10,6 @@ import { useAuthStore } from '../../stores/authStore';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
 import ChatModal from '../../pages/message/ChatModal';
-// import { User1 } from '../..//pages/message/ChatModal';
 import useChatClose from '../../utils/changeMessageIcon';
 import NotLoginModal from '../post/NotLoginModal';
 

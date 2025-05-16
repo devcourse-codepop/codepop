@@ -31,7 +31,6 @@ export default function CreateSetPost({ theme }: { theme: Theme }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     const titleText = titleRef.current?.value || '';
 
     if (!channelId) {
@@ -58,6 +57,7 @@ export default function CreateSetPost({ theme }: { theme: Theme }) {
     try {
       const res = await createCodePost(formData);
       console.log('작성 성공:', res.data);
+
       navigate(`/channel/${channelId}`);
     } catch (err) {
       console.error('작성 실패', err);

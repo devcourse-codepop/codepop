@@ -4,7 +4,7 @@ import PostDetailItem from '../components/post/PostDetailItem';
 import WriteCommentItem from '../components/post/WriteCommentItem';
 import { getPostList } from '../api/post/post';
 import { usePostStore } from '../stores/postStore';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Theme } from '../types/darkModeTypes';
 
 export default function PostDetail({ theme }: { theme: Theme }) {
@@ -30,27 +30,30 @@ export default function PostDetail({ theme }: { theme: Theme }) {
   };
 
   // 해당 게시글만 필터링
-  const filteringItem = (data: Post[]) => {
-    for (const res of data) {
-      if (res._id === post) {
-        setPostItem(structuredClone(res));
+  const filteringItem = useCallback(
+    (data: Post[]) => {
+      for (const res of data) {
+        if (res._id === post) {
+          setPostItem(structuredClone(res));
+        }
       }
-    }
-  };
+    },
+    [post]
+  );
 
   // 게시글 목록 불러오기 (게시글 id에 해당하는 게시글만 필터링)
-  const getPostItem = async () => {
+  const getPostItem = useCallback(async () => {
     try {
       const { data } = await getPostList(channelIdList[Number(channel) - 1]);
       filteringItem(data);
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
-  };
+  }, [channel, channelIdList, filteringItem]);
 
   useEffect(() => {
     getPostItem();
-  }, [reloadTrigger]);
+  }, [reloadTrigger, getPostItem]);
 
   // 댓글 아이콘 클릭 후 현재 페이지 접근 시, 댓글 작성 컴포넌트가 화면에 보이도록 스크롤 조정
   useEffect(() => {

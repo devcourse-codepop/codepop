@@ -1,6 +1,5 @@
 import Avatar from '../avatar/Avatar';
 import LikeComment from '../reaction/LikeComment';
-import dayjs from 'dayjs';
 import { Link, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 import { useState } from 'react';
@@ -12,6 +11,7 @@ import { useChannelItemStore } from '../../stores/channelStore';
 import PollOptionsView from '../poll/PollOptionsView';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
+import getElapsedTime from '../../utils/getDatetime';
 
 interface PostListItemProps extends Post {
   theme: Theme;
@@ -69,19 +69,6 @@ export default function PostListItem(props: PostListItemProps) {
   // 코드 블록 개수 가져오기
   const setCodeCount = () => {
     if (codes.length > 0) return codes.length;
-  };
-
-  // 게시글 작성 시간 포맷 설정
-  const getElapsedTime = () => {
-    const now = dayjs().add(9, 'hour');
-    const writeTime = dayjs(createdAt).add(9, 'hour');
-
-    const gap = now.diff(writeTime, 's');
-    if (gap < 60) return `${gap}초 전`;
-    if (gap < 3600) return `${Math.floor(gap / 60)}분 전`;
-    if (gap < 86400) return `${Math.floor(gap / 3600)}시간 전`;
-
-    return writeTime.format('YYYY.MM.DD');
   };
 
   // 게시글 클릭 시, 로그인하지 않은 사용자라면 로그인 관련 모달을, 탈퇴한 사용자 게시글이라면 탈퇴한 사용자 관련 모달을 띄워주기
@@ -183,7 +170,7 @@ export default function PostListItem(props: PostListItemProps) {
               : 'text-[#111111] opacity-50'
           }`}
         >
-          {getElapsedTime()}
+          {getElapsedTime(createdAt)}
         </div>
         <hr
           className={`mx-[18px] ${
