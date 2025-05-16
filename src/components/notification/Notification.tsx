@@ -181,15 +181,17 @@ export default function Notification({ theme }: { theme: Theme }) {
       {notifiOpen && (
         <div
           ref={modalRef}
-          className={`absolute gap-3 rounded-[10px] py-4 px-5 shadow-md w-[360px] border border-[#eee] z-10 -right-5 top-8.5 ${
+          className={`absolute gap-3 rounded-[10px] py-4 px-5 shadow-md w-[360px] border  z-10 -right-5 top-8.5 ${
             dark(theme)
-              ? 'bg-[#2d2d2d] text-[#ffffff]'
-              : 'bg-[#ffffff] text-[#111111]'
+              ? 'bg-[#2d2d2d] text-[#ffffff] border-[#4a4a4a]'
+              : 'bg-[#ffffff] text-[#111111] border-[#eee]'
           }`}
         >
           <span
-            className={`w-[12px] h-[12px] rounded-[2px] absolute rotate-135 -top-1.5 right-6 -z-2 border-b border-l border-[#eee] ${
-              dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+            className={`w-[12px] h-[12px] rounded-[2px] absolute rotate-135 -top-1.5 right-6 -z-2 border-b border-l  ${
+              dark(theme)
+                ? 'bg-[#2d2d2d] border-[#4a4a4a]'
+                : 'bg-[#ffffff] border-[#eee]'
             }`}
           ></span>
           <div
