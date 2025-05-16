@@ -83,6 +83,14 @@ export default function PostList({ theme }: { theme: Theme }) {
     navigate(`/channel/${channel}/write`);
   };
 
+  // 엔터 입력 시에도 메시지 전송하기
+  const keyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      clickSearchHandler();
+    }
+  };
+
   // 검색한 내용에 해당하는 게시글만 필터링
   const filteringItem = (data: Post[]) => {
     const temp = [];
@@ -101,6 +109,7 @@ export default function PostList({ theme }: { theme: Theme }) {
     try {
       const { data } = await getSearchPostList(input);
       filteringItem(data);
+      setInput('');
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
@@ -152,6 +161,7 @@ export default function PostList({ theme }: { theme: Theme }) {
                   type="text"
                   value={input}
                   onChange={(e) => changeInputHandler(e)}
+                  onKeyDown={keyDownHandler}
                   placeholder="검색"
                   className="flex-grow text-[11px] outline-none placeholder-[#989898]"
                 />
