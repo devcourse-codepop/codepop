@@ -1,17 +1,21 @@
 import { useRef, useState } from 'react';
 import { postComments, postNotifications } from '../../api/post/post';
 import CommentEditor from '../editor/CommentEditor';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 import { useNavigate } from 'react-router-dom';
 
 export default function WriteCommentItem({
   channelId,
   postId,
   postUserId,
+  theme,
   updateReloadTrigger,
 }: {
   channelId: string;
   postId: string;
   postUserId: string;
+  theme: Theme;
   updateReloadTrigger: () => void;
 }) {
   const navigate = useNavigate();
@@ -57,8 +61,6 @@ export default function WriteCommentItem({
         postId
       );
       console.log(data);
-
-      //window.location.href = `/channel/${channelId}/post/${postId}`;
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
@@ -72,7 +74,11 @@ export default function WriteCommentItem({
   return (
     <>
       <div
-        className="relative w-full h-auto rounded-[5px] bg-white shadow-[0_4px_4px_rgba(0,0,0,0.25)]"
+        className={`relative w-full h-auto rounded-[5px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] ${
+          dark(theme)
+            ? 'bg-[#2d2d2d] text-[#ffffff]'
+            : 'bg-[#ffffff] text-[#111111]'
+        }`}
         ref={bottomRef}
       >
         <CommentEditor
@@ -82,6 +88,7 @@ export default function WriteCommentItem({
           submitHandler={submitHandler}
           onChange={(v) => changeCommentHandler(v)}
           showCodeButton={true}
+          theme={theme}
         />
       </div>
     </>

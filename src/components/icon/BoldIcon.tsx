@@ -1,10 +1,12 @@
-import boldIcon from "../../assets/BoldIcon.svg";
+import boldIcon from '../../assets/images/editor/bold-icon.svg';
+import boldIconWhite from '../../assets/images/editor/bold-icon-white.svg';
+import { Theme } from '../../types/darkModeTypes';
 
-export default function BoldIcon() {
+export default function BoldIcon({ theme }: { theme: Theme }) {
   return (
     <img
-      src={boldIcon}
-      className="w-[30px] h-[30px] inline-block cursor-pointer p-1"
+      src={`${theme.name === 'Dark' ? boldIconWhite : boldIcon}`}
+      className="w-[29.5px] h-[29.5px] inline-block cursor-pointer p-1"
     />
   );
 }

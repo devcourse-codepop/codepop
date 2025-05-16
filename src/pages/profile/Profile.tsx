@@ -2,9 +2,11 @@ import { useCallback, useEffect, useState } from 'react';
 import ProfileLeft from './ProfileLeft';
 import ProfileRight from './ProfileRight';
 import { getUserData } from '../../api/profileInfo/profile';
-import defaultCover from '../../assets/images/profile/defaultCover.png';
+import defaultCover from '../../assets/images/profile/default-cover.png';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 
-export default function Profile({ userId }: { userId: string }) {
+export default function Profile({ userId, theme }: { userId: string; theme: Theme }) {
   const [userData, setUserData] = useState<User | null>(null);
 
   const fetchUserData = useCallback(async () => {
@@ -28,7 +30,11 @@ export default function Profile({ userId }: { userId: string }) {
   }
 
   return (
-    <div className='w-full h-[calc(100vh-100px-30px)] bg-white rounded-[10px] shadow-md font-semibold overflow-hidden flex flex-col'>
+    <div
+      className={`w-full h-[calc(100vh-100px-30px)] rounded-[10px] shadow-md font-semibold overflow-hidden flex flex-col ${
+        dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+      }`}
+    >
       <div className='h-[223px] flex-shrink-0'>
         <img
           src={userData?.coverImage || defaultCover}
@@ -37,8 +43,8 @@ export default function Profile({ userId }: { userId: string }) {
         />
       </div>
       <div className=' flex  overflow-hidden'>
-        <ProfileLeft userData={userData} userId={userId} refetchUserData={fetchUserData} />
-        <ProfileRight userData={userData} />
+        <ProfileLeft userData={userData} userId={userId} refetchUserData={fetchUserData} theme={theme} />
+        <ProfileRight userData={userData} theme={theme} />
       </div>
     </div>
   );

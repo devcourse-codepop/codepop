@@ -1,11 +1,15 @@
-import likeClick from '../../assets/LikeClick.svg';
-import likeRed from '../../assets/images/LikeRed.svg';
-import comment from '../../assets/images/comment-outline.svg';
+import likeClick from '../../assets/images/like/like-click.svg';
+import likeClickWhite from '../../assets/images/like/like-click-white.svg';
+import likeRed from '../../assets/images/like/like-red.svg';
+import comment from '../../assets/images/comment/comment-outline.svg';
+import commentWhite from '../../assets/images/comment/comment-white.svg';
 import { useEffect, useState } from 'react';
 import { Channel, Like, User } from '../../types';
 import { deleteLikes, postLikes, postNotifications } from '../../api/post/post';
 import { useAuthStore } from '../../stores/authStore';
 import NotLoginModal from '../post/NotLoginModal';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 import { useNavigate } from 'react-router-dom';
 import { useChannelItemStore } from '../../stores/channelStore';
 import DeletedUserModal from '../post/DeletedUserModal';
@@ -16,6 +20,7 @@ interface LikeCommentProps {
   commentCount: number;
   postId: string;
   likes: Like[];
+  theme: Theme;
   author: User;
   channel: Channel;
 }
@@ -25,6 +30,7 @@ export default function LikeComment({
   commentCount,
   postId,
   likes,
+  theme,
   author,
   channel,
 }: LikeCommentProps) {
@@ -149,23 +155,42 @@ export default function LikeComment({
     <div className="reaction flex justify-end items-center gap-5 p-4">
       <div className="flex items-center gap-1.5">
         <img
-          src={checkLike ? likeRed : likeClick}
+          src={checkLike ? likeRed : dark(theme) ? likeClickWhite : likeClick}
           alt="좋아요"
           className="w-5 h-5 cursor-pointer"
           onClick={clickLikes}
         />
-        <span className="text-sm">{like}</span>
+        <span
+          className={`text-sm ${
+            dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
+          }`}
+        >
+          {like}
+        </span>
       </div>
 
       <div
         className="flex items-center gap-[10px] cursor-pointer"
         onClick={clickComments}
       >
-        <img src={comment} alt="댓글" className="w-5 h-5 relative top-[1px]" />
-        <span className="text-sm">{commentCount}</span>
+        <img
+          src={dark(theme) ? commentWhite : comment}
+          alt="댓글"
+          className="w-5 h-5 relative top-[1px]"
+        />
+        <span
+          className={`text-sm ${
+            dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
+          }`}
+        >
+          {commentCount}
+        </span>
       </div>
       {isLoginModalOpen && (
-        <NotLoginModal closeLoginModalHanlder={closeLoginModalHanlder} />
+        <NotLoginModal
+          closeLoginModalHanlder={closeLoginModalHanlder}
+          theme={theme}
+        />
       )}
       {isUserModalOpen && (
         <DeletedUserModal closeUserModalHanlder={closeUserModalHanlder} />

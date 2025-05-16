@@ -1,10 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
 import Pagination from 'react-js-pagination';
 import { getAuthorPostData, getPostData } from '../../api/post/post';
-import commentIcon from '../../assets/images/comment-outline.svg';
+import commentWhite from '../../assets/images/comment/comment-white.svg';
+import commentIcon from '../../assets/images/comment/comment-outline.svg';
 import { useNavigate } from 'react-router-dom';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 
-export default function ProfileRight({ userData }: UserPostInfo) {
+interface ProfileRightProps extends UserPostInfo {
+  theme: Theme;
+}
+
+export default function ProfileRight({ userData, theme }: ProfileRightProps) {
   const userId = userData?._id;
   const [userPostData, setUserPostData] = useState<Post[] | null>(null);
   const [selectedTab, setSelectedTab] = useState<'posts' | 'likes' | 'comments'>('posts');
@@ -33,7 +40,16 @@ export default function ProfileRight({ userData }: UserPostInfo) {
   const fetchCommentedPosts = useCallback(async () => {
     if (!userData?.comments) return;
 
-    const sortedComments = [...userData.comments].sort(
+    const filteredComments = userData.comments.filter((comment) => {
+      try {
+        const parsed = JSON.parse(comment.comment);
+        return parsed.type !== 'vote';
+      } catch {
+        return true;
+      }
+    });
+
+    const sortedComments = [...filteredComments].sort(
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
 
@@ -178,8 +194,8 @@ export default function ProfileRight({ userData }: UserPostInfo) {
 
                   {selectedTab === 'comments' && post.comments.length > 0 && (
                     <div className='mt-1 text-[12px] text-gray-700 flex'>
-                      <img src={commentIcon} />
-                      <p className='ml-[5px]'>+{post.myCommentCount}개</p>
+                      <img src={dark(theme) ? commentWhite : commentIcon} className='w-5 h-5' />
+                      <p className={`ml-[5px] ${dark(theme) ? 'text-[#ffffff]' : ''}`}>+{post.myCommentCount}개</p>
                     </div>
                   )}
                 </div>
@@ -194,7 +210,7 @@ export default function ProfileRight({ userData }: UserPostInfo) {
       </div>
 
       {userPostData && userPostData.length > postsPerPage && (
-        <div className='mt-8 flex justify-center'>
+        <div className={`mt-8 flex justify-center ${dark(theme) ? 'text-[#ffffff]' : ''}`}>
           <Pagination
             activePage={currentPage}
             itemsCountPerPage={postsPerPage}
@@ -207,7 +223,7 @@ export default function ProfileRight({ userData }: UserPostInfo) {
             lastPageText={<span className='text-xl leading-none flex items-center justify-center'>»</span>}
             innerClass='flex gap-2 text-sm'
             itemClass='px-3 py-1 rounded-[5px] cursor-pointer'
-            activeClass='bg-[#1E293B] text-white'
+            activeClass={`bg-[#1E293B] text-white ${dark(theme) ? 'bg-[#1e1e1e]' : ''}`}
           />
         </div>
       )}

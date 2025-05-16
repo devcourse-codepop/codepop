@@ -103,7 +103,7 @@ interface EditMenuProps {
 type PhotoUploadModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (file: File, previewUrl: string) => void;
+  onSave: (file: File) => void;
 };
 
 type EnteredErrorValues = {

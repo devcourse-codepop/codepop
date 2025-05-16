@@ -2,7 +2,9 @@ import { Mail } from 'lucide-react';
 import Button from '../../components/common/Button';
 import { useAuthStore } from '../../stores/authStore';
 import { useNavigate } from 'react-router-dom';
-import defaultProfileImage from '../../assets/images/profile/defaultProfileImage.jpg';
+import defaultProfileImage from '../../assets/images/profile/default-profile-img.jpg';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 import { useEffect, useState } from 'react';
 import ChatModal from '../message/ChatModal';
 import useChatClose from '../../utils/changeMessageIcon';
@@ -10,7 +12,11 @@ import FollowModal from './FollowModal';
 import followIcon from '../../assets/images/profile/follow-icon.svg';
 import { handleFollow, handleUnfollow } from '../../utils/followHandlers';
 
-export default function ProfileLeft({ userData, userId, refetchUserData }: UserInfo) {
+interface ProfileLeftProps extends UserInfo {
+  theme: Theme;
+}
+
+export default function ProfileLeft({ userData, theme, userId, refetchUserData }: ProfileLeftProps) {
   const user = useAuthStore((state) => state.user);
   const setUser = useAuthStore((state) => state.setUser);
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -36,7 +42,11 @@ export default function ProfileLeft({ userData, userId, refetchUserData }: UserI
 
   return (
     <>
-      <div className='w-[291px] h-[633px] rounded-bl-[10px] px-[50px] border-r-2 border-gray-300 '>
+      <div
+        className={`w-[291px] h-[633px] rounded-bl-[10px] px-[50px] border-r-2 border-gray-300
+    ${dark(theme) ? 'text-[#ffffff]' : ''}
+  `}
+      >
         <img
           src={userData?.image || defaultProfileImage}
           alt='Profile'
@@ -71,9 +81,19 @@ export default function ProfileLeft({ userData, userId, refetchUserData }: UserI
           </div>
           {user?._id === userId ? (
             <div className='mt-[25px] flex gap-6'>
-              <Button value='프로필 수정' className='button-style3' onClick={() => navigate('/profile/edit')} />
-              <Mail className='w-[30px] h-[30px] cursor-pointer' onClick={() => setIsChatOpen(true)} />
-              <ChatModal isOpen={isChatOpen} onClose={onClose} />
+              <Button
+                value='프로필 수정'
+                className={`button-style3 ${dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''}`}
+                onClick={() => navigate('/profile/edit')}
+              />
+              <Mail
+                className={`w-[30px] h-[30px] cursor-pointer ${
+                  dark(theme) ? 'text-[#ffffff] opacity-80' : 'text-[#111111]'
+                }`}
+                onClick={() => setIsChatOpen(true)}
+              />
+
+              <ChatModal isOpen={isChatOpen} onClose={onClose} theme={theme} />
             </div>
           ) : (
             <div className='mt-[25px]'>

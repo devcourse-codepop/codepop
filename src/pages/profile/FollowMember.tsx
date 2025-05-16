@@ -1,7 +1,7 @@
-import menuIcon from '../../assets/MenuIcon.svg';
+import menuIcon from '../../assets/images/menu/menu-icon.svg';
 import { Search } from 'lucide-react';
 import Avatar from '../../components/avatar/Avatar';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getAllUsersData } from '../../api/memberbox/member';
 import { useAuthStore } from '../../stores/authStore';
@@ -141,7 +141,7 @@ export default function FollowerMember({
           followerMembers.map((listedUser) => (
             <div className='relative' key={listedUser._id} id={listedUser._id}>
               <div className='memberCard cursor-pointer' onClick={() => ToggleHandelr(listedUser._id)}>
-                <Avatar name={listedUser.fullName} email={listedUser.email} image={listedUser.image} />
+                <Avatar name={listedUser.fullName} email={listedUser.email} image={listedUser.image} theme={theme} />
               </div>
               <button className='absolute right-0 top-4 cursor-pointer' onClick={() => ToggleHandelr(listedUser._id)}>
                 <img src={menuIcon} className='rotate-90' />
@@ -199,7 +199,7 @@ export default function FollowerMember({
           followingMembers.map((listedUser) => (
             <div className='relative' key={listedUser._id} id={listedUser._id}>
               <div className='memberCard cursor-pointer' onClick={() => ToggleHandelr(listedUser._id)}>
-                <Avatar name={listedUser.fullName} email={listedUser.email} image={listedUser.image} />
+                <Avatar name={listedUser.fullName} email={listedUser.email} image={listedUser.image} theme={theme} />
               </div>
               <button className='absolute right-0 top-4 cursor-pointer' onClick={() => ToggleHandelr(listedUser._id)}>
                 <img src={menuIcon} className='rotate-90' />
@@ -250,7 +250,7 @@ export default function FollowerMember({
         <div className='h-4' />
       </div>
 
-      <ChatModal initialUser={chatTargetUser} isOpen={isChatOpen} onClose={onClose} />
+      <ChatModal initialUser={chatTargetUser} isOpen={isChatOpen} onClose={onClose} theme={theme} />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { Message } from '../types';
 
 interface User {
   _id: string;
@@ -12,6 +13,7 @@ interface User {
   isOnline: boolean;
   followers: Follow[];
   following: Follow[];
+  messages: Message[];
 }
 
 interface AuthStore {
@@ -60,6 +62,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
       isOnline: true,
       followers: userData.followers,
       following: userData.following,
+      messages: userData.messages,
     };
     set({ user, isLoading: false, isLoggedIn: true });
   },

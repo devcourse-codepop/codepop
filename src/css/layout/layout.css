@@ -3,6 +3,12 @@
   padding: 5px 10px 15px 0;
   border-bottom: 1px solid #ddd;
 }
+
+.dark-myInfoCard .avartar-box {
+  padding: 5px 10px 15px 0;
+  border-bottom: 1px solid #484848;
+}
+
 .member-list {
   padding-bottom: 20px;
   box-sizing: border-box;
@@ -14,6 +20,20 @@
 .member-list::-webkit-scrollbar-thumb {
   background: #adadad50;
   border-top: 5px solid #fff;
+}
+
+.dark-member-list {
+  padding-bottom: 20px;
+  box-sizing: border-box;
+}
+.dark-member-list::-webkit-scrollbar {
+  width: 2px;
+  border-radius: 2px;
+}
+
+.dark-member-list::-webkit-scrollbar-thumb {
+  background: #1e1e1e;
+  border-top: 5px solid #1e1e1e;
 }
 
 .memberCard .avartar-box {

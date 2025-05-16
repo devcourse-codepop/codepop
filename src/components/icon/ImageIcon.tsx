@@ -1,11 +1,20 @@
-import imageIcon from '../../assets/ImageIcon.svg';
+import imageIcon from '../../assets/images/editor/img-icon.svg';
+import imageIconWhite from '../../assets/images/editor/img-icon-white.svg';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 
-export default function ImageIcon({ onClick }: { onClick?: () => void }) {
+export default function ImageIcon({
+  onClick,
+  theme,
+}: {
+  onClick?: () => void;
+  theme: Theme;
+}) {
   return (
     <>
       <img
-        src={imageIcon}
-        className="w-[30px] h-[30px] inline-block cursor-pointer"
+        src={dark(theme) ? imageIconWhite : imageIcon}
+        className="w-[25px] h-[25px] inline-block cursor-pointer"
         onClick={onClick}
       />
     </>
