@@ -103,7 +103,7 @@ export default function SignUp({ theme }: { theme: Theme }) {
     const value = e.target.value;
     setPassword(value);
 
-    if (!validatePassword(password)) {
+    if (!validatePassword(value)) {
       setPasswordError(
         '비밀번호는 영문, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.'
       );
