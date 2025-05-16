@@ -108,8 +108,8 @@ export default function ChatUserList({
       ) : (
         <div
           className={`flex-1 overflow-y-auto messageBox ${
-            dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
-          }`}
+            dark(theme) ? 'dark' : ''
+          } ${dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'}`}
         >
           {conversations.map((con) => {
             const opponentId = getOpponentId(con._id);
