@@ -198,7 +198,10 @@ export default function LikeComment({
         />
       )}
       {isUserModalOpen && (
-        <DeletedUserModal closeUserModalHanlder={closeUserModalHanlder} />
+        <DeletedUserModal
+          closeUserModalHanlder={closeUserModalHanlder}
+          theme={theme}
+        />
       )}
     </div>
   );
