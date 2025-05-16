@@ -38,7 +38,7 @@ interface Post {
   myCommentCount?: number;
 }
 
-interface Follower {
+interface Follow {
   _id: string;
   user: string;
   follower: string;
@@ -66,26 +66,24 @@ interface User {
   emailVerified: boolean;
   banned: boolean;
   isOnline: boolean;
-  posts: Post[];
-  likes: Like[];
-  comments: Comment[];
+  posts?: Post[];
+  likes?: Like[];
+  comments?: Comment[];
   followers: Follower[];
   following: Follower[];
-  messages: Message[];
-  createdAt: string;
-  updatedAt: string;
-  image: string;
+  messages?: Message[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 type UserInfo = {
   userData: User | null;
-  onSelectTab: React.Dispatch<React.SetStateAction<'posts' | 'likes' | 'comments'>>;
   userId?: string;
+  refetchUserData: () => void;
 };
 
 type UserPostInfo = {
   userData: User | null;
-  selectedTab: 'posts' | 'likes' | 'comments';
 };
 
 //Conversation, Notification 제외

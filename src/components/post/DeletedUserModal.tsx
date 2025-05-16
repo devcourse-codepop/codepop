@@ -1,10 +1,15 @@
 import Button from '../common/Button';
 import close from '../../assets/images/close/close-btn.svg';
+import closeWhite from '../../assets/images/close/close-btn-white.svg';
+import { dark } from '../../utils/darkModeUtils';
+import { Theme } from '../../types/darkModeTypes';
 
 export default function DeletedUserModal({
   closeUserModalHanlder,
+  theme,
 }: {
   closeUserModalHanlder: () => void;
+  theme: Theme;
 }) {
   return (
     <>
@@ -13,14 +18,18 @@ export default function DeletedUserModal({
         onClick={closeUserModalHanlder}
       >
         <div
-          className="bg-white p-5 rounded-[5px] text-center w-[300px] flex flex-col gap-10"
+          className={` p-5 rounded-[5px] text-center w-[300px] flex flex-col gap-10 ${
+            dark(theme)
+              ? 'bg-[#2d2d2d] text-[#ffffff]'
+              : 'bg-[#ffffff] text-[#111111]'
+          }`}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
               <div className="opacity-70 text-[13px]">Notice</div>
               <img
-                src={close}
+                src={dark(theme) ? closeWhite : close}
                 alt="close"
                 className="w-4 h-4 cursor-pointer"
                 onClick={closeUserModalHanlder}
@@ -33,7 +42,9 @@ export default function DeletedUserModal({
           </div>
           <div className="flex justify-end mr-5">
             <Button
-              className="button-style3 text-[12px]"
+              className={`button-style3 text-[12px] ${
+                dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
+              }`}
               value="확인"
               onClick={closeUserModalHanlder}
             ></Button>

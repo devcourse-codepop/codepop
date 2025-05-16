@@ -71,6 +71,7 @@ export default function LikeComment({
     if (user) {
       if (!author) {
         setIsUserModalOpen(true);
+        return;
       } else {
         channels.map((cha) => {
           if (cha.id === channel._id) {
@@ -82,13 +83,17 @@ export default function LikeComment({
       }
     } else {
       setIsLoginModalOpen(true);
+      return;
     }
   };
 
   // 좋아요 클릭 시, 로그인하지 않은 사용자라면 로그인 관련 모달을, 탈퇴한 사용자 게시글이라면 탈퇴한 사용자 관련 모달을 띄워주기
   // 둘 다 해당하지 않는다면 현재 사용자의 좋아요 클릭 상태에 따라 post, delete 요청을 보낸 후, 알림 전송하기
   const clickLikes = async () => {
-    if (!user) setIsLoginModalOpen(true);
+    if (!user) {
+      setIsLoginModalOpen(true);
+      return;
+    }
     if (!author) {
       setIsUserModalOpen(true);
       return;
