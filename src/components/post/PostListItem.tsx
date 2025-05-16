@@ -238,7 +238,10 @@ export default function PostListItem(props: PostListItemProps) {
         />
       )}
       {isUserModalOpen && (
-        <DeletedUserModal closeUserModalHanlder={closeUserModalHanlder} />
+        <DeletedUserModal
+          closeUserModalHanlder={closeUserModalHanlder}
+          theme={theme}
+        />
       )}
     </>
   );
