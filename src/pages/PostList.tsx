@@ -169,7 +169,8 @@ export default function PostList({ theme }: { theme: Theme }) {
             </div>
             <div className='flex gap-2.5 ml-auto mt-3.5'>
               {/* <SearchPost /> */}
-              <div className='w-[225px] h-[40px] flex items-center bg-white rounded-[5px] px-2.5 py-2'>
+
+              <div className='w-[225px] h-[38px] flex items-center bg-white rounded-[5px] px-2.5 py-2'>
                 <input
                   type='text'
                   value={input}
@@ -190,7 +191,7 @@ export default function PostList({ theme }: { theme: Theme }) {
               <select
                 value={select}
                 onChange={(e) => changeSelectHandler(e)}
-                className='w-[86px] h-[40px] bg-white pl-[11px] py-1.5 rounded-[5px] cursor-pointer text-[13px]'
+                className='w-[86px] h-[38px] bg-white pl-[11px] py-1.5 rounded-[5px] cursor-pointer text-[13px]'
               >
                 <option value='recent'>최신순</option>
                 <option value='popular'>인기순</option>
