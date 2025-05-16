@@ -50,16 +50,17 @@ export default function ProfileLeft({
   return (
     <>
       <div
-        className={`w-[291px] rounded-bl-[10px] px-[50px] pb-[60px] border-r-2 border-gray-300
+        className={`w-[271px] rounded-bl-[10px]  flex-shrink-0 px-[40px] pb-[60px] border-r-2 border-gray-300 profile-left
     ${dark(theme) ? 'text-[#ffffff]' : ''}
   `}
       >
         <img
+          className='profile-left-img'
           src={userData?.image || defaultProfileImage}
           alt='Profile'
           className='w-[196px] h-[196px] rounded-[5px] mt-[60px]  object-contain overflow-hidden'
         />
-        <div className='pt-[0px]'>
+        <div className='pt-[0px] profile-left-text'>
           <p className='font-bold text-[20px] mt-[42px]'>
             {' '}
             {userData?.fullName}

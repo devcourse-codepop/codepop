@@ -1,20 +1,20 @@
-import Avatar from "../avatar/Avatar";
-import LikeComment from "../reaction/LikeComment";
-import menuIcon from "../../assets/images/menu/menu-icon.svg";
-import menuIconWhite from "../../assets/images/menu/menu-icon-white.svg";
-import { useEffect, useRef, useState } from "react";
-import { Comment, Post } from "../../types";
-import dayjs from "dayjs";
-import { getPostList } from "../../api/post/post";
-import { usePostStore } from "../../stores/postStore";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import CommentListItem from "./CommentListItem";
-import { useAuthStore } from "../../stores/authStore";
-import DOMPurify from "dompurify";
-import PollOptionsVoteView from "../poll/PollOptionsVoteView";
-import CheckDeleteModal from "./CheckDeleteModal";
-import { Theme } from "../../types/darkModeTypes";
-import { dark } from "../../utils/darkModeUtils";
+import Avatar from '../avatar/Avatar';
+import LikeComment from '../reaction/LikeComment';
+import menuIcon from '../../assets/images/menu/menu-icon.svg';
+import menuIconWhite from '../../assets/images/menu/menu-icon-white.svg';
+import { useEffect, useRef, useState } from 'react';
+import { Comment, Post } from '../../types';
+import dayjs from 'dayjs';
+import { getPostList } from '../../api/post/post';
+import { usePostStore } from '../../stores/postStore';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import CommentListItem from './CommentListItem';
+import { useAuthStore } from '../../stores/authStore';
+import DOMPurify from 'dompurify';
+import PollOptionsVoteView from '../poll/PollOptionsVoteView';
+import CheckDeleteModal from './CheckDeleteModal';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 
 // updateReloadTrigger 타입 추가
 interface PostDetailItemProps extends Post {
@@ -68,24 +68,24 @@ export default function PostDetailItem({
   // 코드 블록 스타일 적용하기
   const editCodeStyle = (html: string): string => {
     const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
+    const doc = parser.parseFromString(html, 'text/html');
 
-    const codes = doc.querySelectorAll("pre");
-    const codeStr = "<span>&lt;/&gt;</span>";
+    const codes = doc.querySelectorAll('pre');
+    const codeStr = '<span>&lt;/&gt;</span>';
     codes.forEach((code) => {
-      code.style.backgroundColor = dark(theme) ? "#1e1e1e" : "#ececec";
-      code.style.color = dark(theme) ? "#ffffff" : "#111111";
-      code.style.padding = "20px";
-      code.style.paddingTop = "2px";
-      code.style.marginTop = "10px";
-      code.style.marginBottom = "10px";
-      code.style.borderRadius = "8px";
-      code.innerHTML = codeStr + "<br/><br/>" + code.innerHTML;
+      code.style.backgroundColor = dark(theme) ? '#1e1e1e' : '#ececec';
+      code.style.color = dark(theme) ? '#ffffff' : '#111111';
+      code.style.padding = '20px';
+      code.style.paddingTop = '2px';
+      code.style.marginTop = '10px';
+      code.style.marginBottom = '10px';
+      code.style.borderRadius = '8px';
+      code.innerHTML = codeStr + '<br/><br/>' + code.innerHTML;
 
-      const span = code.querySelector("span");
-      span!.style.fontSize = "12px";
-      span!.style.opacity = "30%";
-      span!.style.marginLeft = "-9px";
+      const span = code.querySelector('span');
+      span!.style.fontSize = '12px';
+      span!.style.opacity = '30%';
+      span!.style.marginLeft = '-9px';
     });
 
     return doc.body.innerHTML;
@@ -93,21 +93,21 @@ export default function PostDetailItem({
 
   // 최신순 정렬을 위한 댓글 시간 포맷 설정
   const getDatetimeSortFormat = (update: string): string => {
-    const date = dayjs(update).add(9, "hour");
-    return date.format("YYYY-MM-DD HH:mm:ss");
+    const date = dayjs(update).add(9, 'hour');
+    return date.format('YYYY-MM-DD HH:mm:ss');
   };
 
   // 게시글 작성 시간 포맷 설정
   const getElapsedTime = () => {
-    const now = dayjs().add(9, "hour");
-    const writeTime = dayjs(createdAt).add(9, "hour");
+    const now = dayjs().add(9, 'hour');
+    const writeTime = dayjs(createdAt).add(9, 'hour');
 
-    const gap = now.diff(writeTime, "s");
+    const gap = now.diff(writeTime, 's');
     if (gap < 60) return `${gap}초 전`;
     if (gap < 3600) return `${Math.floor(gap / 60)}분 전`;
     if (gap < 86400) return `${Math.floor(gap / 3600)}시간 전`;
 
-    return writeTime.format("YYYY.MM.DD");
+    return writeTime.format('YYYY.MM.DD');
   };
 
   // 로그인한 사용자가 해당 게시글 작성자인지 확인
@@ -170,15 +170,15 @@ export default function PostDetailItem({
       }
     };
 
-    window.addEventListener("mousedown", clickHandler);
-    return () => window.removeEventListener("mousedown", clickHandler);
+    window.addEventListener('mousedown', clickHandler);
+    return () => window.removeEventListener('mousedown', clickHandler);
   }, [modalRef]);
 
   return (
     <>
       <div
-        className={`w-full h-auto rounded-[5px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative ${
-          dark(theme) ? "bg-[#2d2d2d]" : "bg-[#ffffff]"
+        className={`w-full h-auto rounded-[5px] shadow-md relative ${
+          dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
         }`}
 
         //ref={divRef}
@@ -206,14 +206,14 @@ export default function PostDetailItem({
                 <div
                   className={`flex flex-col w-[91px] h-[70px] rounded-[2px]  absolute top-8 right-4  ${
                     dark(theme)
-                      ? "bg-[#2d2d2d] border border-white/40"
-                      : "border border-[#e5e5e5]"
+                      ? 'bg-[#2d2d2d] border border-white/40'
+                      : 'border border-[#e5e5e5]'
                   }`}
                   ref={modalRef}
                 >
                   <div
                     className={`flex justify-center items-center text-[12px] h-[34px] cursor-pointer ${
-                      dark(theme) ? "text-[#ffffff]/70" : ""
+                      dark(theme) ? 'text-[#ffffff]/70' : ''
                     }`}
                     onClick={clickUpdateHandler}
                   >
@@ -221,7 +221,7 @@ export default function PostDetailItem({
                   </div>
                   <hr
                     className={` ${
-                      dark(theme) ? "border-[#878787]" : "opacity-10"
+                      dark(theme) ? 'border-[#878787]' : 'opacity-10'
                     }`}
                   />
 
@@ -239,7 +239,7 @@ export default function PostDetailItem({
         <div className='flex flex-col px-[55px] py-[15px] gap-[22px]'>
           <div
             className={`text-[20px] font-semibold ${
-              dark(theme) ? "text-[#ffffff]" : "text-[#111111]"
+              dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
             }`}
           >
             {JSON.parse(title).title}
@@ -254,7 +254,7 @@ export default function PostDetailItem({
               ),
             }}
             className={`text-[15px] font-normal ${
-              dark(theme) ? "text-[#ffffff]" : "text-[#111111]"
+              dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
             }`}
           />
           {/* 투표 옵션이 있을 경우 */}
@@ -279,7 +279,7 @@ export default function PostDetailItem({
               comments.filter((c) => {
                 try {
                   const parsed = JSON.parse(c.comment);
-                  return parsed.type !== "vote";
+                  return parsed.type !== 'vote';
                 } catch {
                   return true;
                 }
@@ -314,7 +314,7 @@ export default function PostDetailItem({
             .filter((item) => {
               try {
                 const parsed = JSON.parse(item.comment);
-                return parsed.type !== "vote";
+                return parsed.type !== 'vote';
               } catch {
                 return true;
               }

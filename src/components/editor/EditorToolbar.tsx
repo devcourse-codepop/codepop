@@ -26,7 +26,7 @@ export default function EditorToolbar({
   if (!editor) return null;
 
   return (
-    <div className="flex gap-6 mb-4">
+    <div className='flex gap-5.5 mb-2.5'>
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         className={`cursor-pointer rounded-[5px]${
@@ -64,8 +64,8 @@ export default function EditorToolbar({
       )}
 
       <input
-        type="file"
-        accept="image/*"
+        type='file'
+        accept='image/*'
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (file) {
@@ -95,13 +95,13 @@ export default function EditorToolbar({
           }
           e.target.value = '';
         }}
-        className="hidden cursor-pointer rounded-[5px]"
-        id="image-upload"
+        className='hidden cursor-pointer rounded-[5px]'
+        id='image-upload'
       />
 
       <label
-        htmlFor="image-upload"
-        className="cursor-pointer rounded-[5px] flex items-center justify-center hover:bg-gray-200"
+        htmlFor='image-upload'
+        className='cursor-pointer rounded-[5px] flex items-center justify-center hover:bg-gray-200'
       >
         <ImageIcon theme={theme} />
       </label>
@@ -109,7 +109,7 @@ export default function EditorToolbar({
       {showPollButton && (
         <button
           onClick={onTogglePoll}
-          className="cursor-pointer rounded-[5px] hover:bg-gray-200"
+          className='cursor-pointer rounded-[5px] hover:bg-gray-200'
         >
           <VoteIcon theme={theme} />
         </button>

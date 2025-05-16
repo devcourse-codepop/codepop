@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { useEffect, useState } from 'react';
-=======
 import { useCallback, useEffect, useState } from 'react';
->>>>>>> 5e25c2da6da6866f47f5a6e978029d54a79b014f
 import Pagination from 'react-js-pagination';
 import { getAuthorPostData, getPostData } from '../../api/post/post';
 import commentWhite from '../../assets/images/comment/comment-white.svg';
@@ -18,32 +14,14 @@ interface ProfileRightProps extends UserPostInfo {
 export default function ProfileRight({ userData, theme }: ProfileRightProps) {
   const userId = userData?._id;
   const [userPostData, setUserPostData] = useState<Post[] | null>(null);
-  const [selectedTab, setSelectedTab] = useState<'posts' | 'likes' | 'comments'>('posts');
+  const [selectedTab, setSelectedTab] = useState<
+    'posts' | 'likes' | 'comments'
+  >('posts');
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 6;
   const navigate = useNavigate();
 
-<<<<<<< HEAD
-  // selectedTab이 변경될 때마다 각 탭에 맞는 데이터를 가져옴
-  useEffect(() => {
-    setCurrentPage(1);
-    const fetchData = async () => {
-      switch (selectedTab) {
-        case 'posts':
-          return fetchUserPosts();
-        case 'likes':
-          return fetchLikedPosts();
-        case 'comments':
-          return fetchCommentedPosts();
-      }
-    };
-    fetchData();
-  }, [selectedTab]);
-
-  const fetchUserPosts = async () => {
-=======
   const fetchUserPosts = useCallback(async () => {
->>>>>>> 5e25c2da6da6866f47f5a6e978029d54a79b014f
     if (!userData?.posts) return;
     const { data } = await getAuthorPostData(userId || '');
     setUserPostData(data);
@@ -53,10 +31,13 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
   const fetchLikedPosts = useCallback(async () => {
     if (!userData?.likes) return;
     const sortedLikes = [...userData.likes].sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
     const likedPostIds = sortedLikes.map((like) => like.post);
-    const likedPosts = await Promise.all(likedPostIds.map((postId) => getPostData(postId).then((res) => res.data)));
+    const likedPosts = await Promise.all(
+      likedPostIds.map((postId) => getPostData(postId).then((res) => res.data))
+    );
     setUserPostData(likedPosts);
   }, [userData?.likes]);
 
@@ -74,7 +55,8 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
     });
 
     const sortedComments = [...filteredComments].sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
 
     const commentCountMap = new Map<string, number>();
@@ -90,7 +72,9 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
     });
 
     const uniquePostIds = Array.from(commentCountMap.keys());
-    const commentPosts = await Promise.all(uniquePostIds.map((postId) => getPostData(postId).then((res) => res.data)));
+    const commentPosts = await Promise.all(
+      uniquePostIds.map((postId) => getPostData(postId).then((res) => res.data))
+    );
 
     const postsWithCommentData = commentPosts.map((post) => ({
       ...post,
@@ -98,7 +82,11 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
       latestCommentAt: latestCommentTimeMap.get(post._id) || '',
     }));
 
-    postsWithCommentData.sort((a, b) => new Date(b.latestCommentAt).getTime() - new Date(a.latestCommentAt).getTime());
+    postsWithCommentData.sort(
+      (a, b) =>
+        new Date(b.latestCommentAt).getTime() -
+        new Date(a.latestCommentAt).getTime()
+    );
 
     setUserPostData(postsWithCommentData);
   }, [userData?.comments]);
@@ -123,19 +111,13 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
 
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = userPostData?.slice(indexOfFirstPost, indexOfLastPost) || [];
+  const currentPosts =
+    userPostData?.slice(indexOfFirstPost, indexOfLastPost) || [];
 
-<<<<<<< HEAD
-  const tabLabels: Record<string, string> = {
-    posts: '작성한 글',
-    likes: '좋아요한 글',
-    comments: '댓글 단 글',
-=======
   let totalTab: Record<string, number> = {
     posts: 0,
     likes: 0,
     comments: 0,
->>>>>>> 5e25c2da6da6866f47f5a6e978029d54a79b014f
   };
 
   if (userData) {
@@ -161,35 +143,12 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
   };
 
   return (
-<<<<<<< HEAD
-    <div className='px-[26px] w-full min-w-0 pb-[40px]'>
-      <p
-        className={`mt-[40px] font-semibold text-[18px] ${
-          dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
-        }`}
-      >
-        {tabLabels[selectedTab]}
-      </p>
-
-      <div
-        className={`mt-[31px] min-h-[365px] ${
-          dark(theme) ? 'text-[#ffffff]' : ''
-        }`}
-      >
-        {userPostData && userPostData.length === 0 && (
-          <p
-            className={`text-center whitespace-pre-line text-sm py-45 border-t-2 leading-[3rem] ${
-              dark(theme)
-                ? 'border-t-white/60 text-[#ffffff]/60'
-                : 'text-gray-500 '
-=======
-    <div className='ml-[26px]'>
-      <div className='flex justify-between items-center mt-[40px] text-[18px] font-semibold'>
-        <div className='flex pb-[10px]'>
+    <div className='w-full min-w-0 px-[26px] pb-[40px] profile-right'>
+      <div className='w-full flex justify-between items-center mt-[40px] text-[18px] font-semibold'>
+        <div className='flex pb-[10px] whitespace-nowrap'>
           <div
             className={`cursor-pointer mb-[-13px] px-4 ${
               selectedTab === 'posts' ? 'border-b-4 border-black' : 'opacity-30'
->>>>>>> 5e25c2da6da6866f47f5a6e978029d54a79b014f
             }`}
             onClick={() => setSelectedTab('posts')}
           >
@@ -205,7 +164,9 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
           </div>
           <div
             className={`cursor-pointer mb-[-13px] px-4 ${
-              selectedTab === 'comments' ? 'border-b-4 border-black' : 'opacity-30'
+              selectedTab === 'comments'
+                ? 'border-b-4 border-black'
+                : 'opacity-30'
             }`}
             onClick={() => setSelectedTab('comments')}
           >
@@ -213,10 +174,12 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
           </div>
         </div>
 
-        <p className='font-normal text-[12px] text-black/60 '>전체 : {totalTab[selectedTab]}</p>
+        <p className='font-normal text-[12px] text-black/60 '>
+          전체 : {totalTab[selectedTab]}
+        </p>
       </div>
 
-      <div className='w-[682px] min-h-[365px]  border-t-2 border-t-black/30'>
+      <div className='w-full min-h-[365px]  border-t-2 border-t-black/30'>
         {userPostData && userPostData.length === 0 && (
           <p className='text-center whitespace-pre-line text-gray-500 text-sm py-45  leading-[3rem]'>
             {emptyText[selectedTab]}
@@ -228,30 +191,9 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
           return (
             <div
               key={post._id}
-<<<<<<< HEAD
-              className={`relative flex flex-col gap-2 border-b-2 
-                ${
-                  i !== currentPosts.length - 1
-                    ? dark(theme)
-                      ? 'border-b-white/30'
-                      : 'border-b-black/30'
-                    : dark(theme)
-                    ? 'border-b-white/60'
-                    : 'border-b-black/60'
-                }
-                ${
-                  i === 0
-                    ? dark(theme)
-                      ? 'border-t-2 border-t-white/60'
-                      : 'border-t-2 border-t-black/60'
-                    : ''
-                } 
-                ${selectedTab === 'comments' ? 'py-[6px]' : 'py-4'}`}
-=======
               className={`relative flex flex-col  border-b-2  border-b-black/30 ${
                 selectedTab === 'comments' ? 'py-[6px]' : 'py-4'
               }`}
->>>>>>> 5e25c2da6da6866f47f5a6e978029d54a79b014f
             >
               <div className='relative flex flex-wrap items-center py-0.5 px-2 gap-y-2.5'>
                 <div className='w-[130px]'>
@@ -270,8 +212,6 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
                     <p className='font-semibold text-[15px] w-full truncate'>
                       {JSON.parse(post.title).title}
                     </p>
-
-<<<<<<< HEAD
                     {selectedTab === 'comments' && post.comments.length > 0 && (
                       <div className='mt-1 text-[12px] text-gray-700 flex'>
                         <img
@@ -292,20 +232,6 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
                   <p className='ml-auto w-[100px] font-normal  text-right text-[13px]'>
                     {post.createdAt.slice(0, 10)}
                   </p>
-=======
-                <div
-                  className='ml-[130px] flex flex-col cursor-pointer justify-center'
-                  onClick={() => navigate(`/channel/${id}/post/${post._id}`)}
-                >
-                  <p className='font-semibold text-[15px] truncate max-w-[430px]'>{JSON.parse(post.title).title}</p>
-
-                  {selectedTab === 'comments' && post.comments.length > 0 && (
-                    <div className='mt-1 text-[12px] text-gray-700 flex'>
-                      <img src={dark(theme) ? commentWhite : commentIcon} className='w-5 h-5' />
-                      <p className={`ml-[5px] ${dark(theme) ? 'text-[#ffffff]' : ''}`}>+{post.myCommentCount}개</p>
-                    </div>
-                  )}
->>>>>>> 5e25c2da6da6866f47f5a6e978029d54a79b014f
                 </div>
               </div>
             </div>
@@ -314,34 +240,42 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
       </div>
 
       {userPostData && userPostData.length > postsPerPage && (
-<<<<<<< HEAD
         <div
           className={`mt-8 flex justify-center ${
             dark(theme) ? 'text-[#ffffff]' : ''
           }`}
         >
-=======
-        <div className={`mt-8 flex justify-center ${dark(theme) ? 'text-[#ffffff]' : ''}`}>
->>>>>>> 5e25c2da6da6866f47f5a6e978029d54a79b014f
           <Pagination
             activePage={currentPage}
             itemsCountPerPage={postsPerPage}
             totalItemsCount={userPostData.length}
             pageRangeDisplayed={6}
             onChange={handlePageChange}
-            prevPageText={<span className='text-xl leading-none flex items-center justify-center'>‹</span>}
-            nextPageText={<span className='text-xl leading-none flex items-center justify-center'>›</span>}
-            firstPageText={<span className='text-xl leading-none flex items-center justify-center'>«</span>}
-            lastPageText={<span className='text-xl leading-none flex items-center justify-center'>»</span>}
+            prevPageText={
+              <span className='text-xl leading-none flex items-center justify-center'>
+                ‹
+              </span>
+            }
+            nextPageText={
+              <span className='text-xl leading-none flex items-center justify-center'>
+                ›
+              </span>
+            }
+            firstPageText={
+              <span className='text-xl leading-none flex items-center justify-center'>
+                «
+              </span>
+            }
+            lastPageText={
+              <span className='text-xl leading-none flex items-center justify-center'>
+                »
+              </span>
+            }
             innerClass='flex gap-2 text-sm'
             itemClass='px-3 py-1 rounded-[5px] cursor-pointer'
-<<<<<<< HEAD
             activeClass={`bg-[#1E293B] text-white ${
               dark(theme) ? 'bg-[#1e1e1e]' : ''
             }`}
-=======
-            activeClass={`bg-[#1E293B] text-white ${dark(theme) ? 'bg-[#1e1e1e]' : ''}`}
->>>>>>> 5e25c2da6da6866f47f5a6e978029d54a79b014f
           />
         </div>
       )}
