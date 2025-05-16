@@ -4,7 +4,6 @@ import likeRed from '../../assets/images/like/like-red.svg';
 import comment from '../../assets/images/comment/comment-outline.svg';
 import commentWhite from '../../assets/images/comment/comment-white.svg';
 import { useEffect, useState } from 'react';
-import { Channel, Like, User } from '../../types';
 import { deleteLikes, postLikes, postNotifications } from '../../api/post/post';
 import { useAuthStore } from '../../stores/authStore';
 import NotLoginModal from '../post/NotLoginModal';
@@ -128,12 +127,7 @@ export default function LikeComment({
   // 좋아요 알림 전송하기
   const sendLikeNotification = async (notificationTypeId: string) => {
     try {
-      const { data } = await postNotifications(
-        'LIKE',
-        notificationTypeId,
-        author._id,
-        postId
-      );
+      const { data } = await postNotifications('LIKE', notificationTypeId, author._id, postId);
       console.log(data);
     } catch (e) {
       console.log(e instanceof Error && e.message);
@@ -157,49 +151,23 @@ export default function LikeComment({
   }, [user, likes]);
 
   return (
-    <div className="reaction flex justify-end items-center gap-5 p-4">
-      <div className="flex items-center gap-1.5">
+    <div className='reaction flex justify-end items-center gap-5 p-4'>
+      <div className='flex items-center gap-1.5'>
         <img
           src={checkLike ? likeRed : dark(theme) ? likeClickWhite : likeClick}
-          alt="좋아요"
-          className="w-5 h-5 cursor-pointer"
+          alt='좋아요'
+          className='w-5 h-5 cursor-pointer'
           onClick={clickLikes}
         />
-        <span
-          className={`text-sm ${
-            dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
-          }`}
-        >
-          {like}
-        </span>
+        <span className={`text-sm ${dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'}`}>{like}</span>
       </div>
 
-      <div
-        className="flex items-center gap-[10px] cursor-pointer"
-        onClick={clickComments}
-      >
-        <img
-          src={dark(theme) ? commentWhite : comment}
-          alt="댓글"
-          className="w-5 h-5 relative top-[1px]"
-        />
-        <span
-          className={`text-sm ${
-            dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
-          }`}
-        >
-          {commentCount}
-        </span>
+      <div className='flex items-center gap-[10px] cursor-pointer' onClick={clickComments}>
+        <img src={dark(theme) ? commentWhite : comment} alt='댓글' className='w-5 h-5 relative top-[1px]' />
+        <span className={`text-sm ${dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'}`}>{commentCount}</span>
       </div>
-      {isLoginModalOpen && (
-        <NotLoginModal
-          closeLoginModalHanlder={closeLoginModalHanlder}
-          theme={theme}
-        />
-      )}
-      {isUserModalOpen && (
-        <DeletedUserModal closeUserModalHanlder={closeUserModalHanlder} />
-      )}
+      {isLoginModalOpen && <NotLoginModal closeLoginModalHanlder={closeLoginModalHanlder} theme={theme} />}
+      {isUserModalOpen && <DeletedUserModal closeUserModalHanlder={closeUserModalHanlder} />}
     </div>
   );
 }

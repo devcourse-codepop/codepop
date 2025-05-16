@@ -1,13 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 //import { User1 } from './ChatModal';
 import ChatHeader from './ChatHeader';
-import {
-  getMessages,
-  postMessages,
-  putMessageSeen,
-} from '../../api/message/message';
+import { getMessages, postMessages, putMessageSeen } from '../../api/message/message';
 // import { postNotifications } from '../../api/post/post';
-import { Message, User } from '../../types';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import { useAuthStore } from '../../stores/authStore';
@@ -26,12 +21,7 @@ interface ChatRoomProps {
 // 한국어로 요일을 나타내기 위한 변환
 dayjs.locale('ko');
 
-export default function ChatRoom({
-  user,
-  onBack,
-  onClose,
-  theme,
-}: ChatRoomProps) {
+export default function ChatRoom({ user, onBack, onClose, theme }: ChatRoomProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState<string>('');
 
@@ -164,13 +154,8 @@ export default function ChatRoom({
   }, [reloadTrigger, bottomRef, messages, shouldScrollToBottom]);
 
   return (
-    <div className="flex flex-col h-full">
-      <ChatHeader
-        userName={user.fullName}
-        onBack={onBack}
-        onClose={onClose}
-        theme={theme}
-      />
+    <div className='flex flex-col h-full'>
+      <ChatHeader userName={user.fullName} onBack={onBack} onClose={onClose} theme={theme} />
 
       {/* 대화 내용 */}
       {isLoading ? (
@@ -186,88 +171,63 @@ export default function ChatRoom({
               const isMyMessage: boolean = msg.sender._id === loginUser?._id;
 
               const currentDate = dayjs(msg.createdAt).format('YYYY-MM-DD');
-              const prevDate =
-                idx > 0
-                  ? dayjs(messages[idx - 1].createdAt).format('YYYY-MM-DD')
-                  : null;
+              const prevDate = idx > 0 ? dayjs(messages[idx - 1].createdAt).format('YYYY-MM-DD') : null;
               const isNewDate = currentDate !== prevDate;
 
               return (
                 <>
                   {isNewDate && (
-                    <p className="text-center font-medium text-[13px] mt-[10px] mb-[30px]">
+                    <p className='text-center font-medium text-[13px] mt-[10px] mb-[30px]'>
                       {dayjs(msg.createdAt).format('YYYY.MM.DD (dd)')}
                     </p>
                   )}
 
                   {isMyMessage ? (
-                    <div key={msg._id} className="flex justify-end">
+                    <div key={msg._id} className='flex justify-end'>
                       {/* 읽음 표시 + 시간 */}
-                      <div className="flex flex-col justify-end items-end mr-2 text-[12px] font-normal">
+                      <div className='flex flex-col justify-end items-end mr-2 text-[12px] font-normal'>
                         {!msg.seen && (
-                          <span
-                            className={`font-semibold ${
-                              dark(theme) ? 'text-[#ffffff]' : 'text-[#1E293B]'
-                            }`}
-                          >
+                          <span className={`font-semibold ${dark(theme) ? 'text-[#ffffff]' : 'text-[#1E293B]'}`}>
                             1
                           </span>
                         )}
-                        <span
-                          className={` ${
-                            dark(theme)
-                              ? 'text-[#ffffff]/50'
-                              : 'text-[#111111]/50'
-                          }`}
-                        >
+                        <span className={` ${dark(theme) ? 'text-[#ffffff]/50' : 'text-[#111111]/50'}`}>
                           {getWriteDatetimeFormat(msg.createdAt)}
                         </span>
                       </div>
                       {/* 메시지 내용 */}
                       <div
                         className={`text-[14px] p-2.5 rounded-b-[10px] rounded-tl-[10px] max-w-[300px] break-words pl-3 w-fit ${
-                          dark(theme)
-                            ? 'bg-[#a5d7db] text-[#111111]'
-                            : 'bg-[#1E293B] text-white'
+                          dark(theme) ? 'bg-[#a5d7db] text-[#111111]' : 'bg-[#1E293B] text-white'
                         }`}
                       >
                         {msg.message}
                       </div>
                     </div>
                   ) : (
-                    <div key={msg._id} className="flex">
+                    <div key={msg._id} className='flex'>
                       {/* 프로필 이미지 */}
-                      <div className="">
+                      <div className=''>
                         <img
                           src={msg.sender.image}
-                          alt="상대 프로필"
-                          className="w-[35px] h-[35px] rounded-[50%] border border-[#ddd]"
+                          alt='상대 프로필'
+                          className='w-[35px] h-[35px] rounded-[50%] border border-[#ddd]'
                         />
                       </div>
                       {/* 이름 + 메시지 내용 */}
-                      <div className="flex flex-col ml-[5px] pt-1.5">
-                        <div className="font-normal text-[12px] mb-[5px] ml-[2px] w-fit">
-                          {msg.sender.fullName}
-                        </div>
+                      <div className='flex flex-col ml-[5px] pt-1.5'>
+                        <div className='font-normal text-[12px] mb-[5px] ml-[2px] w-fit'>{msg.sender.fullName}</div>
                         <div
                           className={`text-[14px] p-2.5 rounded-b-[10px] rounded-tr-[10px] max-w-[300px] break-words pl-3 w-fit ${
-                            dark(theme)
-                              ? 'bg-[#ffffff] text-[#111111]'
-                              : 'bg-[#ECECEC] text-[#111111]'
+                            dark(theme) ? 'bg-[#ffffff] text-[#111111]' : 'bg-[#ECECEC] text-[#111111]'
                           }`}
                         >
                           {msg.message}
                         </div>
                       </div>
                       {/* 시간 */}
-                      <div className="flex justify-end items-end ml-2 text-[12px] font-normal">
-                        <span
-                          className={` ${
-                            dark(theme)
-                              ? 'text-[#ffffff]/50'
-                              : 'text-[#111111]/50'
-                          }`}
-                        >
+                      <div className='flex justify-end items-end ml-2 text-[12px] font-normal'>
+                        <span className={` ${dark(theme) ? 'text-[#ffffff]/50' : 'text-[#111111]/50'}`}>
                           {getWriteDatetimeFormat(msg.createdAt)}
                         </span>
                       </div>
@@ -282,13 +242,11 @@ export default function ChatRoom({
           {/* 메시지 입력 */}
           <div
             className={`flex p-4 rounded-b-[5px] ${
-              dark(theme)
-                ? 'bg-[#2d2d2d] border-t border-t-white/40'
-                : 'bg-[#ffffff] border-t border-t-[#DEDEDE]'
+              dark(theme) ? 'bg-[#2d2d2d] border-t border-t-white/40' : 'bg-[#ffffff] border-t border-t-[#DEDEDE]'
             }`}
           >
             <input
-              type="text"
+              type='text'
               ref={inputRef}
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
@@ -296,11 +254,11 @@ export default function ChatRoom({
               className={`w-full h-[50px] p-1 pl-[18px] rounded-[5px] bg-[#ECECEC] font-normal placeholder-[#898FA3] outline-none text-[14px] ${
                 dark(theme) ? 'text-[#111111]' : ''
               }`}
-              placeholder="메시지를 입력해주세요..."
+              placeholder='메시지를 입력해주세요...'
             />
             <img
               src={`${dark(theme) ? messageSendBtnWhite : messageSendBtn}`}
-              className="ml-[12px] w-[50px] h-[50px] rounded-[5px] cursor-pointer"
+              className='ml-[12px] w-[50px] h-[50px] rounded-[5px] cursor-pointer'
               onClick={handleSend}
             />
           </div>

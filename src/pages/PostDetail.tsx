@@ -5,7 +5,6 @@ import WriteCommentItem from '../components/post/WriteCommentItem';
 import { getPostList } from '../api/post/post';
 import { usePostStore } from '../stores/postStore';
 import { useEffect, useRef, useState } from 'react';
-import { Post } from '../types';
 import { Theme } from '../types/darkModeTypes';
 
 export default function PostDetail({ theme }: { theme: Theme }) {
@@ -70,18 +69,14 @@ export default function PostDetail({ theme }: { theme: Theme }) {
 
   return (
     <>
-      <div className="w-full">
-        <div className="flex justify-between items-end pb-[30px]">
+      <div className='w-full'>
+        <div className='flex justify-between items-end pb-[30px]'>
           <ChannelName channelId={String(channel)} theme={theme} />
         </div>
         {postItem && (
-          <div className="flex flex-col gap-[30px] max-h-[calc(100vh-100px-120px)] overflow-auto scroll-custom">
+          <div className='flex flex-col gap-[30px] max-h-[calc(100vh-100px-120px)] overflow-auto scroll-custom'>
             {/* <PostDetailItem key={postItem?._id} {...postItem} /> */}
-            <PostDetailItem
-              {...postItem}
-              updateReloadTrigger={updateReloadTrigger}
-              theme={theme}
-            />
+            <PostDetailItem {...postItem} updateReloadTrigger={updateReloadTrigger} theme={theme} />
             <div ref={commentRef}>
               <WriteCommentItem
                 channelId={String(channel)}
