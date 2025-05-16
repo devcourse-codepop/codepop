@@ -205,7 +205,11 @@ export default function Notification({ theme }: { theme: Theme }) {
               Notifications
             </h3>
           </div>
-          <div className='notiList py-1 px-2 h-[200px] overflow-y-auto scroll-custom relative'>
+          <div
+            className={`scroll-custom ${
+              dark(theme) ? 'dark-scroll-custom' : ''
+            } notiList py-1 px-2 h-[200px] overflow-y-auto relative`}
+          >
             {notifications.length === 0 ? (
               <p className='absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm'>
                 알림이 없습니다

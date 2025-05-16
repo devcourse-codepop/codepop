@@ -33,7 +33,7 @@
 
 .dark-member-list::-webkit-scrollbar-thumb {
   background: #1e1e1e;
-  border-top: 5px solid #1e1e1e;
+  border-top: 5px solid #2d2d2d;
 }
 
 .memberCard .avartar-box {
@@ -64,10 +64,19 @@
   background: #939393;
 }
 
+.dark-scroll-custom::-webkit-scrollbar-thumb {
+  background: #1e1e1e;
+}
+
 .messageBox::-webkit-scrollbar {
   width: 5px;
   border-radius: 5px;
 }
 .messageBox::-webkit-scrollbar-thumb {
   background: #adadad;
+}
+
+.dark.messageBox::-webkit-scrollbar-thumb,
+.dark .messageBox::-webkit-scrollbar-thumb {
+  background: #1e1e1e;
 }

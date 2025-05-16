@@ -148,7 +148,9 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
         <div className='flex pb-[10px] whitespace-nowrap'>
           <div
             className={`cursor-pointer mb-[-13px] px-4 ${
-              selectedTab === 'posts' ? 'border-b-4 border-black' : 'opacity-30'
+              selectedTab === 'posts'
+                ? `border-b-4 ${dark(theme) ? 'border-white' : 'border-black'}`
+                : 'opacity-30'
             }`}
             onClick={() => setSelectedTab('posts')}
           >
@@ -156,7 +158,9 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
           </div>
           <div
             className={`cursor-pointer mb-[-13px] px-4 ${
-              selectedTab === 'likes' ? 'border-b-4 border-black' : 'opacity-30'
+              selectedTab === 'likes'
+                ? `border-b-4 ${dark(theme) ? 'border-white' : 'border-black'}`
+                : 'opacity-30'
             }`}
             onClick={() => setSelectedTab('likes')}
           >
@@ -165,7 +169,7 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
           <div
             className={`cursor-pointer mb-[-13px] px-4 ${
               selectedTab === 'comments'
-                ? 'border-b-4 border-black'
+                ? `border-b-4 ${dark(theme) ? 'border-white' : 'border-black'}`
                 : 'opacity-30'
             }`}
             onClick={() => setSelectedTab('comments')}
@@ -174,14 +178,27 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
           </div>
         </div>
 
-        <p className='font-normal text-[12px] text-black/60 '>
+        <p
+          className={`font-normal text-[12px] ${
+            dark(theme) ? 'text-[#ffffff]/60' : 'text-[#111111]/60'
+          }`}
+        >
           전체 : {totalTab[selectedTab]}
         </p>
       </div>
-
-      <div className='w-full min-h-[365px]  border-t-2 border-t-black/30'>
+      <div
+        className={`w-full min-h-[365px]   ${
+          dark(theme)
+            ? 'border-t-2 border-t-[#ffffff]/30'
+            : 'border-t-2 border-t-[#111111]/30'
+        }`}
+      >
         {userPostData && userPostData.length === 0 && (
-          <p className='text-center whitespace-pre-line text-gray-500 text-sm py-45  leading-[3rem]'>
+          <p
+            className={`text-center whitespace-pre-line  text-sm py-45  leading-[3rem] ${
+              dark(theme) ? 'text-[#ffffff]/60' : 'text-gray-500'
+            }`}
+          >
             {emptyText[selectedTab]}
           </p>
         )}
@@ -191,9 +208,9 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
           return (
             <div
               key={post._id}
-              className={`relative flex flex-col  border-b-2  border-b-black/30 ${
-                selectedTab === 'comments' ? 'py-[6px]' : 'py-4'
-              }`}
+              className={`relative flex flex-col  border-b-2 ${
+                dark(theme) ? 'border-b-[#ffffff]/30' : 'border-b-[#111111]/30'
+              } ${selectedTab === 'comments' ? 'py-[6px]' : 'py-4'}`}
             >
               <div className='relative flex flex-wrap items-center py-0.5 px-2 gap-y-2.5'>
                 <div className='w-[130px]'>
@@ -209,7 +226,11 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
                     className='min-w-0 flex flex-col cursor-pointer justify-center'
                     onClick={() => navigate(`/channel/${id}/post/${post._id}`)}
                   >
-                    <p className='font-semibold text-[15px] w-full truncate'>
+                    <p
+                      className={`font-semibold text-[15px] w-full truncate  ${
+                        dark(theme) ? 'text-[#ffffff]' : ''
+                      }`}
+                    >
                       {JSON.parse(post.title).title}
                     </p>
                     {selectedTab === 'comments' && post.comments.length > 0 && (
@@ -228,8 +249,11 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
                       </div>
                     )}
                   </div>
-
-                  <p className='ml-auto w-[100px] font-normal  text-right text-[13px]'>
+                  <p
+                    className={`ml-auto w-[100px] font-normal  text-right text-[13px] ${
+                      dark(theme) ? 'text-[#ffffff]' : ''
+                    }`}
+                  >
                     {post.createdAt.slice(0, 10)}
                   </p>
                 </div>
