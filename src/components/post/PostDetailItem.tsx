@@ -223,7 +223,6 @@ export default function PostDetailItem({
                       dark(theme) ? 'border-[#878787]' : 'opacity-10'
                     }`}
                   />
-
                   <div
                     className='flex justify-center items-center text-[12px] text-[#FF0404] h-[34px] cursor-pointer'
                     onClick={clickDeleteHandler}
