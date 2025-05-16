@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Theme } from '../../types/darkModeTypes';
-import { dark } from '../../utils/darkModeUtils';
+import { useEffect, useState } from "react";
+import { Theme } from "../../types/darkModeTypes";
+import { dark } from "../../utils/darkModeUtils";
 
 interface PollOption {
   id: number;
@@ -14,10 +14,10 @@ interface PollCreatorProps {
 }
 
 export default function PollCreator({ onCreate, theme }: PollCreatorProps) {
-  const [options, setOptions] = useState<string[]>(['', '']);
+  const [options, setOptions] = useState<string[]>(["", ""]);
 
   const handleAddOption = () => {
-    if (options.length < 4) setOptions([...options, '']);
+    if (options.length < 4) setOptions([...options, ""]);
   };
 
   const handleChangeOption = (index: number, value: string) => {
@@ -30,7 +30,7 @@ export default function PollCreator({ onCreate, theme }: PollCreatorProps) {
   useEffect(() => {
     if (options.length >= 2) {
       const pollOptions = options
-        .filter((opt) => opt.trim() !== '')
+        .filter((opt) => opt.trim() !== "")
         .map((text, idx) => ({
           id: idx,
           text,
@@ -42,31 +42,31 @@ export default function PollCreator({ onCreate, theme }: PollCreatorProps) {
 
   return (
     <div
-      className={`p-4 max-w-md mt-[25px] mb-[25px] rounded shadow ${
-        dark(theme) ? 'bg-[#1e1e1e]' : 'bg-[#ffffff]'
+      className={`p-4 max-w-md mt-[25px] mb-[25px] rounded border ${
+        dark(theme) ? "bg-[#1e1e1e]" : "bg-[#ffffff]"
       }`}
     >
-      <h2 className="text-xl font-bold mb-2">Create Poll</h2>
+      <h2 className='text-xl font-bold mb-2'>투표 생성하기</h2>
       {options.map((opt, i) => (
         <input
           key={i}
           className={`w-full border p-2 mb-2 rounded bg-transparent
             ${
               dark(theme)
-                ? 'bg-[#2d2d2d] text-white placeholder-[#bbbbbb]'
-                : 'bg-white text-black placeholder-[#999999]'
+                ? "bg-[#2d2d2d] text-white placeholder-[#bbbbbb]"
+                : "bg-white text-black placeholder-[#999999]"
             }`}
-          placeholder={`Choice ${i + 1}`}
+          placeholder={`항목 ${i + 1}`}
           value={opt}
           onChange={(e) => handleChangeOption(i, e.target.value)}
         />
       ))}
       {options.length < 4 && (
         <button
-          className="text-blue-500 text-sm mb-2"
+          className='text-blue-500 text-sm mb-2'
           onClick={handleAddOption}
         >
-          + Add Option
+          + 항목 추가
         </button>
       )}
     </div>

@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
-import { Theme } from '../../types/darkModeTypes';
-import { dark } from '../../utils/darkModeUtils';
-import { useParams } from 'react-router-dom';
-import { voteComments, deleteComments } from '../../api/post/post';
+import { useState, useEffect } from "react";
+import { Theme } from "../../types/darkModeTypes";
+import { dark } from "../../utils/darkModeUtils";
+import { useParams } from "react-router-dom";
+import { voteComments, deleteComments } from "../../api/post/post";
+import { useAuthStore } from "../../stores/authStore";
 
 interface PollOption {
   id: number;
@@ -12,6 +13,7 @@ interface PollOption {
 interface CommentType {
   _id: string;
   comment: string;
+  userId?: string;
 }
 
 interface PollOptionsViewProps {
@@ -28,6 +30,7 @@ export default function PollOptionsVoteView({
   onVoted,
 }: PollOptionsViewProps) {
   const { postId } = useParams<{ postId: string }>();
+  const { user } = useAuthStore();
 
   const [selectedOptionId, setSelectedOptionId] = useState<number | null>(null);
   const [myCommentId, setMyCommentId] = useState<string | null>(null);
@@ -39,10 +42,12 @@ export default function PollOptionsVoteView({
   );
 
   useEffect(() => {
+    const myUserId = user?._id;
+
     const myVoteComment = comments.find((c) => {
       try {
         const parsed = JSON.parse(c.comment);
-        return parsed.type === 'vote';
+        return parsed.type === "vote" && parsed.userId === myUserId;
       } catch {
         return false;
       }
@@ -70,7 +75,7 @@ export default function PollOptionsVoteView({
           try {
             const parsed = JSON.parse(c.comment);
             return (
-              parsed.type === 'vote' &&
+              parsed.type === "vote" &&
               Number(parsed.selectedOptionId) === opt.id
             );
           } catch {
@@ -79,7 +84,7 @@ export default function PollOptionsVoteView({
         }).length,
       }))
     );
-  }, [comments, options]);
+  }, [comments, options, user?._id]);
 
   const totalVotes = pollOptions.reduce((acc, cur) => acc + cur.voteCount, 0);
 
@@ -111,7 +116,11 @@ export default function PollOptionsVoteView({
         );
       }
 
-      const { data } = await voteComments(postId, String(optionId));
+      const { data } = await voteComments(
+        postId,
+        String(optionId),
+        String(user?._id)
+      );
       setSelectedOptionId(optionId);
       setMyCommentId(data._id);
       setPollOptions((prev) =>
@@ -121,7 +130,7 @@ export default function PollOptionsVoteView({
       );
       if (onVoted) onVoted();
     } catch (err) {
-      console.error('❌ 투표 처리 실패', err);
+      console.error("❌ 투표 처리 실패", err);
     }
   };
 
@@ -131,40 +140,40 @@ export default function PollOptionsVoteView({
     .map((opt) => opt.id);
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className='flex flex-col gap-3'>
       {pollOptions.map((option) => {
         const ratio =
           totalVotes > 0 ? (option.voteCount / totalVotes) * 100 : 0;
         const isSelected = option.id === selectedOptionId;
         const isTop = topOptionIds.includes(option.id);
 
-        const bgColor = dark(theme) ? '#8c8c8c' : '#d1d6db';
-        const topColor = dark(theme) ? '#1e1e1e' : '#60AfF7';
+        const bgColor = dark(theme) ? "#8c8c8c" : "#d1d6db";
+        const topColor = dark(theme) ? "#1e1e1e" : "#60AfF7";
         const barColor = isTop ? topColor : bgColor;
 
         const borderColor = dark(theme)
           ? isSelected
-            ? 'border-2 border-[#1e1e1e]'
-            : 'border-2 border-neutral-600'
+            ? "border-2 border-[#1e1e1e]"
+            : "border-2 border-neutral-600"
           : isSelected
-          ? 'border-gray-400'
-          : 'border-gray-300';
+          ? "border-gray-400"
+          : "border-gray-300";
 
         const hoverBg = dark(theme)
-          ? 'hover:bg-[#2c2c2c]'
-          : 'hover:bg-gray-100';
+          ? "hover:bg-[#2c2c2c]"
+          : "hover:bg-gray-100";
 
-        const textColor = dark(theme) ? 'text-white' : 'text-gray-800';
-        const subTextColor = dark(theme) ? 'text-gray-300' : 'text-gray-600';
+        const textColor = dark(theme) ? "text-white" : "text-gray-800";
+        const subTextColor = dark(theme) ? "text-gray-300" : "text-gray-600";
 
         return (
-          <div key={option.id} className="flex flex-col gap-2">
+          <div key={option.id} className='flex flex-col gap-2'>
             <div
               onClick={() => handleVote(option.id)}
               className={`relative px-4 py-2 border rounded flex justify-between items-center cursor-pointer transition overflow-hidden ${borderColor} ${hoverBg}`}
             >
               <div
-                className="absolute left-0 top-0 h-full transition-all duration-300"
+                className='absolute left-0 top-0 h-full transition-all duration-300'
                 style={{
                   width: `${ratio}%`,
                   backgroundColor: barColor,
@@ -180,7 +189,7 @@ export default function PollOptionsVoteView({
       })}
       <div
         className={`mt-4  font-medium ${
-          dark(theme) ? 'text-[#ffffff]' : 'text-gray-700'
+          dark(theme) ? "text-[#ffffff]" : "text-gray-700"
         }`}
       >
         Total Votes: {totalVotes}
