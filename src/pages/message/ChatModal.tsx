@@ -42,7 +42,9 @@ export default function ChatModal({
         onClick={onClose}
       >
         <div
-          className="w-[448px] h-[75vh] bg-white rounded-[5px] flex flex-col"
+          className={`w-[448px] h-[75vh]  rounded-[5px] flex flex-col ${
+            dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+          }`}
           onClick={(e) => e.stopPropagation()}
         >
           {selectedUser ? (
