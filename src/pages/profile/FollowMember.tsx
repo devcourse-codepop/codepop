@@ -6,18 +6,21 @@ import { Link } from 'react-router-dom';
 import { getAllUsersData } from '../../api/memberbox/member';
 import { useAuthStore } from '../../stores/authStore';
 import ChatModal from '../../pages/message/ChatModal';
-import { User1 } from '../../pages/message/ChatModal';
+// import { User1 } from '../../pages/message/ChatModal';
 import useChatClose from '../../utils/changeMessageIcon';
 import { handleFollow, handleUnfollow } from '../../utils/followHandlers';
+import { Theme } from '../../types/darkModeTypes';
 
 export default function FollowerMember({
   followData,
   followType,
   targetUserId,
+  theme,
 }: {
   followData: Follow[];
   followType: 'following' | 'follower';
   targetUserId?: string;
+  theme: Theme;
 }) {
   const { user, setUser } = useAuthStore();
   const [searchKeyword, setSearchKeyword] = useState<string>('');

@@ -132,6 +132,7 @@ export default function ProfileLeft({ userData, theme, userId, refetchUserData }
             followData={followData}
             followType={followType}
             targetUserId={userId}
+            theme={theme}
           />
         )}
       </div>

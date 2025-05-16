@@ -3,19 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import close from '../../assets/images/header/close.svg';
 import closeWhite from '../../assets/images/header/close-white.svg';
 import alarm from '../../assets/images/header/alarm.svg';
-<<<<<<< HEAD
-import redDot from '../../assets/RedDotIcon.svg';
-import { useEffect, useRef, useState } from 'react';
-import { getNotificationsData, putNotificationSeenData } from '../../api/notification/notification';
-=======
 import alarmWhite from '../../assets/images/header/alarm-white.svg';
 import redDot from '../../assets/images/header/red-dot-icon.svg';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  getNotificationsData,
-  putNotificationSeenData,
-} from '../../api/notification/notification';
->>>>>>> dev
+import { getNotificationsData, putNotificationSeenData } from '../../api/notification/notification';
 import { useChannelItemStore } from '../../stores/channelStore';
 import { twMerge } from 'tailwind-merge';
 import { useAuthStore } from '../../stores/authStore';
@@ -32,9 +23,7 @@ export default function Notification({ theme }: { theme: Theme }) {
   const { channels } = useChannelItemStore();
   const [notifiOpen, setNotifiOpen] = useState(false);
 
-  const [originNotifications, setOriginNotifications] = useState<
-    NotificationType[]
-  >([]);
+  const [originNotifications, setOriginNotifications] = useState<NotificationType[]>([]);
   const [notifications, setNotifications] = useState<NotificationType[]>([]);
   const [countData, setCountData] = useState(0);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -50,15 +39,6 @@ export default function Notification({ theme }: { theme: Theme }) {
     }
   };
 
-<<<<<<< HEAD
-  // 새로운 알림이 있는지 확인
-  const newDataHandler = () => {
-    let dataSum = 0;
-    notifications.map((notification) => {
-      // seen값이 false고 like,comment가 삭제된 내용이 아니면 카운트 되도록
-      if (notification.seen === false && notification.like !== null && notification.comment !== null) {
-        dataSum += 1;
-=======
   const notificationHandler = useCallback(() => {
     // api에 가져오 실시간 값
     const originDatas: NotificationType[] = originNotifications;
@@ -66,19 +46,13 @@ export default function Notification({ theme }: { theme: Theme }) {
     //sessionStorage에 값이 있으면 가져오는 값
     const sessionResult = sessionStorage.getItem(`notification-${userId}`);
     const sessionDatas: NotificationType[] =
-      sessionResult && sessionResult !== '[]'
-        ? JSON.parse(sessionResult)
-        : originDatas;
+      sessionResult && sessionResult !== '[]' ? JSON.parse(sessionResult) : originDatas;
 
     // 실시간 값과 session값 가져와서 비교해서 seen 값 변경
     originDatas.forEach((origin) => {
-      const match = sessionDatas.find(
-        (data) =>
-          data._id === origin._id && data.seen != origin.seen && !origin.seen
-      );
+      const match = sessionDatas.find((data) => data._id === origin._id && data.seen != origin.seen && !origin.seen);
       if (match && !origin.seen) {
         origin.seen = match.seen;
->>>>>>> dev
       }
     });
 
@@ -92,10 +66,7 @@ export default function Notification({ theme }: { theme: Theme }) {
           d.author['_id'] !== userId &&
           dayjs(d.createdAt).isAfter(dayjs().subtract(2, 'day'))
       )
-      .sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      );
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     setNotifications(filterResult);
   }, [userId, originNotifications]);
@@ -112,9 +83,7 @@ export default function Notification({ theme }: { theme: Theme }) {
   }, [originNotifications, notificationHandler]);
   // 개별 알림에 변화가 있으면 새로운 카운트
   useEffect(() => {
-    setCountData(
-      notifications.reduce((sum, n) => (!n.seen ? sum + 1 : sum), 0)
-    );
+    setCountData(notifications.reduce((sum, n) => (!n.seen ? sum + 1 : sum), 0));
   }, [notifications]);
 
   // 알림글 누르면 해당 포스트로 이동하는 navigate
@@ -142,7 +111,6 @@ export default function Notification({ theme }: { theme: Theme }) {
         navigate(`/profile`, { state: { userid: notifi.follow['follower'] } });
       }
     });
-<<<<<<< HEAD
 
     if (notifi.follow !== undefined && notifi.follow !== null) {
       console.log(notifi.follow);
@@ -150,10 +118,6 @@ export default function Notification({ theme }: { theme: Theme }) {
         state: { userid: notifi.follow.follower },
       });
     }
-
-    closeHandler();
-=======
->>>>>>> dev
   };
 
   // 알림닫힘
@@ -166,10 +130,7 @@ export default function Notification({ theme }: { theme: Theme }) {
     await putNotificationSeenData();
     fetchNotifications();
 
-    sessionStorage.setItem(
-      `notification-${user?._id}`,
-      JSON.stringify(notifications)
-    );
+    sessionStorage.setItem(`notification-${user?._id}`, JSON.stringify(notifications));
   };
 
   // 알림 modal 외의 외부 영역 누르면 모달이 닫히도록
@@ -192,33 +153,18 @@ export default function Notification({ theme }: { theme: Theme }) {
           setNotifiOpen(!notifiOpen);
         }}
       >
-<<<<<<< HEAD
-        <img src={alarm} />
-        {newData > 0 && (
-          <span className='block w-3.5 h-3.5 rounded-2xl bg-[#FF0000] absolute -right-1 top-0 text-[11px] text-white leading-3'>
-            {newData}
-=======
         <img src={dark(theme) ? alarmWhite : alarm} />
         {countData > 0 && (
           <span className='block w-3.5 h-3.5 rounded-2xl bg-[#FF0000] absolute -right-1 top-0 text-[11px] text-white leading-3'>
             {countData}
->>>>>>> dev
           </span>
         )}
       </button>
       {notifiOpen && (
-<<<<<<< HEAD
-        <div className='absolute gap-3 bg-white rounded-[10px] z-1 py-4 px-5 shadow-2xl w-[340px] z-10 -right-5 top-8.5'>
-          <span className='w-[12px] h-[12px] bg-white rounded-[2px] absolute rotate-135 -top-1.5 right-6 -z-2'></span>
-          <div className='border-b border-[#cccccc] flex justify-between pb-3'>
-            <h3 className='text-[#4D4D4D] text-base font-medium flex items-end gap-x-2'>
-=======
         <div
           ref={modalRef}
           className={`absolute gap-3 rounded-[10px] py-4 px-5 shadow-2xl w-[360px] z-10 -right-5 top-8.5 ${
-            dark(theme)
-              ? 'bg-[#2d2d2d] text-[#ffffff]'
-              : 'bg-[#ffffff] text-[#111111]'
+            dark(theme) ? 'bg-[#2d2d2d] text-[#ffffff]' : 'bg-[#ffffff] text-[#111111]'
           }`}
         >
           <span
@@ -227,71 +173,23 @@ export default function Notification({ theme }: { theme: Theme }) {
             }`}
           ></span>
           <div
-            className={`border-b  flex justify-between pb-3 ${
-              dark(theme) ? 'border-[#484848]' : 'border-[#cccccc]'
-            }`}
+            className={`border-b  flex justify-between pb-3 ${dark(theme) ? 'border-[#484848]' : 'border-[#cccccc]'}`}
           >
             <h3
               className={`text-[#4D4D4D] text-base font-medium flex items-end gap-x-2 ${
                 dark(theme) ? 'text-[#ffffff]' : 'text-[#4D4D4D]'
               }`}
             >
->>>>>>> dev
               Notifications
             </h3>
           </div>
-<<<<<<< HEAD
-          <div ref={modalRef} className='notiList px-2 h-[200px] overflow-y-auto scroll-custom relative'>
-            {notifications.length === 0 ? (
-              <p className='absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm text-[#5c5c5c]'>
-                알림이 없습니다
-              </p>
-            ) : (
-              notifications.map((notifi, index) => {
-                let thisType = '';
-                if (notifi.like !== undefined && notifi.like !== null) {
-                  thisType = 'like';
-                } else if (notifi.comment !== undefined && notifi.comment !== null) {
-                  thisType = 'comment';
-                } else if (notifi.follow !== undefined && notifi.follow !== null) {
-                  thisType = 'follow';
-                } else {
-                  thisType = 'none';
-                }
-                return (
-                  <>
-                    {thisType !== 'none' && (
-                      <button
-                        onClick={() => {
-                          navigateHandler(notifi);
-                        }}
-                        className='block relative pl-3.5 text-[13px] my-3.5 cursor-pointer text-left'
-                        key={`notification-${index}`}
-                      >
-                        <img
-                          className={twMerge('absolute -left-0.5 top-2', notifi.seen && 'grayscale-100 opacity-30')}
-                          src={redDot}
-                        />
-                        {thisType === 'like' && `[${notifi.author['fullName']}] 님이 당신의 게시물을 좋아합니다.`}
-                        {thisType === 'comment' &&
-                          `[${notifi.author['fullName']}] 님이 당신의 게시물에 댓글을 달았습니다.`}
-                        {thisType === 'follow' && `[${notifi.author['fullName']}] 님이 당신을 팔로우했습니다.`}
-                      </button>
-                    )}
-                  </>
-=======
           <div className='notiList py-1 px-2 h-[200px] overflow-y-auto scroll-custom relative'>
             {notifications.length === 0 ? (
-              <p className='absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm'>
-                알림이 없습니다
-              </p>
+              <p className='absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm'>알림이 없습니다</p>
             ) : (
               notifications.map((notifi) => {
                 return (
-                  <div
-                    key={notifi._id}
-                    className='w-full flex justify-between items-start py-2.5'
-                  >
+                  <div key={notifi._id} className='w-full flex justify-between items-start py-2.5'>
                     <button
                       onClick={() => {
                         navigateHandler(notifi);
@@ -305,55 +203,33 @@ export default function Notification({ theme }: { theme: Theme }) {
                         )}
                         src={redDot}
                       />
-                      {notifi.like !== undefined &&
-                        `[${notifi.author['fullName']}] 님이 당신의 게시물을 좋아합니다.`}
+                      {notifi.like !== undefined && `[${notifi.author['fullName']}] 님이 당신의 게시물을 좋아합니다.`}
                       {notifi.comment !== undefined &&
                         `[${notifi.author['fullName']}] 님이 당신의 게시물에 댓글을 달았습니다.`}
-                      {notifi.follow !== undefined &&
-                        `[${notifi.author['fullName']}] 님이 당신을 팔로우 합니다.`}
+                      {notifi.follow !== undefined && `[${notifi.author['fullName']}] 님이 당신을 팔로우 합니다.`}
                     </button>
 
                     <span className='w-12 text-[11px] text-zinc-400 shrink-0 text-right whitespace-nowrap -mt-[1px]'>
                       {dayjs(notifi.createdAt).fromNow()}
                     </span>
                   </div>
->>>>>>> dev
                 );
               })
             )}
           </div>
-<<<<<<< HEAD
-          <div className='absolute right-5 top-4'>
-            <button
-=======
-          <div
-            className={`text-right border-t ${
-              dark(theme) ? 'border-[#484848]' : 'border-[#cccccc]'
-            }`}
-          >
-            <button
-              className='text-xs text-zinc-500 cursor-pointer'
-              onClick={readHandler}
-            >
+          <div className={`text-right border-t ${dark(theme) ? 'border-[#484848]' : 'border-[#cccccc]'}`}>
+            <button className='text-xs text-zinc-500 cursor-pointer' onClick={readHandler}>
               전체읽기
             </button>
           </div>
           <div className='absolute right-5 top-4'>
             <button
->>>>>>> dev
               className='text-sm text-[#bbbbbb] cursor-pointer'
               onClick={() => {
                 closeModalHandler();
               }}
             >
-<<<<<<< HEAD
-              <img src={close} className='opacity-60' />
-=======
-              <img
-                src={dark(theme) ? closeWhite : close}
-                className='opacity-60'
-              />
->>>>>>> dev
+              <img src={dark(theme) ? closeWhite : close} className='opacity-60' />
             </button>
           </div>
         </div>
