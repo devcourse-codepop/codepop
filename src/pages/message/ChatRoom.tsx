@@ -249,18 +249,31 @@ export default function ChatRoom({
                         <div className="font-normal text-[12px] mb-[5px] ml-[2px] w-fit">
                           {msg.sender.fullName}
                         </div>
-                        <div
-                          className={`text-[14px] p-2.5 rounded-b-[10px] rounded-tr-[10px] max-w-[300px] break-words pl-3 w-fit ${
-                            dark(theme)
-                              ? 'bg-[#ffffff] text-[#111111]'
-                              : 'bg-[#ECECEC] text-[#111111]'
-                          }`}
-                        >
-                          {msg.message}
+                        <div className="flex">
+                          <div
+                            className={`text-[14px] p-2.5 rounded-b-[10px] rounded-tr-[10px] max-w-[300px] break-words pl-3 w-fit ${
+                              dark(theme)
+                                ? 'bg-[#ffffff] text-[#111111]'
+                                : 'bg-[#ECECEC] text-[#111111]'
+                            }`}
+                          >
+                            {msg.message}
+                          </div>
+                          <div className="flex justify-end items-end ml-2 text-[12px] font-normal">
+                            <span
+                              className={` ${
+                                dark(theme)
+                                  ? 'text-[#ffffff]/50'
+                                  : 'text-[#111111]/50'
+                              }`}
+                            >
+                              {getWriteDatetimeFormat(msg.createdAt)}
+                            </span>
+                          </div>
                         </div>
                       </div>
                       {/* 시간 */}
-                      <div className="flex justify-end items-end ml-2 text-[12px] font-normal">
+                      {/* <div className="flex justify-end items-end ml-2 text-[12px] font-normal">
                         <span
                           className={` ${
                             dark(theme)
@@ -270,7 +283,7 @@ export default function ChatRoom({
                         >
                           {getWriteDatetimeFormat(msg.createdAt)}
                         </span>
-                      </div>
+                      </div> */}
                     </div>
                   )}
                 </>
