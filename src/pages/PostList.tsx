@@ -1,20 +1,20 @@
-import ChannelName from '../components/channel/ChannelName';
-import PostListItem from '../components/post/PostListItem';
-import postBtn from '../assets/images/post/post-btn.svg';
-import postBtnWhite from '../assets/images/post/post-btn-white.svg';
-import topBtn2 from '../assets/images/top-btn/top-btn.png';
-import topBtn2White from '../assets/images/top-btn/top-btn-white.png';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Search } from 'lucide-react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { getPostList, getSearchPostList } from '../api/post/post';
-import { usePostStore } from '../stores/postStore';
-import dayjs from 'dayjs';
-import { useAuthStore } from '../stores/authStore';
-import { Theme } from '../types/darkModeTypes';
-import { dark } from '../utils/darkModeUtils';
-import PostSkeleton from '../components/post/PostSkeleton';
-import NotLoginModal from '../components/post/NotLoginModal';
+import ChannelName from "../components/channel/ChannelName";
+import PostListItem from "../components/post/PostListItem";
+import postBtn from "../assets/images/post/post-btn.svg";
+import postBtnWhite from "../assets/images/post/post-btn-white.svg";
+import topBtn2 from "../assets/images/top-btn/top-btn.png";
+import topBtn2White from "../assets/images/top-btn/top-btn-white.png";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Search } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
+import { getPostList, getSearchPostList } from "../api/post/post";
+import { usePostStore } from "../stores/postStore";
+import dayjs from "dayjs";
+import { useAuthStore } from "../stores/authStore";
+import { Theme } from "../types/darkModeTypes";
+import { dark } from "../utils/darkModeUtils";
+import PostSkeleton from "../components/post/PostSkeleton";
+import NotLoginModal from "../components/post/NotLoginModal";
 
 export default function PostList({ theme }: { theme: Theme }) {
   const params = useParams();
@@ -38,13 +38,13 @@ export default function PostList({ theme }: { theme: Theme }) {
   const [postListItem, setPostListItem] = useState<Post[]>([]);
 
   // 검색한 내용 상태
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const changeInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
 
   // 정렬 상태 (최신순, 인기순)
-  const [select, setSelect] = useState('recent');
+  const [select, setSelect] = useState("recent");
   const changeSelectHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelect(e.target.value);
   };
@@ -54,12 +54,12 @@ export default function PostList({ theme }: { theme: Theme }) {
   // 전체 게시글 목록을 나타내는 div 요소
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
-  const imgSize = dark(theme) ? 'w-[32px] h-[32px]' : 'w-5 h-5';
+  const imgSize = dark(theme) ? "w-[32px] h-[32px]" : "w-5 h-5";
 
   // 최신순 정렬을 위한 날짜 포맷 설정
   const getDatetimeFormat = (update: string): string => {
     const date = dayjs(update);
-    return date.format('YYYY-MM-DD HH:mm:ss');
+    return date.format("YYYY-MM-DD HH:mm:ss");
   };
 
   // 스크롤 값에 따른 Top 버튼 표시 여부
@@ -76,7 +76,7 @@ export default function PostList({ theme }: { theme: Theme }) {
     if (scrollRef.current) {
       scrollRef.current.scrollTo({
         top: 0,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     }
   };
@@ -92,9 +92,9 @@ export default function PostList({ theme }: { theme: Theme }) {
 
   // 엔터 입력 시에도 메시지 전송하기
   const keyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
-      if (input.trim() === '') return;
+      if (input.trim() === "") return;
       clickSearchHandler();
     }
   };
@@ -117,7 +117,7 @@ export default function PostList({ theme }: { theme: Theme }) {
     try {
       const { data } = await getSearchPostList(input);
       filteringItem(data);
-      setInput('');
+      setInput("");
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
@@ -149,12 +149,12 @@ export default function PostList({ theme }: { theme: Theme }) {
   useEffect(() => {
     const scrollElement = scrollRef.current;
     if (scrollElement) {
-      scrollElement.addEventListener('scroll', scrollHandler);
+      scrollElement.addEventListener("scroll", scrollHandler);
     }
 
     return () => {
       if (scrollElement) {
-        scrollElement.removeEventListener('scroll', scrollHandler);
+        scrollElement.removeEventListener("scroll", scrollHandler);
       }
     };
   }, []);
@@ -169,19 +169,19 @@ export default function PostList({ theme }: { theme: Theme }) {
             </div>
             <div className='flex gap-2.5'>
               {/* <SearchPost /> */}
-              <div className='w-[205px] h-[31px] flex items-center bg-white rounded-[5px] px-2.5 py-2'>
+              <div className='w-[250px] h-[45px] flex items-center bg-white rounded-[5px] px-2.5 py-2'>
                 <input
                   type='text'
                   value={input}
                   onChange={(e) => changeInputHandler(e)}
                   onKeyDown={keyDownHandler}
                   placeholder='검색'
-                  className='flex-grow text-[11px] outline-none placeholder-[#989898]'
+                  className='flex-grow text-[14px] outline-none placeholder-[#989898]'
                 />
                 <Search
                   className='w-[19.94px] h-[19.94px] text-[#86879C] cursor-pointer'
                   onClick={() => {
-                    if (input.trim() === '') return;
+                    if (input.trim() === "") return;
                     clickSearchHandler();
                   }}
                 />
@@ -190,7 +190,7 @@ export default function PostList({ theme }: { theme: Theme }) {
               <select
                 value={select}
                 onChange={(e) => changeSelectHandler(e)}
-                className='w-[86px] h-[31px] bg-white pl-[11px] py-1.5 rounded-[5px] cursor-pointer text-[11px]'
+                className='w-[100px] h-[45px] bg-white pl-[11px] py-1.5 rounded-[5px] cursor-pointer text-[14px]'
               >
                 <option value='recent'>최신순</option>
                 <option value='popular'>인기순</option>
@@ -202,7 +202,9 @@ export default function PostList({ theme }: { theme: Theme }) {
             ref={scrollRef}
           >
             {isLoading ? (
-              Array.from({ length: 5 }).map((_, i) => <PostSkeleton key={i} theme={theme} />)
+              Array.from({ length: 5 }).map((_, i) => (
+                <PostSkeleton key={i} theme={theme} />
+              ))
             ) : (
               <>
                 {postListItem.length === 0 && (
@@ -212,22 +214,27 @@ export default function PostList({ theme }: { theme: Theme }) {
                   </div>
                 )}
                 {postListItem.length !== 0 &&
-                  select === 'recent' &&
+                  select === "recent" &&
                   [...postListItem]
                     .sort(
                       (a, b) =>
                         new Date(getDatetimeFormat(b.createdAt)).getTime() -
                         new Date(getDatetimeFormat(a.createdAt)).getTime()
                     )
-                    .map((item) => <PostListItem key={item._id} {...item} theme={theme} />)}
+                    .map((item) => (
+                      <PostListItem key={item._id} {...item} theme={theme} />
+                    ))}
                 {postListItem.length !== 0 &&
-                  select === 'popular' &&
+                  select === "popular" &&
                   [...postListItem]
                     .sort((a, b) => {
-                      if (b.likes.length - a.likes.length !== 0) return b.likes.length - a.likes.length;
+                      if (b.likes.length - a.likes.length !== 0)
+                        return b.likes.length - a.likes.length;
                       else return b.comments.length - a.comments.length;
                     })
-                    .map((item) => <PostListItem key={item._id} {...item} theme={theme} />)}
+                    .map((item) => (
+                      <PostListItem key={item._id} {...item} theme={theme} />
+                    ))}
               </>
             )}
           </div>
@@ -236,7 +243,7 @@ export default function PostList({ theme }: { theme: Theme }) {
       {showTopButton && (
         <div
           className={`absolute right-[39%] bottom-[38px] cursor-pointer flex justify-center items-center w-14 h-14 rounded-[50%]  shadow-[1px_3px_3px_rgba(0,0,0,0.25)] ${
-            dark(theme) ? 'bg-[#1e1e1e]' : 'bg-[#ffffff]'
+            dark(theme) ? "bg-[#1e1e1e]" : "bg-[#ffffff]"
           }`}
           onClick={scrollToTop}
         >
@@ -249,9 +256,18 @@ export default function PostList({ theme }: { theme: Theme }) {
         </div>
       )}
       <div className='absolute right-35 bottom-5 cursor-pointer'>
-        <img src={dark(theme) ? postBtnWhite : postBtn} onClick={createNewPost} alt='게시글 작성 버튼' />
+        <img
+          src={dark(theme) ? postBtnWhite : postBtn}
+          onClick={createNewPost}
+          alt='게시글 작성 버튼'
+        />
       </div>
-      {isLoginModalOpen && <NotLoginModal closeLoginModalHanlder={closeLoginModalHanlder} theme={theme} />}
+      {isLoginModalOpen && (
+        <NotLoginModal
+          closeLoginModalHanlder={closeLoginModalHanlder}
+          theme={theme}
+        />
+      )}
     </>
   );
 }

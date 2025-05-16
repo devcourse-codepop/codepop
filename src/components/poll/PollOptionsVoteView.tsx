@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { Theme } from '../../types/darkModeTypes';
-import { dark } from '../../utils/darkModeUtils';
-import { useParams } from 'react-router-dom';
-import { voteComments, deleteComments } from '../../api/post/post';
-import { useAuthStore } from '../../stores/authStore';
+import { useState, useEffect, useMemo } from "react";
+import { Theme } from "../../types/darkModeTypes";
+import { dark } from "../../utils/darkModeUtils";
+import { useParams } from "react-router-dom";
+import { voteComments, deleteComments } from "../../api/post/post";
+import { useAuthStore } from "../../stores/authStore";
 
 interface PollOption {
   id: number;
@@ -31,149 +31,176 @@ export default function PollOptionsVoteView({
 }: PollOptionsViewProps) {
   const { postId } = useParams<{ postId: string }>();
   const { user } = useAuthStore();
+  const myUserId = user?._id;
 
-  const [selectedOptionId, setSelectedOptionId] = useState<number | null>(null);
-  const [myCommentId, setMyCommentId] = useState<string | null>(null);
-  const [pollOptions, setPollOptions] = useState(() =>
-    options.map((opt) => ({
-      ...opt,
-      voteCount: 0,
-    }))
-  );
+  const [localComments, setLocalComments] = useState<CommentType[]>(comments);
 
   useEffect(() => {
-    const myUserId = user?._id;
+    setLocalComments(comments);
+  }, [comments]);
 
-    const myVoteComment = comments.find((c) => {
+  const { selectedOptionId, myCommentId } = useMemo(() => {
+    const vote = localComments.find((c) => {
       try {
         const parsed = JSON.parse(c.comment);
-        return parsed.type === 'vote' && parsed.userId === myUserId;
+        return (
+          parsed.type === "vote" &&
+          (parsed.userId === myUserId || c.userId === myUserId)
+        );
       } catch {
         return false;
       }
     });
 
-    if (myVoteComment) {
+    if (vote) {
       try {
-        const parsed = JSON.parse(myVoteComment.comment);
-        setSelectedOptionId(Number(parsed.selectedOptionId));
-        setMyCommentId(myVoteComment._id);
+        const parsed = JSON.parse(vote.comment);
+        return {
+          selectedOptionId: Number(parsed.selectedOptionId),
+          myCommentId: vote._id,
+        };
       } catch {
-        setSelectedOptionId(null);
-        setMyCommentId(null);
+        return { selectedOptionId: null, myCommentId: null };
       }
-    } else {
-      setSelectedOptionId(null);
-      setMyCommentId(null);
     }
 
-    // 옵션별 투표 수 갱신
-    setPollOptions(
-      options.map((opt) => ({
-        ...opt,
-        voteCount: comments.filter((c) => {
-          try {
-            const parsed = JSON.parse(c.comment);
-            return (
-              parsed.type === 'vote' &&
-              Number(parsed.selectedOptionId) === opt.id
-            );
-          } catch {
-            return false;
-          }
-        }).length,
-      }))
-    );
-  }, [comments, options, user?._id]);
+    return { selectedOptionId: null, myCommentId: null };
+  }, [localComments, myUserId]);
 
-  const totalVotes = pollOptions.reduce((acc, cur) => acc + cur.voteCount, 0);
+  const pollOptions = useMemo(() => {
+    return options.map((opt) => ({
+      ...opt,
+      voteCount: localComments.filter((c) => {
+        try {
+          const parsed = JSON.parse(c.comment);
+          return (
+            parsed.type === "vote" && Number(parsed.selectedOptionId) === opt.id
+          );
+        } catch {
+          return false;
+        }
+      }).length,
+    }));
+  }, [options, localComments]);
+
+  const totalVotes = useMemo(
+    () => pollOptions.reduce((acc, cur) => acc + cur.voteCount, 0),
+    [pollOptions]
+  );
+
+  const maxVoteCount = useMemo(
+    () => Math.max(...pollOptions.map((opt) => opt.voteCount)),
+    [pollOptions]
+  );
+
+  const topOptionIds = useMemo(
+    () =>
+      pollOptions
+        .filter((opt) => opt.voteCount === maxVoteCount)
+        .map((opt) => opt.id),
+    [pollOptions, maxVoteCount]
+  );
 
   const handleVote = async (optionId: number) => {
-    if (!postId) return;
+    if (!postId || !myUserId) return;
+
+    const prevComment = localComments.find((c) => c._id === myCommentId);
+
+    // 선택 취소
+    if (selectedOptionId === optionId && myCommentId) {
+      setLocalComments((prev) => prev.filter((c) => c._id !== myCommentId));
+
+      try {
+        await deleteComments(myCommentId);
+        onVoted?.();
+      } catch (err) {
+        if (prevComment) {
+          setLocalComments((prev) => [...prev, prevComment]);
+        }
+        console.error("❌ 선택 취소 실패", err);
+      }
+
+      return;
+    }
+
+    if (myCommentId) {
+      setLocalComments((prev) => prev.filter((c) => c._id !== myCommentId));
+
+      try {
+        await deleteComments(myCommentId);
+      } catch (err) {
+        console.error("⚠️ 기존 투표 삭제 실패", err);
+      }
+    }
+
+    // 새 투표 생성 (optimistic)
+    const tempId = "temp-" + Date.now();
+    const newComment: CommentType = {
+      _id: tempId,
+      userId: myUserId,
+      comment: JSON.stringify({
+        type: "vote",
+        selectedOptionId: optionId,
+        userId: myUserId,
+      }),
+    };
+
+    setLocalComments((prev) => [...prev, newComment]);
 
     try {
-      if (selectedOptionId === optionId && myCommentId) {
-        await deleteComments(myCommentId);
-        setSelectedOptionId(null);
-        setMyCommentId(null);
-        setPollOptions((prev) =>
-          prev.map((opt) =>
-            opt.id === optionId ? { ...opt, voteCount: opt.voteCount - 1 } : opt
-          )
-        );
-        if (onVoted) onVoted();
-        return;
-      }
-
-      if (myCommentId) {
-        await deleteComments(myCommentId);
-        setPollOptions((prev) =>
-          prev.map((opt) =>
-            opt.id === selectedOptionId
-              ? { ...opt, voteCount: opt.voteCount - 1 }
-              : opt
-          )
-        );
-      }
-
       const { data } = await voteComments(
         postId,
         String(optionId),
-        String(user?._id)
+        String(myUserId)
       );
-      setSelectedOptionId(optionId);
-      setMyCommentId(data._id);
-      setPollOptions((prev) =>
-        prev.map((opt) =>
-          opt.id === optionId ? { ...opt, voteCount: opt.voteCount + 1 } : opt
-        )
+
+      // temp -> 서버 응답으로 대체
+      setLocalComments((prev) =>
+        prev.map((c) => (c._id === tempId ? data : c))
       );
-      if (onVoted) onVoted();
+
+      onVoted?.();
     } catch (err) {
-      console.error('❌ 투표 처리 실패', err);
+      // 실패 시 롤백
+      setLocalComments((prev) => prev.filter((c) => c._id !== tempId));
+      console.error("❌ 투표 실패", err);
     }
   };
 
-  const maxVoteCount = Math.max(...pollOptions.map((opt) => opt.voteCount));
-  const topOptionIds = pollOptions
-    .filter((opt) => opt.voteCount === maxVoteCount)
-    .map((opt) => opt.id);
-
   return (
-    <div className="flex flex-col gap-3">
+    <div className='flex flex-col gap-3'>
       {pollOptions.map((option) => {
         const ratio =
           totalVotes > 0 ? (option.voteCount / totalVotes) * 100 : 0;
         const isSelected = option.id === selectedOptionId;
         const isTop = topOptionIds.includes(option.id);
 
-        const bgColor = dark(theme) ? '#8c8c8c' : '#d1d6db';
-        const topColor = dark(theme) ? '#1e1e1e' : '#60AfF7';
+        const bgColor = dark(theme) ? "#8c8c8c" : "#d1d6db";
+        const topColor = dark(theme) ? "#1e1e1e" : "#60AfF7";
         const barColor = isTop ? topColor : bgColor;
 
         const borderColor = dark(theme)
           ? isSelected
-            ? 'border-2 border-neutral-600'
-            : 'border-2 border-[#1e1e1e]'
+            ? "border-2 border-neutral-600"
+            : "border-2 border-[#1e1e1e]"
           : isSelected
-          ? 'border-gray-400'
-          : 'border-gray-300';
+          ? "border-gray-400"
+          : "border-gray-300";
 
         const hoverBg = dark(theme)
-          ? 'hover:bg-[#2c2c2c]'
-          : 'hover:bg-gray-100';
-
-        const textColor = dark(theme) ? 'text-white' : 'text-gray-800';
-        const subTextColor = dark(theme) ? 'text-gray-300' : 'text-gray-600';
+          ? "hover:bg-[#2c2c2c]"
+          : "hover:bg-gray-100";
+        const textColor = dark(theme) ? "text-white" : "text-gray-800";
+        const subTextColor = dark(theme) ? "text-gray-300" : "text-gray-600";
 
         return (
-          <div key={option.id} className="flex flex-col gap-2">
+          <div key={option.id} className='flex flex-col gap-2'>
             <div
               onClick={() => handleVote(option.id)}
               className={`relative px-4 py-2 border rounded flex justify-between items-center cursor-pointer transition overflow-hidden ${borderColor} ${hoverBg}`}
             >
               <div
-                className="absolute left-0 top-0 h-full transition-all duration-300"
+                className='absolute left-0 top-0 h-full transition-all duration-300'
                 style={{
                   width: `${ratio}%`,
                   backgroundColor: barColor,
@@ -188,8 +215,8 @@ export default function PollOptionsVoteView({
         );
       })}
       <div
-        className={`mt-4  font-medium ${
-          dark(theme) ? 'text-[#ffffff]' : 'text-gray-700'
+        className={`mt-4 font-medium ${
+          dark(theme) ? "text-[#ffffff]" : "text-gray-700"
         }`}
       >
         Total Votes: {totalVotes}
