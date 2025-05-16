@@ -264,6 +264,7 @@ export default function PostDetailItem({
                 options={pollOptions}
                 comments={comments}
                 theme={theme}
+                onVoted={updateReloadTrigger}
               />
             </div>
           )}
