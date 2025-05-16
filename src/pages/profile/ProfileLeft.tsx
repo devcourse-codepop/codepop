@@ -10,20 +10,28 @@ import ChatModal from '../message/ChatModal';
 import useChatClose from '../../utils/changeMessageIcon';
 import FollowModal from './FollowModal';
 import followIcon from '../../assets/images/profile/follow-icon.svg';
+import followIconBlack from '../../assets/images/profile/follow-icon-black.svg';
 import { handleFollow, handleUnfollow } from '../../utils/followHandlers';
 
 interface ProfileLeftProps extends UserInfo {
   theme: Theme;
 }
 
-export default function ProfileLeft({ userData, theme, userId, refetchUserData }: ProfileLeftProps) {
+export default function ProfileLeft({
+  userData,
+  theme,
+  userId,
+  refetchUserData,
+}: ProfileLeftProps) {
   const user = useAuthStore((state) => state.user);
   const setUser = useAuthStore((state) => state.setUser);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFollowed, setIsFollowed] = useState(false);
   const [followData, setFollowData] = useState<Follow[]>([]);
-  const [followType, setFollowType] = useState<'follower' | 'following'>('follower');
+  const [followType, setFollowType] = useState<'follower' | 'following'>(
+    'follower'
+  );
   const onClose = useChatClose(setIsChatOpen);
   const navigate = useNavigate();
 
@@ -49,15 +57,20 @@ export default function ProfileLeft({ userData, theme, userId, refetchUserData }
       >
         <img
           src={userData?.image || defaultProfileImage}
-          alt='Profile'
-          className='w-[196px] h-[196px] rounded-[5px] mt-[60px]  object-contain overflow-hidden'
+          alt="Profile"
+          className="w-[196px] h-[196px] rounded-[5px] mt-[60px]  object-contain overflow-hidden"
         />
-        <div className='pt-[0px]'>
-          <p className='font-bold text-[20px] mt-[40px]'> {userData?.fullName}</p>
-          <p className='font-normal text-[14px] mt-[3px] w-[200px] break-words'>{userData?.email}</p>
-          <div className='flex gap-8.5 text-[16px] font-medium mt-[40px] '>
+        <div className="pt-[0px]">
+          <p className="font-bold text-[20px] mt-[40px]">
+            {' '}
+            {userData?.fullName}
+          </p>
+          <p className="font-normal text-[14px] mt-[3px] w-[200px] break-words">
+            {userData?.email}
+          </p>
+          <div className="flex gap-8.5 text-[16px] font-medium mt-[40px] ">
             <div
-              className='flex  items-center cursor-pointer'
+              className="flex  items-center cursor-pointer"
               onClick={() => {
                 console.log('팔로워 리스트:', userData?.followers);
                 openModalWithData(userData?.followers);
@@ -65,10 +78,10 @@ export default function ProfileLeft({ userData, theme, userId, refetchUserData }
               }}
             >
               <span>팔로워</span>
-              <span className='ml-[8px]'>{userData?.followers.length}</span>
+              <span className="ml-[8px]">{userData?.followers.length}</span>
             </div>
             <div
-              className='flex  items-center cursor-pointer'
+              className="flex  items-center cursor-pointer"
               onClick={() => {
                 console.log('팔로잉 리스트:', userData?.following);
                 openModalWithData(userData?.following);
@@ -76,14 +89,16 @@ export default function ProfileLeft({ userData, theme, userId, refetchUserData }
               }}
             >
               <span>팔로잉</span>
-              <span className='ml-[8px]'>{userData?.following.length}</span>
+              <span className="ml-[8px]">{userData?.following.length}</span>
             </div>
           </div>
           {user?._id === userId ? (
-            <div className='mt-[25px] flex gap-6'>
+            <div className="mt-[25px] flex gap-6">
               <Button
-                value='프로필 수정'
-                className={`button-style3 ${dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''}`}
+                value="프로필 수정"
+                className={`button-style3 ${
+                  dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
+                }`}
                 onClick={() => navigate('/profile/edit')}
               />
               <Mail
@@ -96,12 +111,14 @@ export default function ProfileLeft({ userData, theme, userId, refetchUserData }
               <ChatModal isOpen={isChatOpen} onClose={onClose} theme={theme} />
             </div>
           ) : (
-            <div className='mt-[25px]'>
+            <div className="mt-[25px]">
               {userId &&
                 (isFollowed ? (
                   <Button
-                    value='팔로우 취소'
-                    className='button-style3'
+                    value="팔로우 취소"
+                    className={`button-style3 ${
+                      dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
+                    }`}
                     onClick={() => {
                       if (!user) return;
                       handleUnfollow(user, userId, setUser, refetchUserData);
@@ -109,14 +126,16 @@ export default function ProfileLeft({ userData, theme, userId, refetchUserData }
                   />
                 ) : (
                   <Button
-                    value='팔로우'
-                    className='button-style3'
+                    value="팔로우"
+                    className={`button-style3 ${
+                      dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
+                    }`}
                     onClick={() => {
                       if (!user) return;
                       handleFollow(user, userId, setUser, refetchUserData);
                     }}
-                    imageSrc={followIcon}
-                    imageAlt='팔로우 아이콘'
+                    imageSrc={dark(theme) ? followIconBlack : followIcon}
+                    imageAlt="팔로우 아이콘"
                   />
                 ))}
             </div>

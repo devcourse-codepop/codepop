@@ -1,4 +1,5 @@
 import menuIcon from '../../assets/images/menu/menu-icon.svg';
+import menuIconWhite from '../../assets/images/menu/menu-icon-white.svg';
 import { Search } from 'lucide-react';
 import Avatar from '../../components/avatar/Avatar';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -10,6 +11,7 @@ import ChatModal from '../../pages/message/ChatModal';
 import useChatClose from '../../utils/changeMessageIcon';
 import { handleFollow, handleUnfollow } from '../../utils/followHandlers';
 import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 
 export default function FollowerMember({
   followData,
@@ -28,7 +30,9 @@ export default function FollowerMember({
   const [users, setUsers] = useState<User[]>([]);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatTargetUser, setChatTargetUser] = useState<User1 | null>(null);
-  const [activeTab, setActiveTab] = useState<'following' | 'follower'>(followType);
+  const [activeTab, setActiveTab] = useState<'following' | 'follower'>(
+    followType
+  );
   const onClose = useChatClose(setIsChatOpen);
   const modalRef = useRef<HTMLUListElement>(null);
   const isMyProfile = user?._id === targetUserId;
@@ -100,22 +104,46 @@ export default function FollowerMember({
   }, []);
 
   return (
-    <div className='w-[448px] h-[75vh] bg-white rounded-[10px] shadow-md pl-[30px] pr-[26px] pt-[20px] relative overflow-hidden'>
+    <div
+      className={`w-[448px] h-[75vh] rounded-[10px] shadow-md pl-[30px] pr-[26px] pt-[20px] relative overflow-hidden ${
+        dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+      }`}
+    >
       {/* 탭 버튼 영역 */}
-      <div className='flex justify-around mb-[13px]'>
+      <div className="flex justify-around mb-[13px]">
         <button
           onClick={() => setActiveTab('follower')}
           className={`w-1/2 py-2 px-4 text-sm font-medium border-b-2 ${
-            activeTab === 'follower' ? 'border-black text-black' : 'border-gray-300 text-gray-400'
+            activeTab === 'follower'
+              ? `${
+                  dark(theme)
+                    ? 'border-[#acacaa] text-[#acacaa]'
+                    : 'border-black text-black'
+                }`
+              : `${
+                  dark(theme)
+                    ? 'border-[#1e1e1e] text-[#1e1e1e]'
+                    : 'border-gray-300 text-gray-400'
+                }`
           }`}
         >
-          Follower
+          Followers
         </button>
 
         <button
           onClick={() => setActiveTab('following')}
           className={`w-1/2 py-2 px-4 text-sm font-medium border-b-2 ${
-            activeTab === 'following' ? 'border-black text-black' : 'border-gray-300 text-gray-400'
+            activeTab === 'following'
+              ? `${
+                  dark(theme)
+                    ? 'border-[#acacaa] text-[#acacaa]'
+                    : 'border-black text-black'
+                }`
+              : `${
+                  dark(theme)
+                    ? 'border-[#1e1e1e] text-[#1e1e1e]'
+                    : 'border-gray-300 text-gray-400'
+                }`
           }`}
         >
           Following
@@ -123,39 +151,69 @@ export default function FollowerMember({
       </div>
 
       {/* 검색창 */}
-      <div className='flex items-center text-[#898FA3] bg-[#F6F8FA] px-3 py-2 rounded-[5.54px] text-[14px] gap-4 mb-[13px]'>
-        <Search className='w-[19.94px] h-[19.94px] text-[#86879C]' />
+      <div className="flex items-center text-[#898FA3] bg-[#F6F8FA] px-3 py-2 rounded-[5.54px] text-[14px] gap-4 mb-[13px]">
+        <Search className="w-[19.94px] h-[19.94px] text-[#86879C]" />
         <input
-          type='text'
-          placeholder='Search'
-          className='outline-none placeholder:text-[#898FA3] placeholder:text-[14px] w-full'
+          type="text"
+          placeholder={
+            activeTab === 'follower'
+              ? '팔로워를 검색해 보세요'
+              : '팔로잉을 검색해 보세요'
+          }
+          className="outline-none placeholder:text-[#898FA3] placeholder:text-[14px] w-full"
           onChange={searchHandler}
         />
       </div>
 
       {/* 유저 리스트 */}
-      <div className='member-list overflow-y-auto pt-2 pb-2 h-[calc(75vh-140px)]'>
+      <div
+        className={`member-list overflow-y-auto pt-2 pb-2 h-[calc(75vh-140px)] ${
+          dark(theme) ? 'dark-member-list' : ''
+        }`}
+      >
         {activeTab === 'follower' && followerMembers.length === 0 && (
-          <div className='h-[50vh] flex items-center justify-center text-[20px] text-gray-600'>
+          <div
+            className={`h-[50vh] flex items-center justify-center text-[15px] ${
+              dark(theme) ? 'text-[#acacaa]' : 'text-gray-600 '
+            }`}
+          >
             표시할 사용자가 없습니다.
           </div>
         )}
         {activeTab === 'follower' &&
           followerMembers.map((listedUser) => (
-            <div className='relative' key={listedUser._id} id={listedUser._id}>
-              <div className='memberCard cursor-pointer' onClick={() => ToggleHandelr(listedUser._id)}>
-                <Avatar name={listedUser.fullName} email={listedUser.email} image={listedUser.image} theme={theme} />
+            <div className="relative" key={listedUser._id} id={listedUser._id}>
+              <div
+                className="memberCard cursor-pointer"
+                onClick={() => ToggleHandelr(listedUser._id)}
+              >
+                <Avatar
+                  name={listedUser.fullName}
+                  email={listedUser.email}
+                  image={listedUser.image}
+                  theme={theme}
+                />
               </div>
-              <button className='absolute right-0 top-4 cursor-pointer' onClick={() => ToggleHandelr(listedUser._id)}>
-                <img src={menuIcon} className='rotate-90' />
+              <button
+                className="absolute right-0 top-4 cursor-pointer"
+                onClick={() => ToggleHandelr(listedUser._id)}
+              >
+                <img
+                  src={dark(theme) ? menuIconWhite : menuIcon}
+                  className="rotate-90"
+                />
                 {openUser === listedUser._id && (
                   <ul
                     ref={modalRef}
-                    className='avatarMenu absolute text-xs w-27 right-5 top-0 bg-white rounded-[5px] border border-[#ddd] text-left z-2 py-1'
+                    className={`avatarMenu absolute text-xs w-27 right-5 top-0  rounded-[5px]  text-left z-2 py-1 ${
+                      dark(theme)
+                        ? 'bg-[#2d2d2d] border border-white/40'
+                        : 'bg-[#ffffff] border border-[#ddd]'
+                    }`}
                   >
                     <li>
                       <Link
-                        className='px-3 py-1 block opacity-70 hover:opacity-100'
+                        className="px-3 py-1 block opacity-70 hover:opacity-100"
                         to={`/profile`}
                         state={{ userid: listedUser._id }}
                       >
@@ -163,9 +221,12 @@ export default function FollowerMember({
                       </Link>
                     </li>
                     <li
-                      className='px-3 py-1 block  opacity-70 hover:opacity-100'
+                      className="px-3 py-1 block  opacity-70 hover:opacity-100"
                       onClick={() => {
-                        setChatTargetUser({ id: listedUser._id, name: listedUser.fullName });
+                        setChatTargetUser({
+                          id: listedUser._id,
+                          name: listedUser.fullName,
+                        });
                         setIsChatOpen(true);
                       }}
                     >
@@ -174,15 +235,20 @@ export default function FollowerMember({
                     {user?._id !== listedUser._id &&
                       (isFollowingUser(listedUser._id) ? (
                         <li
-                          className='px-3 py-1 block  opacity-70 hover:opacity-100'
-                          onClick={() => user && handleUnfollow(user, listedUser._id, setUser)}
+                          className="px-3 py-1 block  opacity-70 hover:opacity-100"
+                          onClick={() =>
+                            user &&
+                            handleUnfollow(user, listedUser._id, setUser)
+                          }
                         >
                           팔로우 취소
                         </li>
                       ) : (
                         <li
-                          className='px-3 py-1 block  opacity-70 hover:opacity-100'
-                          onClick={() => user && handleFollow(user, listedUser._id, setUser)}
+                          className="px-3 py-1 block  opacity-70 hover:opacity-100"
+                          onClick={() =>
+                            user && handleFollow(user, listedUser._id, setUser)
+                          }
                         >
                           팔로우
                         </li>
@@ -194,26 +260,48 @@ export default function FollowerMember({
           ))}
 
         {activeTab === 'following' && followingMembers.length === 0 && (
-          <div className='h-[50vh] flex items-center justify-center text-[20px] text-gray-600'>
+          <div
+            className={`h-[50vh] flex items-center justify-center text-[15px] ${
+              dark(theme) ? 'text-[#acacaa]' : 'text-gray-600 '
+            }`}
+          >
             표시할 사용자가 없습니다.
           </div>
         )}
         {activeTab === 'following' &&
           followingMembers.map((listedUser) => (
-            <div className='relative' key={listedUser._id} id={listedUser._id}>
-              <div className='memberCard cursor-pointer' onClick={() => ToggleHandelr(listedUser._id)}>
-                <Avatar name={listedUser.fullName} email={listedUser.email} image={listedUser.image} theme={theme} />
+            <div className="relative" key={listedUser._id} id={listedUser._id}>
+              <div
+                className="memberCard cursor-pointer"
+                onClick={() => ToggleHandelr(listedUser._id)}
+              >
+                <Avatar
+                  name={listedUser.fullName}
+                  email={listedUser.email}
+                  image={listedUser.image}
+                  theme={theme}
+                />
               </div>
-              <button className='absolute right-0 top-4 cursor-pointer' onClick={() => ToggleHandelr(listedUser._id)}>
-                <img src={menuIcon} className='rotate-90' />
+              <button
+                className="absolute right-0 top-4 cursor-pointer"
+                onClick={() => ToggleHandelr(listedUser._id)}
+              >
+                <img
+                  src={dark(theme) ? menuIconWhite : menuIcon}
+                  className="rotate-90"
+                />
                 {openUser === listedUser._id && (
                   <ul
                     ref={modalRef}
-                    className='avatarMenu absolute text-xs w-27 right-5 top-0 bg-white rounded-[5px] border border-[#ddd] text-left z-2 py-1'
+                    className={`avatarMenu absolute text-xs w-27 right-5 top-0  rounded-[5px]  text-left z-2 py-1 ${
+                      dark(theme)
+                        ? 'bg-[#2d2d2d] border border-white/40'
+                        : 'bg-[#ffffff] border border-[#ddd]'
+                    }`}
                   >
                     <li>
                       <Link
-                        className='px-3 py-1 block opacity-70 hover:opacity-100'
+                        className="px-3 py-1 block opacity-70 hover:opacity-100"
                         to={`/profile`}
                         state={{ userid: listedUser._id }}
                       >
@@ -221,9 +309,12 @@ export default function FollowerMember({
                       </Link>
                     </li>
                     <li
-                      className='px-3 py-1 block  opacity-70 hover:opacity-100'
+                      className="px-3 py-1 block  opacity-70 hover:opacity-100"
                       onClick={() => {
-                        setChatTargetUser({ id: listedUser._id, name: listedUser.fullName });
+                        setChatTargetUser({
+                          id: listedUser._id,
+                          name: listedUser.fullName,
+                        });
                         setIsChatOpen(true);
                       }}
                     >
@@ -232,15 +323,20 @@ export default function FollowerMember({
                     {user?._id !== listedUser._id &&
                       (isFollowingUser(listedUser._id) ? (
                         <li
-                          className='px-3 py-1 block  opacity-70 hover:opacity-100'
-                          onClick={() => user && handleUnfollow(user, listedUser._id, setUser)}
+                          className="px-3 py-1 block  opacity-70 hover:opacity-100"
+                          onClick={() =>
+                            user &&
+                            handleUnfollow(user, listedUser._id, setUser)
+                          }
                         >
                           팔로우 취소
                         </li>
                       ) : (
                         <li
-                          className='px-3 py-1 block  opacity-70 hover:opacity-100'
-                          onClick={() => user && handleFollow(user, listedUser._id, setUser)}
+                          className="px-3 py-1 block  opacity-70 hover:opacity-100"
+                          onClick={() =>
+                            user && handleFollow(user, listedUser._id, setUser)
+                          }
                         >
                           팔로우
                         </li>
@@ -250,10 +346,15 @@ export default function FollowerMember({
               </button>
             </div>
           ))}
-        <div className='h-4' />
+        <div className="h-4" />
       </div>
 
-      <ChatModal initialUser={chatTargetUser} isOpen={isChatOpen} onClose={onClose} theme={theme} />
+      <ChatModal
+        initialUser={chatTargetUser}
+        isOpen={isChatOpen}
+        onClose={onClose}
+        theme={theme}
+      />
     </div>
   );
 }
