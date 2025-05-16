@@ -129,8 +129,10 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
               isSubmitDisabled
                 ? dark(theme)
                   ? 'bg-[#3a3a3a] text-[#777777] cursor-not-allowed'
-                  : 'bg-gray-400 text-white cursor-not-allowed'
-                : 'bg-[#1e1e1e] text-[#ffffff]'
+                  : 'bg-gray-400 text-[#ffffff] cursor-not-allowed'
+                : dark(theme)
+                ? 'bg-[#1e1e1e] text-[#ffffff]'
+                : 'bg-[#1E293B] text-[#ffffff]'
             }`}
             onClick={(e) => {
               if (isSubmitDisabled) {

@@ -179,7 +179,7 @@ export default function ChatRoom({
         <>
           <div
             className={`flex-1 overflow-y-auto p-2 font-normal px-[16px] space-y-3 messageBox ${
-              dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
+              dark(theme) ? 'bg-[#2d2d2d] text-[#ffffff]' : 'text-[#111111]'
             }`}
           >
             {messages.map((msg, idx) => {
@@ -227,7 +227,7 @@ export default function ChatRoom({
                       <div
                         className={`text-[14px] p-2.5 rounded-b-[10px] rounded-tl-[10px] max-w-[300px] break-words pl-3 w-fit ${
                           dark(theme)
-                            ? 'bg-[#ffffff] text-[#111111]'
+                            ? 'bg-[#a5d7db] text-[#111111]'
                             : 'bg-[#1E293B] text-white'
                         }`}
                       >
@@ -293,7 +293,9 @@ export default function ChatRoom({
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full h-[50px] p-1 pl-[18px] rounded-[5px] bg-[#ECECEC] font-normal placeholder-[#898FA3] outline-none text-[14px]"
+              className={`w-full h-[50px] p-1 pl-[18px] rounded-[5px] bg-[#ECECEC] font-normal placeholder-[#898FA3] outline-none text-[14px] ${
+                dark(theme) ? 'text-[#111111]' : ''
+              }`}
               placeholder="메시지를 입력해주세요..."
             />
             <img

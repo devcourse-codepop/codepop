@@ -6,7 +6,7 @@ export default function BoldIcon({ theme }: { theme: Theme }) {
   return (
     <img
       src={`${theme.name === 'Dark' ? boldIconWhite : boldIcon}`}
-      className="w-[30px] h-[30px] inline-block cursor-pointer p-1"
+      className="w-[29.5px] h-[29.5px] inline-block cursor-pointer p-1"
     />
   );
 }

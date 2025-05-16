@@ -15,7 +15,7 @@ export default function ChannelName({ channelId, theme }: ChannelNameProps) {
   const titleList = [
     { subtitle: '"이거 왜 되지?"', title: '미스터리 코드 공유 채널' },
     { subtitle: '"이거 왜 안 쓰지?"', title: '데스크 셋업 공유 채널' },
-    { subtitle: '"골라봐"', title: '선택의 갈림길에서 함께 답을 찾는 채널' },
+    { subtitle: '"골라봐"', title: '투표하다 보면 수다도 터지는 채널' },
   ];
 
   const textColor = dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]';
