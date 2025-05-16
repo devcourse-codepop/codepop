@@ -149,7 +149,15 @@ export default function UpdateVotePost({ theme }: { theme: Theme }) {
           <div className='mb-2.5'>
             {pollOptions.length > 0 && (
               <div className='mt-6'>
-                <h2 className='font-semibold text-gray-700 mb-2'>투표 항목</h2>
+                <h2
+                  className={`font-semibold mb-2  ${
+                    dark(theme)
+                      ? "bg-[#2d2d2d] text-[#ffffff]"
+                      : "bg-[#ffffff] text-[#111111]"
+                  }`}
+                >
+                  투표 항목
+                </h2>
                 <PollOptionsView options={pollOptions} theme={theme} />
               </div>
             )}
