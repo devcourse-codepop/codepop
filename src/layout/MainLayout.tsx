@@ -54,7 +54,7 @@ export default function MainLayout({
           <aside
             ref={sideBarRef}
             className={twMerge(
-              'side-bar flex flex-col h-full mr-[30px] box-border  pb-[20px]',
+              'side-bar flex flex-col h-full mr-[30px] box-border pb-[30px]',
               mobileSide && 'open'
             )}
           >
@@ -63,7 +63,7 @@ export default function MainLayout({
             </div>
             <MemberBox theme={theme} />
           </aside>
-          <main className='h-full w-full min-w-0 max-w-full pb-[20px]'>
+          <main className='h-full w-full min-w-0 max-w-full h-[841px]'>
             {/* 컨텐츠 영역 */}
             <Outlet />
           </main>

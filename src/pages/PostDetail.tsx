@@ -70,12 +70,12 @@ export default function PostDetail({ theme }: { theme: Theme }) {
 
   return (
     <>
-      <div className="w-full">
-        <div className="flex justify-between items-end pb-[30px]">
+      <div className='grid grid-rows-[auto_1fr_auto] h-full'>
+        <div className='flex justify-between items-end pb-[30px]'>
           <ChannelName channelId={String(channel)} theme={theme} />
         </div>
         {postItem && (
-          <div className="flex flex-col gap-[30px] max-h-[calc(100vh-100px-120px)] overflow-auto scroll-custom">
+          <div className='flex flex-col gap-[30px] h-full overflow-auto scroll-custom pb-[30px]'>
             {/* <PostDetailItem key={postItem?._id} {...postItem} /> */}
             <PostDetailItem
               {...postItem}

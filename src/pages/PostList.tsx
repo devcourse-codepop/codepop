@@ -149,7 +149,7 @@ export default function PostList({ theme }: { theme: Theme }) {
   return (
     <>
       <div className='h-full'>
-        <div className='w-full h-full grid grid-rows-[auto_1fr_auto]'>
+        <div className='w-full h-full grid grid-rows-[auto_1fr_auto] relative'>
           <div className='flex justify-between items-end pb-[20px] flex-wrap channel-top'>
             <div className='mr-3'>
               <ChannelName channelId={String(channel)} theme={theme} />
@@ -182,7 +182,7 @@ export default function PostList({ theme }: { theme: Theme }) {
             </div>
           </div>
           <div
-            className='flex flex-col gap-[30px] pb-5 overflow-y-auto scroll-custom'
+            className='flex flex-col gap-[30px] pb-7.5 overflow-y-auto scroll-custom'
             ref={scrollRef}
           >
             {isLoading ? (
@@ -222,32 +222,32 @@ export default function PostList({ theme }: { theme: Theme }) {
               </>
             )}
           </div>
+          {showTopButton && (
+            <div
+              className={`absolute right-[50%] translate-x-1/2 bottom-[35px] cursor-pointer flex justify-center items-center w-14 h-14 rounded-[50%]  shadow-[1px_3px_3px_rgba(0,0,0,0.25)] ${
+                dark(theme) ? 'bg-[#1e1e1e]' : 'bg-[#ffffff]'
+              }`}
+              onClick={scrollToTop}
+            >
+              <img
+                src={dark(theme) ? topBtn2White : topBtn2}
+                onClick={scrollToTop}
+                alt='top 버튼'
+                className={`w-5 h-5 ${imgSize} cursor-pointer`}
+              />
+            </div>
+          )}
+          {isLogin && (
+            <div className='post-write-button absolute -right-[90px] bottom-5 cursor-pointer'>
+              <img
+                src={dark(theme) ? postBtnWhite : postBtn}
+                onClick={createNewPost}
+                alt='게시글 작성 버튼'
+              />
+            </div>
+          )}
         </div>
       </div>
-      {showTopButton && (
-        <div
-          className={`absolute right-[39%] bottom-[38px] cursor-pointer flex justify-center items-center w-14 h-14 rounded-[50%]  shadow-[1px_3px_3px_rgba(0,0,0,0.25)] ${
-            dark(theme) ? 'bg-[#1e1e1e]' : 'bg-[#ffffff]'
-          }`}
-          onClick={scrollToTop}
-        >
-          <img
-            src={dark(theme) ? topBtn2White : topBtn2}
-            onClick={scrollToTop}
-            alt='top 버튼'
-            className={`w-5 h-5 ${imgSize} cursor-pointer`}
-          />
-        </div>
-      )}
-      {isLogin && (
-        <div className='absolute right-35 bottom-5 cursor-pointer'>
-          <img
-            src={dark(theme) ? postBtnWhite : postBtn}
-            onClick={createNewPost}
-            alt='게시글 작성 버튼'
-          />
-        </div>
-      )}
     </>
   );
 }

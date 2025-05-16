@@ -23,6 +23,10 @@
   .input-profile {
     @apply w-[300px] h-[37px] text-[15px] rounded-[5px] pl-[14px] outline-none border mt-[11px] border-[#E3E3E3] font-normal;
   }
+  .postContent * {
+    font-style: normal;
+    font-weight: 400;
+  }
 
   /* 글 작성페이지 */
   .prose {
