@@ -95,6 +95,7 @@ export default function PostList({ theme }: { theme: Theme }) {
   const keyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
+      if (input.trim() === '') return;
       clickSearchHandler();
     }
   };
@@ -180,7 +181,10 @@ export default function PostList({ theme }: { theme: Theme }) {
                 />
                 <Search
                   className="w-[19.94px] h-[19.94px] text-[#86879C] cursor-pointer"
-                  onClick={clickSearchHandler}
+                  onClick={() => {
+                    if (input.trim() === '') return;
+                    clickSearchHandler();
+                  }}
                 />
               </div>
               {/* <DropSort /> */}

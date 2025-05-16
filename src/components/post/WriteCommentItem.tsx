@@ -68,6 +68,7 @@ export default function WriteCommentItem({
 
   const submitHandler = (e: React.FormEvent<Element>) => {
     e.preventDefault();
+    if (comment.trim() === '') return;
     createNewComment();
   };
 
