@@ -31,7 +31,7 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    navigate(`/channel/${channelId}`);
+
     const titleText = titleRef.current?.value || "";
 
     if (!channelId) {
@@ -52,12 +52,13 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
     formData.append("channelId", channelIdList[Number(channel) - 1]);
 
     if (imageFile) {
-      formData.append("image", imageFile); // 이미지 파일 추가
+      formData.append("image", imageFile);
     }
 
     try {
       const res = await createCodePost(formData);
       console.log("작성 성공:", res.data);
+      navigate(`/channel/${channelId}`);
       // 성공 시 이동 등 처리
     } catch (err) {
       console.error("작성 실패", err);
@@ -105,7 +106,7 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
           <Editor
             onChange={setContent}
             onPollCreate={handlePollCreate}
-            onImageSelect={(file) => setImageFile(file)} // 이미지 저장
+            onImageSelect={(file) => setImageFile(file)}
             showCodeButton={true}
             initialContent={content}
             theme={theme}
@@ -137,7 +138,7 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
               }`}
               onClick={(e) => {
                 if (isSubmitDisabled) {
-                  e.preventDefault(); // 아무 동작도 하지 않음
+                  e.preventDefault();
                   return;
                 }
                 handleSubmit(e);
