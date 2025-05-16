@@ -29,7 +29,7 @@ export default function EditorToolbar({
     <div className='flex gap-5.5 mb-2.5'>
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
-        className={`cursor-pointer rounded-[5px]${
+        className={`cursor-pointer rounded-[5px] ${
           editor.isActive('bold')
             ? 'font-bold bg-blue-400'
             : ' hover:bg-gray-200'
