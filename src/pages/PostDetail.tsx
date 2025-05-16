@@ -73,7 +73,7 @@ export default function PostDetail({ theme }: { theme: Theme }) {
   return (
     <>
       <div className='grid grid-rows-[auto_1fr_auto] h-full'>
-        <div className='flex justify-between items-end pb-[30px]'>
+        <div className='flex justify-between items-end pb-[20px]'>
           <ChannelName channelId={String(channel)} theme={theme} />
         </div>
         {postItem && (

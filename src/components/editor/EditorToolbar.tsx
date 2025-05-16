@@ -27,7 +27,7 @@ export default function EditorToolbar({
   if (!editor) return null;
 
   return (
-    <div className='flex gap-5.5 mb-2.5'>
+    <div className='flex gap-5.5 mb-3.5'>
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         className={`cursor-pointer rounded-[5px] ${

@@ -70,7 +70,7 @@ export default function CreateSetPost({ theme }: { theme: Theme }) {
     <>
       <div className='w-full h-full pb-[30px]'>
         <div className='w-full max-h-[820px] h-full grid grid-rows-[auto_1fr_auto]'>
-          <div className='pb-[30px]'>
+          <div className='pb-[20px]'>
             <ChannelName channelId={channelId ?? '2'} theme={theme} />
           </div>
 

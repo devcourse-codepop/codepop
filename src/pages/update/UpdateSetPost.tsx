@@ -112,7 +112,7 @@ export default function UpdateSetPost({ theme }: { theme: Theme }) {
   return (
     <div className='w-full h-full pb-[30px]'>
       <div className='w-full max-h-[820px] h-full grid grid-rows-[auto_1fr_auto]'>
-        <div className='pb-[30px]'>
+        <div className='pb-[20px]'>
           <ChannelName channelId={channelId ?? '1'} theme={theme} />
         </div>
 
