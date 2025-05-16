@@ -97,7 +97,7 @@ export default function CreateVotePost({ theme }: { theme: Theme }) {
             <Editor
               onChange={setContent}
               onPollCreate={handlePollCreate}
-              onImageSelect={(file) => setImageFile(file)} // 이미지 저장
+              onImageSelect={(file) => setImageFile(file)}
               showPollButton={true}
               // disableMinHeight={true}
               initialContent={content}
@@ -123,7 +123,7 @@ export default function CreateVotePost({ theme }: { theme: Theme }) {
                 }`}
                 onClick={(e) => {
                   if (isSubmitDisabled) {
-                    e.preventDefault(); // 아무 동작도 하지 않음
+                    e.preventDefault();
                     return;
                   }
                   handleSubmit(e);

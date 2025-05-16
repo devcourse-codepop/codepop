@@ -5,7 +5,6 @@ import { useMessageStore } from '../../stores/messageStore';
 import MessageOpenIcon from '../../assets/images/message/message-open-icon.svg';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
-import { User } from '../../types';
 
 interface ChatModalProps {
   isOpen: boolean;
@@ -43,9 +42,7 @@ export default function ChatModal({
         onClick={onClose}
       >
         <div
-          className={`w-[448px] h-[75vh] rounded-[5px] flex flex-col ${
-            dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
-          }`}
+          className="w-[448px] h-[75vh] bg-white rounded-[5px] flex flex-col"
           onClick={(e) => e.stopPropagation()}
         >
           {selectedUser ? (

@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { getMessageList, getMessages } from '../api/message/message';
 import { useAuthStore } from '../stores/authStore';
 import { useMessageStore } from '../stores/messageStore';
-import { Conversation, Message } from '../types';
 
 export default function useNewMessageUpdate() {
   const user = useAuthStore((state) => state.user);
@@ -18,14 +17,11 @@ export default function useNewMessageUpdate() {
 
         await Promise.all(
           conversations.map(async (con: Conversation) => {
-            const opponentId =
-              con._id.find((id: string) => id !== user._id) || '';
+            const opponentId = con._id.find((id: string) => id !== user._id) || '';
             if (!opponentId) return;
 
             const { data: messages } = await getMessages(opponentId);
-            const count = messages.filter(
-              (msg: Message) => msg.sender._id === opponentId && !msg.seen
-            ).length;
+            const count = messages.filter((msg: Message) => msg.sender._id === opponentId && !msg.seen).length;
             totalCount += count;
           })
         );

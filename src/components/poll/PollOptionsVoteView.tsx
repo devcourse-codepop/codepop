@@ -153,8 +153,8 @@ export default function PollOptionsVoteView({
 
         const borderColor = dark(theme)
           ? isSelected
-            ? 'border-2 border-[#1e1e1e]'
-            : 'border-2 border-neutral-600'
+            ? 'border-2 border-neutral-600'
+            : 'border-2 border-[#1e1e1e]'
           : isSelected
           ? 'border-gray-400'
           : 'border-gray-300';

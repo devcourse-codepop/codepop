@@ -1,12 +1,12 @@
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import EditorToolbar from './EditorToolbar';
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import EditorToolbar from "./EditorToolbar";
 
-import { CustomImage } from './extensions/CustomImage';
-import { useState, useEffect } from 'react';
-import PollCreator from '../poll/PollCreater';
-import { Theme } from '../../types/darkModeTypes';
-import { dark } from '../../utils/darkModeUtils';
+import { CustomImage } from "./extensions/CustomImage";
+import { useState, useEffect } from "react";
+import PollCreator from "../poll/PollCreater";
+import { Theme } from "../../types/darkModeTypes";
+import { dark } from "../../utils/darkModeUtils";
 
 interface Props {
   onChange: (html: string) => void;
@@ -31,7 +31,7 @@ export default function Editor({
 }: Props) {
   const editor = useEditor({
     extensions: [StarterKit, CustomImage],
-    content: '', // 빈 문자열로 시작
+    content: "", // 빈 문자열로 시작
     onUpdate({ editor }) {
       onChange(editor.getHTML());
     },
@@ -47,7 +47,7 @@ export default function Editor({
   }, [editor, initialContent, hasSetInitialContent]);
 
   return (
-    <div className="p-4 rounded-lg min-h-[100px] h-auto mb-12">
+    <div className='p-4 rounded-lg min-h-[100px] h-auto mb-8'>
       <EditorToolbar
         editor={editor}
         onTogglePoll={() => setShowPollCreator((prev) => !prev)}
@@ -60,7 +60,7 @@ export default function Editor({
         editor={editor}
         className={`
           prose max-w-none [&_.ProseMirror]:outline-none
-          ${disableMinHeight ? '' : '[&_.ProseMirror]:min-h-[365px]'}
+          ${disableMinHeight ? "" : "[&_.ProseMirror]:min-h-[360px]"}
           [&_.ProseMirror]:h-auto
 
           [&_.ProseMirror_pre]:p-4
@@ -73,8 +73,8 @@ export default function Editor({
 
           ${
             dark(theme)
-              ? '[&_.ProseMirror_pre]:bg-[#1e1e1e] [&_.ProseMirror_pre]:text-[#ffffff]'
-              : '[&_.ProseMirror_pre]:bg-[#ececec] [&_.ProseMirror_pre]:text-[#111111]'
+              ? "[&_.ProseMirror_pre]:bg-[#1e1e1e] [&_.ProseMirror_pre]:text-[#ffffff]"
+              : "[&_.ProseMirror_pre]:bg-[#ececec] [&_.ProseMirror_pre]:text-[#111111]"
           }
 
           

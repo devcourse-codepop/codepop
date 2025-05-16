@@ -9,7 +9,6 @@ import { Search } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getPostList, getSearchPostList } from '../api/post/post';
 import { usePostStore } from '../stores/postStore';
-import { Post } from '../types';
 import dayjs from 'dayjs';
 import { useAuthStore } from '../stores/authStore';
 import { Theme } from '../types/darkModeTypes';
@@ -162,25 +161,25 @@ export default function PostList({ theme }: { theme: Theme }) {
 
   return (
     <>
-      <div className="flex ">
-        <div className="w-full ">
-          <div className="flex justify-between items-end pb-[30px]">
+      <div className='flex '>
+        <div className='w-full '>
+          <div className='flex justify-between items-end pb-[30px]'>
             <div>
               <ChannelName channelId={String(channel)} theme={theme} />
             </div>
-            <div className="flex gap-2.5">
+            <div className='flex gap-2.5'>
               {/* <SearchPost /> */}
-              <div className="w-[205px] h-[31px] flex items-center bg-white rounded-[5px] px-2.5 py-2">
+              <div className='w-[205px] h-[31px] flex items-center bg-white rounded-[5px] px-2.5 py-2'>
                 <input
-                  type="text"
+                  type='text'
                   value={input}
                   onChange={(e) => changeInputHandler(e)}
                   onKeyDown={keyDownHandler}
-                  placeholder="검색"
-                  className="flex-grow text-[11px] outline-none placeholder-[#989898]"
+                  placeholder='검색'
+                  className='flex-grow text-[11px] outline-none placeholder-[#989898]'
                 />
                 <Search
-                  className="w-[19.94px] h-[19.94px] text-[#86879C] cursor-pointer"
+                  className='w-[19.94px] h-[19.94px] text-[#86879C] cursor-pointer'
                   onClick={() => {
                     if (input.trim() === '') return;
                     clickSearchHandler();
@@ -191,25 +190,23 @@ export default function PostList({ theme }: { theme: Theme }) {
               <select
                 value={select}
                 onChange={(e) => changeSelectHandler(e)}
-                className="w-[86px] h-[31px] bg-white pl-[11px] py-1.5 rounded-[5px] cursor-pointer text-[11px]"
+                className='w-[86px] h-[31px] bg-white pl-[11px] py-1.5 rounded-[5px] cursor-pointer text-[11px]'
               >
-                <option value="recent">최신순</option>
-                <option value="popular">인기순</option>
+                <option value='recent'>최신순</option>
+                <option value='popular'>인기순</option>
               </select>
             </div>
           </div>
           <div
-            className="flex flex-col gap-[30px] pb-5 max-h-[calc(100vh-100px-120px)] overflow-auto scroll-custom"
+            className='flex flex-col gap-[30px] pb-5 max-h-[calc(100vh-100px-120px)] overflow-auto scroll-custom'
             ref={scrollRef}
           >
             {isLoading ? (
-              Array.from({ length: 5 }).map((_, i) => (
-                <PostSkeleton key={i} theme={theme} />
-              ))
+              Array.from({ length: 5 }).map((_, i) => <PostSkeleton key={i} theme={theme} />)
             ) : (
               <>
                 {postListItem.length === 0 && (
-                  <div className="flex flex-col justify-center items-center gap-5 text-lg font-semibold pt-16 opacity-60">
+                  <div className='flex flex-col justify-center items-center gap-5 text-lg font-semibold pt-16 opacity-60'>
                     <div>게시글이 없습니다!</div>
                     <div>새로운 게시글을 작성해 보세요!</div>
                   </div>
@@ -222,20 +219,15 @@ export default function PostList({ theme }: { theme: Theme }) {
                         new Date(getDatetimeFormat(b.createdAt)).getTime() -
                         new Date(getDatetimeFormat(a.createdAt)).getTime()
                     )
-                    .map((item) => (
-                      <PostListItem key={item._id} {...item} theme={theme} />
-                    ))}
+                    .map((item) => <PostListItem key={item._id} {...item} theme={theme} />)}
                 {postListItem.length !== 0 &&
                   select === 'popular' &&
                   [...postListItem]
                     .sort((a, b) => {
-                      if (b.likes.length - a.likes.length !== 0)
-                        return b.likes.length - a.likes.length;
+                      if (b.likes.length - a.likes.length !== 0) return b.likes.length - a.likes.length;
                       else return b.comments.length - a.comments.length;
                     })
-                    .map((item) => (
-                      <PostListItem key={item._id} {...item} theme={theme} />
-                    ))}
+                    .map((item) => <PostListItem key={item._id} {...item} theme={theme} />)}
               </>
             )}
           </div>
@@ -251,24 +243,15 @@ export default function PostList({ theme }: { theme: Theme }) {
           <img
             src={dark(theme) ? topBtn2White : topBtn2}
             onClick={scrollToTop}
-            alt="top 버튼"
+            alt='top 버튼'
             className={`w-5 h-5 ${imgSize} cursor-pointer`}
           />
         </div>
       )}
-      <div className="absolute right-35 bottom-5 cursor-pointer">
-        <img
-          src={dark(theme) ? postBtnWhite : postBtn}
-          onClick={createNewPost}
-          alt="게시글 작성 버튼"
-        />
+      <div className='absolute right-35 bottom-5 cursor-pointer'>
+        <img src={dark(theme) ? postBtnWhite : postBtn} onClick={createNewPost} alt='게시글 작성 버튼' />
       </div>
-      {isLoginModalOpen && (
-        <NotLoginModal
-          closeLoginModalHanlder={closeLoginModalHanlder}
-          theme={theme}
-        />
-      )}
+      {isLoginModalOpen && <NotLoginModal closeLoginModalHanlder={closeLoginModalHanlder} theme={theme} />}
     </>
   );
 }

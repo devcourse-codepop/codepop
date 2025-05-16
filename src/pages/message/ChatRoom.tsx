@@ -7,7 +7,6 @@ import {
   putMessageSeen,
 } from '../../api/message/message';
 // import { postNotifications } from '../../api/post/post';
-import { Message, User } from '../../types';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import { useAuthStore } from '../../stores/authStore';
@@ -272,18 +271,6 @@ export default function ChatRoom({
                           </div>
                         </div>
                       </div>
-                      {/* 시간 */}
-                      {/* <div className="flex justify-end items-end ml-2 text-[12px] font-normal">
-                        <span
-                          className={` ${
-                            dark(theme)
-                              ? 'text-[#ffffff]/50'
-                              : 'text-[#111111]/50'
-                          }`}
-                        >
-                          {getWriteDatetimeFormat(msg.createdAt)}
-                        </span>
-                      </div> */}
                     </div>
                   )}
                 </>
