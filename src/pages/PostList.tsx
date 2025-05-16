@@ -4,6 +4,7 @@ import postBtn from '../assets/images/post/post-btn.svg';
 import postBtnWhite from '../assets/images/post/post-btn-white.svg';
 import topBtn2 from '../assets/images/top-btn/top-btn.png';
 import topBtn2White from '../assets/images/top-btn/top-btn-white.png';
+
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Search } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -191,7 +192,13 @@ export default function PostList({ theme }: { theme: Theme }) {
               <select
                 value={select}
                 onChange={(e) => changeSelectHandler(e)}
-                className='w-[86px] h-[38px] bg-white pl-[11px] py-1.5 rounded-[5px] cursor-pointer text-[13px]'
+                className={`w-[86px] h-[38px] bg-white pl-[11px] py-1.5 rounded-[5px] cursor-pointer text-[13px] appearance-none`}
+                style={{
+                  backgroundSize: '12px',
+                  backgroundImage: `url('/src/assets/images/form/select-icon.svg')`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 8px center',
+                }}
               >
                 <option value='recent'>최신순</option>
                 <option value='popular'>인기순</option>
