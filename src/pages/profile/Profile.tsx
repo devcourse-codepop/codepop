@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ProfileLeft from './ProfileLeft';
 import ProfileRight from './ProfileRight';
 import { getUserData } from '../../api/profileInfo/profile';
@@ -7,21 +7,21 @@ import defaultCover from '../../assets/images/profile/defaultCover.png';
 export default function Profile({ userId }: { userId: string }) {
   const [userData, setUserData] = useState<User | null>(null);
 
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     try {
       const { data: userData } = await getUserData(userId);
       setUserData(userData);
     } catch (error) {
       console.error('getUserData 오류:', error);
     }
-  };
+  }, [userId]);
 
   useEffect(() => {
     setUserData(null);
     if (userId) {
       fetchUserData();
     }
-  }, [userId]);
+  }, [userId, fetchUserData]);
 
   if (!userData) {
     return <div className='text-center py-10 text-gray-500'>로딩 중...</div>;

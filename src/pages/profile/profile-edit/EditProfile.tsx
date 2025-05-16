@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ImageEditBtn from '../../../assets/ImageEditBtn.svg';
 import { fullNameRegex, passwordRegex } from '../../../utils/validators';
 import EditMenu from './EditMenu';
@@ -77,18 +77,18 @@ export default function EditProfile({ userId }: { userId: string }) {
     }));
   };
 
-  const fetchUserData = async () => {
+  const fetchUserData = useCallback(async () => {
     try {
       const { data: userData } = await getUserData(userId);
       setUserData(userData);
     } catch (error) {
       console.error('getUserData 오류:', error);
     }
-  };
+  }, [userId]);
 
   useEffect(() => {
     if (userId) fetchUserData();
-  }, [userId]);
+  }, [userId, fetchUserData]);
 
   // 모달로 받은 사진 미리 보기 및 저장
   const handleSavePhoto = (file: File, previewUrl: string) => {
