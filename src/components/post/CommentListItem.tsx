@@ -2,7 +2,6 @@ import menuIcon from '../../assets/images/menu/menu-icon.svg';
 import menuIconWhite from '../../assets/images/menu/menu-icon-white.svg';
 import userImg from '../../assets/images/header/user-img.svg';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Comment } from '../../types';
 import { useAuthStore } from '../../stores/authStore';
 import { Link, useParams } from 'react-router-dom';
 import DOMPurify from 'dompurify';

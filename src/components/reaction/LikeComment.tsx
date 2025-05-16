@@ -4,7 +4,6 @@ import likeRed from '../../assets/images/like/like-red.svg';
 import comment from '../../assets/images/comment/comment-outline.svg';
 import commentWhite from '../../assets/images/comment/comment-white.svg';
 import { useCallback, useEffect, useState } from 'react';
-import { Channel, Like, User } from '../../types';
 import { deleteLikes, postLikes, postNotifications } from '../../api/post/post';
 import { useAuthStore } from '../../stores/authStore';
 import NotLoginModal from '../post/NotLoginModal';
