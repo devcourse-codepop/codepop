@@ -10,3 +10,8 @@
   overflow: hidden;
   background: linear-gradient(180deg, #ffffff 0%, #c0cfe7 100%);
 }
+@media (max-width: 1024px) {
+  :root {
+    /* font-size: 14px; */
+  }
+}

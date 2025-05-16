@@ -74,27 +74,27 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
   // };
 
   return (
-    <div className="w-full flex relative">
-      <div>
-        <div className="pb-[30px]">
+    <div className='w-full h-full flex relative'>
+      <div className='w-full h-full grid grid-rows-[auto_1fr_auto] overflow-hidden'>
+        <div className='pb-[30px]'>
           <ChannelName channelId={channelId ?? '1'} theme={theme} />
         </div>
 
         <div
-          className={`shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto ${
+          className={`shadow-md rounded-[10px] p-5 relative h-full ${
             dark(theme)
               ? 'bg-[#2d2d2d] text-[#ffffff]'
               : 'bg-[#ffffff] text-[#111111]'
           }`}
         >
           <input
-            type="text"
+            type='text'
             value={title}
             ref={titleRef}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="제목을 입력하세요"
+            placeholder='제목을 입력하세요'
             autoFocus
-            className="w-[955px] font-semibold text-[25px] m-3 outline-none"
+            className='w-full font-semibold text-[25px] p-3 outline-none'
           />
           <hr
             className={`mt-[15px] mb-[15px] opacity-30 ${
@@ -111,7 +111,7 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
             theme={theme}
           />
           <hr
-            className={`mb-[60px] opacity-30 ${
+            className={`mb-[30px] opacity-30 ${
               dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
             }`}
           />
@@ -123,25 +123,27 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
               onClick={handleImageDelete}
             />
           )} */}
-          <Button
-            value="완료"
-            className={`absolute bottom-[15px] right-[20px] button-style2 ${
-              isSubmitDisabled
-                ? dark(theme)
-                  ? 'bg-[#3a3a3a] text-[#777777] cursor-not-allowed'
-                  : 'bg-gray-400 text-[#ffffff] cursor-not-allowed'
-                : dark(theme)
-                ? 'bg-[#1e1e1e] text-[#ffffff]'
-                : 'bg-[#1E293B] text-[#ffffff]'
-            }`}
-            onClick={(e) => {
-              if (isSubmitDisabled) {
-                e.preventDefault(); // 아무 동작도 하지 않음
-                return;
-              }
-              handleSubmit(e);
-            }}
-          />
+          <div className='text-right'>
+            <Button
+              value='완료'
+              className={`button-style2 ${
+                isSubmitDisabled
+                  ? dark(theme)
+                    ? 'bg-[#3a3a3a] text-[#777777] cursor-not-allowed'
+                    : 'bg-gray-400 text-[#ffffff] cursor-not-allowed'
+                  : dark(theme)
+                  ? 'bg-[#1e1e1e] text-[#ffffff]'
+                  : 'bg-[#1E293B] text-[#ffffff]'
+              }`}
+              onClick={(e) => {
+                if (isSubmitDisabled) {
+                  e.preventDefault(); // 아무 동작도 하지 않음
+                  return;
+                }
+                handleSubmit(e);
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

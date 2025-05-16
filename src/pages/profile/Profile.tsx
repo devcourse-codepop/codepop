@@ -36,23 +36,23 @@ export default function Profile({
   }, [userId]);
 
   if (!userData) {
-    return <div className="text-center py-10 text-gray-500">로딩 중...</div>;
+    return <div className='text-center py-10 text-gray-500'>로딩 중...</div>;
   }
 
   return (
     <div
-      className={`w-full h-[calc(100vh-100px-30px)] rounded-[10px] shadow-md font-semibold overflow-hidden flex flex-col ${
+      className={`w-full h-full rounded-[10px] shadow-md font-semibold overflow-auto ${
         dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
       }`}
     >
-      <div className="h-[223px] flex-shrink-0">
+      <div className='h-[223px] flex-shrink-0'>
         <img
           src={userData?.coverImage || defaultCover}
-          className="w-full h-full rounded-t-[10px] object-fill"
-          alt="BackgroundImage "
+          className='w-full h-full rounded-t-[10px] object-fill'
+          alt='BackgroundImage '
         />
       </div>
-      <div className=" flex  overflow-hidden">
+      <div className='flex min-h-[calc(100% - 223px)]'>
         <ProfileLeft
           userData={userData}
           onSelectTab={setSelectedTab}

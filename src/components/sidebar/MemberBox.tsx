@@ -87,7 +87,7 @@ export default function MemberBox({ theme }: { theme: Theme }) {
       }`}
     >
       <h2
-        className={`font-medium text-[18px] mb-[13px]  ${
+        className={`font-medium text-[20px] mb-[13px]  ${
           dark(theme) ? 'text-[#acacaa]' : 'text-[#595956]'
         }`}
       >

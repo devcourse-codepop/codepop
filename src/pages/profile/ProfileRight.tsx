@@ -128,7 +128,7 @@ export default function ProfileRight({
   };
 
   return (
-    <div className="ml-[26px] ">
+    <div className='px-[26px] w-full min-w-0 pb-[40px]'>
       <p
         className={`mt-[40px] font-semibold text-[18px] ${
           dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
@@ -138,7 +138,7 @@ export default function ProfileRight({
       </p>
 
       <div
-        className={`mt-[31px] w-[682px] min-h-[365px] ${
+        className={`mt-[31px] min-h-[365px] ${
           dark(theme) ? 'text-[#ffffff]' : ''
         }`}
       >
@@ -178,42 +178,45 @@ export default function ProfileRight({
                 } 
                 ${selectedTab === 'comments' ? 'py-[6px]' : 'py-4'}`}
             >
-              <div className="relative flex items-center py-0.5">
-                <div
-                  className={`absolute left-0 rounded-[28px] border text-[12px] font-bold ml-2 text-white px-[10px] py-[3px] cursor-pointer ${bg}`}
-                  onClick={() => navigate(`/channel/${id}`)}
-                >
-                  {label}
+              <div className='relative flex flex-wrap items-center py-0.5 px-2 gap-y-2.5'>
+                <div className='w-[130px]'>
+                  <div
+                    className={`inline-block rounded-[28px] border text-[12px] font-bold text-white px-[10px] py-[3px] cursor-pointer ${bg}`}
+                    onClick={() => navigate(`/channel/${id}`)}
+                  >
+                    {label}
+                  </div>
                 </div>
+                <div className='flex items-center max-w-[calc(100%-130px)] w-full profile-post-title'>
+                  <div
+                    className='min-w-0 flex flex-col cursor-pointer justify-center'
+                    onClick={() => navigate(`/channel/${id}/post/${post._id}`)}
+                  >
+                    <p className='font-semibold text-[15px] w-full truncate'>
+                      {JSON.parse(post.title).title}
+                    </p>
 
-                <div
-                  className="ml-[130px] flex flex-col cursor-pointer justify-center"
-                  onClick={() => navigate(`/channel/${id}/post/${post._id}`)}
-                >
-                  <p className="font-semibold text-[15px] truncate max-w-[430px]">
-                    {JSON.parse(post.title).title}
+                    {selectedTab === 'comments' && post.comments.length > 0 && (
+                      <div className='mt-1 text-[12px] text-gray-700 flex'>
+                        <img
+                          src={dark(theme) ? commentWhite : commentIcon}
+                          className='w-5 h-5'
+                        />
+                        <p
+                          className={`ml-[5px] ${
+                            dark(theme) ? 'text-[#ffffff]' : ''
+                          }`}
+                        >
+                          +{post.myCommentCount}개
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  <p className='ml-auto w-[100px] font-normal  text-right text-[13px]'>
+                    {post.createdAt.slice(0, 10)}
                   </p>
-
-                  {selectedTab === 'comments' && post.comments.length > 0 && (
-                    <div className="mt-1 text-[12px] text-gray-700 flex">
-                      <img
-                        src={dark(theme) ? commentWhite : commentIcon}
-                        className="w-5 h-5"
-                      />
-                      <p
-                        className={`ml-[5px] ${
-                          dark(theme) ? 'text-[#ffffff]' : ''
-                        }`}
-                      >
-                        +{post.myCommentCount}개
-                      </p>
-                    </div>
-                  )}
                 </div>
-
-                <p className="absolute right-0 top-1/2 -translate-y-1/2 w-[100px] font-normal  text-right text-[13px] pr-[15px]">
-                  {post.createdAt.slice(0, 10)}
-                </p>
               </div>
             </div>
           );
@@ -233,27 +236,27 @@ export default function ProfileRight({
             pageRangeDisplayed={6}
             onChange={handlePageChange}
             prevPageText={
-              <span className="text-xl leading-none flex items-center justify-center">
+              <span className='text-xl leading-none flex items-center justify-center'>
                 ‹
               </span>
             }
             nextPageText={
-              <span className="text-xl leading-none flex items-center justify-center">
+              <span className='text-xl leading-none flex items-center justify-center'>
                 ›
               </span>
             }
             firstPageText={
-              <span className="text-xl leading-none flex items-center justify-center">
+              <span className='text-xl leading-none flex items-center justify-center'>
                 «
               </span>
             }
             lastPageText={
-              <span className="text-xl leading-none flex items-center justify-center">
+              <span className='text-xl leading-none flex items-center justify-center'>
                 »
               </span>
             }
-            innerClass="flex gap-2 text-sm"
-            itemClass="px-3 py-1 rounded-[5px] cursor-pointer"
+            innerClass='flex gap-2 text-sm'
+            itemClass='px-3 py-1 rounded-[5px] cursor-pointer'
             activeClass={`bg-[#1E293B] text-white ${
               dark(theme) ? 'bg-[#1e1e1e]' : ''
             }`}

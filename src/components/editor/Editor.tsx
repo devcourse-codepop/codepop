@@ -47,7 +47,7 @@ export default function Editor({
   }, [editor, initialContent, hasSetInitialContent]);
 
   return (
-    <div className="p-4 rounded-lg min-h-[100px] h-auto mb-12">
+    <div className='p-4 rounded-lg min-h-[100px] mb-6 h-[calc(100%-228px)]'>
       <EditorToolbar
         editor={editor}
         onTogglePoll={() => setShowPollCreator((prev) => !prev)}
@@ -61,7 +61,7 @@ export default function Editor({
         className={`
           prose max-w-none [&_.ProseMirror]:outline-none
           ${disableMinHeight ? '' : '[&_.ProseMirror]:min-h-[365px]'}
-          [&_.ProseMirror]:h-auto
+          [&_.ProseMirror]:h-full
 
           [&_.ProseMirror_pre]:p-4
           [&_.ProseMirror_pre]:rounded-lg
@@ -77,7 +77,9 @@ export default function Editor({
               : '[&_.ProseMirror_pre]:bg-[#ececec] [&_.ProseMirror_pre]:text-[#111111]'
           }
 
-          
+          max-w-full
+          overflow-y-auto
+          h-[calc(100%-40px)]
         `}
       />
 

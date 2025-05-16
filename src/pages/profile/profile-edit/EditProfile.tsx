@@ -218,27 +218,27 @@ export default function EditProfile({
   };
 
   if (!userData) {
-    return <div className="text-center py-10 text-gray-500">로딩 중...</div>;
+    return <div className='text-center py-10 text-gray-500'>로딩 중...</div>;
   }
 
   return (
     <>
       <div
-        className={`w-full h-[calc(100vh-100px-30px)] rounded-[10px] shadow-md font-semibold ${
+        className={`w-full h-full overflow-y-auto rounded-[10px] pb-[50px] shadow-md font-semibold ${
           dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
         }`}
       >
-        <div className="relative h-[223px] rounded-t-[10px]">
+        <div className='relative h-[223px] rounded-t-[10px]'>
           <img
             src={coverPreviewUrl || userData.coverImage || defaultCover}
-            className="w-full h-full rounded-t-[10px]"
-            alt="Background"
+            className='w-full h-full rounded-t-[10px]'
+            alt='Background'
           />
-          <div className="relative">
+          <div className='absolute bottom-[19px] right-3'>
             <img
               src={ImageEditBtn}
-              alt="BackgroundEdit"
-              className="absolute cursor-pointer w-[30px] h-[30px] bottom-[19px] right-3"
+              alt='BackgroundEdit'
+              className='cursor-pointer w-[30px] h-[30px]'
               onClick={() => {
                 setIsBackgroundMenuOpen((prev) => !prev);
                 setIsCover(true);
@@ -255,18 +255,18 @@ export default function EditProfile({
           </div>
         </div>
 
-        <div className="flex justify-center items-center">
-          <div className="relative inline-block mt-[19px]">
+        <div className='flex flex-wrap justify-evenly gap-x-6 items-center px-5 mt-10 '>
+          <div className='relative inline-block'>
             <img
               src={profilePreviewUrl || userData.image || defaultProfileImage}
-              className="w-[300px] h-[300px] rounded-[5px] ml-[100px] border border-[#E3E3E3] object-cover"
-              alt="Profile"
+              className='w-[300px] h-[300px] rounded-[5px] border border-[#E3E3E3] object-cover'
+              alt='Profile'
             />
-            <div className="relative">
+            <div className='absolute bottom-[19px] right-3'>
               <img
                 src={ImageEditBtn}
-                alt="ProfileEdit"
-                className="absolute cursor-pointer w-[30px] h-[30px] bottom-[19px] right-3"
+                alt='ProfileEdit'
+                className='cursor-pointer w-[30px] h-[30px]'
                 onClick={() => {
                   setIsProfileMenuOpen((prev) => !prev);
                   setIsCover(false);
@@ -283,10 +283,7 @@ export default function EditProfile({
             </div>
           </div>
 
-          <form
-            onSubmit={handleSubmit}
-            className="w-full max-w-md pl-[50px] ml-[120px] mt-9"
-          >
+          <form onSubmit={handleSubmit}>
             <p
               className={`pt-[35px] font-bold text-[14px] ${
                 dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
@@ -295,14 +292,14 @@ export default function EditProfile({
               이름
             </p>
             <Input
-              type="text"
+              type='text'
               value={enteredUserValues.myName}
               className={`input-profile ${dark(theme) ? 'bg-[#ffffff]' : ''}`}
               onChange={(event) =>
                 handleInputChange('myName', event.target.value)
               }
             />
-            <p className="text-[11px] text-red-500 pt-1 h-2.5">
+            <p className='text-[11px] text-red-500 pt-1 h-2.5'>
               {enteredErrorValues.myNameError || '\u00A0'}
             </p>
 
@@ -314,7 +311,7 @@ export default function EditProfile({
               이메일
             </p>
             <Input
-              type="text"
+              type='text'
               value={userData.email}
               readOnly
               className={`input-profile bg-[#e3e3e3] text-black/50 ${
@@ -330,15 +327,15 @@ export default function EditProfile({
               비밀번호
             </p>
             <Input
-              type="password"
-              placeholder="Password"
+              type='password'
+              placeholder='Password'
               className={`input-profile ${dark(theme) ? 'bg-[#ffffff]' : ''}`}
               value={enteredUserValues.password}
               onChange={(event) =>
                 handleInputChange('password', event.target.value)
               }
             />
-            <p className="text-[11px] text-red-500 pt-1 h-2.5">
+            <p className='text-[11px] text-red-500 pt-1 h-2.5'>
               {enteredErrorValues.passwordError || '\u00A0'}
             </p>
             <p
@@ -349,21 +346,21 @@ export default function EditProfile({
               비밀번호 확인
             </p>
             <Input
-              type="password"
-              placeholder="Password"
+              type='password'
+              placeholder='Password'
               className={`input-profile ${dark(theme) ? 'bg-[#ffffff]' : ''}`}
               value={enteredUserValues.confirmPassword}
               onChange={(event) =>
                 handleInputChange('confirmPassword', event.target.value)
               }
             />
-            <p className="text-[11px] text-red-500 pt-1 h-2.5">
+            <p className='text-[11px] text-red-500 pt-1 h-2.5'>
               {enteredErrorValues.confirmPasswordError || '\u00A0'}
             </p>
 
-            <div className="flex justify-end mr-[113px] mt-[25px] relative">
+            <div className='flex justify-end mr-[113px] mt-[25px] relative'>
               <Button
-                value="수정"
+                value='수정'
                 className={`button-edit ${
                   dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
                 }`}
