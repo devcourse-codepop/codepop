@@ -135,8 +135,8 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
 
   const getChannelInfo = (name: string) => {
     const info = {
-      Vote: { id: 3, label: '골라봐', bg: 'bg-[#60A7F7]' },
-      MysteryCode: { id: 1, label: '이게 왜 되지?', bg: 'bg-[#10215C]' },
+      Vote: { id: 3, label: '골라봐', bg: 'bg-[#9E68E9]' },
+      MysteryCode: { id: 1, label: '이게 왜 되지?', bg: 'bg-[#19A9BE]' },
       Default: { id: 2, label: '이거 왜 안 쓰지?', bg: 'bg-[#3380DE]' },
     };
     return info[name as keyof typeof info] || info.Default;
