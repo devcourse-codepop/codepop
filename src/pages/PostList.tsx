@@ -4,7 +4,7 @@ import postBtn from '../assets/images/post/post-btn.svg';
 import postBtnWhite from '../assets/images/post/post-btn-white.svg';
 import topBtn2 from '../assets/images/top-btn/top-btn.png';
 import topBtn2White from '../assets/images/top-btn/top-btn-white.png';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Search } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getPostList, getSearchPostList } from '../api/post/post';
@@ -124,7 +124,7 @@ export default function PostList({ theme }: { theme: Theme }) {
   };
 
   // 채널의 전체 게시글 목록 가져오기
-  const getPostListItem = async () => {
+  const getPostListItem = useCallback(async () => {
     try {
       const { data } = await getPostList(channelIdList[Number(channel) - 1]);
       // console.log(data);
@@ -133,7 +133,7 @@ export default function PostList({ theme }: { theme: Theme }) {
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
-  };
+  }, [channel, channelIdList]);
 
   // 로그인 관련 모달 닫기
   const closeLoginModalHanlder = () => {
@@ -143,7 +143,7 @@ export default function PostList({ theme }: { theme: Theme }) {
   useEffect(() => {
     if (user) setIsLogin(true);
     getPostListItem();
-  }, [user, channel]);
+  }, [user, channel, getPostListItem]);
 
   // 스크롤 조작을 위한 이벤트 적용
   useEffect(() => {
