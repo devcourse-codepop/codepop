@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { Message } from '../types';
 
 interface User {
   _id: string;
@@ -13,7 +12,7 @@ interface User {
   isOnline: boolean;
   followers: Follow[];
   following: Follow[];
-  messages: Message[];
+  messages?: Message[];
 }
 
 interface AuthStore {
