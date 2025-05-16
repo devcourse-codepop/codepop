@@ -107,7 +107,7 @@ export default function PopularPost({ theme }: { theme: Theme }) {
               id={`panel-${cIndex}`}
             >
               {isLoading ? (
-                <PopularPostCkeleton />
+                <PopularPostCkeleton theme={theme} />
               ) : sortPopulars.length == 0 ? (
                 <p className='absolute left-1/2 bottom-4/7 -translate-x-1/2 text-sm text-[#5c5c5c]'>
                   해당 채널에 게시글이 없습니다.

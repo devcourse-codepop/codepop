@@ -145,7 +145,11 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
   return (
     <div className='w-full min-w-0 px-[26px] pb-[40px] profile-right'>
       <div className='w-full flex justify-between items-center mt-[40px] text-[18px] font-semibold'>
-        <div className='flex pb-[10px] whitespace-nowrap'>
+        <div
+          className={`flex pb-[10px] whitespace-nowrap ${
+            dark(theme) ? 'text-[#ffffff]' : ''
+          }`}
+        >
           <div
             className={`cursor-pointer mb-[-13px] px-4 ${
               selectedTab === 'posts'
@@ -215,7 +219,7 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
               <div className='relative flex flex-wrap items-center py-0.5 px-2 gap-y-2.5'>
                 <div className='w-[130px]'>
                   <div
-                    className={`inline-block rounded-[28px] border text-[12px] font-bold text-white px-[10px] py-[3px] cursor-pointer ${bg}`}
+                    className={`inline-block rounded-[28px] text-[12px] font-bold text-white px-[10px] py-[3px] cursor-pointer ${bg}`}
                     onClick={() => navigate(`/channel/${id}`)}
                   >
                     {label}
@@ -250,7 +254,7 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
                     )}
                   </div>
                   <p
-                    className={`ml-auto w-[100px] font-normal  text-right text-[13px] ${
+                    className={`ml-auto w-[100px] font-normal shrink-0 text-right text-[13px] ${
                       dark(theme) ? 'text-[#ffffff]' : ''
                     }`}
                   >
