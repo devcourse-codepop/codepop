@@ -1,22 +1,30 @@
-import { useParams } from 'react-router-dom';
-import CreateCodePost from '../pages/write/CreateCodePost';
-import CreateSetPost from '../pages/write//CreateSetPost';
-import CreateVotePost from '../pages/write/CreateVotePost';
-import { Theme } from '../types/darkModeTypes';
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import CreateCodePost from "../pages/write/CreateCodePost";
+import CreateSetPost from "../pages/write//CreateSetPost";
+import CreateVotePost from "../pages/write/CreateVotePost";
+import { Theme } from "../types/darkModeTypes";
 
-const ChannelWriteRouter: React.FC<{ theme: Theme }> = ({ theme }) => {
+export default function ChannelWriteRouter({ theme }: { theme: Theme }) {
   const { channelId } = useParams<{ channelId: string }>();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (channelId && !["1", "2", "3"].includes(channelId)) {
+      navigate("/404");
+    }
+  }, [channelId, navigate]);
+
+  if (!channelId) return null;
 
   switch (channelId) {
-    case '1':
+    case "1":
       return <CreateCodePost theme={theme} />;
-    case '2':
+    case "2":
       return <CreateSetPost theme={theme} />;
-    case '3':
+    case "3":
       return <CreateVotePost theme={theme} />;
     default:
-      return <div>해당 채널이 존재하지 않습니다.</div>; // 나중에 404 페이지로 변환
+      return null;
   }
-};
-
-export default ChannelWriteRouter;
+}

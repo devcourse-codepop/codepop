@@ -12,7 +12,7 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
   const titleRef = useRef<HTMLInputElement>(null);
   const params = useParams();
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState(''); // Editor에서 본문 HTML을 받음
+  const [content, setContent] = useState('');
   const [pollOptions, setPollOptions] = useState<
     { id: number; text: string }[]
   >([]);
@@ -74,14 +74,14 @@ export default function CreateCodePost({ theme }: { theme: Theme }) {
   // };
 
   return (
-    <div className='w-full h-full flex relative'>
-      <div className='w-full h-full grid grid-rows-[auto_1fr_auto] overflow-hidden'>
+    <div className='w-full flex relative'>
+      <div>
         <div className='pb-[30px]'>
           <ChannelName channelId={channelId ?? '1'} theme={theme} />
         </div>
 
         <div
-          className={`shadow-md rounded-[10px] p-5 relative h-full ${
+          className={`shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto scroll-custom ${
             dark(theme)
               ? 'bg-[#2d2d2d] text-[#ffffff]'
               : 'bg-[#ffffff] text-[#111111]'

@@ -83,6 +83,14 @@ export default function PostList({ theme }: { theme: Theme }) {
     navigate(`/channel/${channel}/write`);
   };
 
+  // 엔터 입력 시에도 메시지 전송하기
+  const keyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      clickSearchHandler();
+    }
+  };
+
   // 검색한 내용에 해당하는 게시글만 필터링
   const filteringItem = (data: Post[]) => {
     const temp = [];
@@ -101,6 +109,7 @@ export default function PostList({ theme }: { theme: Theme }) {
     try {
       const { data } = await getSearchPostList(input);
       filteringItem(data);
+      setInput('');
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
@@ -110,7 +119,7 @@ export default function PostList({ theme }: { theme: Theme }) {
   const getPostListItem = async () => {
     try {
       const { data } = await getPostList(channelIdList[Number(channel) - 1]);
-      console.log(data);
+      // console.log(data);
       setPostListItem(data);
       setIsLoading(false);
     } catch (e) {
@@ -152,6 +161,7 @@ export default function PostList({ theme }: { theme: Theme }) {
                   type='text'
                   value={input}
                   onChange={(e) => changeInputHandler(e)}
+                  onKeyDown={keyDownHandler}
                   placeholder='검색'
                   className='flex-grow text-[11px] outline-none placeholder-[#989898]'
                 />
@@ -211,28 +221,6 @@ export default function PostList({ theme }: { theme: Theme }) {
                     ))}
               </>
             )}
-            {postListItem.length !== 0 &&
-              select === 'recent' &&
-              [...postListItem]
-                .sort(
-                  (a, b) =>
-                    new Date(getDatetimeFormat(b.createdAt)).getTime() -
-                    new Date(getDatetimeFormat(a.createdAt)).getTime()
-                )
-                .map((item) => (
-                  <PostListItem key={item._id} {...item} theme={theme} />
-                ))}
-            {postListItem.length !== 0 &&
-              select === 'popular' &&
-              [...postListItem]
-                .sort((a, b) => {
-                  if (b.likes.length - a.likes.length !== 0)
-                    return b.likes.length - a.likes.length;
-                  else return b.comments.length - a.comments.length;
-                })
-                .map((item) => (
-                  <PostListItem key={item._id} {...item} theme={theme} />
-                ))}
           </div>
         </div>
       </div>

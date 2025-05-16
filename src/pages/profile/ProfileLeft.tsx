@@ -63,7 +63,18 @@ export default function ProfileLeft({
               onClick={() => onSelectTab('comments')}
             >
               <span>댓글</span>
-              <span className=' mt-1'>{userData?.comments.length}</span>
+              <span className=' mt-1'>
+                {
+                  userData?.comments.filter((c) => {
+                    try {
+                      const parsed = JSON.parse(c.comment);
+                      return parsed.type !== 'vote';
+                    } catch {
+                      return true;
+                    }
+                  }).length
+                }
+              </span>
             </div>
           </div>
           {user?._id === userId && (
@@ -76,7 +87,9 @@ export default function ProfileLeft({
                 onClick={() => navigate('/profile/edit')}
               />
               <Mail
-                className='w-[30px] h-[30px] cursor-pointer'
+                className={`w-[30px] h-[30px] cursor-pointer ${
+                  dark(theme) ? 'text-[#ffffff] opacity-80' : 'text-[#111111]'
+                }`}
                 onClick={() => setIsChatOpen(true)}
               />
 

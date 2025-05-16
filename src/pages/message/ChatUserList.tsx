@@ -58,7 +58,8 @@ export default function ChatUserList({
   const getMyMessageList = async () => {
     try {
       const { data } = await getMessageList();
-      console.log(data);
+      // console.log(data);
+
       setConversations(data);
       setIsLoading(false);
     } catch (e) {

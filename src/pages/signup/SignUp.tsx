@@ -204,7 +204,7 @@ export default function SignUp({ theme }: { theme: Theme }) {
 
     try {
       await signup(fullName, email, password);
-      navigate('/login');
+      navigate('/login', { state: 'from signup' });
     } catch (err) {
       const error = err as AxiosError;
 

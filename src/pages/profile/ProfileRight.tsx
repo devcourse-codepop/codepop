@@ -62,7 +62,16 @@ export default function ProfileRight({
   const fetchCommentedPosts = async () => {
     if (!userData?.comments) return;
 
-    const sortedComments = [...userData.comments].sort(
+    const filteredComments = userData.comments.filter((comment) => {
+      try {
+        const parsed = JSON.parse(comment.comment);
+        return parsed.type !== 'vote';
+      } catch {
+        return true;
+      }
+    });
+
+    const sortedComments = [...filteredComments].sort(
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
