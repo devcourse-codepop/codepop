@@ -8,7 +8,7 @@ export default function ItalicIcon({ theme }: { theme: Theme }) {
     <>
       <img
         src={dark(theme) ? italicIconWhite : italicIcon}
-        className="w-[30px] h-[30px] inline-block cursor-pointer"
+        className="w-[27.5px] h-[27.5px] inline-block cursor-pointer"
       />
     </>
   );

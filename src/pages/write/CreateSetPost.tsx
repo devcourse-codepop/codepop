@@ -103,7 +103,7 @@ export default function CreateSetPost({ theme }: { theme: Theme }) {
               theme={theme}
             />
             <hr
-              className={`pacity-30 ${
+              className={`opacity-30 ${
                 dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
               }`}
             />
