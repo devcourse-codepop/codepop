@@ -253,7 +253,7 @@ export default function ChatRoom({
                           className={`text-[14px] p-2.5 rounded-b-[10px] rounded-tr-[10px] max-w-[300px] break-words pl-3 w-fit ${
                             dark(theme)
                               ? 'bg-[#ffffff] text-[#111111]'
-                              : 'bg-[#1E293B] text-white'
+                              : 'bg-[#ECECEC] text-[#111111]'
                           }`}
                         >
                           {msg.message}

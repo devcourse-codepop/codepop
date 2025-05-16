@@ -5,7 +5,7 @@ import closeWhite from '../../assets/images/header/close-white.svg';
 import alarm from '../../assets/images/header/alarm.svg';
 import alarmWhite from '../../assets/images/header/alarm-white.svg';
 import redDot from '../../assets/images/header/red-dot-icon.svg';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   getNotificationsData,
   putNotificationSeenData,
@@ -15,74 +15,91 @@ import { twMerge } from 'tailwind-merge';
 import { useAuthStore } from '../../stores/authStore';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/ko';
+dayjs.extend(relativeTime);
+dayjs.locale('ko');
 
 export default function Notification({ theme }: { theme: Theme }) {
   const { user } = useAuthStore();
   const { channels } = useChannelItemStore();
   const [notifiOpen, setNotifiOpen] = useState(false);
-  // 실질적으로 화면에 그려지는 알림 state
-  const [notifications, setNotifications] = useState<NotificationType[]>([]);
-  // api이 반영된 알림 state
+
   const [originNotifications, setOriginNotifications] = useState<
     NotificationType[]
   >([]);
-  const [newData, setNewData] = useState(0);
+  const [notifications, setNotifications] = useState<NotificationType[]>([]);
+  const [countData, setCountData] = useState(0);
   const modalRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const hasCopiedRef = useRef(false);
+  const userId = user?._id;
 
   const fetchNotifications = async () => {
-    const result = await getNotificationsData();
-    setOriginNotifications(result.data);
-    return result.data;
+    try {
+      const result = await getNotificationsData();
+      setOriginNotifications(result.data);
+    } catch (error) {
+      console.log('알림 데이터 요청 오류', error);
+    }
   };
 
-  // 새로운 알림, 알림 삭제를 반영 하기 위한 함수
-  const updateDataHandler = () => {
-    let updateNotifications = [...notifications];
-    // 새로운 알림을 notitications에 반영하기
-    const newNotifications = originNotifications.filter(
-      (x) => !updateNotifications.some((y) => y._id === x._id)
-    );
-    updateNotifications = [...newNotifications, ...updateNotifications];
+  const notificationHandler = useCallback(() => {
+    // api에 가져오 실시간 값
+    const originDatas: NotificationType[] = originNotifications;
 
-    originNotifications.forEach((origin, i) => {
-      if (
-        origin.like !== updateNotifications[i].like ||
-        origin.comment !== updateNotifications[i].comment ||
-        origin.follow !== updateNotifications[i].follow
-      ) {
-        updateNotifications[i] = {
-          ...origin,
-          seen: updateNotifications[i].seen,
-        };
+    //sessionStorage에 값이 있으면 가져오는 값
+    const sessionResult = sessionStorage.getItem(`notification-${userId}`);
+    const sessionDatas: NotificationType[] =
+      sessionResult && sessionResult !== '[]'
+        ? JSON.parse(sessionResult)
+        : originDatas;
+
+    // 실시간 값과 session값 가져와서 비교해서 seen 값 변경
+    originDatas.forEach((origin) => {
+      const match = sessionDatas.find(
+        (data) =>
+          data._id === origin._id && data.seen != origin.seen && !origin.seen
+      );
+      if (match && !origin.seen) {
+        origin.seen = match.seen;
       }
     });
 
-    // 정렬
-    updateNotifications.sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
-    setNotifications(updateNotifications);
-  };
+    //filter링 및 정렬하기
+    const filterResult = originDatas
+      .filter(
+        (d) =>
+          ((d.like != null && d.like !== undefined) ||
+            (d.comment != null && d.comment !== undefined) ||
+            (d.follow != null && d.follow !== undefined)) &&
+          d.author['_id'] !== userId &&
+          dayjs(d.createdAt).isAfter(dayjs().subtract(2, 'day'))
+      )
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
 
-  // 새로운 알림갯수 세기
-  const countDataHandler = () => {
-    let dataSum = 0;
-    // notifications에서 seen값이 false고 like,comment가 삭제된 내용이 아니면 카운트 되도록
-    notifications.map((notification) => {
-      if (
-        notification.seen === false &&
-        notification.like !== null &&
-        notification.comment !== null &&
-        notification.follow !== null
-      ) {
-        dataSum += 1;
-      }
-    });
-    setNewData(dataSum);
-  };
+    setNotifications(filterResult);
+  }, [userId, originNotifications]);
+  // 알림 api 요청, 실시간 알림 감지를 위해 2초마다 요청
+  useEffect(() => {
+    fetchNotifications();
+
+    const interval = setInterval(fetchNotifications, 10000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    notificationHandler();
+  }, [originNotifications, notificationHandler]);
+  // 개별 알림에 변화가 있으면 새로운 카운트
+  useEffect(() => {
+    setCountData(
+      notifications.reduce((sum, n) => (!n.seen ? sum + 1 : sum), 0)
+    );
+  }, [notifications]);
 
   // 알림글 누르면 해당 포스트로 이동하는 navigate
   const navigateHandler = (notifi: NotificationType) => {
@@ -92,9 +109,9 @@ export default function Notification({ theme }: { theme: Theme }) {
     );
     setNotifications(update);
 
-    // 알림이 눌렸을때 개별 읽기가 되기때문에 sessionStorage는 알림을 눌렀을 때만 하면 됨
+    // 알림이 눌렸을때 개별 읽기 반영을 위해 sessionStorage 저장
     sessionStorage.setItem(`notification-${user?._id}`, JSON.stringify(update));
-    closeHandler();
+    closeModalHandler();
 
     channels.map((channel) => {
       if (notifi.like !== undefined) {
@@ -112,55 +129,26 @@ export default function Notification({ theme }: { theme: Theme }) {
   };
 
   // 알림닫힘
-  const closeHandler = () => {
+  const closeModalHandler = () => {
     setNotifiOpen(false);
   };
 
   // 알림 전체확인 api 보내기
   const readHandler = async () => {
     await putNotificationSeenData();
-    const data = await fetchNotifications();
-    setNotifications(data);
-    sessionStorage.setItem(`notification-${user?._id}`, JSON.stringify(data));
-  };
-
-  // 알림 api 요청, 실시간 알림 감지를 위해 2초마다 요청
-  useEffect(() => {
     fetchNotifications();
 
-    const interval = setInterval(fetchNotifications, 2000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const sessionData = async () => {
-    const result = await sessionStorage.getItem(`notification-${user?._id}`);
-    const parseMyData =
-      result && result !== '[]' ? JSON.parse(result) : [...originNotifications];
-    setNotifications(parseMyData);
+    sessionStorage.setItem(
+      `notification-${user?._id}`,
+      JSON.stringify(notifications)
+    );
   };
-
-  // origin 알림목록 갱신되면 감지하고 countDataHandler 실행
-  useEffect(() => {
-    // 맨 처음 한번만 목록 가져오기
-    if (!hasCopiedRef.current && originNotifications.length > 0) {
-      sessionData();
-      hasCopiedRef.current = true;
-    }
-
-    countDataHandler();
-    updateDataHandler();
-  }, [originNotifications]);
-
-  // 개별 알림에 변화가 있으면 새로운 카운트
-  useEffect(() => {
-    countDataHandler();
-  }, [notifications]);
 
   // 알림 modal 외의 외부 영역 누르면 모달이 닫히도록
   useEffect(() => {
     const clickHandler = (e: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-        closeHandler();
+        closeModalHandler();
       }
     };
     window.addEventListener('mousedown', clickHandler);
@@ -170,23 +158,23 @@ export default function Notification({ theme }: { theme: Theme }) {
   return (
     <>
       <button
-        className="relative cursor-pointer block"
+        className='relative cursor-pointer block'
         onClick={(e) => {
           e.preventDefault();
           setNotifiOpen(!notifiOpen);
         }}
       >
         <img src={dark(theme) ? alarmWhite : alarm} />
-        {newData > 0 && (
-          <span className="block w-3.5 h-3.5 rounded-2xl bg-[#FF0000] absolute -right-1 top-0 text-[11px] text-white leading-3">
-            {newData}
+        {countData > 0 && (
+          <span className='block w-3.5 h-3.5 rounded-2xl bg-[#FF0000] absolute -right-1 top-0 text-[11px] text-white leading-3'>
+            {countData}
           </span>
         )}
       </button>
       {notifiOpen && (
         <div
           ref={modalRef}
-          className={`absolute gap-3 rounded-[10px] z-1 py-4 px-5 shadow-2xl w-[340px] z-10 -right-5 top-8.5 ${
+          className={`absolute gap-3 rounded-[10px] py-4 px-5 shadow-2xl w-[360px] z-10 -right-5 top-8.5 ${
             dark(theme)
               ? 'bg-[#2d2d2d] text-[#ffffff]'
               : 'bg-[#ffffff] text-[#111111]'
@@ -210,74 +198,69 @@ export default function Notification({ theme }: { theme: Theme }) {
               Notifications
             </h3>
           </div>
-          <div className="notiList pt-1 px-2 h-[200px] overflow-y-auto scroll-custom relative">
+          <div className='notiList py-1 px-2 h-[200px] overflow-y-auto scroll-custom relative'>
             {notifications.length === 0 ? (
-              <p className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm">
+              <p className='absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm'>
                 알림이 없습니다
               </p>
             ) : (
               notifications.map((notifi) => {
-                let thisType = '';
-                if (notifi.like !== undefined && notifi.like !== null) {
-                  thisType = 'like';
-                } else if (
-                  notifi.comment !== undefined &&
-                  notifi.comment !== null
-                ) {
-                  thisType = 'comment';
-                } else if (
-                  notifi.follow !== undefined &&
-                  notifi.follow !== null
-                ) {
-                  thisType = 'follow';
-                } else thisType = 'none';
                 return (
-                  <div key={notifi._id}>
-                    {thisType !== 'none' && (
-                      <button
-                        onClick={() => {
-                          navigateHandler(notifi);
-                        }}
-                        className="block relative pl-3.5 text-[13px] my-2.5 cursor-pointer text-left"
-                      >
-                        <img
-                          className={twMerge(
-                            'absolute -left-0.5 top-2',
-                            notifi.seen ? 'opacity-40 grayscale' : 'opacity-100'
-                          )}
-                          src={redDot}
-                        />
-                        {thisType === 'like' &&
-                          `[${notifi.author['fullName']}] 님이 당신의 게시물을 좋아합니다.`}
-                        {thisType === 'comment' &&
-                          `[${notifi.author['fullName']}] 님이 당신의 게시물에 댓글을 달았습니다.`}
-                        {thisType === 'follow' &&
-                          `[${notifi.author['fullName']}] 님이 당신을 팔로우 합니다.`}
-                      </button>
-                    )}
+                  <div
+                    key={notifi._id}
+                    className='w-full flex justify-between items-start py-2.5'
+                  >
+                    <button
+                      onClick={() => {
+                        navigateHandler(notifi);
+                      }}
+                      className='block relative pl-3.5 text-[13px] cursor-pointer text-left leading-4'
+                    >
+                      <img
+                        className={twMerge(
+                          'absolute -left-0.5 top-2',
+                          notifi.seen ? 'opacity-40 grayscale' : 'opacity-100'
+                        )}
+                        src={redDot}
+                      />
+                      {notifi.like !== undefined &&
+                        `[${notifi.author['fullName']}] 님이 당신의 게시물을 좋아합니다.`}
+                      {notifi.comment !== undefined &&
+                        `[${notifi.author['fullName']}] 님이 당신의 게시물에 댓글을 달았습니다.`}
+                      {notifi.follow !== undefined &&
+                        `[${notifi.author['fullName']}] 님이 당신을 팔로우 합니다.`}
+                    </button>
+
+                    <span className='w-12 text-[11px] text-zinc-400 shrink-0 text-right whitespace-nowrap -mt-[1px]'>
+                      {dayjs(notifi.createdAt).fromNow()}
+                    </span>
                   </div>
                 );
               })
             )}
           </div>
-          <div className="text-right mt-1">
+          <div
+            className={`text-right border-t ${
+              dark(theme) ? 'border-[#484848]' : 'border-[#cccccc]'
+            }`}
+          >
             <button
-              className="text-xs text-zinc-500 cursor-pointer"
+              className='text-xs text-zinc-500 cursor-pointer'
               onClick={readHandler}
             >
               전체읽기
             </button>
           </div>
-          <div className="absolute right-5 top-4">
+          <div className='absolute right-5 top-4'>
             <button
-              className="text-sm text-[#bbbbbb] cursor-pointer"
+              className='text-sm text-[#bbbbbb] cursor-pointer'
               onClick={() => {
-                closeHandler();
+                closeModalHandler();
               }}
             >
               <img
                 src={dark(theme) ? closeWhite : close}
-                className="opacity-60"
+                className='opacity-60'
               />
             </button>
           </div>
