@@ -135,16 +135,37 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
 
   const getChannelInfo = (name: string) => {
     const info = {
-      Vote: { id: 3, label: '골라봐', bg: 'bg-[#9E68E9]' },
-      MysteryCode: { id: 1, label: '이게 왜 되지?', bg: 'bg-[#19A9BE]' },
-      Default: { id: 2, label: '이거 왜 안 쓰지?', bg: 'bg-[#3380DE]' },
+      Vote: {
+        id: 3,
+        label: '골라봐',
+        bg: {
+          light: 'bg-[#60A7F7]',
+          dark: 'bg-[#9E68E9]',
+        },
+      },
+      MysteryCode: {
+        id: 1,
+        label: '이게 왜 되지?',
+        bg: {
+          light: 'bg-[#10215C]',
+          dark: 'bg-[#19A9BE]',
+        },
+      },
+      Default: {
+        id: 2,
+        label: '이거 왜 안 쓰지?',
+        bg: {
+          light: 'bg-[#3380DE]',
+          dark: 'bg-[#3380DE]',
+        },
+      },
     };
     return info[name as keyof typeof info] || info.Default;
   };
 
   return (
-    <div className='w-full min-w-0 px-[26px] pb-[40px] profile-right'>
-      <div className='w-full flex justify-between items-center mt-[40px] text-[18px] font-semibold'>
+    <div className="w-full min-w-0 px-[26px] pb-[40px] profile-right">
+      <div className="w-full flex justify-between items-center mt-[40px] text-[18px] font-semibold">
         <div
           className={`flex pb-[10px] whitespace-nowrap ${
             dark(theme) ? 'text-[#ffffff]' : ''
@@ -158,7 +179,7 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
             }`}
             onClick={() => setSelectedTab('posts')}
           >
-            <p className='pb-[12px]'>포스트</p>
+            <p className="pb-[12px]">포스트</p>
           </div>
           <div
             className={`cursor-pointer mb-[-13px] px-4 ${
@@ -168,7 +189,7 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
             }`}
             onClick={() => setSelectedTab('likes')}
           >
-            <p className='pb-[12px]'>좋아요</p>
+            <p className="pb-[12px]">좋아요</p>
           </div>
           <div
             className={`cursor-pointer mb-[-13px] px-4 ${
@@ -178,7 +199,7 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
             }`}
             onClick={() => setSelectedTab('comments')}
           >
-            <p className='pb-[12px]'>댓글</p>
+            <p className="pb-[12px]">댓글</p>
           </div>
         </div>
 
@@ -216,18 +237,20 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
                 dark(theme) ? 'border-b-[#ffffff]/30' : 'border-b-[#111111]/30'
               } ${selectedTab === 'comments' ? 'py-[6px]' : 'py-4'}`}
             >
-              <div className='relative flex flex-wrap items-center py-0.5 px-2 gap-y-2.5'>
-                <div className='w-[130px]'>
+              <div className="relative flex flex-wrap items-center py-0.5 px-2 gap-y-2.5">
+                <div className="w-[130px]">
                   <div
-                    className={`inline-block rounded-[28px] text-[12px] font-bold text-white px-[10px] py-[3px] cursor-pointer ${bg}`}
+                    className={`inline-block rounded-[28px] text-[12px] font-bold text-white px-[10px] py-[3px] cursor-pointer ${
+                      dark(theme) ? bg.dark : bg.light
+                    }`}
                     onClick={() => navigate(`/channel/${id}`)}
                   >
                     {label}
                   </div>
                 </div>
-                <div className='flex items-center max-w-[calc(100%-130px)] w-full profile-post-title'>
+                <div className="flex items-center max-w-[calc(100%-130px)] w-full profile-post-title">
                   <div
-                    className='min-w-0 flex flex-col cursor-pointer justify-center'
+                    className="min-w-0 flex flex-col cursor-pointer justify-center"
                     onClick={() => navigate(`/channel/${id}/post/${post._id}`)}
                   >
                     <p
@@ -238,10 +261,10 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
                       {JSON.parse(post.title).title}
                     </p>
                     {selectedTab === 'comments' && post.comments.length > 0 && (
-                      <div className='mt-1 text-[12px] text-gray-700 flex'>
+                      <div className="mt-1 text-[12px] text-gray-700 flex">
                         <img
                           src={dark(theme) ? commentWhite : commentIcon}
-                          className='w-5 h-5'
+                          className="w-5 h-5"
                         />
                         <p
                           className={`ml-[5px] ${
@@ -280,27 +303,27 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
             pageRangeDisplayed={6}
             onChange={handlePageChange}
             prevPageText={
-              <span className='text-xl leading-none flex items-center justify-center'>
+              <span className="text-xl leading-none flex items-center justify-center">
                 ‹
               </span>
             }
             nextPageText={
-              <span className='text-xl leading-none flex items-center justify-center'>
+              <span className="text-xl leading-none flex items-center justify-center">
                 ›
               </span>
             }
             firstPageText={
-              <span className='text-xl leading-none flex items-center justify-center'>
+              <span className="text-xl leading-none flex items-center justify-center">
                 «
               </span>
             }
             lastPageText={
-              <span className='text-xl leading-none flex items-center justify-center'>
+              <span className="text-xl leading-none flex items-center justify-center">
                 »
               </span>
             }
-            innerClass='flex gap-2 text-sm'
-            itemClass='px-3 py-1 rounded-[5px] cursor-pointer'
+            innerClass="flex gap-2 text-sm"
+            itemClass="px-3 py-1 rounded-[5px] cursor-pointer"
             activeClass={`bg-[#1E293B] text-white ${
               dark(theme) ? 'bg-[#1e1e1e]' : ''
             }`}
