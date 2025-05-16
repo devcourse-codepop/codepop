@@ -109,7 +109,6 @@ export default function CreateVotePost({ theme }: { theme: Theme }) {
               }`}
             />
 
-            <hr className="opacity-30" />
             <div className="flex justify-end mt-6">
               <Button
                 value="완료"
