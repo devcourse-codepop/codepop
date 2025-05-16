@@ -87,9 +87,13 @@ export default function ProfileLeft({
                 onClick={() => navigate("/profile/edit")}
               />
               <Mail
+<<<<<<< HEAD
                 className={`w-[30px] h-[30px] cursor-pointer ${
                   dark(theme) ? "text-[#ffffff] opacity-80" : "text-[#111111]"
                 }`}
+=======
+                className="w-[30px] h-[30px] cursor-pointer"
+>>>>>>> 71b456cd81e781608d30f7f1cbf7bca0e75a7e2c
                 onClick={() => setIsChatOpen(true)}
               />
 
