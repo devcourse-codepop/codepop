@@ -1,7 +1,7 @@
 import menuIcon from '../../assets/images/menu/menu-icon.svg';
 import menuIconWhite from '../../assets/images/menu/menu-icon-white.svg';
 import userImg from '../../assets/images/header/user-img.svg';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Comment } from '../../types';
 import { useAuthStore } from '../../stores/authStore';
 import { Link, useParams } from 'react-router-dom';
@@ -71,11 +71,11 @@ export default function CommentListItem({
   };
 
   // 로그인한 사용자가 해당 댓글 작성자인지 확인
-  const checkCommentUser = () => {
+  const checkCommentUser = useCallback(() => {
     if (author._id === user?._id) {
       setIsUser(true);
     }
-  };
+  }, [author._id, user?._id]);
 
   // 삭제 버튼 클릭 시, 삭제할 건지 한 번 더 물어보는 모달 띄우기
   const clickDeleteHandler = () => {
@@ -96,7 +96,7 @@ export default function CommentListItem({
     if (user) {
       checkCommentUser();
     }
-  }, [user]);
+  }, [user, checkCommentUser]);
 
   // 삭제 모달 밖 영역 클릭 시, 모달 닫기
   useEffect(() => {

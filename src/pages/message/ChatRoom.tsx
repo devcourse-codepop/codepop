@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 //import { User1 } from './ChatModal';
 import ChatHeader from './ChatHeader';
 import {
@@ -109,17 +109,17 @@ export default function ChatRoom({
   // };
 
   // 채팅방 입장 시 메시지 읽음 처리하기
-  const readUserMessages = async () => {
+  const readUserMessages = useCallback(async () => {
     try {
       await putMessageSeen(user._id);
       // console.log(data);
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
-  };
+  }, [user._id]);
 
   // 메시지 기록 가져오기
-  const getUserMessages = async () => {
+  const getUserMessages = useCallback(async () => {
     try {
       const { data } = await getMessages(user._id);
       // console.log(data);
@@ -132,7 +132,7 @@ export default function ChatRoom({
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
-  };
+  }, [user._id]);
 
   // 상대방이 보내는 메시지 실시간으로 채팅방에 보여주고 읽음 처리하기
   useEffect(() => {
@@ -148,12 +148,12 @@ export default function ChatRoom({
     }, 2000);
 
     return () => clearInterval(interval);
-  }, [user._id]);
+  }, [user._id, readUserMessages]);
 
   useEffect(() => {
     readUserMessages();
     getUserMessages();
-  }, [reloadTrigger]);
+  }, [reloadTrigger, getUserMessages, readUserMessages]);
 
   // 채팅방 들어왔을 때와 메시지 전송했을 때, 가장 최신 메시지를 화면에 보여주기
   useEffect(() => {

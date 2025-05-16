@@ -40,5 +40,5 @@ export default function useNewMessageUpdate() {
     const interval = setInterval(getNewMessageCount, 10000);
 
     return () => clearInterval(interval);
-  }, [user]);
+  }, [user, setNewNotiCount]);
 }

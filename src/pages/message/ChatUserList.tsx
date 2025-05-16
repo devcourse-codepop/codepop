@@ -1,6 +1,6 @@
 import ChatHeader from './ChatHeader';
 import { getMessageList, getMessages } from '../../api/message/message';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Conversation, Message, User } from '../../types';
 import { twMerge } from 'tailwind-merge';
 import { useAuthStore } from '../../stores/authStore';
@@ -33,9 +33,12 @@ export default function ChatUserList({
   const user = useAuthStore((state) => state.user);
 
   // 상대방 id 가져오기
-  const getOpponentId = (idArr: string[]): string => {
-    return idArr.find((id) => id !== user?._id) || '';
-  };
+  const getOpponentId = useCallback(
+    (idArr: string[]): string => {
+      return idArr.find((id) => id !== user?._id) || '';
+    },
+    [user?._id]
+  );
 
   // 상대방 User 객체 가져오기
   const getOpponentUser = (con: Conversation, id: string): User => {
@@ -82,7 +85,7 @@ export default function ChatUserList({
     if (conversations.length > 0) {
       getNotSeenCounts();
     }
-  }, [conversations]);
+  }, [conversations, getOpponentId]);
 
   useEffect(() => {
     getMyMessageList();

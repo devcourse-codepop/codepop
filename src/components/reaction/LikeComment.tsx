@@ -3,7 +3,7 @@ import likeClickWhite from '../../assets/images/like/like-click-white.svg';
 import likeRed from '../../assets/images/like/like-red.svg';
 import comment from '../../assets/images/comment/comment-outline.svg';
 import commentWhite from '../../assets/images/comment/comment-white.svg';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Channel, Like, User } from '../../types';
 import { deleteLikes, postLikes, postNotifications } from '../../api/post/post';
 import { useAuthStore } from '../../stores/authStore';
@@ -141,20 +141,20 @@ export default function LikeComment({
   };
 
   // authStore에서 현재 로그인한 사용자의 id 값을 받아와서 해당 게시글에 사용자가 좋아요를 눌렀는지 확인하기
-  const checkClickLikes = () => {
+  const checkClickLikes = useCallback(() => {
     likes.forEach((like) => {
       if (like.user === user?._id) {
         setCheckLike(true);
         setLikeId(like._id);
       }
     });
-  };
+  }, [likes, user?._id]);
 
   useEffect(() => {
     if (user && likes.length > 0) {
       checkClickLikes();
     }
-  }, [user, likes]);
+  }, [user, likes, checkClickLikes]);
 
   return (
     <div className="reaction flex justify-end items-center gap-5 p-4">

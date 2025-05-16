@@ -63,7 +63,7 @@ export default function CommentEditor({
     if (editor) {
       editor.commands.clearContent();
     }
-  }, [resetTrigger]);
+  }, [resetTrigger, editor]);
 
   return (
     <div className=" rounded-[5px] min-h-[100px] h-auto">

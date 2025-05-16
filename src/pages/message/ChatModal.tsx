@@ -32,7 +32,7 @@ export default function ChatModal({
       setIsLoading(false);
       changeMessageIcon(dark(theme) ? MessageOpenIcon : MessageOpenIcon);
     }
-  }, [isOpen, initialUser]);
+  }, [isOpen, initialUser, changeMessageIcon, theme]);
 
   if (!isOpen) return null;
 
