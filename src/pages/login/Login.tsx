@@ -15,7 +15,6 @@ export default function Login({ theme }: { theme: Theme }) {
   const storeLogin = useAuthStore((state) => state.login);
 
   const location = useLocation();
-  // const from = location.state?.from;
 
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -64,7 +63,6 @@ export default function Login({ theme }: { theme: Theme }) {
       const token = res.data.token;
       storeLogin(token);
 
-      // navigate(from && from !== '/signup' ? from : '/');
       if (location.state === 'from signup') navigate(-3);
       else navigate(-1);
     } catch (err) {
