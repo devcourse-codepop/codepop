@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Pagination from 'react-js-pagination';
 import { getAuthorPostData, getPostData } from '../../api/post/post';
 import commentIcon from '../../assets/images/comment-outline.svg';
@@ -12,30 +12,14 @@ export default function ProfileRight({ userData }: UserPostInfo) {
   const postsPerPage = 6;
   const navigate = useNavigate();
 
-  // selectedTab이 변경될 때마다 각 탭에 맞는 데이터를 가져옴
-  useEffect(() => {
-    setCurrentPage(1);
-    const fetchData = async () => {
-      switch (selectedTab) {
-        case 'posts':
-          return fetchUserPosts();
-        case 'likes':
-          return fetchLikedPosts();
-        case 'comments':
-          return fetchCommentedPosts();
-      }
-    };
-    fetchData();
-  }, [selectedTab]);
-
-  const fetchUserPosts = async () => {
+  const fetchUserPosts = useCallback(async () => {
     if (!userData?.posts) return;
     const { data } = await getAuthorPostData(userId || '');
     setUserPostData(data);
-  };
+  }, [userData?.posts, userId]);
 
   // 좋아요 목록을 시간순 정렬 후 해당 post들을 가져와 표시
-  const fetchLikedPosts = async () => {
+  const fetchLikedPosts = useCallback(async () => {
     if (!userData?.likes) return;
     const sortedLikes = [...userData.likes].sort(
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -43,10 +27,10 @@ export default function ProfileRight({ userData }: UserPostInfo) {
     const likedPostIds = sortedLikes.map((like) => like.post);
     const likedPosts = await Promise.all(likedPostIds.map((postId) => getPostData(postId).then((res) => res.data)));
     setUserPostData(likedPosts);
-  };
+  }, [userData?.likes]);
 
   // 댓글단 게시글에 몇 번 댓글 단지와 최근 댓글 달았는 지 확인 후, 최신 댓글 기준으로 정렬
-  const fetchCommentedPosts = async () => {
+  const fetchCommentedPosts = useCallback(async () => {
     if (!userData?.comments) return;
 
     const sortedComments = [...userData.comments].sort(
@@ -77,7 +61,23 @@ export default function ProfileRight({ userData }: UserPostInfo) {
     postsWithCommentData.sort((a, b) => new Date(b.latestCommentAt).getTime() - new Date(a.latestCommentAt).getTime());
 
     setUserPostData(postsWithCommentData);
-  };
+  }, [userData?.comments]);
+
+  // selectedTab이 변경될 때마다 각 탭에 맞는 데이터를 가져옴
+  useEffect(() => {
+    setCurrentPage(1);
+    const fetchData = async () => {
+      switch (selectedTab) {
+        case 'posts':
+          return fetchUserPosts();
+        case 'likes':
+          return fetchLikedPosts();
+        case 'comments':
+          return fetchCommentedPosts();
+      }
+    };
+    fetchData();
+  }, [selectedTab, fetchCommentedPosts, fetchLikedPosts, fetchUserPosts]);
 
   const handlePageChange = (page: number) => setCurrentPage(page);
 
@@ -85,12 +85,19 @@ export default function ProfileRight({ userData }: UserPostInfo) {
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = userPostData?.slice(indexOfFirstPost, indexOfLastPost) || [];
 
-  const totalTab: Record<string, number> = {
-    posts: userData?.posts.length ?? 0,
-    likes: userData?.likes.length ?? 0,
-    comments: userData?.comments.length ?? 0,
+  let totalTab: Record<string, number> = {
+    posts: 0,
+    likes: 0,
+    comments: 0,
   };
 
+  if (userData) {
+    totalTab = {
+      posts: userData.posts?.length ?? 0,
+      likes: userData.likes?.length ?? 0,
+      comments: userData.comments?.length ?? 0,
+    };
+  }
   const emptyText: Record<string, string> = {
     posts: '게시글을 작성해 주세요.',
     likes: '좋아요를 누른 게시글이 없습니다.',
