@@ -38,11 +38,11 @@ export default function MemberBox({ theme }: { theme: Theme }) {
     );
   };
 
-  // 유저가져오기, 유저들 접속 감지를 위해 2초마다 갱신
+  // 유저가져오기, 유저들 접속 감지를 위해 10초마다 갱신
   useEffect(() => {
     fetchUsers();
 
-    const interval = setInterval(fetchUsers, 2000);
+    const interval = setInterval(fetchUsers, 10000);
 
     return () => clearInterval(interval);
   }, []);
@@ -93,14 +93,14 @@ export default function MemberBox({ theme }: { theme: Theme }) {
       >
         Member
       </h2>
-      <div className="flex items-center text-[#898FA3] bg-[#F6F8FA] px-3 py-2 rounded-[5.54px] text-[14px] gap-4 mb-[13px]">
+      <div className='flex items-center text-[#898FA3] bg-[#F6F8FA] px-3 py-2 rounded-[5.54px] text-[14px] gap-4 mb-[13px]'>
         <div>
-          <Search className="w-[19.94px] h-[19.94px] text-[#86879C]" />
+          <Search className='w-[19.94px] h-[19.94px] text-[#86879C]' />
         </div>
         <input
-          type="text"
-          placeholder="멤버를 검색해 보세요"
-          className=" outline-none placeholder:text-[#898FA3] placeholder:text-[14px]w-full"
+          type='text'
+          placeholder='멤버를 검색해 보세요'
+          className=' outline-none placeholder:text-[#898FA3] placeholder:text-[14px]w-full'
           onChange={(e) => searchHandler(e)}
         />
       </div>
@@ -127,9 +127,9 @@ export default function MemberBox({ theme }: { theme: Theme }) {
       >
         {/* 유저멤버 카드 */}
         {filterUsers.map((user) => (
-          <div className="relative" key={user._id} id={user._id}>
+          <div className='relative' key={user._id} id={user._id}>
             <div
-              className="memberCard cursor-pointer"
+              className='memberCard cursor-pointer'
               onClick={() => ToggleHandelr(user._id)}
             >
               <Avatar
@@ -143,12 +143,12 @@ export default function MemberBox({ theme }: { theme: Theme }) {
 
             {/* 프로필 클릭시 나오는 modal */}
             <button
-              className="absolute right-0 top-4 cursor-pointer"
+              className='absolute right-0 top-4 cursor-pointer'
               onClick={() => ToggleHandelr(user._id)}
             >
               <img
                 src={dark(theme) ? menuIconWhite : menuIcon}
-                className="rotate-90"
+                className='rotate-90'
               />
               {openUser === user._id && (
                 <ul
@@ -161,7 +161,7 @@ export default function MemberBox({ theme }: { theme: Theme }) {
                 >
                   <li>
                     <Link
-                      className="px-3 py-1 block opacity-70 hover:opacity-100"
+                      className='px-3 py-1 block opacity-70 hover:opacity-100'
                       to={`/profile`}
                       state={{ userid: user._id }}
                     >
@@ -169,7 +169,7 @@ export default function MemberBox({ theme }: { theme: Theme }) {
                     </Link>
                   </li>
                   <li
-                    className="px-3 py-1 block  opacity-70 hover:opacity-100"
+                    className='px-3 py-1 block  opacity-70 hover:opacity-100'
                     onClick={() => {
                       setChatTargetUser(user);
                       setIsChatOpen(true);
