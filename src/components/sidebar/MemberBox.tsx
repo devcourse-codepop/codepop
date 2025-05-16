@@ -20,6 +20,7 @@ export default function MemberBox({ theme }: { theme: Theme }) {
   const [users, setUsers] = useState<User[]>([]); // 모든 사용자
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatTargetUser, setChatTargetUser] = useState<User | null>(null);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const onClose = useChatClose(setIsChatOpen);
   const modalRef = useRef<HTMLUListElement>(null);
 
@@ -65,6 +66,11 @@ export default function MemberBox({ theme }: { theme: Theme }) {
     } else {
       setOpenUser(id);
     }
+  };
+
+  // 로그인 관련 모달 닫기
+  const closeLoginModalHanlder = () => {
+    setIsLoginModalOpen(false);
   };
 
   // 해당 modal이 아닌 경우 열려 있는 modal 닫기
@@ -155,8 +161,11 @@ export default function MemberBox({ theme }: { theme: Theme }) {
                   <li
                     className='px-3 py-1 block  opacity-70 hover:opacity-100'
                     onClick={() => {
-                      setChatTargetUser(user);
-                      setIsChatOpen(true);
+                      if (!isLoggedIn) setIsLoginModalOpen(true);
+                      else {
+                        setChatTargetUser(user);
+                        setIsChatOpen(true);
+                      }
                     }}
                   >
                     메세지 보내기
@@ -168,6 +177,7 @@ export default function MemberBox({ theme }: { theme: Theme }) {
         ))}
       </div>
       <ChatModal initialUser={chatTargetUser} isOpen={isChatOpen} onClose={onClose} theme={theme} />
+      {isLoginModalOpen && <NotLoginModal closeLoginModalHanlder={closeLoginModalHanlder} theme={theme} />}
     </div>
   );
 }

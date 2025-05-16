@@ -210,7 +210,7 @@ export default function PostListItem(props: PostListItemProps) {
       </div>
 
       {isLoginModalOpen && <NotLoginModal closeLoginModalHanlder={closeLoginModalHanlder} theme={theme} />}
-      {isUserModalOpen && <DeletedUserModal closeUserModalHanlder={closeUserModalHanlder} />}
+      {isUserModalOpen && <DeletedUserModal closeUserModalHanlder={closeUserModalHanlder} theme={theme} />}
     </>
   );
 }

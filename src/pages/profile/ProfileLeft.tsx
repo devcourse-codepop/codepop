@@ -10,6 +10,7 @@ import ChatModal from '../message/ChatModal';
 import useChatClose from '../../utils/changeMessageIcon';
 import FollowModal from './FollowModal';
 import followIcon from '../../assets/images/profile/follow-icon.svg';
+import followIconBlack from '../../assets/images/profile/follow-icon-black.svg';
 import { handleFollow, handleUnfollow } from '../../utils/followHandlers';
 
 interface ProfileLeftProps extends UserInfo {
@@ -106,7 +107,7 @@ export default function ProfileLeft({ userData, theme, userId, refetchUserData }
                 (isFollowed ? (
                   <Button
                     value='팔로우 취소'
-                    className='button-style3'
+                    className={`button-style3 ${dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''}`}
                     onClick={() => {
                       if (!user) return;
                       handleUnfollow(user, userId, setUser, refetchUserData);
@@ -115,12 +116,12 @@ export default function ProfileLeft({ userData, theme, userId, refetchUserData }
                 ) : (
                   <Button
                     value='팔로우'
-                    className='button-style3'
+                    className={`button-style3 ${dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''}`}
                     onClick={() => {
                       if (!user) return;
                       handleFollow(user, userId, setUser, refetchUserData);
                     }}
-                    imageSrc={followIcon}
+                    imageSrc={dark(theme) ? followIconBlack : followIcon}
                     imageAlt='팔로우 아이콘'
                   />
                 ))}

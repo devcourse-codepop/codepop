@@ -14,6 +14,7 @@ import { useAuthStore } from '../stores/authStore';
 import { Theme } from '../types/darkModeTypes';
 import { dark } from '../utils/darkModeUtils';
 import PostSkeleton from '../components/post/PostSkeleton';
+import NotLoginModal from '../components/post/NotLoginModal';
 
 export default function PostList({ theme }: { theme: Theme }) {
   const params = useParams();
@@ -30,6 +31,9 @@ export default function PostList({ theme }: { theme: Theme }) {
   const [isLoading, setIsLoading] = useState(true);
   // 로그인 상태
   const [isLogin, setIsLogin] = useState(false);
+  // 로그인 관련 모달 상태
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
   // 게시글 목록 상태
   const [postListItem, setPostListItem] = useState<Post[]>([]);
 
@@ -79,6 +83,10 @@ export default function PostList({ theme }: { theme: Theme }) {
 
   // 게시글 작성 페이지로 이동
   const createNewPost = () => {
+    if (!isLogin) {
+      setIsLoginModalOpen(true);
+      return;
+    }
     navigate(`/channel/${channel}/write`);
   };
 
@@ -86,6 +94,7 @@ export default function PostList({ theme }: { theme: Theme }) {
   const keyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
+      if (input.trim() === '') return;
       clickSearchHandler();
     }
   };
@@ -124,6 +133,11 @@ export default function PostList({ theme }: { theme: Theme }) {
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
+  };
+
+  // 로그인 관련 모달 닫기
+  const closeLoginModalHanlder = () => {
+    setIsLoginModalOpen(false);
   };
 
   useEffect(() => {
@@ -166,7 +180,10 @@ export default function PostList({ theme }: { theme: Theme }) {
                 />
                 <Search
                   className='w-[19.94px] h-[19.94px] text-[#86879C] cursor-pointer'
-                  onClick={clickSearchHandler}
+                  onClick={() => {
+                    if (input.trim() === '') return;
+                    clickSearchHandler();
+                  }}
                 />
               </div>
               {/* <DropSort /> */}
@@ -231,11 +248,10 @@ export default function PostList({ theme }: { theme: Theme }) {
           />
         </div>
       )}
-      {isLogin && (
-        <div className='absolute right-35 bottom-5 cursor-pointer'>
-          <img src={dark(theme) ? postBtnWhite : postBtn} onClick={createNewPost} alt='게시글 작성 버튼' />
-        </div>
-      )}
+      <div className='absolute right-35 bottom-5 cursor-pointer'>
+        <img src={dark(theme) ? postBtnWhite : postBtn} onClick={createNewPost} alt='게시글 작성 버튼' />
+      </div>
+      {isLoginModalOpen && <NotLoginModal closeLoginModalHanlder={closeLoginModalHanlder} theme={theme} />}
     </>
   );
 }

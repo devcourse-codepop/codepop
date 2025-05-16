@@ -99,7 +99,11 @@ export default function ChatUserList({ onSelectUser, onClose, theme }: ChatUserL
       {isLoading || isCountLoading ? (
         <></>
       ) : (
-        <div className={`flex-1 overflow-y-auto messageBox ${dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'}`}>
+        <div
+          className={`flex-1 overflow-y-auto messageBox ${dark(theme) ? 'dark' : ''} ${
+            dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+          }`}
+        >
           {conversations.map((con) => {
             const opponentId = getOpponentId(con._id);
             const opponentUser = getOpponentUser(con, opponentId);
