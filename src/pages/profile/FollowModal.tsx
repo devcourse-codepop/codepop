@@ -6,13 +6,16 @@ import FollowerMember from './FollowMember';
 interface FollowModal {
   isOpen: boolean;
   onClose: () => void;
-  followData: Follow[];
+  followData: {
+    followers: Follow[];
+    following: Follow[];
+  };
   followType: 'following' | 'follower';
   targetUserId?: string;
   theme: Theme;
 }
 
-export default function ChatModal({ isOpen, onClose, followData, followType, targetUserId, theme }: FollowModal) {
+export default function FollowModal({ isOpen, onClose, followData, followType, targetUserId, theme }: FollowModal) {
   if (!isOpen) return null;
 
   return (

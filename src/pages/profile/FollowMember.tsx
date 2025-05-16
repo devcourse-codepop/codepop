@@ -17,7 +17,10 @@ export default function FollowerMember({
   targetUserId,
   theme,
 }: {
-  followData: Follow[];
+  followData: {
+    followers: Follow[];
+    following: Follow[];
+  };
   followType: 'following' | 'follower';
   targetUserId?: string;
   theme: Theme;
@@ -76,13 +79,13 @@ export default function FollowerMember({
   const followingMembers = filterUsers.filter((targetUser) =>
     isMyProfile
       ? user?.following?.some((follow) => follow.user === targetUser._id)
-      : followData?.some((follow) => follow.user === targetUser._id)
+      : followData.following?.some((follow) => follow.user === targetUser._id)
   );
 
   const followerMembers = filterUsers.filter((targetUser) =>
     isMyProfile
       ? user?.followers?.some((follow) => follow.follower === targetUser._id)
-      : followData?.some((follow) => follow.follower === targetUser._id)
+      : followData.followers?.some((follow) => follow.follower === targetUser._id)
   );
 
   const ToggleHandelr = (id: string) => {

@@ -22,14 +22,19 @@ export default function ProfileLeft({ userData, theme, userId, refetchUserData }
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFollowed, setIsFollowed] = useState(false);
-  const [followData, setFollowData] = useState<Follow[]>([]);
+  const [followData, setFollowData] = useState<{ followers: Follow[]; following: Follow[] }>({
+    followers: [],
+    following: [],
+  });
   const [followType, setFollowType] = useState<'follower' | 'following'>('follower');
   const onClose = useChatClose(setIsChatOpen);
   const navigate = useNavigate();
 
-  const openModalWithData = (data: Follow[] | undefined) => {
-    if (!data) return;
-    setFollowData(data);
+  const openModalWithData = (followers?: Follow[], following?: Follow[]) => {
+    setFollowData({
+      followers: followers || [],
+      following: following || [],
+    });
     setIsModalOpen(true);
   };
 
@@ -59,8 +64,8 @@ export default function ProfileLeft({ userData, theme, userId, refetchUserData }
             <div
               className='flex  items-center cursor-pointer'
               onClick={() => {
-                console.log('팔로워 리스트:', userData?.followers);
-                openModalWithData(userData?.followers);
+                console.log('팔로워 리스트:', followData);
+                openModalWithData(userData?.followers, userData?.following);
                 setFollowType('follower');
               }}
             >
@@ -70,8 +75,8 @@ export default function ProfileLeft({ userData, theme, userId, refetchUserData }
             <div
               className='flex  items-center cursor-pointer'
               onClick={() => {
-                console.log('팔로잉 리스트:', userData?.following);
-                openModalWithData(userData?.following);
+                console.log('팔로워 리스트:', followData);
+                openModalWithData(userData?.followers, userData?.following);
                 setFollowType('following');
               }}
             >
