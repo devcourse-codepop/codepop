@@ -5,16 +5,22 @@ import { Post } from '../../types';
 import PostListItem from '../post/PostListItem';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
+import PopularPostCkeleton from './PopularPostCkeleton';
 
 export default function PopularPost({ theme }: { theme: Theme }) {
   const { channels, fetchChannels } = useChannelItemStore();
   const [activeTab, setActiveTab] = useState(0);
   const [sortPopulars, setSortPopulars] = useState<Post[]>([]);
+  const [isLoading, setLoading] = useState(true);
 
   const tabClickHandler = async (channelId: string, index: number) => {
-    const data = await getPopularPostData(channelId);
-    setActiveTab(index);
-    setSortPopulars(data);
+    try {
+      const data = await getPopularPostData(channelId);
+      setActiveTab(index);
+      setSortPopulars(data);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -100,7 +106,9 @@ export default function PopularPost({ theme }: { theme: Theme }) {
               aria-labelledby={`tab-${cIndex}`}
               id={`panel-${cIndex}`}
             >
-              {sortPopulars.length == 0 ? (
+              {isLoading ? (
+                <PopularPostCkeleton />
+              ) : sortPopulars.length == 0 ? (
                 <p className='absolute left-1/2 bottom-4/7 -translate-x-1/2 text-sm text-[#5c5c5c]'>
                   해당 채널에 게시글이 없습니다.
                 </p>
@@ -116,14 +124,6 @@ export default function PopularPost({ theme }: { theme: Theme }) {
                       className='basis-[calc(50%-0.875rem)] max-w-full tabConstentItem'
                     >
                       <PostListItem {...parsePopular} theme={theme} />
-                      {/* <PostList
-                        title={{
-                          title: `${postTitle}`,
-                          content: `${postContent}`,
-                          tag: `아마 태그 없앴던거 같음`,
-                        }}
-                        updatedAt={popular.createdAt.split("T")[0]}
-                      /> */}
                     </div>
                   );
                 })
