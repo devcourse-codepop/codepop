@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useChannelItemStore } from '../../stores/channelStore';
 import { getPopularPostData } from '../../api/post/post';
-import { Post } from '../../types';
 import PostListItem from '../post/PostListItem';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
@@ -87,6 +86,7 @@ export default function PopularPost({ theme }: { theme: Theme }) {
                       ? '#4B4B4B'
                       : '#E3E3E3',
                   color: activeTab === index ? '#fff' : '#6A6A6A',
+                  fontWeight: activeTab === index ? 'bold' : 'normal',
                   boxShadow:
                     activeTab === index ? '0px 2px 3px rgba(0, 0, 0, 0.2)' : '',
                 }}

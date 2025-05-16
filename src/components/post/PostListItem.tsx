@@ -1,6 +1,5 @@
 import Avatar from '../avatar/Avatar';
 import LikeComment from '../reaction/LikeComment';
-import { Post } from '../../types';
 import dayjs from 'dayjs';
 import { Link, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';

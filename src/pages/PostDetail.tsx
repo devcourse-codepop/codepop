@@ -5,7 +5,6 @@ import WriteCommentItem from '../components/post/WriteCommentItem';
 import { getPostList } from '../api/post/post';
 import { usePostStore } from '../stores/postStore';
 import { useEffect, useRef, useState } from 'react';
-import { Post } from '../types';
 import { Theme } from '../types/darkModeTypes';
 
 export default function PostDetail({ theme }: { theme: Theme }) {

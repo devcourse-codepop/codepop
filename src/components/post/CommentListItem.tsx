@@ -3,7 +3,6 @@ import menuIconWhite from '../../assets/images/menu/menu-icon-white.svg';
 import userImg from '../../assets/images/header/user-img.svg';
 import { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
-import { Comment } from '../../types';
 import { useAuthStore } from '../../stores/authStore';
 import { Link, useParams } from 'react-router-dom';
 import DOMPurify from 'dompurify';
@@ -126,46 +125,27 @@ export default function CommentListItem({
     <>
       <div
         className={`h-auto rounded-[5px] border border-[#b4b4b4] mx-7 mb-[30px] relative ${
-          dark(theme)
-            ? 'bg-[#2d2d2d] text-[#ffffff]'
-            : 'bg-[#ffffff] text-[#111111]'
+          dark(theme) ? 'bg-[#2d2d2d] text-[#ffffff]' : 'bg-[#ffffff] text-[#111111]'
         }`}
       >
-        <div className="flex justify-between pt-2.5">
-          <div className="flex items-center gap-3 pl-4 pt-1">
-            <Link
-              to={`/profile`}
-              state={{ userid: author?._id }}
-              className="flex items-center gap-2"
-            >
-              <img
-                src={author.image ? author.image : userImg}
-                alt="사용자"
-                className="w-9 h-9 rounded-full"
-              />
-              <span className="text-[13px] font-semibold">
-                {author.fullName}
-              </span>
+        <div className='flex justify-between pt-2.5'>
+          <div className='flex items-center gap-3 pl-4 pt-1'>
+            <Link to={`/profile`} state={{ userid: author?._id }} className='flex items-center gap-2'>
+              <img src={author.image ? author.image : userImg} alt='사용자' className='w-9 h-9 rounded-full' />
+              <span className='text-[13px] font-semibold'>{author.fullName}</span>
             </Link>
-            <span className="text-[11px] opacity-60 font-light">
-              {getElapsedTime()}
-            </span>
+            <span className='text-[11px] opacity-60 font-light'>{getElapsedTime()}</span>
           </div>
           {/* 로그인한 사용자 id 값과 해당 댓글 작성자 id 값이 일치할 경우 */}
           {isUser && (
             <>
-              <div
-                onClick={clickMenuHandler}
-                className="w-9 h-9 pr-2.5 cursor-pointer"
-              >
+              <div onClick={clickMenuHandler} className='w-9 h-9 pr-2.5 cursor-pointer'>
                 <img src={dark(theme) ? menuIconWhite : menuIcon} />
               </div>
               {isOpen && (
                 <div
                   className={`flex justify-center items-center text-[12px] text-[#FF0404] rounded-[2px] w-[91px] h-[34px]  cursor-pointer absolute top-8 right-4 ${
-                    dark(theme)
-                      ? 'bg-[#2d2d2d] border border-white/40'
-                      : 'border border-[#e5e5e5]'
+                    dark(theme) ? 'bg-[#2d2d2d] border border-white/40' : 'border border-[#e5e5e5]'
                   }`}
                   onClick={clickDeleteHandler}
                   ref={modalRef}
@@ -176,21 +156,19 @@ export default function CommentListItem({
             </>
           )}
         </div>
-        <div className="flex flex-col">
+        <div className='flex flex-col'>
           <div
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(
-                editCodeStyle(JSON.parse(comment).content)
-              ),
+              __html: DOMPurify.sanitize(editCodeStyle(JSON.parse(comment).content)),
             }}
-            className="py-[11px] px-4 text-sm font-normal"
+            className='py-[11px] px-4 text-sm font-normal'
           />
         </div>
-        <div className="flex justify-end items-center gap-1.5 px-4 pb-3"></div>
+        <div className='flex justify-end items-center gap-1.5 px-4 pb-3'></div>
       </div>
       {isDeleteModalOpen && (
         <CheckDeleteModal
-          type="COMMENT"
+          type='COMMENT'
           channel={String(channel)}
           _id={_id}
           closeDeleteModalHanlder={closeDeleteModalHanlder}

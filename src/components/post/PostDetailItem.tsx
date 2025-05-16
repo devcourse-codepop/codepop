@@ -3,7 +3,6 @@ import LikeComment from '../reaction/LikeComment';
 import menuIcon from '../../assets/images/menu/menu-icon.svg';
 import menuIconWhite from '../../assets/images/menu/menu-icon-white.svg';
 import { useEffect, useRef, useState } from 'react';
-import { Comment, Post } from '../../types';
 import dayjs from 'dayjs';
 import { getPostList } from '../../api/post/post';
 import { usePostStore } from '../../stores/postStore';
@@ -224,7 +223,6 @@ export default function PostDetailItem({
                       dark(theme) ? 'border-[#878787]' : 'opacity-10'
                     }`}
                   />
-
                   <div
                     className='flex justify-center items-center text-[12px] text-[#FF0404] h-[34px] cursor-pointer'
                     onClick={clickDeleteHandler}
