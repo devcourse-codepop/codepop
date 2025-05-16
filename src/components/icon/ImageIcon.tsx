@@ -14,7 +14,7 @@ export default function ImageIcon({
     <>
       <img
         src={dark(theme) ? imageIconWhite : imageIcon}
-        className="w-[25px] h-[25px] inline-block cursor-pointer"
+        className='w-[23px] h-[23px] inline-block cursor-pointer'
         onClick={onClick}
       />
     </>

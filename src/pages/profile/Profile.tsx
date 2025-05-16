@@ -6,7 +6,13 @@ import defaultCover from '../../assets/images/profile/default-cover.png';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
 
-export default function Profile({ userId, theme }: { userId: string; theme: Theme }) {
+export default function Profile({
+  userId,
+  theme,
+}: {
+  userId: string;
+  theme: Theme;
+}) {
   const [userData, setUserData] = useState<User | null>(null);
 
   const fetchUserData = useCallback(async () => {
@@ -30,21 +36,28 @@ export default function Profile({ userId, theme }: { userId: string; theme: Them
   }
 
   return (
-    <div
-      className={`w-full h-[calc(100vh-100px-30px)] rounded-[10px] shadow-md font-semibold overflow-hidden flex flex-col ${
-        dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
-      }`}
-    >
-      <div className='h-[223px] flex-shrink-0'>
-        <img
-          src={userData?.coverImage || defaultCover}
-          className='w-full h-full rounded-t-[10px] object-fill'
-          alt='BackgroundImage '
-        />
-      </div>
-      <div className=' flex  overflow-hidden'>
-        <ProfileLeft userData={userData} userId={userId} refetchUserData={fetchUserData} theme={theme} />
-        <ProfileRight userData={userData} theme={theme} />
+    <div className={`w-full h-full pb-[30px]`}>
+      <div className='grid grid-rows-[auto_1fr] w-full max-h-[820px] h-full rounded-[10px] shadow-md font-semibold  min-h-[calc(100% - 223px)] overflow-y-auto scroll-custom'>
+        <div className='h-[223px]'>
+          <img
+            src={userData?.coverImage || defaultCover}
+            className='w-full h-full rounded-t-[10px] object-fill'
+            alt='BackgroundImage '
+          />
+        </div>
+        <div
+          className={`flex min-w-0 profile-content ${
+            dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+          }`}
+        >
+          <ProfileLeft
+            userData={userData}
+            userId={userId}
+            refetchUserData={fetchUserData}
+            theme={theme}
+          />
+          <ProfileRight userData={userData} theme={theme} />
+        </div>
       </div>
     </div>
   );

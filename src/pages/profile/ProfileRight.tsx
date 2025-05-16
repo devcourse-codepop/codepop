@@ -143,10 +143,12 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
   };
 
   return (
-    <div className="ml-[26px]">
-      <div className="flex justify-between items-center mt-[40px] text-[18px] font-semibold">
+    <div className='w-full min-w-0 px-[26px] pb-[40px] profile-right'>
+      <div className='w-full flex justify-between items-center mt-[40px] text-[18px] font-semibold'>
         <div
-          className={`flex pb-[10px] ${dark(theme) ? 'text-[#ffffff]' : ''}`}
+          className={`flex pb-[10px] whitespace-nowrap ${
+            dark(theme) ? 'text-[#ffffff]' : ''
+          }`}
         >
           <div
             className={`cursor-pointer mb-[-13px] px-4 ${
@@ -156,7 +158,7 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
             }`}
             onClick={() => setSelectedTab('posts')}
           >
-            <p className="pb-[12px]">포스트</p>
+            <p className='pb-[12px]'>포스트</p>
           </div>
           <div
             className={`cursor-pointer mb-[-13px] px-4 ${
@@ -166,7 +168,7 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
             }`}
             onClick={() => setSelectedTab('likes')}
           >
-            <p className="pb-[12px]">좋아요</p>
+            <p className='pb-[12px]'>좋아요</p>
           </div>
           <div
             className={`cursor-pointer mb-[-13px] px-4 ${
@@ -176,7 +178,7 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
             }`}
             onClick={() => setSelectedTab('comments')}
           >
-            <p className="pb-[12px]">댓글</p>
+            <p className='pb-[12px]'>댓글</p>
           </div>
         </div>
 
@@ -188,9 +190,8 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
           전체 : {totalTab[selectedTab]}
         </p>
       </div>
-
       <div
-        className={`w-[682px] min-h-[365px]   ${
+        className={`w-full min-h-[365px]   ${
           dark(theme)
             ? 'border-t-2 border-t-[#ffffff]/30'
             : 'border-t-2 border-t-[#111111]/30'
@@ -215,50 +216,51 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
                 dark(theme) ? 'border-b-[#ffffff]/30' : 'border-b-[#111111]/30'
               } ${selectedTab === 'comments' ? 'py-[6px]' : 'py-4'}`}
             >
-              <div className="relative flex items-center py-0.5">
-                <div
-                  className={`absolute left-0 rounded-[28px] border text-[12px] font-bold ml-2 text-white px-[10px] py-[3px] cursor-pointer ${bg}`}
-                  onClick={() => navigate(`/channel/${id}`)}
-                >
-                  {label}
+              <div className='relative flex flex-wrap items-center py-0.5 px-2 gap-y-2.5'>
+                <div className='w-[130px]'>
+                  <div
+                    className={`inline-block rounded-[28px] text-[12px] font-bold text-white px-[10px] py-[3px] cursor-pointer ${bg}`}
+                    onClick={() => navigate(`/channel/${id}`)}
+                  >
+                    {label}
+                  </div>
                 </div>
-
-                <div
-                  className="ml-[130px] flex flex-col cursor-pointer justify-center"
-                  onClick={() => navigate(`/channel/${id}/post/${post._id}`)}
-                >
+                <div className='flex items-center max-w-[calc(100%-130px)] w-full profile-post-title'>
+                  <div
+                    className='min-w-0 flex flex-col cursor-pointer justify-center'
+                    onClick={() => navigate(`/channel/${id}/post/${post._id}`)}
+                  >
+                    <p
+                      className={`font-semibold text-[15px] w-full truncate  ${
+                        dark(theme) ? 'text-[#ffffff]' : ''
+                      }`}
+                    >
+                      {JSON.parse(post.title).title}
+                    </p>
+                    {selectedTab === 'comments' && post.comments.length > 0 && (
+                      <div className='mt-1 text-[12px] text-gray-700 flex'>
+                        <img
+                          src={dark(theme) ? commentWhite : commentIcon}
+                          className='w-5 h-5'
+                        />
+                        <p
+                          className={`ml-[5px] ${
+                            dark(theme) ? 'text-[#ffffff]' : ''
+                          }`}
+                        >
+                          +{post.myCommentCount}개
+                        </p>
+                      </div>
+                    )}
+                  </div>
                   <p
-                    className={`font-semibold text-[15px] truncate max-w-[430px] ${
+                    className={`ml-auto w-[100px] font-normal shrink-0 text-right text-[13px] ${
                       dark(theme) ? 'text-[#ffffff]' : ''
                     }`}
                   >
-                    {JSON.parse(post.title).title}
+                    {post.createdAt.slice(0, 10)}
                   </p>
-
-                  {selectedTab === 'comments' && post.comments.length > 0 && (
-                    <div className="mt-1 text-[12px] text-gray-700 flex">
-                      <img
-                        src={dark(theme) ? commentWhite : commentIcon}
-                        className="w-5 h-5"
-                      />
-                      <p
-                        className={`ml-[5px] ${
-                          dark(theme) ? 'text-[#ffffff]' : ''
-                        }`}
-                      >
-                        +{post.myCommentCount}개
-                      </p>
-                    </div>
-                  )}
                 </div>
-
-                <p
-                  className={`absolute right-0 top-1/2 -translate-y-1/2 w-[100px] font-normal  text-right text-[13px] pr-[15px] ${
-                    dark(theme) ? 'text-[#ffffff]' : ''
-                  }`}
-                >
-                  {post.createdAt.slice(0, 10)}
-                </p>
               </div>
             </div>
           );
@@ -278,27 +280,27 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
             pageRangeDisplayed={6}
             onChange={handlePageChange}
             prevPageText={
-              <span className="text-xl leading-none flex items-center justify-center">
+              <span className='text-xl leading-none flex items-center justify-center'>
                 ‹
               </span>
             }
             nextPageText={
-              <span className="text-xl leading-none flex items-center justify-center">
+              <span className='text-xl leading-none flex items-center justify-center'>
                 ›
               </span>
             }
             firstPageText={
-              <span className="text-xl leading-none flex items-center justify-center">
+              <span className='text-xl leading-none flex items-center justify-center'>
                 «
               </span>
             }
             lastPageText={
-              <span className="text-xl leading-none flex items-center justify-center">
+              <span className='text-xl leading-none flex items-center justify-center'>
                 »
               </span>
             }
-            innerClass="flex gap-2 text-sm"
-            itemClass="px-3 py-1 rounded-[5px] cursor-pointer"
+            innerClass='flex gap-2 text-sm'
+            itemClass='px-3 py-1 rounded-[5px] cursor-pointer'
             activeClass={`bg-[#1E293B] text-white ${
               dark(theme) ? 'bg-[#1e1e1e]' : ''
             }`}

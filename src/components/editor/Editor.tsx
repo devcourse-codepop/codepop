@@ -1,12 +1,12 @@
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import EditorToolbar from "./EditorToolbar";
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import EditorToolbar from './EditorToolbar';
 
-import { CustomImage } from "./extensions/CustomImage";
-import { useState, useEffect } from "react";
-import PollCreator from "../poll/PollCreater";
-import { Theme } from "../../types/darkModeTypes";
-import { dark } from "../../utils/darkModeUtils";
+import { CustomImage } from './extensions/CustomImage';
+import { useState, useEffect } from 'react';
+import PollCreator from '../poll/PollCreater';
+import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 
 interface Props {
   onChange: (html: string) => void;
@@ -31,7 +31,7 @@ export default function Editor({
 }: Props) {
   const editor = useEditor({
     extensions: [StarterKit, CustomImage],
-    content: "", // 빈 문자열로 시작
+    content: '', // 빈 문자열로 시작
     onUpdate({ editor }) {
       onChange(editor.getHTML());
     },
@@ -47,7 +47,11 @@ export default function Editor({
   }, [editor, initialContent, hasSetInitialContent]);
 
   return (
-    <div className='p-4 rounded-lg min-h-[100px] h-auto mb-8'>
+    <div
+      className={
+        'editor-box px-4 py-2 rounded-lg min-h-[100px] mb-4 h-[calc(100%-170px)]'
+      }
+    >
       <EditorToolbar
         editor={editor}
         onTogglePoll={() => setShowPollCreator((prev) => !prev)}
@@ -56,12 +60,17 @@ export default function Editor({
         showCodeButton={showCodeButton}
         theme={theme}
       />
-      <EditorContent
-        editor={editor}
-        className={`
+      <div
+        className={`editor-box-text max-w-full overflow-y-auto h-[calc(100%-41px)] pr-1  ${
+          showPollCreator && onPollCreate && 'edit-vote-box-text'
+        }`}
+      >
+        <EditorContent
+          editor={editor}
+          className={`
           prose max-w-none [&_.ProseMirror]:outline-none
-          ${disableMinHeight ? "" : "[&_.ProseMirror]:min-h-[360px]"}
-          [&_.ProseMirror]:h-auto
+          ${disableMinHeight ? '' : '[&_.ProseMirror]:min-h-full'}
+          [&_.ProseMirror]:h-full
 
           [&_.ProseMirror_pre]:p-4
           [&_.ProseMirror_pre]:rounded-lg
@@ -73,17 +82,16 @@ export default function Editor({
 
           ${
             dark(theme)
-              ? "[&_.ProseMirror_pre]:bg-[#1e1e1e] [&_.ProseMirror_pre]:text-[#ffffff]"
-              : "[&_.ProseMirror_pre]:bg-[#ececec] [&_.ProseMirror_pre]:text-[#111111]"
+              ? '[&_.ProseMirror_pre]:bg-[#1e1e1e] [&_.ProseMirror_pre]:text-[#ffffff]'
+              : '[&_.ProseMirror_pre]:bg-[#ececec] [&_.ProseMirror_pre]:text-[#111111]'
           }
-
-          
         `}
-      />
+        />
 
-      {showPollCreator && onPollCreate && (
-        <PollCreator onCreate={onPollCreate} theme={theme} />
-      )}
+        {showPollCreator && onPollCreate && (
+          <PollCreator onCreate={onPollCreate} theme={theme} />
+        )}
+      </div>
     </div>
   );
 }

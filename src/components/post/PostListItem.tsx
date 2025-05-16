@@ -1,6 +1,5 @@
 import Avatar from '../avatar/Avatar';
 import LikeComment from '../reaction/LikeComment';
-import { Post } from '../../types';
 import { Link, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 import { useState } from 'react';
@@ -103,11 +102,11 @@ export default function PostListItem(props: PostListItemProps) {
   return (
     <>
       <div
-        className={`postListItem w-full h-auto rounded-[5px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative ${
+        className={`postListItem w-full h-auto rounded-[5px] shadow-md relative ${
           dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
         }`}
       >
-        <div className="postListItem-top flex justify-between h-[85px] pl-3 pt-2.5">
+        <div className='postListItem-top flex justify-between h-[85px] pl-3 pt-2.5'>
           <Link to={`/profile`} state={{ userid: author?._id }}>
             <Avatar
               name={author?.fullName}
@@ -149,18 +148,18 @@ export default function PostListItem(props: PostListItemProps) {
                   removeImgTags(JSON.parse(title).content)
                 ),
               }}
-              className="postContent text-[15px] font-normal line-clamp-5"
+              className='postContent text-[15px] font-normal line-clamp-5'
             />
             {/* 투표 옵션이 있을 경우 */}
             {pollOptions && pollOptions.length > 0 && (
-              <div className="postPoll mt-4">
+              <div className='postPoll mt-4'>
                 <PollOptionsView options={pollOptions} theme={theme} />
               </div>
             )}
           </div>
           {image && (
-            <div className="postListItem-content-image border border-[#e0e0e0] rounded-[5px]">
-              <img src={image} className="w-[226px] h-[226px]" />
+            <div className='postListItem-content-image border border-[#e0e0e0] rounded-[5px]'>
+              <img src={image} className='w-[226px] h-[226px]' />
             </div>
           )}
         </div>
@@ -193,7 +192,7 @@ export default function PostListItem(props: PostListItemProps) {
                 dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
               }`}
             >
-              +<span className="text-[#ff0000]">{setCodeCount()}</span>개의 코드
+              +<span className='text-[#ff0000]'>{setCodeCount()}</span>개의 코드
               블록
             </div>
           )}

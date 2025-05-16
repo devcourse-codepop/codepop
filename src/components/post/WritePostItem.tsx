@@ -71,41 +71,41 @@ export default function WritePostItem({
   return (
     <>
       <div
-        className={`w-full h-auto rounded-[5px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] ${
+        className={`w-full h-auto rounded-[5px] shadow-md ${
           dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
         }`}
       >
         <form onSubmit={(e) => submitHandler(e)}>
           <textarea
-            id="title"
-            name="title"
+            id='title'
+            name='title'
             // ref={titleRef}
             value={title}
             onChange={(e) => changeTitleHandler(e)}
-            placeholder="제목"
-            className="w-full h-[96px] text-[35px] px-[32px] py-[22px] resize-none outline-none"
+            placeholder='제목'
+            className='w-full h-[96px] text-[35px] px-[32px] py-[22px] resize-none outline-none'
           />
-          <hr className="mx-[22px] text-[#b2b2b2]" />
-          <div className="w-full h-[66px] flex justify-end items-center">
-            <div className="pr-[25px]">
+          <hr className='mx-[22px] text-[#b2b2b2]' />
+          <div className='w-full h-[66px] flex justify-end items-center'>
+            <div className='pr-[25px]'>
               {channelId === '1' && <CodeEditIcon theme={theme} />}
               {channelId === '3' && <VoteIcon theme={theme} />}
               <ImageIcon theme={theme} />
             </div>
           </div>
           <textarea
-            id="content"
-            name="content"
+            id='content'
+            name='content'
             // ref={contentRef}
             value={content}
             onChange={(e) => changeContentHandler(e)}
-            placeholder="내용"
-            className="w-full h-[520px] text-[30px] px-[38px] py-[7px] resize-none outline-none"
+            placeholder='내용'
+            className='w-full h-[520px] text-[30px] px-[38px] py-[7px] resize-none outline-none'
           />
-          <hr className="mx-[22px] text-[#b2b2b2]" />
-          <div className="w-full h-[84px] relative">
-            <div className="inline-block absolute right-[20px] bottom-[15px]">
-              <Button value="완료" className="button-style2" />
+          <hr className='mx-[22px] text-[#b2b2b2]' />
+          <div className='w-full h-[84px] relative'>
+            <div className='inline-block absolute right-[20px] bottom-[15px]'>
+              <Button value='완료' className='button-style2' />
             </div>
           </div>
           {/* <div className="w-full h-[84px] relative">

@@ -4,6 +4,8 @@ import ChannelBox from '../components/sidebar/ChannelBox';
 import MemberBox from '../components/sidebar/MemberBox';
 import '../css/layout/layout.css';
 import { Theme } from '../types/darkModeTypes';
+import { useRef, useState } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 export default function MainLayout({
   theme,
@@ -14,22 +16,54 @@ export default function MainLayout({
   nextTheme: () => void;
   nextThemeIndex: number;
 }) {
+  const [mobileSide, setMobileSide] = useState(false);
+  const sideBarButtonRef = useRef<HTMLButtonElement>(null);
+  const sideBarRef = useRef<HTMLElement>(null);
+
+  // useEffect(() => {
+  //   const clickHandler = (e: MouseEvent) => {
+  //     if (
+  //       sideBarRef.current &&
+  //       sideBarButtonRef.current &&
+  //       !sideBarRef.current.contains(e.target as Node) &&
+  //       !sideBarButtonRef.current.contains(e.target as Node)
+  //     ) {
+  //       setMobileSide(false);
+  //     }
+  //   };
+  //   window.addEventListener('mousedown', clickHandler);
+  //   return () => window.removeEventListener('mousedown', clickHandler);
+  // }, [sideBarRef, sideBarButtonRef]);
+
   return (
     <>
-      <div className="max-w-[1500px] mx-auto">
+      <div className='max-w-[1500px] mx-auto'>
         <Header
           theme={theme}
           nextTheme={nextTheme}
           nextThemeIndex={nextThemeIndex}
         />
-        <div className="flex px-[60px] h-[calc(100dvh-100px)]">
-          <aside className="flex flex-col h-full mr-[50px] box-border  pb-[20px]">
-            <div className="mb-[30px]">
+        <button
+          ref={sideBarButtonRef}
+          className='mobile-side-menu-button fixed text-5xl top-[22px] left-[30px] cursor-pointer z-21 hidden'
+          onClick={() => setMobileSide(!mobileSide)}
+        >
+          =
+        </button>
+        <div className='main-layout-content flex px-[60px] h-[calc(100dvh-100px)]'>
+          <aside
+            ref={sideBarRef}
+            className={twMerge(
+              'side-bar flex flex-col h-full mr-[30px] box-border pb-[30px]',
+              mobileSide && 'open'
+            )}
+          >
+            <div className='mb-[30px]'>
               <ChannelBox theme={theme} />
             </div>
             <MemberBox theme={theme} />
           </aside>
-          <main className="h-full w-full min-w-0 max-w-full pb-[20px]">
+          <main className='h-full w-full min-w-0 max-w-full h-[841px]'>
             {/* 컨텐츠 영역 */}
             <Outlet />
           </main>

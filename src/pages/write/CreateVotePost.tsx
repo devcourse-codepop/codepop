@@ -68,26 +68,26 @@ export default function CreateVotePost({ theme }: { theme: Theme }) {
   const isSubmitDisabled = title.trim() === '' || content.trim() === '';
   return (
     <>
-      <div className="w-full flex relative">
-        <div>
-          <div className="pb-[30px]">
+      <div className='w-full h-full pb-[30px]'>
+        <div className='w-full max-h-[820px] h-full grid grid-rows-[auto_1fr_auto]'>
+          <div className='pb-[20px]'>
             <ChannelName channelId={channelId ?? '3'} theme={theme} />
           </div>
 
           <div
-            className={`shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto scroll-custom ${
+            className={`shadow-md rounded-[10px] p-5 relative h-full overflow-hidden ${
               dark(theme)
                 ? 'bg-[#2d2d2d] text-[#ffffff]'
                 : 'bg-[#ffffff] text-[#111111]'
             }`}
           >
             <input
-              type="text"
+              type='text'
               ref={titleRef}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="제목을 입력하세요"
+              placeholder='제목을 입력하세요'
               autoFocus
-              className="w-[955px] font-semibold text-[25px] m-3 outline-none"
+              className='w-full font-semibold text-[23px] px-3 py-2 outline-none'
             />
             <hr
               className={`mt-[15px] mb-[15px] opacity-30 ${
@@ -104,14 +104,14 @@ export default function CreateVotePost({ theme }: { theme: Theme }) {
               theme={theme}
             />
             <hr
-              className={`opacity-30 ${
+              className={`mb-[20px]  opacity-30 ${
                 dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
               }`}
             />
 
-            <div className="flex justify-end mt-6">
+            <div className='text-right'>
               <Button
-                value="완료"
+                value='완료'
                 className={`button-style2 ${
                   isSubmitDisabled
                     ? dark(theme)

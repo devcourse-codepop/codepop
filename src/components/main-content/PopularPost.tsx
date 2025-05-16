@@ -4,16 +4,22 @@ import { getPopularPostData } from '../../api/post/post';
 import PostListItem from '../post/PostListItem';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
+import PopularPostCkeleton from './PopularPostCkeleton';
 
 export default function PopularPost({ theme }: { theme: Theme }) {
   const { channels, fetchChannels } = useChannelItemStore();
   const [activeTab, setActiveTab] = useState(0);
   const [sortPopulars, setSortPopulars] = useState<Post[]>([]);
+  const [isLoading, setLoading] = useState(true);
 
   const tabClickHandler = async (channelId: string, index: number) => {
-    const data = await getPopularPostData(channelId);
-    setActiveTab(index);
-    setSortPopulars(data);
+    try {
+      const data = await getPopularPostData(channelId);
+      setActiveTab(index);
+      setSortPopulars(data);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -45,7 +51,11 @@ export default function PopularPost({ theme }: { theme: Theme }) {
           dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
         }`}
       >
-        <h3 className={`font-semibold  text-[18px] mb-[15px] ${dark(theme) ? 'text-[#acacaa]' : 'text-[#595956]'}`}>
+        <h3
+          className={`font-semibold  text-[20px] mb-[15px] ${
+            dark(theme) ? 'text-[#acacaa]' : 'text-[#595956]'
+          }`}
+        >
           Popular Posts
         </h3>
         <ul className='flex relative gap-x-5 gap-y-2.5 mb-4.5 flex-wrap'>
@@ -58,7 +68,7 @@ export default function PopularPost({ theme }: { theme: Theme }) {
               id={`tab-${index}`}
             >
               <button
-                className={`bg-[#E3E3E3] text-white rounded-[10px] w-[123px] h-[40px] text-[12px] cursor-pointer duration-300`}
+                className={`bg-[#E3E3E3] text-white rounded-[10px] w-[123px] h-[40px] text-[13px] cursor-pointer duration-300 font-semibold`}
                 onClick={() => {
                   tabClickHandler(channel.id, index);
                 }}
@@ -77,7 +87,8 @@ export default function PopularPost({ theme }: { theme: Theme }) {
                       : '#E3E3E3',
                   color: activeTab === index ? '#fff' : '#6A6A6A',
                   fontWeight: activeTab === index ? 'bold' : 'normal',
-                  boxShadow: activeTab === index ? '0px 2px 3px rgba(0, 0, 0, 0.2)' : '',
+                  boxShadow:
+                    activeTab === index ? '0px 2px 3px rgba(0, 0, 0, 0.2)' : '',
                 }}
               >
                 {channel.name}
@@ -95,7 +106,9 @@ export default function PopularPost({ theme }: { theme: Theme }) {
               aria-labelledby={`tab-${cIndex}`}
               id={`panel-${cIndex}`}
             >
-              {sortPopulars.length == 0 ? (
+              {isLoading ? (
+                <PopularPostCkeleton theme={theme} />
+              ) : sortPopulars.length == 0 ? (
                 <p className='absolute left-1/2 bottom-4/7 -translate-x-1/2 text-sm text-[#5c5c5c]'>
                   해당 채널에 게시글이 없습니다.
                 </p>
@@ -106,16 +119,11 @@ export default function PopularPost({ theme }: { theme: Theme }) {
                     title: parseHandler(popular.title),
                   };
                   return (
-                    <div key={`popular-${pIndex}`} className='basis-[calc(50%-0.875rem)] max-w-full tabConstentItem'>
+                    <div
+                      key={`popular-${pIndex}`}
+                      className='basis-[calc(50%-0.875rem)] max-w-full tabConstentItem'
+                    >
                       <PostListItem {...parsePopular} theme={theme} />
-                      {/* <PostList
-                        title={{
-                          title: `${postTitle}`,
-                          content: `${postContent}`,
-                          tag: `아마 태그 없앴던거 같음`,
-                        }}
-                        updatedAt={popular.createdAt.split("T")[0]}
-                      /> */}
                     </div>
                   );
                 })

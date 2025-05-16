@@ -17,17 +17,27 @@ interface ProfileLeftProps extends UserInfo {
   theme: Theme;
 }
 
-export default function ProfileLeft({ userData, theme, userId, refetchUserData }: ProfileLeftProps) {
+export default function ProfileLeft({
+  userData,
+  theme,
+  userId,
+  refetchUserData,
+}: ProfileLeftProps) {
   const user = useAuthStore((state) => state.user);
   const setUser = useAuthStore((state) => state.setUser);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFollowed, setIsFollowed] = useState(false);
-  const [followData, setFollowData] = useState<{ followers: Follow[]; following: Follow[] }>({
+  const [followData, setFollowData] = useState<{
+    followers: Follow[];
+    following: Follow[];
+  }>({
     followers: [],
     following: [],
   });
-  const [followType, setFollowType] = useState<'follower' | 'following'>('follower');
+  const [followType, setFollowType] = useState<'follower' | 'following'>(
+    'follower'
+  );
   const onClose = useChatClose(setIsChatOpen);
   const navigate = useNavigate();
 
@@ -49,18 +59,23 @@ export default function ProfileLeft({ userData, theme, userId, refetchUserData }
   return (
     <>
       <div
-        className={`w-[291px] h-[633px] rounded-bl-[10px] px-[50px] border-r-2 border-gray-300
+        className={`w-[271px] rounded-bl-[10px]  flex-shrink-0 px-[40px] pb-[60px] border-r-2 border-gray-300 profile-left
     ${dark(theme) ? 'text-[#ffffff]' : ''}
   `}
       >
         <img
           src={userData?.image || defaultProfileImage}
           alt='Profile'
-          className='w-[196px] h-[196px] rounded-[5px] mt-[60px]  object-contain overflow-hidden'
+          className='profile-left-img w-[196px] h-[196px] rounded-[5px] mt-[60px]  object-contain overflow-hidden'
         />
-        <div className='pt-[0px]'>
-          <p className='font-bold text-[20px] mt-[40px]'> {userData?.fullName}</p>
-          <p className='font-normal text-[14px] mt-[3px] w-[200px] break-words'>{userData?.email}</p>
+        <div className='pt-[0px] profile-left-text'>
+          <p className='font-bold text-[20px] mt-[42px]'>
+            {' '}
+            {userData?.fullName}
+          </p>
+          <p className='font-normal text-[14px] mt-[3px] w-[200px] break-words'>
+            {userData?.email}
+          </p>
           <div className='flex gap-8.5 text-[16px] font-medium mt-[40px] '>
             <div
               className='flex  items-center cursor-pointer'
@@ -89,7 +104,9 @@ export default function ProfileLeft({ userData, theme, userId, refetchUserData }
             <div className='mt-[25px] flex gap-6'>
               <Button
                 value='프로필 수정'
-                className={`button-style3 ${dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''}`}
+                className={`button-style3 ${
+                  dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
+                }`}
                 onClick={() => navigate('/profile/edit')}
               />
               <Mail
@@ -107,7 +124,9 @@ export default function ProfileLeft({ userData, theme, userId, refetchUserData }
                 (isFollowed ? (
                   <Button
                     value='팔로우 취소'
-                    className={`button-style3 ${dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''}`}
+                    className={`button-style3 ${
+                      dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
+                    }`}
                     onClick={() => {
                       if (!user) return;
                       handleUnfollow(user, userId, setUser, refetchUserData);
@@ -116,7 +135,9 @@ export default function ProfileLeft({ userData, theme, userId, refetchUserData }
                 ) : (
                   <Button
                     value='팔로우'
-                    className={`button-style3 ${dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''}`}
+                    className={`button-style3 ${
+                      dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
+                    }`}
                     onClick={() => {
                       if (!user) return;
                       handleFollow(user, userId, setUser, refetchUserData);
