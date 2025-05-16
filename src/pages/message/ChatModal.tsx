@@ -13,7 +13,12 @@ interface ChatModalProps {
   theme: Theme;
 }
 
-export default function ChatModal({ isOpen, onClose, initialUser, theme }: ChatModalProps) {
+export default function ChatModal({
+  isOpen,
+  onClose,
+  initialUser,
+  theme,
+}: ChatModalProps) {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const changeMessageIcon = useMessageStore((state) => state.setMessageIcon);
 
@@ -26,14 +31,20 @@ export default function ChatModal({ isOpen, onClose, initialUser, theme }: ChatM
       setIsLoading(false);
       changeMessageIcon(dark(theme) ? MessageOpenIcon : MessageOpenIcon);
     }
-  }, [isOpen, initialUser]);
+  }, [isOpen, initialUser, changeMessageIcon, theme]);
 
   if (!isOpen) return null;
 
   return (
     !isLoading && (
-      <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50' onClick={onClose}>
-        <div className='w-[448px] h-[75vh] bg-white rounded-[5px] flex flex-col' onClick={(e) => e.stopPropagation()}>
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+        onClick={onClose}
+      >
+        <div
+          className="w-[448px] h-[75vh] bg-white rounded-[5px] flex flex-col"
+          onClick={(e) => e.stopPropagation()}
+        >
           {selectedUser ? (
             <ChatRoom
               user={selectedUser}
@@ -45,7 +56,11 @@ export default function ChatModal({ isOpen, onClose, initialUser, theme }: ChatM
               theme={theme}
             /> // 채팅방
           ) : (
-            <ChatUserList onSelectUser={setSelectedUser} onClose={onClose} theme={theme} /> // 대화했던 사람들 목록
+            <ChatUserList
+              onSelectUser={setSelectedUser}
+              onClose={onClose}
+              theme={theme}
+            /> // 대화했던 사람들 목록
           )}
         </div>
       </div>

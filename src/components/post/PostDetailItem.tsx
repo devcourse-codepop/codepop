@@ -2,7 +2,8 @@ import Avatar from "../avatar/Avatar";
 import LikeComment from "../reaction/LikeComment";
 import menuIcon from "../../assets/images/menu/menu-icon.svg";
 import menuIconWhite from "../../assets/images/menu/menu-icon-white.svg";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+// import { Comment, Post } from '../../types';
 import dayjs from "dayjs";
 import { getPostList } from "../../api/post/post";
 import { usePostStore } from "../../stores/postStore";
@@ -14,6 +15,7 @@ import PollOptionsVoteView from "../poll/PollOptionsVoteView";
 import CheckDeleteModal from "./CheckDeleteModal";
 import { Theme } from "../../types/darkModeTypes";
 import { dark } from "../../utils/darkModeUtils";
+import getElapsedTime from "../../utils/getDatetime";
 
 // updateReloadTrigger 타입 추가
 interface PostDetailItemProps extends Post {
@@ -96,43 +98,34 @@ export default function PostDetailItem({
     return date.format("YYYY-MM-DD HH:mm:ss");
   };
 
-  // 게시글 작성 시간 포맷 설정
-  const getElapsedTime = () => {
-    const now = dayjs().add(9, "hour");
-    const writeTime = dayjs(createdAt).add(9, "hour");
-
-    const gap = now.diff(writeTime, "s");
-    if (gap < 60) return `${gap}초 전`;
-    if (gap < 3600) return `${Math.floor(gap / 60)}분 전`;
-    if (gap < 86400) return `${Math.floor(gap / 3600)}시간 전`;
-
-    return writeTime.format("YYYY.MM.DD");
-  };
-
   // 로그인한 사용자가 해당 게시글 작성자인지 확인
-  const checkPostUser = () => {
+  const checkPostUser = useCallback(() => {
     if (author._id === user?._id) {
       setIsUser(true);
     }
-  };
+  }, [author._id, user?._id]);
 
   // 해당 게시글의 댓글 목록 필터링
-  const filteringItem = (data: Post[]) => {
-    for (const res of data) {
-      if (res._id === post) {
-        setCommentListItem(res.comments);
+  const filteringItem = useCallback(
+    (data: Post[]) => {
+      for (const res of data) {
+        if (res._id === post) {
+          setCommentListItem(res.comments);
+        }
       }
-    }
-  };
+    },
+    [post]
+  );
+
   // 게시글 목록 불러오기 (게시글 id에 해당하는 댓글만 필터링)
-  const getPostItem = async () => {
+  const getPostItem = useCallback(async () => {
     try {
       const { data } = await getPostList(channelIdList[Number(channelId) - 1]);
       filteringItem(data);
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
-  };
+  }, [channelId, channelIdList, filteringItem]);
 
   // 수정 버튼 클릭 시, 게시글 수정 페이지로 이동하기
   const clickUpdateHandler = () => {
@@ -159,7 +152,7 @@ export default function PostDetailItem({
       getPostItem();
       checkPostUser();
     }
-  }, [user, comments]);
+  }, [user, comments, checkPostUser, getPostItem]);
 
   // 수정, 삭제 모달 밖 영역 클릭 시, 모달 닫기
   useEffect(() => {
@@ -269,7 +262,7 @@ export default function PostDetailItem({
           )}
         </div>
         <div className='flex justify-end pr-5 pb-[9px] text-[#808080] text-sm font-light'>
-          {getElapsedTime()}
+          {getElapsedTime(createdAt)}
         </div>
         <hr className='mx-[18px] text-[#b2b2b2]' />
         <div className='h-[59px]'>
