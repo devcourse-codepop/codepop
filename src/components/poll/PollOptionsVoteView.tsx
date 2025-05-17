@@ -106,7 +106,6 @@ export default function PollOptionsVoteView({
 
     const prevComment = localComments.find((c) => c._id === myCommentId);
 
-    // 선택 취소
     if (selectedOptionId === optionId && myCommentId) {
       setLocalComments((prev) => prev.filter((c) => c._id !== myCommentId));
 
@@ -117,23 +116,12 @@ export default function PollOptionsVoteView({
         if (prevComment) {
           setLocalComments((prev) => [...prev, prevComment]);
         }
-        console.error("❌ 선택 취소 실패", err);
+        console.error("선택 취소 실패", err);
       }
 
       return;
     }
 
-    if (myCommentId) {
-      setLocalComments((prev) => prev.filter((c) => c._id !== myCommentId));
-
-      try {
-        await deleteComments(myCommentId);
-      } catch (err) {
-        console.error("⚠️ 기존 투표 삭제 실패", err);
-      }
-    }
-
-    // 새 투표 생성 (optimistic)
     const tempId = "temp-" + Date.now();
     const newComment: CommentType = {
       _id: tempId,
@@ -145,7 +133,20 @@ export default function PollOptionsVoteView({
       }),
     };
 
-    setLocalComments((prev) => [...prev, newComment]);
+    setLocalComments((prev) => {
+      const filtered = myCommentId
+        ? prev.filter((c) => c._id !== myCommentId)
+        : prev;
+      return [...filtered, newComment];
+    });
+
+    if (myCommentId) {
+      try {
+        await deleteComments(myCommentId);
+      } catch (err) {
+        console.error("기존 투표 삭제 실패", err);
+      }
+    }
 
     try {
       const { data } = await voteComments(
@@ -154,16 +155,14 @@ export default function PollOptionsVoteView({
         String(myUserId)
       );
 
-      // temp -> 서버 응답으로 대체
       setLocalComments((prev) =>
         prev.map((c) => (c._id === tempId ? data : c))
       );
 
       onVoted?.();
     } catch (err) {
-      // 실패 시 롤백
       setLocalComments((prev) => prev.filter((c) => c._id !== tempId));
-      console.error("❌ 투표 실패", err);
+      console.error("투표 실패", err);
     }
   };
 
