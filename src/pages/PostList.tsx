@@ -162,26 +162,26 @@ export default function PostList({ theme }: { theme: Theme }) {
 
   return (
     <>
-      <div className='h-full'>
-        <div className='w-full h-full grid grid-rows-[auto_1fr_auto] relative'>
-          <div className='flex justify-between items-end pb-[20px] flex-wrap channel-top'>
-            <div className='mr-3'>
+      <div className="h-full">
+        <div className="w-full h-full grid grid-rows-[auto_1fr_auto] relative">
+          <div className="flex justify-between items-end pb-[20px] flex-wrap channel-top">
+            <div className="mr-3">
               <ChannelName channelId={String(channel)} theme={theme} />
             </div>
-            <div className='flex gap-2.5 ml-auto mt-3.5'>
+            <div className="flex gap-2.5 ml-auto mt-3.5">
               {/* <SearchPost /> */}
 
-              <div className='w-[225px] h-[38px] flex items-center bg-white rounded-[5px] px-2.5 py-2'>
+              <div className="w-[225px] h-[38px] flex items-center bg-white rounded-[5px] px-2.5 py-2">
                 <input
-                  type='text'
+                  type="text"
                   value={input}
                   onChange={(e) => changeInputHandler(e)}
                   onKeyDown={keyDownHandler}
-                  placeholder='검색'
-                  className='flex-grow text-[13px] outline-none placeholder-[#989898]'
+                  placeholder="검색"
+                  className="flex-grow text-[13px] outline-none placeholder-[#989898]"
                 />
                 <Search
-                  className='w-[19.94px] h-[19.94px] text-[#86879C] cursor-pointer'
+                  className="w-[19.94px] h-[19.94px] text-[#86879C] cursor-pointer"
                   onClick={() => {
                     if (input.trim() === '') return;
                     clickSearchHandler();
@@ -200,13 +200,13 @@ export default function PostList({ theme }: { theme: Theme }) {
                   backgroundPosition: 'right 8px center',
                 }}
               >
-                <option value='recent'>최신순</option>
-                <option value='popular'>인기순</option>
+                <option value="recent">최신순</option>
+                <option value="popular">인기순</option>
               </select>
             </div>
           </div>
           <div
-            className='flex flex-col gap-[30px] pb-7.5 overflow-y-auto scroll-custom'
+            className="flex flex-col gap-[30px] pb-7.5 overflow-y-auto scroll-custom"
             ref={scrollRef}
           >
             {isLoading ? (
@@ -216,7 +216,11 @@ export default function PostList({ theme }: { theme: Theme }) {
             ) : (
               <>
                 {postListItem.length === 0 && (
-                  <div className='flex flex-col justify-center items-center gap-5 text-lg font-semibold pt-16 opacity-60'>
+                  <div
+                    className={`flex flex-col justify-center items-center gap-5 text-lg font-semibold pt-16 opacity-60 ${
+                      dark(theme) ? 'text-[#ffffff]' : ''
+                    }`}
+                  >
                     <div>게시글이 없습니다!</div>
                     <div>새로운 게시글을 작성해 보세요!</div>
                   </div>
@@ -256,17 +260,17 @@ export default function PostList({ theme }: { theme: Theme }) {
               <img
                 src={dark(theme) ? topBtn2White : topBtn2}
                 onClick={scrollToTop}
-                alt='top 버튼'
+                alt="top 버튼"
                 className={`w-5 h-5 ${imgSize} cursor-pointer`}
               />
             </div>
           )}
           {isLogin && (
-            <div className='post-write-button absolute -right-[90px] bottom-[25px] cursor-pointer'>
+            <div className="post-write-button absolute -right-[90px] bottom-[25px] cursor-pointer">
               <img
                 src={dark(theme) ? postBtnWhite : postBtn}
                 onClick={createNewPost}
-                alt='게시글 작성 버튼'
+                alt="게시글 작성 버튼"
               />
             </div>
           )}
