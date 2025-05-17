@@ -63,7 +63,8 @@ export default function MainLayout({
             </div>
             <MemberBox theme={theme} />
           </aside>
-          <main className="w-full min-w-0 max-w-full h-full">
+
+          <main className="h-full w-full min-w-0 max-w-full">
             {/* 컨텐츠 영역 */}
             <Outlet />
           </main>
