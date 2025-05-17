@@ -83,9 +83,7 @@ export default function Header({
                 <img
                   src={messageIcon}
                   onClick={handleMessageClick}
-                  className={` cursor-pointer w-[28px] h-[28px] ${
-                    dark(theme) ? 'invert' : ''
-                  }`}
+                  className="cursor-pointer w-[28px] h-[28px]"
                 />
                 {newNotiCount !== 0 ? (
                   <span className="flex justify-center w-3.5 h-3.5 rounded-2xl bg-[#FF0000] absolute -right-1 top-0 text-[11px] text-white leading-3">

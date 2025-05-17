@@ -3,6 +3,7 @@ import Header from '../components/header/Header';
 import ChannelBox from '../components/sidebar/ChannelBox';
 import MemberBox from '../components/sidebar/MemberBox';
 import '../css/layout/layout.css';
+import { dark } from '../utils/darkModeUtils';
 import { Theme } from '../types/darkModeTypes';
 import { useRef, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -37,7 +38,7 @@ export default function MainLayout({
 
   return (
     <>
-      <div className="max-w-[1500px] mx-auto">
+      <div className='max-w-[1500px] mx-auto'>
         <Header
           theme={theme}
           nextTheme={nextTheme}
@@ -45,12 +46,14 @@ export default function MainLayout({
         />
         <button
           ref={sideBarButtonRef}
-          className="mobile-side-menu-button fixed text-5xl top-[22px] left-[30px] cursor-pointer z-21 hidden"
+          className={`mobile-side-menu-button fixed text-5xl top-[22px] left-[30px] cursor-pointer z-21 hidden ${
+            dark(theme) && 'text-white'
+          }`}
           onClick={() => setMobileSide(!mobileSide)}
         >
           =
         </button>
-        <div className="main-layout-content flex px-[60px] h-[calc(100dvh-100px)]">
+        <div className='main-layout-content flex px-[60px] h-[calc(100dvh-100px)]'>
           <aside
             ref={sideBarRef}
             className={twMerge(
@@ -58,13 +61,13 @@ export default function MainLayout({
               mobileSide && 'open'
             )}
           >
-            <div className="mb-[30px]">
+            <div className='mb-[30px]'>
               <ChannelBox theme={theme} />
             </div>
             <MemberBox theme={theme} />
           </aside>
 
-          <main className="h-full w-full min-w-0 max-w-full">
+          <main className='h-full w-full min-w-0 max-w-full'>
             {/* 컨텐츠 영역 */}
             <Outlet />
           </main>
