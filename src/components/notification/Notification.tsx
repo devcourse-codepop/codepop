@@ -18,6 +18,7 @@ import { dark } from '../../utils/darkModeUtils';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/ko';
+import { getElapsedNotificationTime } from '../../utils/getDatetime';
 dayjs.extend(relativeTime);
 dayjs.locale('ko');
 
@@ -83,7 +84,7 @@ export default function Notification({ theme }: { theme: Theme }) {
 
     setNotifications(filterResult);
   }, [userId, originNotifications]);
-  // 알림 api 요청, 실시간 알림 감지를 위해 2초마다 요청
+  // 알림 api 요청, 실시간 알림 감지를 위해 10초마다 요청
   useEffect(() => {
     fetchNotifications();
 
@@ -165,7 +166,7 @@ export default function Notification({ theme }: { theme: Theme }) {
   return (
     <>
       <button
-        className='relative cursor-pointer block'
+        className="relative cursor-pointer block"
         onClick={(e) => {
           e.preventDefault();
           setNotifiOpen(!notifiOpen);
@@ -173,7 +174,7 @@ export default function Notification({ theme }: { theme: Theme }) {
       >
         <img src={dark(theme) ? alarmWhite : alarm} />
         {countData > 0 && (
-          <span className='block w-3.5 h-3.5 rounded-2xl bg-[#FF0000] absolute -right-1 top-0 text-[11px] text-white leading-3'>
+          <span className="block w-3.5 h-3.5 rounded-2xl bg-[#FF0000] absolute -right-1 top-0 text-[11px] text-white leading-3">
             {countData}
           </span>
         )}
@@ -213,7 +214,7 @@ export default function Notification({ theme }: { theme: Theme }) {
             } notiList py-1 px-2 h-[200px] overflow-y-auto relative`}
           >
             {notifications.length === 0 ? (
-              <p className='absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm'>
+              <p className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm">
                 알림이 없습니다
               </p>
             ) : (
@@ -221,13 +222,13 @@ export default function Notification({ theme }: { theme: Theme }) {
                 return (
                   <div
                     key={notifi._id}
-                    className='w-full flex justify-between items-start py-2.5'
+                    className="w-full flex justify-between items-start py-2.5"
                   >
                     <button
                       onClick={() => {
                         navigateHandler(notifi);
                       }}
-                      className='block relative pl-3.5 text-[13px] cursor-pointer text-left leading-4'
+                      className="block relative pl-3.5 text-[13px] cursor-pointer text-left leading-4"
                     >
                       <img
                         className={twMerge(
@@ -244,8 +245,9 @@ export default function Notification({ theme }: { theme: Theme }) {
                         `[${notifi.author['fullName']}] 님이 당신을 팔로우 합니다.`}
                     </button>
 
-                    <span className='w-12 text-[11px] text-zinc-400 shrink-0 text-right whitespace-nowrap -mt-[1px]'>
-                      {dayjs(notifi.createdAt).fromNow()}
+                    <span className="w-12 text-[11px] text-zinc-400 shrink-0 text-right whitespace-nowrap -mt-[1px]">
+                      {/* {dayjs(notifi.createdAt).fromNow()} */}
+                      {getElapsedNotificationTime(notifi.createdAt)}
                     </span>
                   </div>
                 );
@@ -258,22 +260,22 @@ export default function Notification({ theme }: { theme: Theme }) {
             }`}
           >
             <button
-              className='text-xs text-zinc-500 cursor-pointer'
+              className="text-xs text-zinc-500 cursor-pointer"
               onClick={readHandler}
             >
               전체읽기
             </button>
           </div>
-          <div className='absolute right-5 top-4'>
+          <div className="absolute right-5 top-4">
             <button
-              className='text-sm text-[#bbbbbb] cursor-pointer'
+              className="text-sm text-[#bbbbbb] cursor-pointer"
               onClick={() => {
                 closeModalHandler();
               }}
             >
               <img
                 src={dark(theme) ? closeWhite : close}
-                className='opacity-60'
+                className="opacity-60"
               />
             </button>
           </div>
