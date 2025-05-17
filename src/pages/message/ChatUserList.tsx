@@ -90,7 +90,7 @@ export default function ChatUserList({ onSelectUser, onClose, theme }: ChatUserL
       {isLoading || isCountLoading ? (
         <>
           <div
-            className={`h-[50vh] flex items-center justify-center text-[20px] ${
+            className={`h-[50vh] flex items-center justify-center text-[15px] ${
               dark(theme) ? 'text-[#acacaa]' : 'text-gray-600'
             }`}
           >
