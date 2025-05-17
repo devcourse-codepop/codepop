@@ -6,6 +6,7 @@ import { getPostList } from '../api/post/post';
 import { usePostStore } from '../stores/postStore';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Theme } from '../types/darkModeTypes';
+import PostDetailSkeleton from '../components/post/PostDetailSkeleton';
 
 export default function PostDetail({ theme }: { theme: Theme }) {
   const params = useParams();
@@ -19,6 +20,9 @@ export default function PostDetail({ theme }: { theme: Theme }) {
 
   // 댓글 작성 컴포넌트를 나타내는 div 요소
   const commentRef = useRef<HTMLDivElement | null>(null);
+
+  // 로딩 상태
+  const [isLoading, setIsLoading] = useState(true);
 
   // 게시글 상태
   const [postItem, setPostItem] = useState<Post | null>(null);
@@ -46,6 +50,7 @@ export default function PostDetail({ theme }: { theme: Theme }) {
     try {
       const { data } = await getPostList(channelIdList[Number(channel) - 1]);
       filteringItem(data);
+      setIsLoading(false);
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
@@ -72,28 +77,36 @@ export default function PostDetail({ theme }: { theme: Theme }) {
 
   return (
     <>
-      <div className='grid grid-rows-[auto_1fr_auto] h-full'>
-        <div className='flex justify-between items-end pb-[20px]'>
+      <div className="grid grid-rows-[auto_1fr_auto] h-full">
+        <div className="flex justify-between items-end pb-[20px]">
           <ChannelName channelId={String(channel)} theme={theme} />
         </div>
-        {postItem && (
-          <div className='flex flex-col gap-[30px] h-full overflow-auto scroll-custom pb-[30px]'>
-            {/* <PostDetailItem key={postItem?._id} {...postItem} /> */}
-            <PostDetailItem
-              {...postItem}
-              updateReloadTrigger={updateReloadTrigger}
-              theme={theme}
-            />
-            <div ref={commentRef}>
-              <WriteCommentItem
-                channelId={String(channel)}
-                postId={String(post)}
-                postUserId={postItem.author._id}
-                updateReloadTrigger={updateReloadTrigger}
-                theme={theme}
-              />
-            </div>
-          </div>
+        {isLoading ? (
+          Array.from({ length: 1 }).map((_, i) => (
+            <PostDetailSkeleton key={i} theme={theme} />
+          ))
+        ) : (
+          <>
+            {postItem && (
+              <div className="flex flex-col gap-[30px] h-full overflow-auto scroll-custom pb-[30px]">
+                {/* <PostDetailItem key={postItem?._id} {...postItem} /> */}
+                <PostDetailItem
+                  {...postItem}
+                  updateReloadTrigger={updateReloadTrigger}
+                  theme={theme}
+                />
+                <div ref={commentRef}>
+                  <WriteCommentItem
+                    channelId={String(channel)}
+                    postId={String(post)}
+                    postUserId={postItem.author._id}
+                    updateReloadTrigger={updateReloadTrigger}
+                    theme={theme}
+                  />
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
     </>
