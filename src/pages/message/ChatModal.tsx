@@ -3,8 +3,11 @@ import ChatRoom from './ChatRoom';
 import ChatUserList from './ChatUserList';
 import { useMessageStore } from '../../stores/messageStore';
 import MessageOpenIcon from '../../assets/images/message/message-open-icon.svg';
+import MessageOpenIconWhite from '../../assets/images/message/message-open-icon-white.svg';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
+import MessageIconWhite from '../../assets/images/message/message-icon-white.svg';
+import MessageIcon from '../../assets/images/message/message-icon.svg';
 
 interface ChatModalProps {
   isOpen: boolean;
@@ -29,9 +32,20 @@ export default function ChatModal({
     if (isOpen) {
       setSelectedUser(initialUser || null);
       setIsLoading(false);
-      changeMessageIcon(dark(theme) ? MessageOpenIcon : MessageOpenIcon);
     }
-  }, [isOpen, initialUser, changeMessageIcon, theme]);
+  }, [isOpen, initialUser]);
+
+  useEffect(() => {
+    const icon = isOpen
+      ? dark(theme)
+        ? MessageOpenIconWhite
+        : MessageOpenIcon
+      : dark(theme)
+      ? MessageIconWhite
+      : MessageIcon;
+
+    changeMessageIcon(icon);
+  }, [isOpen, theme, changeMessageIcon]);
 
   if (!isOpen) return null;
 
