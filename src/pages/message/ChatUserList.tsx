@@ -14,11 +14,7 @@ interface ChatUserListProps {
   theme: Theme;
 }
 
-export default function ChatUserList({
-  onSelectUser,
-  onClose,
-  theme,
-}: ChatUserListProps) {
+export default function ChatUserList({ onSelectUser, onClose, theme }: ChatUserListProps) {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [notSeenCounts, setNotSeenCounts] = useState<{
     [userId: string]: number;
@@ -67,9 +63,7 @@ export default function ChatUserList({
           const opponentId = getOpponentId(con._id);
           try {
             const { data } = await getMessages(opponentId);
-            const count = data.filter(
-              (msg: Message) => msg.sender._id === opponentId && !msg.seen
-            ).length;
+            const count = data.filter((msg: Message) => msg.sender._id === opponentId && !msg.seen).length;
             newCounts[opponentId] = count;
           } catch (e) {
             console.log(e instanceof Error && e.message);
@@ -91,15 +85,23 @@ export default function ChatUserList({
   }, []);
 
   return (
-    <div className="h-[75vh] flex-1 flex flex-col">
+    <div className='h-[75vh] flex-1 flex flex-col'>
       <ChatHeader onClose={onClose} theme={theme} />
       {isLoading || isCountLoading ? (
-        <></>
+        <>
+          <div
+            className={`h-[50vh] flex items-center justify-center text-[20px] ${
+              dark(theme) ? 'text-[#acacaa]' : 'text-gray-600'
+            }`}
+          >
+            대화 목록이 없습니다.
+          </div>
+        </>
       ) : (
         <div
-          className={`flex-1 overflow-y-auto messageBox ${
-            dark(theme) ? 'dark' : ''
-          } ${dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'}`}
+          className={`flex-1 overflow-y-auto messageBox ${dark(theme) ? 'dark' : ''} ${
+            dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+          }`}
         >
           {conversations.map((con) => {
             const opponentId = getOpponentId(con._id);
@@ -119,13 +121,11 @@ export default function ChatUserList({
                 {/* 상대 프로필, 이름, 마지막 대화 */}
                 <img
                   src={opponentUser.image ? opponentUser.image : userImage}
-                  alt="상대 프로필"
-                  className="w-[50px] h-[50px] rounded-[50%] border border-[#ddd]"
+                  alt='상대 프로필'
+                  className='w-[50px] h-[50px] rounded-[50%] border border-[#ddd]'
                 />
-                <div className="ml-[20px] pt-1.5">
-                  <p className="font-bold text-[14px]">
-                    {opponentUser.fullName}
-                  </p>
+                <div className='ml-[20px] pt-1.5'>
+                  <p className='font-bold text-[14px]'>{opponentUser.fullName}</p>
                   <p
                     className={`font-normal  text-[12px] truncate w-[258px] ${
                       dark(theme) ? 'text-[#ffffff]/60' : 'text-[#000000]/60'
@@ -134,13 +134,9 @@ export default function ChatUserList({
                     {con.message}
                   </p>
                 </div>
-                <div className="ml-[15px] pt-1 flex flex-col items-center w-[60px] shrink-0">
+                <div className='ml-[15px] pt-1 flex flex-col items-center w-[60px] shrink-0'>
                   {/* 보낸 시간  */}
-                  <p
-                    className={`font-medium text-[12px] ${
-                      dark(theme) ? 'text-[#ffffff]/40' : 'text-[#000000]/40'
-                    }`}
-                  >
+                  <p className={`font-medium text-[12px] ${dark(theme) ? 'text-[#ffffff]/40' : 'text-[#000000]/40'}`}>
                     {getElapsedTime(con.createdAt)}
                   </p>
                   {/* 메시지 온 표시 */}
@@ -148,11 +144,7 @@ export default function ChatUserList({
                     <p
                       className={twMerge(
                         'bg-[#E07070] mt-2 rounded-full inline-flex items-center justify-center h-[20px] font-normal text-[10px] text-white',
-                        String(count).length === 1
-                          ? 'w-[20px]'
-                          : String(count).length === 2
-                          ? 'w-[26px]'
-                          : 'w-[32px]'
+                        String(count).length === 1 ? 'w-[20px]' : String(count).length === 2 ? 'w-[26px]' : 'w-[32px]'
                       )}
                     >
                       {count > 999 ? '999+' : count}
