@@ -99,7 +99,7 @@ export default function PopularPost({ theme }: { theme: Theme }) {
         <div className={`${dark(theme) ? 'dark' : ''}`}>
           {channels.map((_, cIndex) => (
             <div
-              className='tab-content flex gap-x-7 gap-y-5 flex-wrap min-h-[260px] relative'
+              className='tab-content flex gap-x-7 gap-y-5 flex-wrap min-h-[288px] relative'
               key={`panel-${cIndex}`}
               role='tabpanel'
               hidden={!(activeTab === cIndex)}
