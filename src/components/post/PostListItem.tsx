@@ -2,7 +2,7 @@ import Avatar from '../avatar/Avatar';
 import LikeComment from '../reaction/LikeComment';
 import { Link, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 import NotLoginModal from './NotLoginModal';
 import DOMPurify from 'dompurify';
@@ -48,6 +48,12 @@ export default function PostListItem(props: PostListItemProps) {
 
   // removeImgTags 함수 내부에서 상태 변경 시, 리렌더링이 계속 일어나므로 함수 외부에서 사용
   let codes;
+
+  // 사용자의 팔로우
+  const [follow, setFollow] = useState(user?.following);
+  useEffect(() => {
+    setFollow(user?.following);
+  }, [user]);
 
   // 게시글 content 필드에서 img 태그 내용 및 pre 태그 내용(코드 블록) 삭제
   const removeImgTags = (html: string): string => {
@@ -114,6 +120,7 @@ export default function PostListItem(props: PostListItemProps) {
               image={author?.image}
               isOnline={author?.isOnline}
               theme={theme}
+              follow={follow?.some((f) => f.user === author._id)}
             />
           </Link>
         </div>

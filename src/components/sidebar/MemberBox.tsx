@@ -23,6 +23,7 @@ export default function MemberBox({ theme }: { theme: Theme }) {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const onClose = useChatClose(setIsChatOpen);
   const modalRef = useRef<HTMLUListElement>(null);
+  const [follow, setFollow] = useState(user?.following);
 
   // api 유저 요청, 접속 된 유저 먼저 정렬
   const fetchUsers = async () => {
@@ -46,7 +47,9 @@ export default function MemberBox({ theme }: { theme: Theme }) {
 
     return () => clearInterval(interval);
   }, []);
-
+  useEffect(() => {
+    setFollow(user?.following);
+  }, [user]);
   // 검색창의 검색어 가져오기
   const searchHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value.toUpperCase());
@@ -143,6 +146,7 @@ export default function MemberBox({ theme }: { theme: Theme }) {
                 image={user.image}
                 isOnline={user.isOnline}
                 theme={theme}
+                follow={follow?.some((f) => f.user === user._id)}
               ></Avatar>
             </div>
 
