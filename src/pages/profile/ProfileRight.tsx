@@ -6,6 +6,8 @@ import commentIcon from '../../assets/images/comment/comment-outline.svg';
 import { useNavigate } from 'react-router-dom';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
+import { useAuthStore } from '../../stores/authStore';
+import NotLoginModal from '../../components/post/NotLoginModal';
 
 interface ProfileRightProps extends UserPostInfo {
   theme: Theme;
@@ -13,6 +15,8 @@ interface ProfileRightProps extends UserPostInfo {
 
 export default function ProfileRight({ userData, theme }: ProfileRightProps) {
   const userId = userData?._id;
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [userPostData, setUserPostData] = useState<Post[] | null>(null);
   const [selectedTab, setSelectedTab] = useState<
     'posts' | 'likes' | 'comments'
@@ -163,6 +167,10 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
     return info[name as keyof typeof info] || info.Default;
   };
 
+  const closeLoginModalHanlder = () => {
+    setIsLoginModalOpen(false);
+  };
+
   return (
     <div className="w-full min-w-0 px-[26px] pb-[40px] profile-right">
       <div className="w-full flex justify-between items-center mt-[40px] text-[18px] font-semibold">
@@ -251,7 +259,13 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
                 <div className="flex items-center max-w-[calc(100%-130px)] w-full profile-post-title">
                   <div
                     className="min-w-0 flex flex-col cursor-pointer justify-center"
-                    onClick={() => navigate(`/channel/${id}/post/${post._id}`)}
+                    onClick={() => {
+                      if (!isLoggedIn) {
+                        setIsLoginModalOpen(true);
+                        return;
+                      }
+                      navigate(`/channel/${id}/post/${post._id}`);
+                    }}
                   >
                     <p
                       className={`font-semibold text-[15px] w-full truncate  ${
@@ -329,6 +343,12 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
             }`}
           />
         </div>
+      )}
+      {isLoginModalOpen && (
+        <NotLoginModal
+          closeLoginModalHanlder={closeLoginModalHanlder}
+          theme={theme}
+        />
       )}
     </div>
   );
