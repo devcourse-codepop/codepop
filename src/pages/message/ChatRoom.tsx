@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-//import { User1 } from './ChatModal';
 import ChatHeader from './ChatHeader';
 import {
   getMessages,
@@ -12,6 +11,7 @@ import 'dayjs/locale/ko';
 import { useAuthStore } from '../../stores/authStore';
 import messageSendBtn from '../../assets/images/message/message-send-btn.svg';
 import messageSendBtnWhite from '../../assets/images/message/message-send-btn-white.svg';
+import userImage from '../../assets/images/profile/default-profile-img.jpg';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
 
@@ -238,7 +238,7 @@ export default function ChatRoom({
                       {/* 프로필 이미지 */}
                       <div className="">
                         <img
-                          src={msg.sender.image}
+                          src={msg.sender.image ? msg.sender.image : userImage}
                           alt="상대 프로필"
                           className="w-[35px] h-[35px] rounded-[50%] border border-[#ddd]"
                         />
