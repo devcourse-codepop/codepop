@@ -58,11 +58,11 @@ export default function PopularPost({ theme }: { theme: Theme }) {
         >
           Popular Posts
         </h3>
-        <ul className='flex relative gap-x-5 gap-y-2.5 mb-4.5 flex-wrap'>
+        <ul className="flex relative gap-x-5 gap-y-2.5 mb-4.5 flex-wrap">
           {channels.map((channel, index) => (
             <li
               key={`tab-${index}`}
-              role='tab'
+              role="tab"
               aria-selected={activeTab === index}
               aria-controls={`panel-${index}`}
               id={`tab-${index}`}
@@ -99,9 +99,9 @@ export default function PopularPost({ theme }: { theme: Theme }) {
         <div className={`${dark(theme) ? 'dark' : ''}`}>
           {channels.map((_, cIndex) => (
             <div
-              className='tab-content flex gap-x-7 gap-y-5 flex-wrap min-h-[284px] relative'
+              className="tab-content flex gap-x-7 gap-y-5 flex-wrap min-h-[284px] relative"
               key={`panel-${cIndex}`}
-              role='tabpanel'
+              role="tabpanel"
               hidden={!(activeTab === cIndex)}
               aria-labelledby={`tab-${cIndex}`}
               id={`panel-${cIndex}`}
@@ -109,7 +109,11 @@ export default function PopularPost({ theme }: { theme: Theme }) {
               {isLoading ? (
                 <PopularPostCkeleton theme={theme} />
               ) : sortPopulars.length == 0 ? (
-                <p className='absolute left-1/2 bottom-4/7 -translate-x-1/2 text-sm text-[#5c5c5c]'>
+                <p
+                  className={`absolute left-1/2 bottom-4/7 -translate-x-1/2 text-sm  ${
+                    dark(theme) ? 'text-[#ffffff]/50' : 'text-[#5c5c5c]'
+                  }`}
+                >
                   해당 채널에 게시글이 없습니다.
                 </p>
               ) : (
@@ -121,7 +125,7 @@ export default function PopularPost({ theme }: { theme: Theme }) {
                   return (
                     <div
                       key={`popular-${pIndex}`}
-                      className='basis-[calc(50%-0.875rem)] max-w-full tabConstentItem'
+                      className="basis-[calc(50%-0.875rem)] max-w-full tabConstentItem"
                     >
                       <PostListItem {...parsePopular} theme={theme} />
                     </div>
