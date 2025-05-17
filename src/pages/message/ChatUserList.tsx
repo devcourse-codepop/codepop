@@ -1,7 +1,6 @@
 import ChatHeader from './ChatHeader';
 import { getMessageList, getMessages } from '../../api/message/message';
 import { useCallback, useEffect, useState } from 'react';
-import { Conversation, Message, User } from '../../types';
 import { twMerge } from 'tailwind-merge';
 import { useAuthStore } from '../../stores/authStore';
 import userImage from '../../assets/images/profile/default-profile-img.jpg';

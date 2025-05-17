@@ -37,7 +37,7 @@ export default function App() {
     } else {
       useAuthStore.setState({ isLoading: false });
     }
-  }, [accessToken, user?.fullName]);
+  }, [accessToken, user?.fullName, setUser]);
 
   return (
     <DarkMode>
