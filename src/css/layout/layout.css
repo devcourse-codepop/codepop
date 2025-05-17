@@ -69,7 +69,7 @@
 }
 
 .messageBox::-webkit-scrollbar {
-  width: 5px;
+  width: 0px;
   border-radius: 5px;
 }
 .messageBox::-webkit-scrollbar-thumb {
