@@ -36,11 +36,9 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
     setUserPostData(likedPosts);
   }, [userData?.likes]);
 
-  // 댓글단 게시글에 몇 번 댓글 단지와 최근 댓글 달았는 지 확인 후, 최신 댓글 기준으로 정렬
-  const fetchCommentedPosts = useCallback(async () => {
-    if (!userData?.comments) return;
-
-    const filteredComments = userData.comments.filter((comment) => {
+  // 댓글에서 투표수는 제외
+  const filterOutVoteComments = (comments: Comment[]): Comment[] => {
+    return comments.filter((comment) => {
       try {
         const parsed = JSON.parse(comment.comment);
         return parsed.type !== 'vote';
@@ -48,6 +46,13 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
         return true;
       }
     });
+  };
+
+  // 댓글단 게시글에 몇 번 댓글 단지와 최근 댓글 달았는 지 확인 후, 최신 댓글 기준으로 정렬
+  const fetchCommentedPosts = useCallback(async () => {
+    if (!userData?.comments) return;
+
+    const filteredComments = filterOutVoteComments(userData.comments || []);
 
     const sortedComments = [...filteredComments].sort(
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -107,15 +112,7 @@ export default function ProfileRight({ userData, theme }: ProfileRightProps) {
     comments: 0,
   };
   if (userData) {
-    const filteredComments =
-      userData.comments?.filter((comment) => {
-        try {
-          const parsed = JSON.parse(comment.comment);
-          return parsed.type !== 'vote';
-        } catch {
-          return true;
-        }
-      }) ?? [];
+    const filteredComments = filterOutVoteComments(userData.comments || []);
 
     totalTab = {
       posts: userData.posts?.length ?? 0,
