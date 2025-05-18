@@ -13,10 +13,11 @@ export default function PopularPost({ theme }: { theme: Theme }) {
   const [isLoading, setLoading] = useState(true);
 
   const tabClickHandler = async (channelId: string, index: number) => {
+    setLoading(true);
     try {
       const data = await getPopularPostData(channelId);
       setActiveTab(index);
-      setSortPopulars(data);
+      setSortPopulars(data.slice(0, 2));
     } finally {
       setLoading(false);
     }
@@ -31,18 +32,6 @@ export default function PopularPost({ theme }: { theme: Theme }) {
       tabClickHandler(channels[0].id, 0);
     }
   }, [channels]);
-
-  const parseHandler = (str: string | object | null) => {
-    if (typeof str === 'string') {
-      try {
-        JSON.parse(str);
-        return str;
-      } catch {
-        return `{"title":"${str}", "content":""}`;
-      }
-    }
-    return `{"title":"${str}", "content":""}`;
-  };
 
   return (
     <>
@@ -99,7 +88,7 @@ export default function PopularPost({ theme }: { theme: Theme }) {
         <div className={`${dark(theme) ? 'dark' : ''}`}>
           {channels.map((_, cIndex) => (
             <div
-              className='tab-content flex gap-x-7 gap-y-5 flex-wrap min-h-[260px] relative'
+              className='tab-content flex gap-x-7 gap-y-5 flex-wrap min-h-[284px] relative'
               key={`panel-${cIndex}`}
               role='tabpanel'
               hidden={!(activeTab === cIndex)}
@@ -109,21 +98,21 @@ export default function PopularPost({ theme }: { theme: Theme }) {
               {isLoading ? (
                 <PopularPostCkeleton theme={theme} />
               ) : sortPopulars.length == 0 ? (
-                <p className='absolute left-1/2 bottom-4/7 -translate-x-1/2 text-sm text-[#5c5c5c]'>
+                <p
+                  className={`absolute left-1/2 bottom-4/7 -translate-x-1/2 text-sm  ${
+                    dark(theme) ? 'text-[#ffffff]/50' : 'text-[#5c5c5c]'
+                  }`}
+                >
                   해당 채널에 게시글이 없습니다.
                 </p>
               ) : (
-                sortPopulars.slice(0, 2).map((popular, pIndex) => {
-                  const parsePopular: Post = {
-                    ...popular,
-                    title: parseHandler(popular.title),
-                  };
+                sortPopulars.map((popular, pIndex) => {
                   return (
                     <div
                       key={`popular-${pIndex}`}
                       className='basis-[calc(50%-0.875rem)] max-w-full tabConstentItem'
                     >
-                      <PostListItem {...parsePopular} theme={theme} />
+                      <PostListItem {...popular} theme={theme} />
                     </div>
                   );
                 })

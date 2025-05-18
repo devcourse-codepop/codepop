@@ -30,7 +30,7 @@ export default function ChatHeader({
         <img
           src={`${dark(theme) ? backBtnWhite : backBtn}`}
           onClick={onBack}
-          className="w-[24px] h-[24px]  mr-2 cursor-pointer"
+          className="w-[24px] h-[24px]  mr-2 cursor-pointer opacity-60"
         />
       ) : (
         <div className="w-4" /> // 공간 맞춤용
