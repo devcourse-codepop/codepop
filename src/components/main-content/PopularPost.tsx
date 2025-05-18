@@ -14,9 +14,9 @@ export default function PopularPost({ theme }: { theme: Theme }) {
 
   const tabClickHandler = async (channelId: string, index: number) => {
     setLoading(true);
+    setActiveTab(index);
     try {
       const data = await getPopularPostData(channelId);
-      setActiveTab(index);
       setSortPopulars(data.slice(0, 2));
     } finally {
       setLoading(false);
