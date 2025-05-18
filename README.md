@@ -27,6 +27,240 @@
 
 ## 2. 폴더 구조
 
+```bash
+
+📦src
+ ┣ 📂api
+ ┃ ┣ 📂auth
+ ┃ ┃ ┣ 📜login.ts
+ ┃ ┃ ┗ 📜signup.ts
+ ┃ ┣ 📂follow
+ ┃ ┃ ┗ 📜follow.ts
+ ┃ ┣ 📂memberbox
+ ┃ ┃ ┗ 📜member.ts
+ ┃ ┣ 📂message
+ ┃ ┃ ┗ 📜message.ts
+ ┃ ┣ 📂notification
+ ┃ ┃ ┗ 📜notification.ts
+ ┃ ┣ 📂post
+ ┃ ┃ ┗ 📜post.ts
+ ┃ ┣ 📂profileInfo
+ ┃ ┃ ┗ 📜profile.ts
+ ┃ ┣ 📂write
+ ┃ ┃ ┗ 📜write.ts
+ ┃ ┗ 📜axios.ts
+ ┣ 📂assets
+ ┃ ┗ 📂images
+ ┃ ┃ ┣ 📂close
+ ┃ ┃ ┃ ┣ 📜close-btn-white.svg
+ ┃ ┃ ┃ ┗ 📜close-btn.svg
+ ┃ ┃ ┣ 📂comment
+ ┃ ┃ ┃ ┣ 📜comment-outline.svg
+ ┃ ┃ ┃ ┗ 📜comment-white.svg
+ ┃ ┃ ┣ 📂editor
+ ┃ ┃ ┃ ┣ 📜bold-icon-white.svg
+ ┃ ┃ ┃ ┣ 📜bold-icon.svg
+ ┃ ┃ ┃ ┣ 📜code-edition-icon-white.svg
+ ┃ ┃ ┃ ┣ 📜code-edition-icon.svg
+ ┃ ┃ ┃ ┣ 📜img-icon-white.svg
+ ┃ ┃ ┃ ┣ 📜img-icon.svg
+ ┃ ┃ ┃ ┣ 📜italic-icon-white.svg
+ ┃ ┃ ┃ ┣ 📜italic-icon.svg
+ ┃ ┃ ┃ ┣ 📜vote-icon-white.svg
+ ┃ ┃ ┃ ┗ 📜vote-icon.svg
+ ┃ ┃ ┣ 📂error
+ ┃ ┃ ┃ ┣ 📜404-dark.svg
+ ┃ ┃ ┃ ┗ 📜404.svg
+ ┃ ┃ ┣ 📂follow
+ ┃ ┃ ┃ ┣ 📜follow-white.svg
+ ┃ ┃ ┃ ┗ 📜follow.svg
+ ┃ ┃ ┣ 📂form
+ ┃ ┃ ┃ ┗ 📜select-icon.svg
+ ┃ ┃ ┣ 📂header
+ ┃ ┃ ┃ ┣ 📜alarm-white.svg
+ ┃ ┃ ┃ ┣ 📜alarm.svg
+ ┃ ┃ ┃ ┣ 📜check-icon.svg
+ ┃ ┃ ┃ ┣ 📜close-white.svg
+ ┃ ┃ ┃ ┣ 📜close.svg
+ ┃ ┃ ┃ ┣ 📜logo-white.svg
+ ┃ ┃ ┃ ┣ 📜logo.svg
+ ┃ ┃ ┃ ┣ 📜notifi.svg
+ ┃ ┃ ┃ ┣ 📜red-dot-icon.svg
+ ┃ ┃ ┃ ┗ 📜user-img.svg
+ ┃ ┃ ┣ 📂img-edit
+ ┃ ┃ ┃ ┗ 📜img-edit-btn.svg
+ ┃ ┃ ┣ 📂input-delete
+ ┃ ┃ ┃ ┣ 📜input-delete-dark.svg
+ ┃ ┃ ┃ ┗ 📜input-delete.svg
+ ┃ ┃ ┣ 📂like
+ ┃ ┃ ┃ ┣ 📜like-click-white.svg
+ ┃ ┃ ┃ ┣ 📜like-click.svg
+ ┃ ┃ ┃ ┣ 📜like-outline.svg
+ ┃ ┃ ┃ ┗ 📜like-red.svg
+ ┃ ┃ ┣ 📂main-banner
+ ┃ ┃ ┃ ┣ 📜banner1.svg
+ ┃ ┃ ┃ ┣ 📜banner2.svg
+ ┃ ┃ ┃ ┣ 📜banner3.svg
+ ┃ ┃ ┃ ┣ 📜icons-play.svg
+ ┃ ┃ ┃ ┗ 📜icons-stop.svg
+ ┃ ┃ ┣ 📂menu
+ ┃ ┃ ┃ ┣ 📜menu-icon-white.svg
+ ┃ ┃ ┃ ┗ 📜menu-icon.svg
+ ┃ ┃ ┣ 📂message
+ ┃ ┃ ┃ ┣ 📜arrow-back-outline.svg
+ ┃ ┃ ┃ ┣ 📜arrow-back-white.svg
+ ┃ ┃ ┃ ┣ 📜close-outline.svg
+ ┃ ┃ ┃ ┣ 📜close-white.svg
+ ┃ ┃ ┃ ┣ 📜message-icon-white.svg
+ ┃ ┃ ┃ ┣ 📜message-icon.svg
+ ┃ ┃ ┃ ┣ 📜message-open-icon-white.svg
+ ┃ ┃ ┃ ┣ 📜message-open-icon.svg
+ ┃ ┃ ┃ ┣ 📜message-send-btn-white.svg
+ ┃ ┃ ┃ ┗ 📜message-send-btn.svg
+ ┃ ┃ ┣ 📂post
+ ┃ ┃ ┃ ┣ 📜post-btn-white.svg
+ ┃ ┃ ┃ ┗ 📜post-btn.svg
+ ┃ ┃ ┣ 📂profile
+ ┃ ┃ ┃ ┣ 📜default-cover.png
+ ┃ ┃ ┃ ┣ 📜default-profile-img.jpg
+ ┃ ┃ ┃ ┣ 📜follow-icon-black.svg
+ ┃ ┃ ┃ ┗ 📜follow-icon.svg
+ ┃ ┃ ┣ 📂toggle
+ ┃ ┃ ┃ ┣ 📜moon.svg
+ ┃ ┃ ┃ ┗ 📜sun.svg
+ ┃ ┃ ┗ 📂top-btn
+ ┃ ┃ ┃ ┣ 📜top-btn-white.png
+ ┃ ┃ ┃ ┗ 📜top-btn.png
+ ┣ 📂components
+ ┃ ┣ 📂avatar
+ ┃ ┃ ┗ 📜Avatar.tsx
+ ┃ ┣ 📂btn
+ ┃ ┃ ┣ 📜PostBtn.tsx
+ ┃ ┃ ┗ 📜VoteBtn.tsx
+ ┃ ┣ 📂channel
+ ┃ ┃ ┗ 📜ChannelName.tsx
+ ┃ ┣ 📂common
+ ┃ ┃ ┣ 📜Button.tsx
+ ┃ ┃ ┗ 📜Input.tsx
+ ┃ ┣ 📂editor
+ ┃ ┃ ┣ 📂extensions
+ ┃ ┃ ┃ ┗ 📜CustomImage.ts
+ ┃ ┃ ┣ 📜CommentEditor.tsx
+ ┃ ┃ ┣ 📜CommentEditorToolbar.tsx
+ ┃ ┃ ┣ 📜Editor.tsx
+ ┃ ┃ ┗ 📜EditorToolbar.tsx
+ ┃ ┣ 📂header
+ ┃ ┃ ┗ 📜Header.tsx
+ ┃ ┣ 📂icon
+ ┃ ┃ ┣ 📜BoldIcon.tsx
+ ┃ ┃ ┣ 📜CodeEditIcon.tsx
+ ┃ ┃ ┣ 📜ImageIcon.tsx
+ ┃ ┃ ┣ 📜ItalicIcon.tsx
+ ┃ ┃ ┗ 📜VoteIcon.tsx
+ ┃ ┣ 📂main-content
+ ┃ ┃ ┣ 📜Banner.tsx
+ ┃ ┃ ┣ 📜PopularPost.tsx
+ ┃ ┃ ┗ 📜PopularPostCkeleton.tsx
+ ┃ ┣ 📂notification
+ ┃ ┃ ┗ 📜Notification.tsx
+ ┃ ┣ 📂poll
+ ┃ ┃ ┣ 📜PollCreater.tsx
+ ┃ ┃ ┣ 📜PollOptionsView.tsx
+ ┃ ┃ ┗ 📜PollOptionsVoteView.tsx
+ ┃ ┣ 📂post
+ ┃ ┃ ┣ 📜CheckDeleteModal.tsx
+ ┃ ┃ ┣ 📜CommentListItem.tsx
+ ┃ ┃ ┣ 📜DeletedUserModal.tsx
+ ┃ ┃ ┣ 📜DropSort.tsx
+ ┃ ┃ ┣ 📜NotLoginModal.tsx
+ ┃ ┃ ┣ 📜PostDetailItem.tsx
+ ┃ ┃ ┣ 📜PostDetailSkeleton.tsx
+ ┃ ┃ ┣ 📜PostListItem.tsx
+ ┃ ┃ ┣ 📜PostSkeleton.tsx
+ ┃ ┃ ┣ 📜SearchPost.tsx
+ ┃ ┃ ┣ 📜WriteCommentItem.tsx
+ ┃ ┃ ┗ 📜WritePostItem.tsx
+ ┃ ┣ 📂reaction
+ ┃ ┃ ┗ 📜LikeComment.tsx
+ ┃ ┣ 📂sidebar
+ ┃ ┃ ┣ 📜ChannelBox.tsx
+ ┃ ┃ ┗ 📜MemberBox.tsx
+ ┃ ┗ 📂toggle
+ ┃ ┃ ┗ 📜DarkMode.tsx
+ ┣ 📂css
+ ┃ ┣ 📂layout
+ ┃ ┃ ┗ 📜layout.css
+ ┃ ┣ 📂main-content
+ ┃ ┃ ┗ 📜main-content.css
+ ┃ ┣ 📜editor.css
+ ┃ ┣ 📜index.css
+ ┃ ┗ 📜tailwind.css
+ ┣ 📂layout
+ ┃ ┗ 📜MainLayout.tsx
+ ┣ 📂pages
+ ┃ ┣ 📂login
+ ┃ ┃ ┗ 📜Login.tsx
+ ┃ ┣ 📂message
+ ┃ ┃ ┣ 📜ChatHeader.tsx
+ ┃ ┃ ┣ 📜ChatModal.tsx
+ ┃ ┃ ┣ 📜ChatRoom.tsx
+ ┃ ┃ ┗ 📜ChatUserList.tsx
+ ┃ ┣ 📂profile
+ ┃ ┃ ┣ 📂profile-edit
+ ┃ ┃ ┃ ┣ 📜EditMenu.tsx
+ ┃ ┃ ┃ ┣ 📜EditProfile.tsx
+ ┃ ┃ ┃ ┣ 📜EditProfilePage.tsx
+ ┃ ┃ ┃ ┗ 📜PhotoUploadModal.tsx
+ ┃ ┃ ┣ 📜FollowMember.tsx
+ ┃ ┃ ┣ 📜FollowModal.tsx
+ ┃ ┃ ┣ 📜Profile.tsx
+ ┃ ┃ ┣ 📜ProfileLeft.tsx
+ ┃ ┃ ┣ 📜ProfilePage.tsx
+ ┃ ┃ ┗ 📜ProfileRight.tsx
+ ┃ ┣ 📂signup
+ ┃ ┃ ┗ 📜SignUp.tsx
+ ┃ ┣ 📂update
+ ┃ ┃ ┣ 📜UpdateCodePost.tsx
+ ┃ ┃ ┣ 📜UpdateSetPost.tsx
+ ┃ ┃ ┗ 📜UpdateVotePost.tsx
+ ┃ ┣ 📂write
+ ┃ ┃ ┣ 📜CreateCodePost.tsx
+ ┃ ┃ ┣ 📜CreateSetPost.tsx
+ ┃ ┃ ┗ 📜CreateVotePost.tsx
+ ┃ ┣ 📜Error.tsx
+ ┃ ┣ 📜MainContent.tsx
+ ┃ ┣ 📜PostDetail.tsx
+ ┃ ┗ 📜PostList.tsx
+ ┣ 📂route
+ ┃ ┣ 📜UpdatePostRouter.tsx
+ ┃ ┗ 📜WritePostRouter.tsx
+ ┣ 📂stores
+ ┃ ┣ 📜authStore.ts
+ ┃ ┣ 📜channelStore.ts
+ ┃ ┣ 📜messageStore.ts
+ ┃ ┗ 📜postStore.ts
+ ┣ 📂types
+ ┃ ┣ 📜channelItem.d.ts
+ ┃ ┣ 📜darkModeTypes.d.ts
+ ┃ ┣ 📜global.d.ts
+ ┃ ┣ 📜index.d.ts
+ ┃ ┣ 📜model.d.ts
+ ┃ ┣ 📜notification.d.ts
+ ┃ ┗ 📜user.d.ts
+ ┣ 📂utils
+ ┃ ┣ 📜changeMessageIcon.ts
+ ┃ ┣ 📜darkModeUtils.ts
+ ┃ ┣ 📜followHandlers.ts
+ ┃ ┣ 📜getDatetime.ts
+ ┃ ┣ 📜updateNewMessageCount.ts
+ ┃ ┗ 📜validators.ts
+ ┣ 📜App.tsx
+ ┣ 📜main.tsx
+ ┣ 📜swiper.d.ts
+ ┗ 📜vite-env.d.ts
+
+```
+
 <br>
 
 ## 3. 역할 분담
