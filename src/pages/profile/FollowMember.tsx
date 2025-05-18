@@ -3,7 +3,7 @@ import menuIconWhite from '../../assets/images/menu/menu-icon-white.svg';
 import { Search } from 'lucide-react';
 import Avatar from '../../components/avatar/Avatar';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getAllUsersData } from '../../api/memberbox/member';
 import { useAuthStore } from '../../stores/authStore';
 import ChatModal from '../../pages/message/ChatModal';
@@ -36,6 +36,7 @@ export default function FollowerMember({
   const onClose = useChatClose(setIsChatOpen);
   const modalRef = useRef<HTMLUListElement>(null);
   const isMyProfile = user?._id === targetUserId;
+  const navigate = useNavigate();
 
   useEffect(() => {
     setActiveTab(followType);
@@ -168,14 +169,13 @@ export default function FollowerMember({
                       dark(theme) ? 'bg-[#2d2d2d] border border-white/40' : 'bg-[#ffffff] border border-[#ddd]'
                     }`}
                   >
-                    <li>
-                      <Link
-                        className='px-3 py-1 block opacity-70 hover:opacity-100'
-                        to={`/profile`}
-                        state={{ userid: listedUser._id }}
-                      >
-                        프로필 보기
-                      </Link>
+                    <li
+                      className='px-3 py-1 block opacity-70 hover:opacity-100 cursor-pointer'
+                      onClick={() => {
+                        navigate('/profile', { state: { userid: listedUser._id } });
+                      }}
+                    >
+                      프로필 보기
                     </li>
                     <li
                       className='px-3 py-1 block opacity-70 hover:opacity-100'
