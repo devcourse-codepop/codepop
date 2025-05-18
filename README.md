@@ -18,6 +18,8 @@
 
 | **박서영** | **한유빈** | **조소정** | **김태연** | **유강민** |
 | :------: | :------: | :------: | :------: | :------: | 
+| <img src="https://github.com/user-attachments/assets/944342e5-da1b-40aa-8cb6-ac9239d9f122" height=150 width=150> |
+| 팀장 | 팀원 | 팀원 | 팀원 | 팀원 |
 
 <br>
 
@@ -200,7 +202,7 @@
 - 이메일 주소와 비밀번호를 입력하지 않고 로그인 버튼을 클릭할 경우, 필수 입력 항목임을 알리는 경고 문구가 표시됩니다.
 - 입력한 이메일 또는 비밀번호가 기존 정보와 일치하지 않을 경우, "이메일 또는 비밀번호가 올바르지 않습니다."라는 경고 문구를 표시합니다.
 
-https://github.com/user-attachments/assets/c355d027-154b-461f-bfbb-aa85d7ffda6f
+https://github.com/user-attachments/assets/d90d5cfa-df17-427c-8ec0-f1a653bcc533
 
 <br>
 
@@ -217,7 +219,7 @@ https://github.com/user-attachments/assets/c355d027-154b-461f-bfbb-aa85d7ffda6f
 - 사용자 설정에 따라 라이트/다크 테마 전환이 가능합니다.
 - 다크모드 상태는 창을 닫았다가 다시 열어도 유지됩니다.
 
-https://github.com/user-attachments/assets/f18574ac-64bb-47ee-a253-8e1bc8f07fde
+https://github.com/user-attachments/assets/c33821a3-9f07-4454-997b-3c6e9501064f
 
 <br>
 
