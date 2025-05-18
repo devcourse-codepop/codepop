@@ -80,3 +80,8 @@
 .dark .messageBox::-webkit-scrollbar-thumb {
   background: #1e1e1e;
 }
+
+select.select-custom {
+  background: #fff url(../../assets/images/form/select-icon.svg) no-repeat right
+    5px center / 12px auto;
+}
