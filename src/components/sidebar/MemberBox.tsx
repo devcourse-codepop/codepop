@@ -4,7 +4,7 @@ import menuIconWhite from '../../assets/images/menu/menu-icon-white.svg';
 import { Search } from 'lucide-react';
 import Avatar from '../avatar/Avatar';
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getAllUsersData } from '../../api/memberbox/member';
 import { useAuthStore } from '../../stores/authStore';
 import { Theme } from '../../types/darkModeTypes';
@@ -24,6 +24,7 @@ export default function MemberBox({ theme }: { theme: Theme }) {
   const onClose = useChatClose(setIsChatOpen);
   const modalRef = useRef<HTMLUListElement>(null);
   const [follow, setFollow] = useState(user?.following);
+  const navigate = useNavigate();
 
   // api 유저 요청, 접속 된 유저 먼저 정렬
   const fetchUsers = async () => {
@@ -94,11 +95,7 @@ export default function MemberBox({ theme }: { theme: Theme }) {
         dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
       }`}
     >
-      <h2
-        className={`font-medium text-[20px] mb-[13px]  ${
-          dark(theme) ? 'text-[#acacaa]' : 'text-[#595956]'
-        }`}
-      >
+      <h2 className={`font-medium text-[20px] mb-[13px]  ${dark(theme) ? 'text-[#acacaa]' : 'text-[#595956]'}`}>
         Member
       </h2>
       <div className='flex items-center text-[#898FA3] bg-[#F6F8FA] px-3 py-2 rounded-[5.54px] text-[14px] gap-4 mb-[13px]'>
@@ -126,9 +123,7 @@ export default function MemberBox({ theme }: { theme: Theme }) {
         </div>
       )}
       <div
-        className={` overflow-y-auto pt-2 ${
-          dark(theme) ? 'dark-member-list' : 'member-list'
-        }`}
+        className={` overflow-y-auto pt-2 ${dark(theme) ? 'dark-member-list' : 'member-list'}`}
         style={{
           height: isLoggedIn ? `calc(100% - 161px)` : `calc(100% - 91px)`,
         }}
@@ -136,10 +131,7 @@ export default function MemberBox({ theme }: { theme: Theme }) {
         {/* 유저멤버 카드 */}
         {filterUsers.map((user) => (
           <div className='relative' key={user._id} id={user._id}>
-            <div
-              className='memberCard cursor-pointer'
-              onClick={() => ToggleHandelr(user._id)}
-            >
+            <div className='memberCard cursor-pointer' onClick={() => ToggleHandelr(user._id)}>
               <Avatar
                 name={user.fullName}
                 email={user.email}
@@ -151,14 +143,8 @@ export default function MemberBox({ theme }: { theme: Theme }) {
             </div>
 
             {/* 프로필 클릭시 나오는 modal */}
-            <button
-              className='absolute right-0 top-4 cursor-pointer'
-              onClick={() => ToggleHandelr(user._id)}
-            >
-              <img
-                src={dark(theme) ? menuIconWhite : menuIcon}
-                className='rotate-90'
-              />
+            <button className='absolute right-0 top-4 cursor-pointer' onClick={() => ToggleHandelr(user._id)}>
+              <img src={dark(theme) ? menuIconWhite : menuIcon} className='rotate-90' />
               {openUser === user._id && (
                 <ul
                   ref={modalRef}
@@ -168,14 +154,13 @@ export default function MemberBox({ theme }: { theme: Theme }) {
                       : 'bg-[#ffffff] border border-[#ddd]'
                   }`}
                 >
-                  <li>
-                    <Link
-                      className='px-3 py-1 block opacity-70 hover:opacity-100'
-                      to={`/profile`}
-                      state={{ userid: user._id }}
-                    >
-                      프로필 보기
-                    </Link>
+                  <li
+                    className='px-3 py-1 block opacity-70 hover:opacity-100 cursor-pointer'
+                    onClick={() => {
+                      navigate('/profile', { state: { userid: user._id } });
+                    }}
+                  >
+                    프로필 보기
                   </li>
                   <li
                     className='px-3 py-1 block  opacity-70 hover:opacity-100'
@@ -195,18 +180,8 @@ export default function MemberBox({ theme }: { theme: Theme }) {
           </div>
         ))}
       </div>
-      <ChatModal
-        initialUser={chatTargetUser}
-        isOpen={isChatOpen}
-        onClose={onClose}
-        theme={theme}
-      />
-      {isLoginModalOpen && (
-        <NotLoginModal
-          closeLoginModalHanlder={closeLoginModalHanlder}
-          theme={theme}
-        />
-      )}
+      <ChatModal initialUser={chatTargetUser} isOpen={isChatOpen} onClose={onClose} theme={theme} />
+      {isLoginModalOpen && <NotLoginModal closeLoginModalHanlder={closeLoginModalHanlder} theme={theme} />}
     </div>
   );
 }
