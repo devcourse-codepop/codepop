@@ -1,5 +1,3 @@
-// import MemberBox from '../../components/sidebar/MemberBox';
-
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
 import FollowerMember from './FollowMember';
@@ -25,7 +23,6 @@ export default function ChatModal({ isOpen, onClose, followData, followType, tar
         className={`w-[448px] h-[75vh] rounded-[5px] flex flex-col ${dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'}`}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* <MemberBox followData={followData} /> */}
         <FollowerMember followData={followData} followType={followType} targetUserId={targetUserId} theme={theme} />
       </div>
     </div>
