@@ -86,7 +86,10 @@ export default function ProfileLeft({
             <div
               className="flex  items-center cursor-pointer"
               onClick={() => {
-                console.log('팔로워 리스트:', followData);
+                if (!user) {
+                  setIsLoginModalOpen(true);
+                  return;
+                }
                 openModalWithData(userData?.followers, userData?.following);
                 setFollowType('follower');
               }}
@@ -97,7 +100,10 @@ export default function ProfileLeft({
             <div
               className="flex  items-center cursor-pointer"
               onClick={() => {
-                console.log('팔로워 리스트:', followData);
+                if (!user) {
+                  setIsLoginModalOpen(true);
+                  return;
+                }
                 openModalWithData(userData?.followers, userData?.following);
                 setFollowType('following');
               }}
