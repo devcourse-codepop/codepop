@@ -1,10 +1,14 @@
 # CodePop
 
-![codepop](https://github.com/user-attachments/assets/029f21b0-1125-479c-b7cd-345837acdae4)
+![Group 2](https://github.com/user-attachments/assets/70ab9a06-996e-4e99-b4a6-00e02146e0b4)
+
 
 # 개요
 
 # 팀원 구성
+
+| **박서영** | **한유빈** | **조소정** | **김태연** | **유강민** |
+| :------: | :------: | :------: | :------: | :------: | 
 
 # 1. 프로젝트 목표
 
