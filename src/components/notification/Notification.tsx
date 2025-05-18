@@ -217,7 +217,7 @@ export default function Notification({ theme }: { theme: Theme }) {
                   dark(theme) ? 'text-[#acacaa]' : ''
                 }`}
               >
-                알림이 없습니다
+                알림이 없습니다.
               </p>
             ) : (
               notifications.map((notifi) => {
