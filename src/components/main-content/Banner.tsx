@@ -28,7 +28,7 @@ export default function Banner() {
 
   return (
     <>
-      <div className='w-full h-[370px] relative overflow-hidden rounded-[10px] bg-white mb-[30px]'>
+      <div className='w-full h-[355px] relative overflow-hidden rounded-[10px] bg-white mb-[30px] shadow-md'>
         <Swiper
           className='!w-full !h-full'
           modules={[Autoplay, Navigation, Pagination, A11y]}

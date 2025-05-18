@@ -32,7 +32,6 @@ export default function CreateVotePost({ theme }: { theme: Theme }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    navigate(`/channel/${channelId}`);
     const titleText = titleRef.current?.value || '';
 
     if (!channelId) {
@@ -59,7 +58,8 @@ export default function CreateVotePost({ theme }: { theme: Theme }) {
     try {
       const res = await createCodePost(formData);
       console.log('작성 성공:', res.data);
-      // 성공 시 이동 등 처리
+      // 성공 시 이동
+      navigate(`/channel/${channelId}`);
     } catch (err) {
       console.error('작성 실패', err);
     }
@@ -68,26 +68,26 @@ export default function CreateVotePost({ theme }: { theme: Theme }) {
   const isSubmitDisabled = title.trim() === '' || content.trim() === '';
   return (
     <>
-      <div className="w-full flex relative">
-        <div>
-          <div className="pb-[30px]">
+      <div className='w-full h-full pb-[30px]'>
+        <div className='w-full max-h-[820px] h-full grid grid-rows-[auto_1fr_auto]'>
+          <div className='pb-[20px]'>
             <ChannelName channelId={channelId ?? '3'} theme={theme} />
           </div>
 
           <div
-            className={`shadow-md rounded-[10px] p-5 relative max-h-[697px] overflow-y-auto ${
+            className={`shadow-md rounded-[10px] p-5 relative h-full overflow-hidden ${
               dark(theme)
                 ? 'bg-[#2d2d2d] text-[#ffffff]'
                 : 'bg-[#ffffff] text-[#111111]'
             }`}
           >
             <input
-              type="text"
+              type='text'
               ref={titleRef}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="제목을 입력하세요"
+              placeholder='제목을 입력하세요'
               autoFocus
-              className="w-[955px] font-semibold text-[25px] m-3 outline-none"
+              className='w-full font-semibold text-[23px] px-3 py-2 outline-none'
             />
             <hr
               className={`mt-[15px] mb-[15px] opacity-30 ${
@@ -97,27 +97,33 @@ export default function CreateVotePost({ theme }: { theme: Theme }) {
             <Editor
               onChange={setContent}
               onPollCreate={handlePollCreate}
-              onImageSelect={(file) => setImageFile(file)} // 이미지 저장
+              onImageSelect={(file) => setImageFile(file)}
               showPollButton={true}
               // disableMinHeight={true}
               initialContent={content}
               theme={theme}
             />
             <hr
-              className={`mb-[60px] opacity-30 ${
+              className={`mb-[20px]  opacity-30 ${
                 dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
               }`}
             />
 
-            <div className="flex justify-end mt-6">
+            <div className='text-right'>
               <Button
-                value="완료"
-                className={`button-style2 absolute bottom-[15px] right-[20px] ${
-                  dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
+                value='완료'
+                className={`button-style2 ${
+                  isSubmitDisabled
+                    ? dark(theme)
+                      ? 'bg-[#3a3a3a] text-[#777777] cursor-not-allowed'
+                      : 'bg-gray-400 text-[#ffffff] cursor-not-allowed'
+                    : dark(theme)
+                    ? 'bg-[#1e1e1e] text-[#ffffff]'
+                    : 'bg-[#1E293B] text-[#ffffff]'
                 }`}
                 onClick={(e) => {
                   if (isSubmitDisabled) {
-                    e.preventDefault(); // 아무 동작도 하지 않음
+                    e.preventDefault();
                     return;
                   }
                   handleSubmit(e);

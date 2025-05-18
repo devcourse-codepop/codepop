@@ -16,7 +16,7 @@ export const postNotificationData = (
   userId: string, // 알림을 받을 user id
   postId: string | null // 해당 게시글 ID (팔로우나 메시지는 null)
 ) => {
-  return axiosInstance.put(`/notifications/create`, {
+  return axiosInstance.post(`/notifications/create`, {
     notificationType: notificationType,
     notificationTypeId: notificationTypeId,
     userId: userId,

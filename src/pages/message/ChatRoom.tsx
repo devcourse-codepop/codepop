@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-//import { User1 } from './ChatModal';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import ChatHeader from './ChatHeader';
 import {
   getMessages,
@@ -7,12 +6,12 @@ import {
   putMessageSeen,
 } from '../../api/message/message';
 // import { postNotifications } from '../../api/post/post';
-import { Message, User } from '../../types';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import { useAuthStore } from '../../stores/authStore';
 import messageSendBtn from '../../assets/images/message/message-send-btn.svg';
 import messageSendBtnWhite from '../../assets/images/message/message-send-btn-white.svg';
+import userImage from '../../assets/images/profile/default-profile-img.jpg';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
 
@@ -109,17 +108,17 @@ export default function ChatRoom({
   // };
 
   // 채팅방 입장 시 메시지 읽음 처리하기
-  const readUserMessages = async () => {
+  const readUserMessages = useCallback(async () => {
     try {
       await putMessageSeen(user._id);
       // console.log(data);
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
-  };
+  }, [user._id]);
 
   // 메시지 기록 가져오기
-  const getUserMessages = async () => {
+  const getUserMessages = useCallback(async () => {
     try {
       const { data } = await getMessages(user._id);
       // console.log(data);
@@ -132,7 +131,7 @@ export default function ChatRoom({
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
-  };
+  }, [user._id]);
 
   // 상대방이 보내는 메시지 실시간으로 채팅방에 보여주고 읽음 처리하기
   useEffect(() => {
@@ -148,12 +147,12 @@ export default function ChatRoom({
     }, 2000);
 
     return () => clearInterval(interval);
-  }, [user._id]);
+  }, [user._id, readUserMessages]);
 
   useEffect(() => {
     readUserMessages();
     getUserMessages();
-  }, [reloadTrigger]);
+  }, [reloadTrigger, getUserMessages, readUserMessages]);
 
   // 채팅방 들어왔을 때와 메시지 전송했을 때, 가장 최신 메시지를 화면에 보여주기
   useEffect(() => {
@@ -239,7 +238,7 @@ export default function ChatRoom({
                       {/* 프로필 이미지 */}
                       <div className="">
                         <img
-                          src={msg.sender.image}
+                          src={msg.sender.image ? msg.sender.image : userImage}
                           alt="상대 프로필"
                           className="w-[35px] h-[35px] rounded-[50%] border border-[#ddd]"
                         />
@@ -249,27 +248,28 @@ export default function ChatRoom({
                         <div className="font-normal text-[12px] mb-[5px] ml-[2px] w-fit">
                           {msg.sender.fullName}
                         </div>
-                        <div
-                          className={`text-[14px] p-2.5 rounded-b-[10px] rounded-tr-[10px] max-w-[300px] break-words pl-3 w-fit ${
-                            dark(theme)
-                              ? 'bg-[#ffffff] text-[#111111]'
-                              : 'bg-[#1E293B] text-white'
-                          }`}
-                        >
-                          {msg.message}
+                        <div className="flex">
+                          <div
+                            className={`text-[14px] p-2.5 rounded-b-[10px] rounded-tr-[10px] max-w-[300px] break-words pl-3 w-fit ${
+                              dark(theme)
+                                ? 'bg-[#ffffff] text-[#111111]'
+                                : 'bg-[#ECECEC] text-[#111111]'
+                            }`}
+                          >
+                            {msg.message}
+                          </div>
+                          <div className="flex justify-end items-end ml-2 text-[12px] font-normal">
+                            <span
+                              className={` ${
+                                dark(theme)
+                                  ? 'text-[#ffffff]/50'
+                                  : 'text-[#111111]/50'
+                              }`}
+                            >
+                              {getWriteDatetimeFormat(msg.createdAt)}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                      {/* 시간 */}
-                      <div className="flex justify-end items-end ml-2 text-[12px] font-normal">
-                        <span
-                          className={` ${
-                            dark(theme)
-                              ? 'text-[#ffffff]/50'
-                              : 'text-[#111111]/50'
-                          }`}
-                        >
-                          {getWriteDatetimeFormat(msg.createdAt)}
-                        </span>
                       </div>
                     </div>
                   )}

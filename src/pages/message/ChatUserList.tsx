@@ -1,13 +1,14 @@
 import ChatHeader from './ChatHeader';
 import { getMessageList, getMessages } from '../../api/message/message';
-import { useEffect, useState } from 'react';
-import { Conversation, Message, User } from '../../types';
-import dayjs from 'dayjs';
+import { useCallback, useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useAuthStore } from '../../stores/authStore';
-// import userImage from '../../assets/images/profile/default-profile-img.jpg';
+import userImage from '../../assets/images/profile/default-profile-img.jpg';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
+import getElapsedTime from '../../utils/getDatetime';
+import followImg from '../../assets/images/follow/follow.svg';
+import followImgWhite from '../../assets/images/follow/follow-white.svg';
 
 interface ChatUserListProps {
   onSelectUser?: (user: User) => void;
@@ -31,23 +32,19 @@ export default function ChatUserList({
 
   // 로그인한 사용자 정보 받아오기
   const user = useAuthStore((state) => state.user);
-
-  // 메시지 전송 시간 포맷 설정
-  const getElapsedTime = (createdAt: string) => {
-    const now = dayjs().add(9, 'hour');
-    const writeTime = dayjs(createdAt).add(9, 'hour');
-
-    const gap = now.diff(writeTime, 's');
-    if (gap < 60) return `${gap}초 전`;
-    if (gap < 3600) return `${Math.floor(gap / 60)}분 전`;
-    if (gap < 86400) return `${Math.floor(gap / 3600)}시간 전`;
-    return writeTime.format('YYYY.MM.DD');
-  };
+  // 로그인한 사용자의 팔로우
+  const [follow, setFollow] = useState(user?.following);
+  useEffect(() => {
+    setFollow(user?.following);
+  }, [user]);
 
   // 상대방 id 가져오기
-  const getOpponentId = (idArr: string[]): string => {
-    return idArr.find((id) => id !== user?._id) || '';
-  };
+  const getOpponentId = useCallback(
+    (idArr: string[]): string => {
+      return idArr.find((id) => id !== user?._id) || '';
+    },
+    [user?._id]
+  );
 
   // 상대방 User 객체 가져오기
   const getOpponentUser = (con: Conversation, id: string): User => {
@@ -58,7 +55,8 @@ export default function ChatUserList({
   const getMyMessageList = async () => {
     try {
       const { data } = await getMessageList();
-      console.log(data);
+      // console.log(data);
+
       setConversations(data);
       setIsLoading(false);
     } catch (e) {
@@ -93,22 +91,30 @@ export default function ChatUserList({
     if (conversations.length > 0) {
       getNotSeenCounts();
     }
-  }, [conversations]);
+  }, [conversations, getOpponentId]);
 
   useEffect(() => {
     getMyMessageList();
   }, []);
 
   return (
-    <div className="h-[75vh] flex-1 flex flex-col">
+    <div className='h-[75vh] flex-1 flex flex-col'>
       <ChatHeader onClose={onClose} theme={theme} />
       {isLoading || isCountLoading ? (
-        <></>
+        <>
+          <div
+            className={`h-[50vh] flex items-center justify-center text-[15px] ${
+              dark(theme) ? 'text-[#acacaa]' : 'text-gray-600'
+            }`}
+          >
+            대화 목록이 없습니다.
+          </div>
+        </>
       ) : (
         <div
           className={`flex-1 overflow-y-auto messageBox ${
-            dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
-          }`}
+            dark(theme) ? 'dark' : ''
+          } ${dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'}`}
         >
           {conversations.map((con) => {
             const opponentId = getOpponentId(con._id);
@@ -127,13 +133,19 @@ export default function ChatUserList({
               >
                 {/* 상대 프로필, 이름, 마지막 대화 */}
                 <img
-                  src={opponentUser.image}
-                  alt="상대 프로필"
-                  className="w-[50px] h-[50px] rounded-[50%] border border-[#ddd]"
+                  src={opponentUser.image ? opponentUser.image : userImage}
+                  alt='상대 프로필'
+                  className='w-[50px] h-[50px] rounded-[50%] border border-[#ddd]'
                 />
-                <div className="ml-[20px] pt-1.5">
-                  <p className="font-bold text-[14px]">
+                <div className='ml-[20px] pt-1.5'>
+                  <p className='font-bold text-[14px] flex items-center'>
                     {opponentUser.fullName}
+                    {follow?.some((f) => f.user === opponentUser._id) && (
+                      <img
+                        className='w-2 h-2 ml-1 opacity-50'
+                        src={dark(theme) ? followImgWhite : followImg}
+                      />
+                    )}
                   </p>
                   <p
                     className={`font-normal  text-[12px] truncate w-[258px] ${
@@ -143,7 +155,7 @@ export default function ChatUserList({
                     {con.message}
                   </p>
                 </div>
-                <div className="ml-[15px] pt-1 flex flex-col items-center w-[60px] shrink-0">
+                <div className='ml-[15px] pt-1 flex flex-col items-center w-[60px] shrink-0'>
                   {/* 보낸 시간  */}
                   <p
                     className={`font-medium text-[12px] ${

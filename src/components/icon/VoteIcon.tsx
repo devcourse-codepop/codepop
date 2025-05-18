@@ -8,7 +8,7 @@ export default function VoteIcon({ theme }: { theme: Theme }) {
     <>
       <img
         src={dark(theme) ? voteIconWhite : voteIcon}
-        className="w-[30.5px] h-[30.5px] inline-block cursor-pointer"
+        className='w-[28px] h-[28px] inline-block cursor-pointer'
       />
     </>
   );

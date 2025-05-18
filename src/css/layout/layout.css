@@ -33,7 +33,7 @@
 
 .dark-member-list::-webkit-scrollbar-thumb {
   background: #1e1e1e;
-  border-top: 5px solid #1e1e1e;
+  border-top: 5px solid #2d2d2d;
 }
 
 .memberCard .avartar-box {
@@ -57,16 +57,31 @@
 
 /* 스크롤 */
 .scroll-custom::-webkit-scrollbar {
-  width: 4px;
+  width: 0px;
+  height: 0px;
 }
 .scroll-custom::-webkit-scrollbar-thumb {
   background: #939393;
 }
 
+.dark-scroll-custom::-webkit-scrollbar-thumb {
+  background: #1e1e1e;
+}
+
 .messageBox::-webkit-scrollbar {
-  width: 5px;
+  width: 0px;
   border-radius: 5px;
 }
 .messageBox::-webkit-scrollbar-thumb {
   background: #adadad;
+}
+
+.dark.messageBox::-webkit-scrollbar-thumb,
+.dark .messageBox::-webkit-scrollbar-thumb {
+  background: #1e1e1e;
+}
+
+select.select-custom {
+  background: #fff url(../../assets/images/form/select-icon.svg) no-repeat right
+    5px center / 12px auto;
 }

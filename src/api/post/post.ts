@@ -36,12 +36,17 @@ export const postComments = (postId: string, comment: string) => {
   });
 };
 
-export const voteComments = (postId: string, selectedOptionId: string) => {
+export const voteComments = (
+  postId: string,
+  selectedOptionId: string,
+  userId: string
+) => {
   return axiosInstance.post("/comments/create", {
     postId,
     comment: JSON.stringify({
       type: "vote",
       selectedOptionId: selectedOptionId,
+      userId,
     }),
   });
 };
@@ -98,7 +103,7 @@ export const postNotifications = (
   userId: string,
   postId: string | null
 ) => {
-  return axiosInstance.post('/notifications/create', {
+  return axiosInstance.post("/notifications/create", {
     notificationType,
     notificationTypeId,
     userId,

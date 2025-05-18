@@ -30,20 +30,24 @@ export default function ChatHeader({
         <img
           src={`${dark(theme) ? backBtnWhite : backBtn}`}
           onClick={onBack}
-          className="w-[24px] h-[24px]  mr-2 cursor-pointer"
+          className="w-[24px] h-[24px]  mr-2 cursor-pointer opacity-60"
         />
       ) : (
         <div className="w-4" /> // 공간 맞춤용
       )}
 
-      <p className="text-[18px] font-medium flex-1 text-center">
+      <p
+        className={`text-[18px] font-medium flex-1 text-center ${
+          dark(theme) ? 'text-[#ffffff]/' : 'text-[#4d4d4d]'
+        }`}
+      >
         {userName || 'Message'}
       </p>
 
       <img
         src={`${dark(theme) ? closeBtnWhite : closeBtn}`}
         onClick={onClose}
-        className=" w-[24px] h-[24px] ml-2 cursor-pointer"
+        className=" w-[24px] h-[24px] ml-2 cursor-pointer opacity-60"
       />
     </div>
   );

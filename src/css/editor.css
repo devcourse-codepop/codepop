@@ -9,5 +9,8 @@
 
 .ProseMirror img {
   max-width: 30%;
-  height: auto;
+}
+
+.ProseMirror {
+  height: 100%;
 }

@@ -47,7 +47,11 @@ export default function Editor({
   }, [editor, initialContent, hasSetInitialContent]);
 
   return (
-    <div className="p-4 rounded-lg min-h-[100px] h-auto mb-12">
+    <div
+      className={
+        'editor-box px-4 py-2 rounded-lg min-h-[100px] mb-4 h-[calc(100%-170px)]'
+      }
+    >
       <EditorToolbar
         editor={editor}
         onTogglePoll={() => setShowPollCreator((prev) => !prev)}
@@ -56,12 +60,17 @@ export default function Editor({
         showCodeButton={showCodeButton}
         theme={theme}
       />
-      <EditorContent
-        editor={editor}
-        className={`
+      <div
+        className={`editor-box-text max-w-full overflow-y-auto h-[calc(100%-41px)] pr-1  ${
+          showPollCreator && onPollCreate && 'edit-vote-box-text'
+        }`}
+      >
+        <EditorContent
+          editor={editor}
+          className={`
           prose max-w-none [&_.ProseMirror]:outline-none
-          ${disableMinHeight ? '' : '[&_.ProseMirror]:min-h-[365px]'}
-          [&_.ProseMirror]:h-auto
+          ${disableMinHeight ? '' : '[&_.ProseMirror]:min-h-full'}
+          [&_.ProseMirror]:h-full
 
           [&_.ProseMirror_pre]:p-4
           [&_.ProseMirror_pre]:rounded-lg
@@ -76,14 +85,13 @@ export default function Editor({
               ? '[&_.ProseMirror_pre]:bg-[#1e1e1e] [&_.ProseMirror_pre]:text-[#ffffff]'
               : '[&_.ProseMirror_pre]:bg-[#ececec] [&_.ProseMirror_pre]:text-[#111111]'
           }
-
-          
         `}
-      />
+        />
 
-      {showPollCreator && onPollCreate && (
-        <PollCreator onCreate={onPollCreate} theme={theme} />
-      )}
+        {showPollCreator && onPollCreate && (
+          <PollCreator onCreate={onPollCreate} theme={theme} />
+        )}
+      </div>
     </div>
   );
 }

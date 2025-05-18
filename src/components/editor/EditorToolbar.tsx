@@ -5,6 +5,7 @@ import BoldIcon from '../icon/BoldIcon';
 import ItalicIcon from '../icon/ItalicIcon';
 import VoteIcon from '../icon/VoteIcon';
 import { Theme } from '../../types/darkModeTypes';
+import { dark } from '../../utils/darkModeUtils';
 
 interface Props {
   editor: Editor | null;
@@ -26,12 +27,14 @@ export default function EditorToolbar({
   if (!editor) return null;
 
   return (
-    <div className="flex gap-6 mb-4">
+    <div className='flex gap-5.5 mb-3.5'>
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
-        className={`cursor-pointer rounded-[5px]${
+        className={`cursor-pointer rounded-[5px] ${
           editor.isActive('bold')
             ? 'font-bold bg-blue-400'
+            : dark(theme)
+            ? 'hover:bg-[#1e1e1e]'
             : ' hover:bg-gray-200'
         }`}
       >
@@ -43,6 +46,8 @@ export default function EditorToolbar({
         className={`cursor-pointer rounded-[5px] ${
           editor.isActive('italic')
             ? 'italic bg-blue-400'
+            : dark(theme)
+            ? 'hover:bg-[#1e1e1e]'
             : ' hover:bg-gray-200'
         }`}
       >
@@ -56,7 +61,11 @@ export default function EditorToolbar({
           }}
           className={`cursor-pointer rounded-[5px] 
           ${
-            editor.isActive('codeBlock') ? 'bg-blue-400' : 'hover:bg-gray-200'
+            editor.isActive('codeBlock')
+              ? 'bg-blue-400'
+              : dark(theme)
+              ? 'hover:bg-[#1e1e1e]'
+              : 'hover:bg-gray-200'
           }`}
         >
           <CodeEditIcon theme={theme} />
@@ -64,8 +73,8 @@ export default function EditorToolbar({
       )}
 
       <input
-        type="file"
-        accept="image/*"
+        type='file'
+        accept='image/*'
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (file) {
@@ -95,13 +104,15 @@ export default function EditorToolbar({
           }
           e.target.value = '';
         }}
-        className="hidden cursor-pointer rounded-[5px]"
-        id="image-upload"
+        className='hidden cursor-pointer rounded-[5px]'
+        id='image-upload'
       />
 
       <label
-        htmlFor="image-upload"
-        className="cursor-pointer rounded-[5px] flex items-center justify-center hover:bg-gray-200"
+        htmlFor='image-upload'
+        className={`cursor-pointer rounded-[5px] flex items-center justify-center ${
+          dark(theme) ? 'hover:bg-[#1e1e1e]' : 'hover:bg-gray-200'
+        }`}
       >
         <ImageIcon theme={theme} />
       </label>
@@ -109,7 +120,9 @@ export default function EditorToolbar({
       {showPollButton && (
         <button
           onClick={onTogglePoll}
-          className="cursor-pointer rounded-[5px] hover:bg-gray-200"
+          className={`cursor-pointer rounded-[5px] ${
+            dark(theme) ? 'hover:bg-[#1e1e1e]' : 'hover:bg-gray-200'
+          }`}
         >
           <VoteIcon theme={theme} />
         </button>

@@ -9,6 +9,7 @@ import ChatModal from '../../pages/message/ChatModal';
 import { useState } from 'react';
 import { useMessageStore } from '../../stores/messageStore';
 import useChatClose from '../../utils/changeMessageIcon';
+import useNewMessageUpdate from '../../utils/updateNewMessageCount';
 
 export default function Header({
   theme,
@@ -23,6 +24,7 @@ export default function Header({
   const navigator = useNavigate();
   const user = useAuthStore((state) => state.user);
   const messageIcon = useMessageStore((state) => state.messageIcon);
+  const newNotiCount = useMessageStore((state) => state.newNotiCount);
   const [isChatOpen, setIsChatOpen] = useState(false);
 
   let imgSrc: string = '';
@@ -38,6 +40,9 @@ export default function Header({
   };
 
   const onClose = useChatClose(setIsChatOpen);
+
+  useNewMessageUpdate();
+
   return (
     <>
       <header className="h-[100px] px-[60px] flex items-center justify-between">
@@ -73,13 +78,22 @@ export default function Header({
               <div className="notification-wrapper relative">
                 <Notification theme={theme} />
               </div>
-              <img
-                src={messageIcon}
-                onClick={handleMessageClick}
-                className={`cursor-pointer w-[28px] h-[28px] ${
-                  dark(theme) ? 'invert' : ''
-                }`}
-              />
+              {/* 메시지 알림 */}
+              <div className="relative">
+                <img
+                  src={messageIcon}
+                  onClick={handleMessageClick}
+                  className="cursor-pointer w-[28px] h-[28px]"
+                />
+                {newNotiCount !== 0 ? (
+                  <span className="flex justify-center w-3.5 h-3.5 rounded-2xl bg-[#FF0000] absolute -right-1 top-0 text-[11px] text-white leading-3">
+                    <div>{newNotiCount}</div>
+                  </span>
+                ) : (
+                  <></>
+                )}
+              </div>
+
               <img
                 src={imgSrc}
                 className="w-10 h-10 rounded-3xl overflow-hidden cursor-pointer"

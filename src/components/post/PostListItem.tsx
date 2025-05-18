@@ -1,10 +1,8 @@
 import Avatar from '../avatar/Avatar';
 import LikeComment from '../reaction/LikeComment';
-import { Post } from '../../types';
-import dayjs from 'dayjs';
 import { Link, useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 import NotLoginModal from './NotLoginModal';
 import DOMPurify from 'dompurify';
@@ -13,6 +11,7 @@ import { useChannelItemStore } from '../../stores/channelStore';
 import PollOptionsView from '../poll/PollOptionsView';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
+import getElapsedTime from '../../utils/getDatetime';
 
 interface PostListItemProps extends Post {
   theme: Theme;
@@ -50,6 +49,12 @@ export default function PostListItem(props: PostListItemProps) {
   // removeImgTags 함수 내부에서 상태 변경 시, 리렌더링이 계속 일어나므로 함수 외부에서 사용
   let codes;
 
+  // 사용자의 팔로우
+  const [follow, setFollow] = useState(user?.following);
+  useEffect(() => {
+    setFollow(user?.following);
+  }, [user]);
+
   // 게시글 content 필드에서 img 태그 내용 및 pre 태그 내용(코드 블록) 삭제
   const removeImgTags = (html: string): string => {
     const parser = new DOMParser();
@@ -70,19 +75,6 @@ export default function PostListItem(props: PostListItemProps) {
   // 코드 블록 개수 가져오기
   const setCodeCount = () => {
     if (codes.length > 0) return codes.length;
-  };
-
-  // 게시글 작성 시간 포맷 설정
-  const getElapsedTime = () => {
-    const now = dayjs().add(9, 'hour');
-    const writeTime = dayjs(createdAt).add(9, 'hour');
-
-    const gap = now.diff(writeTime, 's');
-    if (gap < 60) return `${gap}초 전`;
-    if (gap < 3600) return `${Math.floor(gap / 60)}분 전`;
-    if (gap < 86400) return `${Math.floor(gap / 3600)}시간 전`;
-
-    return writeTime.format('YYYY.MM.DD');
   };
 
   // 게시글 클릭 시, 로그인하지 않은 사용자라면 로그인 관련 모달을, 탈퇴한 사용자 게시글이라면 탈퇴한 사용자 관련 모달을 띄워주기
@@ -116,11 +108,11 @@ export default function PostListItem(props: PostListItemProps) {
   return (
     <>
       <div
-        className={`postListItem w-full h-auto rounded-[5px] shadow-[0_4px_4px_rgba(0,0,0,0.25)] relative ${
+        className={`postListItem w-full h-auto rounded-[5px] shadow-md relative ${
           dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
         }`}
       >
-        <div className="postListItem-top flex justify-between h-[85px] pl-3 pt-2.5">
+        <div className='postListItem-top flex justify-between h-[85px] pl-3 pt-2.5'>
           <Link to={`/profile`} state={{ userid: author?._id }}>
             <Avatar
               name={author?.fullName}
@@ -128,6 +120,7 @@ export default function PostListItem(props: PostListItemProps) {
               image={author?.image}
               isOnline={author?.isOnline}
               theme={theme}
+              follow={follow?.some((f) => f.user === author._id)}
             />
           </Link>
         </div>
@@ -162,18 +155,18 @@ export default function PostListItem(props: PostListItemProps) {
                   removeImgTags(JSON.parse(title).content)
                 ),
               }}
-              className="postContent text-[15px] font-normal line-clamp-5"
+              className='postContent text-[15px] font-normal line-clamp-5'
             />
             {/* 투표 옵션이 있을 경우 */}
             {pollOptions && pollOptions.length > 0 && (
-              <div className="postPoll mt-4">
+              <div className='postPoll mt-4'>
                 <PollOptionsView options={pollOptions} theme={theme} />
               </div>
             )}
           </div>
           {image && (
-            <div className="postListItem-content-image border border-[#e0e0e0] rounded-[5px]">
-              <img src={image} className="w-[226px] h-[226px]" />
+            <div className='postListItem-content-image border border-[#e0e0e0] rounded-[5px]'>
+              <img src={image} className='w-[226px] h-[226px]' />
             </div>
           )}
         </div>
@@ -184,7 +177,7 @@ export default function PostListItem(props: PostListItemProps) {
               : 'text-[#111111] opacity-50'
           }`}
         >
-          {getElapsedTime()}
+          {getElapsedTime(createdAt)}
         </div>
         <hr
           className={`mx-[18px] ${
@@ -206,7 +199,7 @@ export default function PostListItem(props: PostListItemProps) {
                 dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
               }`}
             >
-              +<span className="text-[#ff0000]">{setCodeCount()}</span>개의 코드
+              +<span className='text-[#ff0000]'>{setCodeCount()}</span>개의 코드
               블록
             </div>
           )}
@@ -238,7 +231,10 @@ export default function PostListItem(props: PostListItemProps) {
         />
       )}
       {isUserModalOpen && (
-        <DeletedUserModal closeUserModalHanlder={closeUserModalHanlder} />
+        <DeletedUserModal
+          closeUserModalHanlder={closeUserModalHanlder}
+          theme={theme}
+        />
       )}
     </>
   );

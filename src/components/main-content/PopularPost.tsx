@@ -1,20 +1,26 @@
 import { useEffect, useState } from 'react';
 import { useChannelItemStore } from '../../stores/channelStore';
 import { getPopularPostData } from '../../api/post/post';
-import { Post } from '../../types';
 import PostListItem from '../post/PostListItem';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
+import PopularPostCkeleton from './PopularPostCkeleton';
 
 export default function PopularPost({ theme }: { theme: Theme }) {
   const { channels, fetchChannels } = useChannelItemStore();
   const [activeTab, setActiveTab] = useState(0);
   const [sortPopulars, setSortPopulars] = useState<Post[]>([]);
+  const [isLoading, setLoading] = useState(true);
 
   const tabClickHandler = async (channelId: string, index: number) => {
-    const data = await getPopularPostData(channelId);
-    setActiveTab(index);
-    setSortPopulars(data);
+    setLoading(true);
+    try {
+      const data = await getPopularPostData(channelId);
+      setActiveTab(index);
+      setSortPopulars(data.slice(0, 2));
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -27,18 +33,6 @@ export default function PopularPost({ theme }: { theme: Theme }) {
     }
   }, [channels]);
 
-  const parseHandler = (str: string | object | null) => {
-    if (typeof str === 'string') {
-      try {
-        JSON.parse(str);
-        return str;
-      } catch {
-        return `{"title":"${str}", "content":""}`;
-      }
-    }
-    return `{"title":"${str}", "content":""}`;
-  };
-
   return (
     <>
       <div
@@ -47,23 +41,23 @@ export default function PopularPost({ theme }: { theme: Theme }) {
         }`}
       >
         <h3
-          className={`font-semibold  text-[18px] mb-[15px] ${
+          className={`font-semibold  text-[20px] mb-[15px] ${
             dark(theme) ? 'text-[#acacaa]' : 'text-[#595956]'
           }`}
         >
           Popular Posts
         </h3>
-        <ul className="flex relative gap-x-5 gap-y-2.5 mb-4.5 flex-wrap">
+        <ul className='flex relative gap-x-5 gap-y-2.5 mb-4.5 flex-wrap'>
           {channels.map((channel, index) => (
             <li
               key={`tab-${index}`}
-              role="tab"
+              role='tab'
               aria-selected={activeTab === index}
               aria-controls={`panel-${index}`}
               id={`tab-${index}`}
             >
               <button
-                className={`bg-[#E3E3E3] text-white rounded-[10px] w-[123px] h-[40px] text-[12px] cursor-pointer duration-300`}
+                className={`bg-[#E3E3E3] text-white rounded-[10px] w-[123px] h-[40px] text-[13px] cursor-pointer duration-300 font-semibold`}
                 onClick={() => {
                   tabClickHandler(channel.id, index);
                 }}
@@ -94,37 +88,31 @@ export default function PopularPost({ theme }: { theme: Theme }) {
         <div className={`${dark(theme) ? 'dark' : ''}`}>
           {channels.map((_, cIndex) => (
             <div
-              className="tab-content flex gap-x-7 gap-y-5 flex-wrap min-h-[260px] relative"
+              className='tab-content flex gap-x-7 gap-y-5 flex-wrap min-h-[284px] relative'
               key={`panel-${cIndex}`}
-              role="tabpanel"
+              role='tabpanel'
               hidden={!(activeTab === cIndex)}
               aria-labelledby={`tab-${cIndex}`}
               id={`panel-${cIndex}`}
             >
-              {sortPopulars.length == 0 ? (
-                <p className="absolute left-1/2 bottom-4/7 -translate-x-1/2 text-sm text-[#5c5c5c]">
+              {isLoading ? (
+                <PopularPostCkeleton theme={theme} />
+              ) : sortPopulars.length == 0 ? (
+                <p
+                  className={`absolute left-1/2 bottom-4/7 -translate-x-1/2 text-sm  ${
+                    dark(theme) ? 'text-[#ffffff]/50' : 'text-[#5c5c5c]'
+                  }`}
+                >
                   해당 채널에 게시글이 없습니다.
                 </p>
               ) : (
-                sortPopulars.slice(0, 2).map((popular, pIndex) => {
-                  const parsePopular: Post = {
-                    ...popular,
-                    title: parseHandler(popular.title),
-                  };
+                sortPopulars.map((popular, pIndex) => {
                   return (
                     <div
                       key={`popular-${pIndex}`}
-                      className="basis-[calc(50%-0.875rem)] max-w-full tabConstentItem"
+                      className='basis-[calc(50%-0.875rem)] max-w-full tabConstentItem'
                     >
-                      <PostListItem {...parsePopular} theme={theme} />
-                      {/* <PostList
-                        title={{
-                          title: `${postTitle}`,
-                          content: `${postContent}`,
-                          tag: `아마 태그 없앴던거 같음`,
-                        }}
-                        updatedAt={popular.createdAt.split("T")[0]}
-                      /> */}
+                      <PostListItem {...popular} theme={theme} />
                     </div>
                   );
                 })

@@ -40,7 +40,7 @@ export default function ChannelBox({ theme }: { theme: Theme }) {
         >
           Channel
         </h2>
-        <ul className="space-y-[13px]">
+        <ul className='space-y-[13px]'>
           {channels.map((item) => (
             <li key={item.id}>
               <Link
@@ -49,7 +49,7 @@ export default function ChannelBox({ theme }: { theme: Theme }) {
                   navigate(item.to);
                 }}
                 to={item.to}
-                className="flex items-start ml-[29px] group"
+                className='flex items-start  ml-7 group'
               >
                 <span
                   className={`w-1 h-8 rounded-sm mr-[7px]`}
@@ -59,7 +59,7 @@ export default function ChannelBox({ theme }: { theme: Theme }) {
                       : item.colorLight,
                   }}
                 ></span>
-                <span className="font-noto font-[18px] pt-1 relative z-1">
+                <span className='font-noto font-[18px] pt-1 relative z-1'>
                   {item.name}
                   <span
                     // 주소 param값이 해당 채널과 동일하면 해당 채널에 css 효과

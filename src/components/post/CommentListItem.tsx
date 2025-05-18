@@ -1,15 +1,14 @@
 import menuIcon from '../../assets/images/menu/menu-icon.svg';
 import menuIconWhite from '../../assets/images/menu/menu-icon-white.svg';
 import userImg from '../../assets/images/header/user-img.svg';
-import { useEffect, useRef, useState } from 'react';
-import dayjs from 'dayjs';
-import { Comment } from '../../types';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAuthStore } from '../../stores/authStore';
 import { Link, useParams } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import CheckDeleteModal from './CheckDeleteModal';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
+import getElapsedTime from '../../utils/getDatetime';
 
 // updateReloadTrigger 타입 추가
 interface CommentListItemProps extends Comment {
@@ -70,24 +69,12 @@ export default function CommentListItem({
     return doc.body.innerHTML;
   };
 
-  // 댓글 작성 시간 포맷 설정
-  const getElapsedTime = () => {
-    const now = dayjs().add(9, 'hour');
-    const writeTime = dayjs(createdAt).add(9, 'hour');
-
-    const gap = now.diff(writeTime, 's');
-    if (gap < 60) return `${gap}초 전`;
-    if (gap < 3600) return `${Math.floor(gap / 60)}분 전`;
-    if (gap < 86400) return `${Math.floor(gap / 3600)}시간 전`;
-    return writeTime.format('YYYY.MM.DD');
-  };
-
   // 로그인한 사용자가 해당 댓글 작성자인지 확인
-  const checkCommentUser = () => {
+  const checkCommentUser = useCallback(() => {
     if (author._id === user?._id) {
       setIsUser(true);
     }
-  };
+  }, [author._id, user?._id]);
 
   // 삭제 버튼 클릭 시, 삭제할 건지 한 번 더 물어보는 모달 띄우기
   const clickDeleteHandler = () => {
@@ -108,7 +95,7 @@ export default function CommentListItem({
     if (user) {
       checkCommentUser();
     }
-  }, [user]);
+  }, [user, checkCommentUser]);
 
   // 삭제 모달 밖 영역 클릭 시, 모달 닫기
   useEffect(() => {
@@ -148,7 +135,7 @@ export default function CommentListItem({
               </span>
             </Link>
             <span className="text-[11px] opacity-60 font-light">
-              {getElapsedTime()}
+              {getElapsedTime(createdAt)}
             </span>
           </div>
           {/* 로그인한 사용자 id 값과 해당 댓글 작성자 id 값이 일치할 경우 */}

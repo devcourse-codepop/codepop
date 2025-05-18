@@ -1,6 +1,7 @@
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
-import Delete from '../../assets/images/input-delete/input-delete.svg';
+import deleteImg from '../../assets/images/input-delete/input-delete.svg';
+import deleteImgDark from '../../assets/images/input-delete/input-delete-dark.svg';
 
 import { useState } from 'react';
 import { useAuthStore } from '../../stores/authStore';
@@ -100,7 +101,7 @@ export default function Login({ theme }: { theme: Theme }) {
             />
             {email && (
               <img
-                src={Delete}
+                src={dark(theme) ? deleteImgDark : deleteImg}
                 alt="삭제"
                 onClick={() => {
                   setEmail('');
@@ -125,7 +126,7 @@ export default function Login({ theme }: { theme: Theme }) {
 
             {password && (
               <img
-                src={Delete}
+                src={dark(theme) ? deleteImgDark : deleteImg}
                 alt="삭제"
                 onClick={() => {
                   setPassword('');

@@ -3,8 +3,7 @@ import likeClickWhite from '../../assets/images/like/like-click-white.svg';
 import likeRed from '../../assets/images/like/like-red.svg';
 import comment from '../../assets/images/comment/comment-outline.svg';
 import commentWhite from '../../assets/images/comment/comment-white.svg';
-import { useEffect, useState } from 'react';
-import { Channel, Like, User } from '../../types';
+import { useCallback, useEffect, useState } from 'react';
 import { deleteLikes, postLikes, postNotifications } from '../../api/post/post';
 import { useAuthStore } from '../../stores/authStore';
 import NotLoginModal from '../post/NotLoginModal';
@@ -71,6 +70,7 @@ export default function LikeComment({
     if (user) {
       if (!author) {
         setIsUserModalOpen(true);
+        return;
       } else {
         channels.map((cha) => {
           if (cha.id === channel._id) {
@@ -82,13 +82,17 @@ export default function LikeComment({
       }
     } else {
       setIsLoginModalOpen(true);
+      return;
     }
   };
 
   // 좋아요 클릭 시, 로그인하지 않은 사용자라면 로그인 관련 모달을, 탈퇴한 사용자 게시글이라면 탈퇴한 사용자 관련 모달을 띄워주기
   // 둘 다 해당하지 않는다면 현재 사용자의 좋아요 클릭 상태에 따라 post, delete 요청을 보낸 후, 알림 전송하기
   const clickLikes = async () => {
-    if (!user) setIsLoginModalOpen(true);
+    if (!user) {
+      setIsLoginModalOpen(true);
+      return;
+    }
     if (!author) {
       setIsUserModalOpen(true);
       return;
@@ -136,20 +140,20 @@ export default function LikeComment({
   };
 
   // authStore에서 현재 로그인한 사용자의 id 값을 받아와서 해당 게시글에 사용자가 좋아요를 눌렀는지 확인하기
-  const checkClickLikes = () => {
+  const checkClickLikes = useCallback(() => {
     likes.forEach((like) => {
       if (like.user === user?._id) {
         setCheckLike(true);
         setLikeId(like._id);
       }
     });
-  };
+  }, [likes, user?._id]);
 
   useEffect(() => {
     if (user && likes.length > 0) {
       checkClickLikes();
     }
-  }, [user, likes]);
+  }, [user, likes, checkClickLikes]);
 
   return (
     <div className="reaction flex justify-end items-center gap-5 p-4">
@@ -193,7 +197,10 @@ export default function LikeComment({
         />
       )}
       {isUserModalOpen && (
-        <DeletedUserModal closeUserModalHanlder={closeUserModalHanlder} />
+        <DeletedUserModal
+          closeUserModalHanlder={closeUserModalHanlder}
+          theme={theme}
+        />
       )}
     </div>
   );

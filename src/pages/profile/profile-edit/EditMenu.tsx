@@ -29,7 +29,7 @@ export default function EditMenu({
   return (
     <div
       ref={menuRef}
-      className={`absolute top-[-15px] right-[10px] w-[120px]   rounded-[5px] shadow-md z-50 ${
+      className={`absolute top-8 right-0 w-[120px] rounded-[5px] shadow-md z-50 ${
         dark(theme)
           ? 'bg-[#2d2d2d] border border-white/40'
           : 'bg-[#ffffff] border'
@@ -46,7 +46,7 @@ export default function EditMenu({
         이미지 변경
       </div>
       <div
-        className="py-2 px-3 cursor-pointer hover:bg-red-100 text-sm rounded-[5px] text-red-500"
+        className='py-2 px-3 cursor-pointer hover:bg-red-100 text-sm rounded-[5px] text-red-500'
         onClick={onDelete}
       >
         삭제하기

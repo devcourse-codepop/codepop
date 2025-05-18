@@ -14,7 +14,7 @@ export default function CodeEditIcon({
     <>
       <img
         src={dark(theme) ? codeEditIconWhite : codeEditIcon}
-        className="w-[35px] h-[35px] inline-block cursor-pointer p-1 stroke-[1.5]"
+        className='w-[33px] h-[33px] inline-block cursor-pointer p-1 stroke-[1.5]'
         onClick={onClick}
       />
     </>

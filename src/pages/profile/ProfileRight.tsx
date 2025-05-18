@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Pagination from 'react-js-pagination';
 import { getAuthorPostData, getPostData } from '../../api/post/post';
 import commentWhite from '../../assets/images/comment/comment-white.svg';
@@ -6,46 +6,33 @@ import commentIcon from '../../assets/images/comment/comment-outline.svg';
 import { useNavigate } from 'react-router-dom';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
+import { useAuthStore } from '../../stores/authStore';
+import NotLoginModal from '../../components/post/NotLoginModal';
 
 interface ProfileRightProps extends UserPostInfo {
   theme: Theme;
 }
 
-export default function ProfileRight({
-  userData,
-  selectedTab,
-  theme,
-}: ProfileRightProps) {
+export default function ProfileRight({ userData, theme }: ProfileRightProps) {
   const userId = userData?._id;
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [userPostData, setUserPostData] = useState<Post[] | null>(null);
+  const [selectedTab, setSelectedTab] = useState<
+    'posts' | 'likes' | 'comments'
+  >('posts');
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 6;
   const navigate = useNavigate();
 
-  // selectedTab이 변경될 때마다 각 탭에 맞는 데이터를 가져옴
-  useEffect(() => {
-    setCurrentPage(1);
-    const fetchData = async () => {
-      switch (selectedTab) {
-        case 'posts':
-          return fetchUserPosts();
-        case 'likes':
-          return fetchLikedPosts();
-        case 'comments':
-          return fetchCommentedPosts();
-      }
-    };
-    fetchData();
-  }, [selectedTab]);
-
-  const fetchUserPosts = async () => {
+  const fetchUserPosts = useCallback(async () => {
     if (!userData?.posts) return;
     const { data } = await getAuthorPostData(userId || '');
     setUserPostData(data);
-  };
+  }, [userData?.posts, userId]);
 
   // 좋아요 목록을 시간순 정렬 후 해당 post들을 가져와 표시
-  const fetchLikedPosts = async () => {
+  const fetchLikedPosts = useCallback(async () => {
     if (!userData?.likes) return;
     const sortedLikes = [...userData.likes].sort(
       (a, b) =>
@@ -56,13 +43,27 @@ export default function ProfileRight({
       likedPostIds.map((postId) => getPostData(postId).then((res) => res.data))
     );
     setUserPostData(likedPosts);
+  }, [userData?.likes]);
+
+  // 댓글에서 투표수는 제외
+  const filterOutVoteComments = (comments: Comment[]): Comment[] => {
+    return comments.filter((comment) => {
+      try {
+        const parsed = JSON.parse(comment.comment);
+        return parsed.type !== 'vote';
+      } catch {
+        return true;
+      }
+    });
   };
 
   // 댓글단 게시글에 몇 번 댓글 단지와 최근 댓글 달았는 지 확인 후, 최신 댓글 기준으로 정렬
-  const fetchCommentedPosts = async () => {
+  const fetchCommentedPosts = useCallback(async () => {
     if (!userData?.comments) return;
 
-    const sortedComments = [...userData.comments].sort(
+    const filteredComments = filterOutVoteComments(userData.comments || []);
+
+    const sortedComments = [...filteredComments].sort(
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
@@ -97,7 +98,23 @@ export default function ProfileRight({
     );
 
     setUserPostData(postsWithCommentData);
-  };
+  }, [userData?.comments]);
+
+  // selectedTab이 변경될 때마다 각 탭에 맞는 데이터를 가져옴
+  useEffect(() => {
+    setCurrentPage(1);
+    const fetchData = async () => {
+      switch (selectedTab) {
+        case 'posts':
+          return fetchUserPosts();
+        case 'likes':
+          return fetchLikedPosts();
+        case 'comments':
+          return fetchCommentedPosts();
+      }
+    };
+    fetchData();
+  }, [selectedTab, fetchCommentedPosts, fetchLikedPosts, fetchUserPosts]);
 
   const handlePageChange = (page: number) => setCurrentPage(page);
 
@@ -106,12 +123,20 @@ export default function ProfileRight({
   const currentPosts =
     userPostData?.slice(indexOfFirstPost, indexOfLastPost) || [];
 
-  const tabLabels: Record<string, string> = {
-    posts: '작성한 글',
-    likes: '좋아요한 글',
-    comments: '댓글 단 글',
+  let totalTab: Record<string, number> = {
+    posts: 0,
+    likes: 0,
+    comments: 0,
   };
+  if (userData) {
+    const filteredComments = filterOutVoteComments(userData.comments || []);
 
+    totalTab = {
+      posts: userData.posts?.length ?? 0,
+      likes: userData.likes?.length ?? 0,
+      comments: filteredComments.length,
+    };
+  }
   const emptyText: Record<string, string> = {
     posts: '게시글을 작성해 주세요.',
     likes: '좋아요를 누른 게시글이 없습니다.',
@@ -120,100 +145,165 @@ export default function ProfileRight({
 
   const getChannelInfo = (name: string) => {
     const info = {
-      Vote: { id: 3, label: '골라봐', bg: 'bg-[#60A7F7]' },
-      MysteryCode: { id: 1, label: '이게 왜 되지?', bg: 'bg-[#10215C]' },
-      Default: { id: 2, label: '이거 왜 안 쓰지?', bg: 'bg-[#3380DE]' },
+      Vote: {
+        id: 3,
+        label: '골라봐',
+        bg: {
+          light: 'bg-[#60A7F7]',
+          dark: 'bg-[#9E68E9]',
+        },
+      },
+      MysteryCode: {
+        id: 1,
+        label: '이게 왜 되지?',
+        bg: {
+          light: 'bg-[#10215C]',
+          dark: 'bg-[#19A9BE]',
+        },
+      },
+      Default: {
+        id: 2,
+        label: '이거 왜 안 쓰지?',
+        bg: {
+          light: 'bg-[#3380DE]',
+          dark: 'bg-[#3380DE]',
+        },
+      },
     };
     return info[name as keyof typeof info] || info.Default;
   };
 
-  return (
-    <div className="ml-[26px] ">
-      <p
-        className={`mt-[40px] font-semibold text-[18px] ${
-          dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
-        }`}
-      >
-        {tabLabels[selectedTab]}
-      </p>
+  const closeLoginModalHanlder = () => {
+    setIsLoginModalOpen(false);
+  };
 
+  return (
+    <div className="w-full min-w-0 px-[26px] pb-[40px] profile-right">
+      <div className="w-full flex justify-between items-center mt-[40px] text-[18px] font-semibold">
+        <div
+          className={`flex pb-[10px] whitespace-nowrap ${
+            dark(theme) ? 'text-[#ffffff]' : ''
+          }`}
+        >
+          <div
+            className={`cursor-pointer mb-[-13px] px-4 ${
+              selectedTab === 'posts'
+                ? `border-b-4 ${dark(theme) ? 'border-white' : 'border-black'}`
+                : 'opacity-30'
+            }`}
+            onClick={() => setSelectedTab('posts')}
+          >
+            <p className="pb-[12px]">포스트</p>
+          </div>
+          <div
+            className={`cursor-pointer mb-[-13px] px-4 ${
+              selectedTab === 'likes'
+                ? `border-b-4 ${dark(theme) ? 'border-white' : 'border-black'}`
+                : 'opacity-30'
+            }`}
+            onClick={() => setSelectedTab('likes')}
+          >
+            <p className="pb-[12px]">좋아요</p>
+          </div>
+          <div
+            className={`cursor-pointer mb-[-13px] px-4 ${
+              selectedTab === 'comments'
+                ? `border-b-4 ${dark(theme) ? 'border-white' : 'border-black'}`
+                : 'opacity-30'
+            }`}
+            onClick={() => setSelectedTab('comments')}
+          >
+            <p className="pb-[12px]">댓글</p>
+          </div>
+        </div>
+
+        <p
+          className={`font-normal text-[12px] ${
+            dark(theme) ? 'text-[#ffffff]/60' : 'text-[#111111]/60'
+          }`}
+        >
+          전체 : {totalTab[selectedTab]}
+        </p>
+      </div>
       <div
-        className={`mt-[31px] w-[682px] min-h-[365px] ${
-          dark(theme) ? 'text-[#ffffff]' : ''
+        className={`w-full min-h-[365px]   ${
+          dark(theme)
+            ? 'border-t-2 border-t-[#ffffff]/30'
+            : 'border-t-2 border-t-[#111111]/30'
         }`}
       >
         {userPostData && userPostData.length === 0 && (
           <p
-            className={`text-center whitespace-pre-line text-sm py-45 border-t-2 leading-[3rem] ${
-              dark(theme)
-                ? 'border-t-white/60 text-[#ffffff]/60'
-                : 'text-gray-500 '
+            className={`text-center whitespace-pre-line  text-sm py-45  leading-[3rem] ${
+              dark(theme) ? 'text-[#ffffff]/60' : 'text-gray-500'
             }`}
           >
             {emptyText[selectedTab]}
           </p>
         )}
 
-        {currentPosts.map((post, i) => {
+        {currentPosts.map((post) => {
           const { id, label, bg } = getChannelInfo(post.channel.name);
           return (
             <div
               key={post._id}
-              className={`relative flex flex-col gap-2 border-b-2 
-                ${
-                  i !== currentPosts.length - 1
-                    ? dark(theme)
-                      ? 'border-b-white/30'
-                      : 'border-b-black/30'
-                    : dark(theme)
-                    ? 'border-b-white/60'
-                    : 'border-b-black/60'
-                }
-                ${
-                  i === 0
-                    ? dark(theme)
-                      ? 'border-t-2 border-t-white/60'
-                      : 'border-t-2 border-t-black/60'
-                    : ''
-                } 
-                ${selectedTab === 'comments' ? 'py-[6px]' : 'py-4'}`}
+              className={`relative flex flex-col  border-b-2 ${
+                dark(theme) ? 'border-b-[#ffffff]/30' : 'border-b-[#111111]/30'
+              } ${selectedTab === 'comments' ? 'py-[6px]' : 'py-4'}`}
             >
-              <div className="relative flex items-center py-0.5">
-                <div
-                  className={`absolute left-0 rounded-[28px] border text-[12px] font-bold ml-2 text-white px-[10px] py-[3px] cursor-pointer ${bg}`}
-                  onClick={() => navigate(`/channel/${id}`)}
-                >
-                  {label}
+              <div className="relative flex flex-wrap items-center py-0.5 px-2 gap-y-2.5">
+                <div className="w-[130px]">
+                  <div
+                    className={`inline-block rounded-[28px] text-[12px] font-bold text-white px-[10px] py-[3px] cursor-pointer ${
+                      dark(theme) ? bg.dark : bg.light
+                    }`}
+                    onClick={() => navigate(`/channel/${id}`)}
+                  >
+                    {label}
+                  </div>
                 </div>
-
-                <div
-                  className="ml-[130px] flex flex-col cursor-pointer justify-center"
-                  onClick={() => navigate(`/channel/${id}/post/${post._id}`)}
-                >
-                  <p className="font-semibold text-[15px] truncate max-w-[430px]">
-                    {JSON.parse(post.title).title}
+                <div className="flex items-center max-w-[calc(100%-130px)] w-full profile-post-title">
+                  <div
+                    className="min-w-0 flex flex-col cursor-pointer justify-center"
+                    onClick={() => {
+                      if (!isLoggedIn) {
+                        setIsLoginModalOpen(true);
+                        return;
+                      }
+                      navigate(`/channel/${id}/post/${post._id}`);
+                    }}
+                  >
+                    <p
+                      className={`font-semibold text-[15px] w-full truncate  ${
+                        dark(theme) ? 'text-[#ffffff]' : ''
+                      }`}
+                    >
+                      {JSON.parse(post.title).title}
+                    </p>
+                    {selectedTab === 'comments' && post.comments.length > 0 && (
+                      <div className="mt-1 text-[12px] text-gray-700 flex">
+                        <img
+                          src={dark(theme) ? commentWhite : commentIcon}
+                          className="w-5 h-5"
+                        />
+                        <p
+                          className={`ml-[5px] ${
+                            dark(theme) ? 'text-[#ffffff]' : ''
+                          }`}
+                        >
+                          +{post.myCommentCount}개
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                  <p
+                    className={`ml-auto w-[100px] font-normal shrink-0 text-right text-[13px] ${
+                      dark(theme) ? 'text-[#ffffff]' : ''
+                    }`}
+                  >
+                    {post.createdAt.slice(0, 10)}
                   </p>
-
-                  {selectedTab === 'comments' && post.comments.length > 0 && (
-                    <div className="mt-1 text-[12px] text-gray-700 flex">
-                      <img
-                        src={dark(theme) ? commentWhite : commentIcon}
-                        className="w-5 h-5"
-                      />
-                      <p
-                        className={`ml-[5px] ${
-                          dark(theme) ? 'text-[#ffffff]' : ''
-                        }`}
-                      >
-                        +{post.myCommentCount}개
-                      </p>
-                    </div>
-                  )}
                 </div>
-
-                <p className="absolute right-0 top-1/2 -translate-y-1/2 w-[100px] font-normal  text-right text-[13px] pr-[15px]">
-                  {post.createdAt.slice(0, 10)}
-                </p>
               </div>
             </div>
           );
@@ -259,6 +349,12 @@ export default function ProfileRight({
             }`}
           />
         </div>
+      )}
+      {isLoginModalOpen && (
+        <NotLoginModal
+          closeLoginModalHanlder={closeLoginModalHanlder}
+          theme={theme}
+        />
       )}
     </div>
   );

@@ -1,6 +1,7 @@
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
-import Delete from '../../assets/images/input-delete/input-delete.svg';
+import deleteImg from '../../assets/images/input-delete/input-delete.svg';
+import deleteImgDark from '../../assets/images/input-delete/input-delete-dark.svg';
 
 import { useState } from 'react';
 import { signup } from '../../api/auth/signup';
@@ -239,7 +240,7 @@ export default function SignUp({ theme }: { theme: Theme }) {
             />
             {fullName && (
               <img
-                src={Delete}
+                src={dark(theme) ? deleteImgDark : deleteImg}
                 alt="삭제"
                 onClick={() => {
                   setFullName('');
@@ -267,7 +268,7 @@ export default function SignUp({ theme }: { theme: Theme }) {
 
             {email && (
               <img
-                src={Delete}
+                src={dark(theme) ? deleteImgDark : deleteImg}
                 alt="삭제"
                 onClick={() => {
                   setEmail('');
@@ -295,7 +296,7 @@ export default function SignUp({ theme }: { theme: Theme }) {
 
             {password && (
               <img
-                src={Delete}
+                src={dark(theme) ? deleteImgDark : deleteImg}
                 alt="삭제"
                 onClick={() => {
                   setPassword('');
@@ -324,7 +325,7 @@ export default function SignUp({ theme }: { theme: Theme }) {
 
             {confirmPassword && (
               <img
-                src={Delete}
+                src={dark(theme) ? deleteImgDark : deleteImg}
                 alt="삭제"
                 onClick={() => {
                   setConfirmPassword('');

@@ -6,8 +6,8 @@ interface PostStore {
 
 export const usePostStore = create<PostStore>(() => ({
   channelIdList: [
-    '681b84d4437f722b6908ab61',
-    '681b850d437f722b6908ab65',
-    '681b8570437f722b6908ab69',
+    '68285819a30514258740f206',
+    '68285835a30514258740f216',
+    '68285844a30514258740f220',
   ],
 }));

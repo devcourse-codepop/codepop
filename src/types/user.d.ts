@@ -38,7 +38,7 @@ interface Post {
   myCommentCount?: number;
 }
 
-interface Follower {
+interface Follow {
   _id: string;
   user: string;
   follower: string;
@@ -66,29 +66,35 @@ interface User {
   emailVerified: boolean;
   banned: boolean;
   isOnline: boolean;
-  posts: Post[];
-  likes: Like[];
-  comments: Comment[];
-  followers: Follower[];
-  following: Follower[];
-  messages: Message[];
-  createdAt: string;
-  updatedAt: string;
-  image: string;
+  posts?: Post[];
+  likes?: Like[];
+  notifications?: Notification[];
+  comments?: Comment[];
+  followers: Follow[];
+  following: Follow[];
+  messages?: Message[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 type UserInfo = {
   userData: User | null;
-  onSelectTab: React.Dispatch<React.SetStateAction<'posts' | 'likes' | 'comments'>>;
   userId?: string;
+  refetchUserData: () => void;
 };
 
 type UserPostInfo = {
   userData: User | null;
-  selectedTab: 'posts' | 'likes' | 'comments';
 };
 
-//Conversation, Notification 제외
+interface Conversation {
+  _id: string[];
+  message: string;
+  sender: User;
+  receiver: User;
+  seen: boolean;
+  createdAt: string;
+}
 
 type EnteredValues = {
   myName: string;
@@ -136,3 +142,8 @@ declare module 'react-js-pagination' {
 
   export default class Pagination extends React.Component<PaginationProps> {}
 }
+
+type ChatTargetUser = {
+  id: string;
+  name: string;
+};

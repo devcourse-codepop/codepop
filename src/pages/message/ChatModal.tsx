@@ -3,9 +3,11 @@ import ChatRoom from './ChatRoom';
 import ChatUserList from './ChatUserList';
 import { useMessageStore } from '../../stores/messageStore';
 import MessageOpenIcon from '../../assets/images/message/message-open-icon.svg';
+import MessageOpenIconWhite from '../../assets/images/message/message-open-icon-white.svg';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
-import { User } from '../../types';
+import MessageIconWhite from '../../assets/images/message/message-icon-white.svg';
+import MessageIcon from '../../assets/images/message/message-icon.svg';
 
 interface ChatModalProps {
   isOpen: boolean;
@@ -30,9 +32,20 @@ export default function ChatModal({
     if (isOpen) {
       setSelectedUser(initialUser || null);
       setIsLoading(false);
-      changeMessageIcon(dark(theme) ? MessageOpenIcon : MessageOpenIcon);
     }
   }, [isOpen, initialUser]);
+
+  useEffect(() => {
+    const icon = isOpen
+      ? dark(theme)
+        ? MessageOpenIconWhite
+        : MessageOpenIcon
+      : dark(theme)
+      ? MessageIconWhite
+      : MessageIcon;
+
+    changeMessageIcon(icon);
+  }, [isOpen, theme, changeMessageIcon]);
 
   if (!isOpen) return null;
 
@@ -43,7 +56,9 @@ export default function ChatModal({
         onClick={onClose}
       >
         <div
-          className="w-[448px] h-[75vh] bg-white rounded-[5px] flex flex-col"
+          className={`w-[448px] h-[75vh]  rounded-[5px] flex flex-col ${
+            dark(theme) ? 'bg-[#2d2d2d]' : 'bg-[#ffffff]'
+          }`}
           onClick={(e) => e.stopPropagation()}
         >
           {selectedUser ? (
