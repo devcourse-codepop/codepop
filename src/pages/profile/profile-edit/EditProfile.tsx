@@ -284,7 +284,7 @@ export default function EditProfile({
               </div>
             </div>
 
-            <form onSubmit={handleSubmit}>
+            <form className="w-[310px]" onSubmit={handleSubmit}>
               <p
                 className={`pt-[35px] font-bold text-[14px] ${
                   dark(theme) ? 'text-[#ffffff]' : 'text-[#111111]'
@@ -300,6 +300,7 @@ export default function EditProfile({
                   handleInputChange('myName', event.target.value)
                 }
               />
+
               <p className="text-[11px] text-red-500 pt-1 h-2.5">
                 {enteredErrorValues.myNameError || '\u00A0'}
               </p>
@@ -336,6 +337,7 @@ export default function EditProfile({
                   handleInputChange('password', event.target.value)
                 }
               />
+
               <p className="text-[11px] text-red-500 pt-1 h-2.5">
                 {enteredErrorValues.passwordError || '\u00A0'}
               </p>

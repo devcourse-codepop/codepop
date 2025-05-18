@@ -13,6 +13,8 @@ import followIcon from '../../assets/images/profile/follow-icon.svg';
 import followIconBlack from '../../assets/images/profile/follow-icon-black.svg';
 import { handleFollow, handleUnfollow } from '../../utils/followHandlers';
 import NotLoginModal from '../../components/post/NotLoginModal';
+import followImg from '../../assets/images/follow/follow.svg';
+import followImgWhite from '../../assets/images/follow/follow-white.svg';
 
 interface ProfileLeftProps extends UserInfo {
   theme: Theme;
@@ -71,20 +73,26 @@ export default function ProfileLeft({
       >
         <img
           src={userData?.image || defaultProfileImage}
-          alt="Profile"
-          className="profile-left-img w-[196px] h-[196px] rounded-[5px] mt-[60px]  object-contain overflow-hidden"
+          alt='Profile'
+          className='profile-left-img w-[196px] h-[196px] rounded-[5px] mt-[60px]  object-contain overflow-hidden'
         />
-        <div className="pt-[0px] profile-left-text">
-          <p className="font-bold text-[20px] mt-[42px]">
+        <div className='pt-[0px] profile-left-text'>
+          <p className='font-bold text-[20px] mt-[42px] flex items-center'>
             {' '}
             {userData?.fullName}
+            {isFollowed && (
+              <img
+                className='inline-block w-3 h-3 ml-1.5 -mb-0.5 opacity-50'
+                src={dark(theme) ? followImgWhite : followImg}
+              />
+            )}
           </p>
-          <p className="font-normal text-[14px] mt-[3px] w-[200px] break-words">
+          <p className='font-normal text-[14px] mt-[3px] w-[200px] break-words'>
             {userData?.email}
           </p>
-          <div className="flex gap-8.5 text-[16px] font-medium mt-[40px] ">
+          <div className='flex gap-8.5 text-[16px] font-medium mt-[40px] '>
             <div
-              className="flex  items-center cursor-pointer"
+              className='flex  items-center cursor-pointer'
               onClick={() => {
                 console.log('팔로워 리스트:', followData);
                 openModalWithData(userData?.followers, userData?.following);
@@ -92,10 +100,10 @@ export default function ProfileLeft({
               }}
             >
               <span>팔로워</span>
-              <span className="ml-[8px]">{userData?.followers.length}</span>
+              <span className='ml-[8px]'>{userData?.followers.length}</span>
             </div>
             <div
-              className="flex  items-center cursor-pointer"
+              className='flex  items-center cursor-pointer'
               onClick={() => {
                 console.log('팔로워 리스트:', followData);
                 openModalWithData(userData?.followers, userData?.following);
@@ -103,13 +111,13 @@ export default function ProfileLeft({
               }}
             >
               <span>팔로잉</span>
-              <span className="ml-[8px]">{userData?.following.length}</span>
+              <span className='ml-[8px]'>{userData?.following.length}</span>
             </div>
           </div>
           {user?._id === userId ? (
-            <div className="mt-[25px] flex gap-6">
+            <div className='mt-[25px] flex gap-6'>
               <Button
-                value="프로필 수정"
+                value='프로필 수정'
                 className={`button-style3 ${
                   dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
                 }`}
@@ -125,11 +133,11 @@ export default function ProfileLeft({
               <ChatModal isOpen={isChatOpen} onClose={onClose} theme={theme} />
             </div>
           ) : (
-            <div className="mt-[25px]">
+            <div className='mt-[25px]'>
               {userId &&
                 (isFollowed ? (
                   <Button
-                    value="팔로우 취소"
+                    value='팔로우 취소'
                     className={`button-style3 ${
                       dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
                     }`}
@@ -140,7 +148,7 @@ export default function ProfileLeft({
                   />
                 ) : (
                   <Button
-                    value="팔로우"
+                    value='팔로우'
                     className={`button-style3 ${
                       dark(theme) ? 'bg-[#ffffff] text-[#111111]' : ''
                     }`}
@@ -152,7 +160,7 @@ export default function ProfileLeft({
                       handleFollow(user, userId, setUser, refetchUserData);
                     }}
                     imageSrc={dark(theme) ? followIconBlack : followIcon}
-                    imageAlt="팔로우 아이콘"
+                    imageAlt='팔로우 아이콘'
                   />
                 ))}
             </div>

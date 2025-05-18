@@ -7,6 +7,8 @@ import userImage from '../../assets/images/profile/default-profile-img.jpg';
 import { Theme } from '../../types/darkModeTypes';
 import { dark } from '../../utils/darkModeUtils';
 import getElapsedTime from '../../utils/getDatetime';
+import followImg from '../../assets/images/follow/follow.svg';
+import followImgWhite from '../../assets/images/follow/follow-white.svg';
 
 interface ChatUserListProps {
   onSelectUser?: (user: User) => void;
@@ -30,6 +32,11 @@ export default function ChatUserList({
 
   // 로그인한 사용자 정보 받아오기
   const user = useAuthStore((state) => state.user);
+  // 로그인한 사용자의 팔로우
+  const [follow, setFollow] = useState(user?.following);
+  useEffect(() => {
+    setFollow(user?.following);
+  }, [user]);
 
   // 상대방 id 가져오기
   const getOpponentId = useCallback(
@@ -91,10 +98,18 @@ export default function ChatUserList({
   }, []);
 
   return (
-    <div className="h-[75vh] flex-1 flex flex-col">
+    <div className='h-[75vh] flex-1 flex flex-col'>
       <ChatHeader onClose={onClose} theme={theme} />
       {isLoading || isCountLoading ? (
-        <></>
+        <>
+          <div
+            className={`h-[50vh] flex items-center justify-center text-[15px] ${
+              dark(theme) ? 'text-[#acacaa]' : 'text-gray-600'
+            }`}
+          >
+            대화 목록이 없습니다.
+          </div>
+        </>
       ) : (
         <div
           className={`flex-1 overflow-y-auto messageBox ${
@@ -119,12 +134,18 @@ export default function ChatUserList({
                 {/* 상대 프로필, 이름, 마지막 대화 */}
                 <img
                   src={opponentUser.image ? opponentUser.image : userImage}
-                  alt="상대 프로필"
-                  className="w-[50px] h-[50px] rounded-[50%] border border-[#ddd]"
+                  alt='상대 프로필'
+                  className='w-[50px] h-[50px] rounded-[50%] border border-[#ddd]'
                 />
-                <div className="ml-[20px] pt-1.5">
-                  <p className="font-bold text-[14px]">
+                <div className='ml-[20px] pt-1.5'>
+                  <p className='font-bold text-[14px] flex items-center'>
                     {opponentUser.fullName}
+                    {follow?.some((f) => f.user === opponentUser._id) && (
+                      <img
+                        className='w-2 h-2 ml-1 opacity-50'
+                        src={dark(theme) ? followImgWhite : followImg}
+                      />
+                    )}
                   </p>
                   <p
                     className={`font-normal  text-[12px] truncate w-[258px] ${
@@ -134,7 +155,7 @@ export default function ChatUserList({
                     {con.message}
                   </p>
                 </div>
-                <div className="ml-[15px] pt-1 flex flex-col items-center w-[60px] shrink-0">
+                <div className='ml-[15px] pt-1 flex flex-col items-center w-[60px] shrink-0'>
                   {/* 보낸 시간  */}
                   <p
                     className={`font-medium text-[12px] ${
