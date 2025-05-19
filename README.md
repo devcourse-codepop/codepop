@@ -28,7 +28,6 @@
 | 구분 | 사용 기술 |
 | -- | -- |
 | 프론트엔드 | ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white) ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) |
-| 저장소 | ![Zustand](https://img.shields.io/badge/Zustand-000000?style=for-the-badge&logo=Zustand&logoColor=white) |
 | 협업 툴 | ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white) ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) ![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white) |
 | 서비스 배포 환경 | ![Netlify](https://img.shields.io/badge/netlify-%23000000.svg?style=for-the-badge&logo=netlify&logoColor=%2300C7B7) |
 | 디자인 | ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white) |
@@ -216,9 +215,11 @@ https://github.com/user-attachments/assets/d90d5cfa-df17-427c-8ec0-f1a653bcc533
 
 ### 5.2. 회원가입
 - 사용자 이름, 이메일 주소, 비밀번호, 비밀번호 확인을 입력받습니다.
-- 각 입력값에 대해 유효성 검사가 이루어지며, 조건을 통과하지 못한 경우 경고 문구가 해당 입력창 하단에 표시됩니다.
+- 각 입력값에 대해 실시간 유효성 검사가 이루어지며, 조건을 통과하지 못한 경우 경고 문구가 해당 입력창 하단에 표시됩니다.
 - 비밀번호 확인 항목은 앞서 입력한 비밀번호와 일치하는 지 비교하여 검사합니다.
 - 회원가입 버튼 클릭 시, 모든 항목의 유효성 검사를 통과한 경우 로그인 페이지로 이동합니다.
+
+https://github.com/user-attachments/assets/6309050a-412c-4f69-8a6e-1b3e591e7a0d
 
 <br>
 
@@ -232,6 +233,11 @@ https://github.com/user-attachments/assets/c33821a3-9f07-4454-997b-3c6e9501064f
 <br>
 
 ## 6. 트러블 슈팅
+
+**박서영**
+
+초기에 다크모드 기능을 구현하면서, 관련 로직과 타입을 별도로 분리하지 않고 각 컴포넌트에 중복 작성했습니다. 페이지 수가 늘어나면서 코드의 반복이 많아졌고, 이에 따라 유틸 함수와 타입 파일로 각각 분리해 import 방식으로 구조를 개선했습니다.
+
 
 <br>
 
