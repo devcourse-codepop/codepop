@@ -128,7 +128,6 @@ export default function PostList({ theme }: { theme: Theme }) {
   const getPostListItem = useCallback(async () => {
     try {
       const { data } = await getPostList(channelIdList[Number(channel) - 1]);
-      // console.log(data);
       setPostListItem(data);
       setIsLoading(false);
     } catch (e) {
@@ -162,45 +161,42 @@ export default function PostList({ theme }: { theme: Theme }) {
 
   return (
     <>
-      <div className='h-full'>
-        <div className='w-full h-full grid grid-rows-[auto_1fr_auto] relative'>
-          <div className='flex justify-between items-end pb-[20px] flex-wrap channel-top'>
-            <div className='mr-3'>
+      <div className="h-full">
+        <div className="w-full h-full grid grid-rows-[auto_1fr_auto] relative">
+          <div className="flex justify-between items-end pb-[20px] flex-wrap channel-top">
+            <div className="mr-3">
               <ChannelName channelId={String(channel)} theme={theme} />
             </div>
-            <div className='flex gap-2.5 ml-auto mt-3.5'>
-              {/* <SearchPost /> */}
-
-              <div className='w-[225px] h-[38px] flex items-center bg-white rounded-[5px] px-2.5 py-2'>
+            <div className="flex gap-2.5 ml-auto mt-3.5">
+              <div className="w-[225px] h-[38px] flex items-center bg-white rounded-[5px] px-2.5 py-2">
                 <input
-                  type='text'
+                  type="text"
                   value={input}
                   onChange={(e) => changeInputHandler(e)}
                   onKeyDown={keyDownHandler}
-                  placeholder='검색'
-                  className='flex-grow text-[13px] outline-none placeholder-[#989898]'
+                  placeholder="검색"
+                  className="flex-grow text-[13px] outline-none placeholder-[#989898]"
                 />
                 <Search
-                  className='w-[19.94px] h-[19.94px] text-[#86879C] cursor-pointer'
+                  className="w-[19.94px] h-[19.94px] text-[#86879C] cursor-pointer"
                   onClick={() => {
                     if (input.trim() === '') return;
                     clickSearchHandler();
                   }}
                 />
               </div>
-              {/* <DropSort /> */}
               <select
                 value={select}
                 onChange={(e) => changeSelectHandler(e)}
                 className={`w-[86px] h-[38px] bg-white pl-[11px] py-1.5 rounded-[5px] cursor-pointer text-[13px] appearance-none select-custom`}
               >
-                <option value='recent'>최신순</option>
-                <option value='popular'>인기순</option>
+                <option value="recent">최신순</option>
+                <option value="popular">인기순</option>
               </select>
             </div>
           </div>
           <div
-            className='flex flex-col gap-[30px] pb-7.5 overflow-y-auto scroll-custom'
+            className="flex flex-col gap-[30px] pb-7.5 overflow-y-auto scroll-custom"
             ref={scrollRef}
           >
             {isLoading ? (
@@ -254,17 +250,17 @@ export default function PostList({ theme }: { theme: Theme }) {
               <img
                 src={dark(theme) ? topBtn2White : topBtn2}
                 onClick={scrollToTop}
-                alt='top 버튼'
+                alt="top 버튼"
                 className={`w-5 h-5 ${imgSize} cursor-pointer`}
               />
             </div>
           )}
           {isLogin && (
-            <div className='post-write-button absolute -right-[90px] bottom-[25px] cursor-pointer'>
+            <div className="post-write-button absolute -right-[90px] bottom-[25px] cursor-pointer">
               <img
                 src={dark(theme) ? postBtnWhite : postBtn}
                 onClick={createNewPost}
-                alt='게시글 작성 버튼'
+                alt="게시글 작성 버튼"
               />
             </div>
           )}

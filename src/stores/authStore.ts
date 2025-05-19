@@ -38,11 +38,6 @@ export const useAuthStore = create<AuthStore>((set) => ({
     set({ accessToken, isLoggedIn: true });
   },
 
-  // login: async (accessToken) => {
-  //   sessionStorage.setItem('token', accessToken);
-  //   set({ accessToken, isLoggedIn: true });
-  // },
-
   logout: () => {
     sessionStorage.removeItem('token');
     set({ accessToken: null, isLoggedIn: false, user: null, isLoading: false });

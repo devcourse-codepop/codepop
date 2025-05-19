@@ -19,14 +19,12 @@ export default function App() {
   const accessToken = useAuthStore((state) => state.accessToken);
   const setUser = useAuthStore((state) => state.setUser);
   const user = useAuthStore((state) => state.user);
-  //const resetUser = useAuthStore((state) => state.resetUser); // 추기
 
   useEffect(() => {
     if (accessToken) {
       axiosInstance
         .get('/auth-user')
         .then((res) => {
-          //resetUser(); // 추가
           setUser(res.data);
           useAuthStore.setState({ isLoading: false });
         })

@@ -1,4 +1,4 @@
-import { axiosInstance } from "../axios";
+import { axiosInstance } from '../axios';
 
 // 채널의 게시글 목록 불러오기
 export const getPostList = (channelId: string) => {
@@ -7,14 +7,14 @@ export const getPostList = (channelId: string) => {
 
 // 좋아요 누르기
 export const postLikes = (postId: string) => {
-  return axiosInstance.post("/likes/create", {
+  return axiosInstance.post('/likes/create', {
     postId,
   });
 };
 
 // 좋아요 삭제하기
 export const deleteLikes = (likeId: string) => {
-  return axiosInstance.delete("/likes/delete", {
+  return axiosInstance.delete('/likes/delete', {
     data: { id: likeId },
   });
 };
@@ -26,7 +26,7 @@ export const getSearchPostList = (value: string) => {
 
 // 댓글 작성하기
 export const postComments = (postId: string, comment: string) => {
-  return axiosInstance.post("/comments/create", {
+  return axiosInstance.post('/comments/create', {
     postId,
     // comment,
     comment: JSON.stringify({
@@ -36,15 +36,16 @@ export const postComments = (postId: string, comment: string) => {
   });
 };
 
+// 투표하기
 export const voteComments = (
   postId: string,
   selectedOptionId: string,
   userId: string
 ) => {
-  return axiosInstance.post("/comments/create", {
+  return axiosInstance.post('/comments/create', {
     postId,
     comment: JSON.stringify({
-      type: "vote",
+      type: 'vote',
       selectedOptionId: selectedOptionId,
       userId,
     }),
@@ -53,7 +54,7 @@ export const voteComments = (
 
 // 댓글 삭제하기
 export const deleteComments = (commentId: string) => {
-  return axiosInstance.delete("/comments/delete", {
+  return axiosInstance.delete('/comments/delete', {
     data: { id: commentId },
   });
 };
@@ -62,14 +63,14 @@ export const deleteComments = (commentId: string) => {
 export const updatePost = (formData: FormData) => {
   return axiosInstance.put(`/posts/update`, formData, {
     headers: {
-      "Content-Type": "multipart/form-data",
+      'Content-Type': 'multipart/form-data',
     },
   });
 };
 
 // 게시글 삭제하기
 export const deletePosts = (postId: string) => {
-  return axiosInstance.delete("/posts/delete", {
+  return axiosInstance.delete('/posts/delete', {
     data: { id: postId },
   });
 };
@@ -103,7 +104,7 @@ export const postNotifications = (
   userId: string,
   postId: string | null
 ) => {
-  return axiosInstance.post("/notifications/create", {
+  return axiosInstance.post('/notifications/create', {
     notificationType,
     notificationTypeId,
     userId,
