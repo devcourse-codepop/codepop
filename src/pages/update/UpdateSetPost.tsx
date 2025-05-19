@@ -67,7 +67,6 @@ export default function UpdateSetPost({ theme }: { theme: Theme }) {
 
     const formData = new FormData();
 
-    // ✅ 필수값 추가
     formData.append("postId", postId);
     formData.append("channelId", channelIdList[Number(channel) - 1]);
 
@@ -80,7 +79,6 @@ export default function UpdateSetPost({ theme }: { theme: Theme }) {
       })
     );
 
-    // 이미지 삭제할 경우 imageToDeletePublicId 추가
     if (imageToDeletePublicId) {
       formData.append("imageToDeletePublicId", imageToDeletePublicId);
     }
@@ -88,7 +86,6 @@ export default function UpdateSetPost({ theme }: { theme: Theme }) {
     if (imageFile) {
       formData.append("image", imageFile);
     } else {
-      // 백엔드에 명시적으로 빈 파일로라도 전달해야 할 경우
       formData.append("image", "");
     }
 
@@ -100,15 +97,6 @@ export default function UpdateSetPost({ theme }: { theme: Theme }) {
       console.error("수정 실패", err);
     }
   };
-
-  // const handleImageDelete = (imagePublicId: string) => {
-  //   // 이미지 삭제 버튼 클릭 시
-  //   const newContent = content.replace(/<p[^>]*>\s*<img[^>]*>\s*<\/p>/g, "");
-
-  //   setContent(newContent);
-  //   setImageToDeletePublicId(imagePublicId); // 삭제할 이미지의 imagePublicId를 설정
-  //   console.log(`이미지(${imagePublicId})가 삭제되었습니다.`);
-  // };
 
   return (
     <div className='w-full h-full pb-[30px]'>
@@ -148,15 +136,6 @@ export default function UpdateSetPost({ theme }: { theme: Theme }) {
               dark(theme) ? "text-[#ffffff]" : "text-[#111111]"
             }`}
           />
-
-          {/* 이미지 삭제 버튼 추가 */}
-          {/* {imageToDeletePublicId && (
-            <Button
-              value="이미지 삭제"
-              className="button-style2 absolute bottom-[15px] right-[160px]"
-              onClick={() => handleImageDelete(imageToDeletePublicId)} // 삭제할 이미지 ID 전달
-            />
-          )} */}
 
           <div className='text-right'>
             <Button
