@@ -18,8 +18,7 @@
 
 | **박서영** | **한유빈** | **조소정** | **김태연** | **유강민** |
 | :------: | :------: | :------: | :------: | :------: | 
-| <img src="https://github.com/user-attachments/assets/944342e5-da1b-40aa-8cb6-ac9239d9f122" height=150 width=150> | :------: | ![mm](https://github.com/user-attachments/assets/dc138edb-f9a9-4bf7-a0b9-d6e4394752b9)
-|
+| <img src="https://github.com/user-attachments/assets/944342e5-da1b-40aa-8cb6-ac9239d9f122" height=150 width=150> | :------: | <img src="https://github.com/user-attachments/assets/dc138edb-f9a9-4bf7-a0b9-d6e4394752b9" height=150 width=150> |
 | 팀장 | 팀원 | 팀원 | 팀원 | 팀원 |
 
 <br>
@@ -262,13 +261,13 @@ https://github.com/user-attachments/assets/c33821a3-9f07-4454-997b-3c6e9501064f
 
 ## 6. 트러블 슈팅
 
-**박서영**
+**🐶 박서영**
 
 초기에 다크모드 기능을 구현하면서, 관련 로직과 타입을 별도로 분리하지 않고 각 컴포넌트에 중복 작성했습니다. 페이지 수가 늘어나면서 코드의 반복이 많아졌고, 이에 따라 유틸 함수와 타입 파일로 각각 분리해 import 방식으로 구조를 개선했습니다.
 
 <br>
 
-**조소정**
+**🐮 조소정**
 
 알림창 관련 개발 중 개별 읽기 API가 없었습니다. 알림이 전체 읽기만 가능한건 어색하다고 판단하여 개별 읽기도 되도록 로직을 구현 했는데
 실시간으로 추가되는 알림과 해당 알림의 댓글 좋아요가 삭제, 취소되면 알림도 삭제하는 등 고려해야 하는 상황이 많아서 개발하는데 복잡함을 느꼈습니다.
