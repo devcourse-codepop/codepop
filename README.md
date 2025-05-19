@@ -37,7 +37,6 @@
 ## 2. 폴더 구조
 
 ```bash
-
 📦src
  ┣ 📂api
  ┃ ┣ 📂auth
@@ -107,8 +106,7 @@
  ┃ ┃ ┣ 📜PostListItem.tsx
  ┃ ┃ ┣ 📜PostSkeleton.tsx
  ┃ ┃ ┣ 📜SearchPost.tsx
- ┃ ┃ ┣ 📜WriteCommentItem.tsx
- ┃ ┃ ┗ 📜WritePostItem.tsx
+ ┃ ┃ ┗ 📜WriteCommentItem.tsx
  ┃ ┣ 📂reaction
  ┃ ┃ ┗ 📜LikeComment.tsx
  ┃ ┣ 📂sidebar
@@ -171,9 +169,6 @@
  ┣ 📂types
  ┃ ┣ 📜channelItem.d.ts
  ┃ ┣ 📜darkModeTypes.d.ts
- ┃ ┣ 📜global.d.ts
- ┃ ┣ 📜index.d.ts
- ┃ ┣ 📜model.d.ts
  ┃ ┣ 📜notification.d.ts
  ┃ ┗ 📜user.d.ts
  ┣ 📂utils
