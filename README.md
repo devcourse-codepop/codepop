@@ -15,7 +15,7 @@
 <br>
 
 ## 팀원 구성
-| **박서영** <br>[@sduddla](https://github.com/yubin121) | **한유빈**<br>[@yubin121](https://github.com/yubin121) | **조소정**<br>[@chosojeong97](https://github.com/chosojeong97) | **김태연**<br>[@COMPOSEDKIM](https://github.com/COMPOSEDKIM) | **유강민**<br>[@dkawoindsa](https://github.com/dkawoindsa) |
+| **박서영** <br>[@sduddla](https://github.com/sduddla) | **한유빈**<br>[@yubin121](https://github.com/yubin121) | **조소정**<br>[@chosojeong97](https://github.com/chosojeong97) | **김태연**<br>[@COMPOSEDKIM](https://github.com/COMPOSEDKIM) | **유강민**<br>[@dkawoindsa](https://github.com/dkawoindsa) |
 | :------: | :------: | :------: | :------: | :------: | 
 | <img src="https://github.com/user-attachments/assets/944342e5-da1b-40aa-8cb6-ac9239d9f122" height=150 width=150> | <img src="https://github.com/user-attachments/assets/b89b03dc-5ca5-461e-979a-9cc439e0d583" height=150 width=150> | <img src="https://github.com/user-attachments/assets/5b60a8c6-e2e4-4a97-8e92-ee33c56a2b33" height=150 width=150> |<img src="https://github.com/user-attachments/assets/e2117f41-b503-4d9e-9ff7-637dbaa78b0e" height=150 width=150> | <img src="https://github.com/user-attachments/assets/23ce4c1e-bc87-4dc8-ab79-ec6bff77ad6d" width="150" height="150" /> |
 | 팀장 | 팀원 | 팀원 | 팀원 | 팀원 |
