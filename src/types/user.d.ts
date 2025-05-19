@@ -63,8 +63,6 @@ interface User {
   coverImage: string;
   image: string;
   role: 'Admin' | 'Regular' | string;
-  emailVerified: boolean;
-  banned: boolean;
   isOnline: boolean;
   posts?: Post[];
   likes?: Like[];

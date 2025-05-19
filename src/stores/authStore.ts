@@ -6,6 +6,7 @@ interface User {
   email: string;
   image: string;
   role: string;
+  coverImage: string;
   isOnline: boolean;
   followers: Follow[];
   following: Follow[];
@@ -44,6 +45,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     const user = {
       _id: userData._id,
       fullName: userData.fullName,
+      coverImage: userData.coverImage,
       email: userData.email,
       image: userData.image,
       role: userData.role,
