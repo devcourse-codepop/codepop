@@ -18,7 +18,8 @@
 
 | **박서영** | **한유빈** | **조소정** | **김태연** | **유강민** |
 | :------: | :------: | :------: | :------: | :------: | 
-| <img src="https://github.com/user-attachments/assets/944342e5-da1b-40aa-8cb6-ac9239d9f122" height=150 width=150> | :------: | <img src="https://github.com/user-attachments/assets/dc138edb-f9a9-4bf7-a0b9-d6e4394752b9" height=150 width=150> |
+| <img src="https://github.com/user-attachments/assets/944342e5-da1b-40aa-8cb6-ac9239d9f122" height=150 width=150> | :------: | <img src="https://github.com/user-attachments/assets/dc138edb-f9a9-4bf7-a0b9-d6e4394752b9" height=150 width=150> |  ![1234](https://github.com/user-attachments/assets/e2117f41-b503-4d9e-9ff7-637dbaa78b0e)
+|
 | 팀장 | 팀원 | 팀원 | 팀원 | 팀원 |
 
 <br>
@@ -305,6 +306,13 @@ https://github.com/user-attachments/assets/f794358b-a148-44fd-87d1-55840b409661
 실시간으로 추가되는 알림과 해당 알림의 댓글 좋아요가 삭제, 취소되면 알림도 삭제하는 등 고려해야 하는 상황이 많아서 개발하는데 복잡함을 느꼈습니다.
 실제로 원하는대로 동작하지 않았고 구현하는데 있어서 어려움이 있었습니다.
 그래서 기능의 시작부터 흐름을 하나하나 정리하며 리팩토링을 진행하면서 해결하였습니다.
+
+<br>
+
+**😎 김태연**
+
+팔로잉 및 팔로워 정보를 불러오는 시간이 느려 렌더링이 지연되는 문제가 발생했습니다. 기존에는 팔로잉/팔로워 각각의 ID를 기반으로 개별 API를 여러 번 호출하는 방식이었지만, 이로 인해 성능 저하가 있었습니다. Batch API를 활용하면 효율적으로 데이터를 가져올 수 있다는 점을 확인했지만, 아직 구현되지 않은 상태였습니다.
+이에 대한 우회 방법으로 전체 유저 데이터를 한 번에 받아온 뒤 클라이언트에서 필터링하는 방식을 적용했으며, 실제 측정 결과 기존 방식보다 약 3배 이상 빠른 응답 속도를 보였습니다. 결과적으로 전체 유저 데이터를 기반으로 필터링하는 방식이 더 효율적이어서 해당 방법을 채택하였습니다.
 
 <br>
 
