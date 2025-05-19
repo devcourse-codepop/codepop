@@ -227,7 +227,7 @@ https://github.com/user-attachments/assets/6309050a-412c-4f69-8a6e-1b3e591e7a0d
 - 로그인시 로그인한 본인의 프로필을 간략하게 볼 수 있고 사용자 목록에서 팔로우 여부를 추가로 알 수 있습니다.
 - 회원들을 클릭하면 작은 모달이 나오고 프로필이동, 메시지 보내기를 선택할 수 있습니다.
 
-https://github.com/user-attachments/assets/3ed98a6c-c203-4112-9e15-12c2fd392a49
+https://github.com/user-attachments/assets/d8b8b29e-87e2-4c64-bfd1-f21d9ebf3a50
 
 <br>
 
@@ -236,7 +236,7 @@ https://github.com/user-attachments/assets/3ed98a6c-c203-4112-9e15-12c2fd392a49
 - 각 채널들의 탭을 누르면 해당 채널의 인기순(좋아요가 많은 순 후순위로 댓글 순) 1,2 위를 보여줍니다.
 - 인기글의 오른쪽 하단에 이미지, 투표는 작은 화면으로 변경하여 hover시 내용을 볼 수 있습니다.
 
-https://github.com/user-attachments/assets/b36a8d6d-b6ae-40ef-80cd-26a555e53b8d
+https://github.com/user-attachments/assets/0b2f8e8d-3b04-4bd9-acac-a84902e7a200
 
 <br>
 
@@ -246,7 +246,7 @@ https://github.com/user-attachments/assets/b36a8d6d-b6ae-40ef-80cd-26a555e53b8d
 - 댓글, 좋아요 알림을 누르면 해당 글로 이동하며 팔로우 알림은 해당 유저의 프로필로 이동합니다.
 - 전체읽기 버튼으로 한번에 알림을 읽음 처리 할 수 있습니다.
 
-https://github.com/user-attachments/assets/aaa958f9-a966-4154-b19e-6d0ff2d3b0cc
+https://github.com/user-attachments/assets/51270402-10e5-4aaf-8c48-4da951041ddf
 
 <br>
 
