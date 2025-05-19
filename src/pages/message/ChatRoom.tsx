@@ -5,7 +5,6 @@ import {
   postMessages,
   putMessageSeen,
 } from '../../api/message/message';
-// import { postNotifications } from '../../api/post/post';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import { useAuthStore } from '../../stores/authStore';
@@ -81,8 +80,6 @@ export default function ChatRoom({
   const createNewMessage = async () => {
     try {
       await postMessages(newMessage, user._id);
-      // console.log(data);
-      // sendMessageNotification(data._id);
       setReloadTrigger((reloadTrigger) => reloadTrigger + 1);
       setShouldScrollToBottom(true);
 
@@ -92,26 +89,10 @@ export default function ChatRoom({
     }
   };
 
-  // 메시지 알림 전송하기
-  // const sendMessageNotification = async (notificationTypeId: string) => {
-  //   try {
-  //     const { data } = await postNotifications(
-  //       'MESSAGE',
-  //       notificationTypeId,
-  //       user._id,
-  //       null
-  //     );
-  //     console.log(data);
-  //   } catch (e) {
-  //     console.log(e instanceof Error && e.message);
-  //   }
-  // };
-
   // 채팅방 입장 시 메시지 읽음 처리하기
   const readUserMessages = useCallback(async () => {
     try {
       await putMessageSeen(user._id);
-      // console.log(data);
     } catch (e) {
       console.log(e instanceof Error && e.message);
     }
@@ -121,7 +102,6 @@ export default function ChatRoom({
   const getUserMessages = useCallback(async () => {
     try {
       const { data } = await getMessages(user._id);
-      // console.log(data);
       setMessages(data);
       setShouldScrollToBottom(true);
 

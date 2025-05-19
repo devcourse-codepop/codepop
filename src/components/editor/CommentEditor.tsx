@@ -1,7 +1,5 @@
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-// import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
-// import { lowlight } from 'lowlight/lib/common';
 import Placeholder from '@tiptap/extension-placeholder';
 import Button from '../common/Button';
 import CommentEditorToolbar from './CommentEditorToolbar';
@@ -39,16 +37,6 @@ export default function CommentEditor({
         placeholder: '댓글을 작성해 주세요',
       }),
     ],
-    // extensions: [
-    //   StarterKit.configure({
-    //     codeBlock: false,
-    //   }),
-    //   CodeBlockLowlight.configure({
-    //     lowlight,
-    //   }),
-    // ],
-
-    // content: '',
     content: '<p></p>',
     onUpdate({ editor }) {
       onChange(editor.getHTML());
