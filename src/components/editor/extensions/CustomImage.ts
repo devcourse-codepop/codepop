@@ -1,4 +1,3 @@
-// import { NodeViewWrapper, NodeViewContent } from "@tiptap/react";
 import { Node, mergeAttributes } from "@tiptap/core";
 
 export const CustomImage = Node.create({
@@ -28,16 +27,16 @@ export const CustomImage = Node.create({
       const wrapper = document.createElement("div");
       wrapper.style.position = "relative";
       wrapper.style.display = "inline-block";
-      wrapper.style.width = "100%"; // 고정 크기
-      wrapper.style.height = "100%"; // 고정 크기
-      wrapper.style.overflow = "hidden"; // 내부 넘침 방지
+      wrapper.style.width = "100%";
+      wrapper.style.height = "100%";
+      wrapper.style.overflow = "hidden";
 
       const img = document.createElement("img");
       img.src = node.attrs.src;
       img.alt = node.attrs.alt || "";
       img.style.width = "100%";
       img.style.height = "100%";
-      img.style.objectFit = "cover"; // 비율 맞춤
+      img.style.objectFit = "cover";
       img.style.display = "block";
       img.style.borderRadius = "8px";
 

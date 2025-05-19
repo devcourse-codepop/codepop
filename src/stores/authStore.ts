@@ -5,10 +5,7 @@ interface User {
   fullName: string;
   email: string;
   image: string;
-  coverImage: string;
   role: string;
-  emailVerified: boolean;
-  banned: boolean;
   isOnline: boolean;
   followers: Follow[];
   following: Follow[];
@@ -38,11 +35,6 @@ export const useAuthStore = create<AuthStore>((set) => ({
     set({ accessToken, isLoggedIn: true });
   },
 
-  // login: async (accessToken) => {
-  //   sessionStorage.setItem('token', accessToken);
-  //   set({ accessToken, isLoggedIn: true });
-  // },
-
   logout: () => {
     sessionStorage.removeItem('token');
     set({ accessToken: null, isLoggedIn: false, user: null, isLoading: false });
@@ -54,10 +46,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
       fullName: userData.fullName,
       email: userData.email,
       image: userData.image,
-      coverImage: userData.coverImage,
       role: userData.role,
-      emailVerified: true,
-      banned: true,
       isOnline: true,
       followers: userData.followers,
       following: userData.following,

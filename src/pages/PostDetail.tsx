@@ -89,7 +89,6 @@ export default function PostDetail({ theme }: { theme: Theme }) {
           <>
             {postItem && (
               <div className="flex flex-col gap-[30px] h-full overflow-auto scroll-custom pb-[30px]">
-                {/* <PostDetailItem key={postItem?._id} {...postItem} /> */}
                 <PostDetailItem
                   {...postItem}
                   updateReloadTrigger={updateReloadTrigger}

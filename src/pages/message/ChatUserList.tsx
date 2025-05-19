@@ -55,8 +55,6 @@ export default function ChatUserList({
   const getMyMessageList = async () => {
     try {
       const { data } = await getMessageList();
-      // console.log(data);
-
       setConversations(data);
       setIsLoading(false);
     } catch (e) {
@@ -98,7 +96,7 @@ export default function ChatUserList({
   }, []);
 
   return (
-    <div className='h-[75vh] flex-1 flex flex-col'>
+    <div className="h-[75vh] flex-1 flex flex-col">
       <ChatHeader onClose={onClose} theme={theme} />
       {isLoading || isCountLoading ? (
         <>
@@ -134,15 +132,15 @@ export default function ChatUserList({
                 {/* 상대 프로필, 이름, 마지막 대화 */}
                 <img
                   src={opponentUser.image ? opponentUser.image : userImage}
-                  alt='상대 프로필'
-                  className='w-[50px] h-[50px] rounded-[50%] border border-[#ddd]'
+                  alt="상대 프로필"
+                  className="w-[50px] h-[50px] rounded-[50%] border border-[#ddd]"
                 />
-                <div className='ml-[20px] pt-1.5'>
-                  <p className='font-bold text-[14px] flex items-center'>
+                <div className="ml-[20px] pt-1.5">
+                  <p className="font-bold text-[14px] flex items-center">
                     {opponentUser.fullName}
                     {follow?.some((f) => f.user === opponentUser._id) && (
                       <img
-                        className='w-2 h-2 ml-1 opacity-50'
+                        className="w-2 h-2 ml-1 opacity-50"
                         src={dark(theme) ? followImgWhite : followImg}
                       />
                     )}
@@ -155,7 +153,7 @@ export default function ChatUserList({
                     {con.message}
                   </p>
                 </div>
-                <div className='ml-[15px] pt-1 flex flex-col items-center w-[60px] shrink-0'>
+                <div className="ml-[15px] pt-1 flex flex-col items-center w-[60px] shrink-0">
                   {/* 보낸 시간  */}
                   <p
                     className={`font-medium text-[12px] ${

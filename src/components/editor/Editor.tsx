@@ -1,12 +1,12 @@
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import EditorToolbar from './EditorToolbar';
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import EditorToolbar from "./EditorToolbar";
 
-import { CustomImage } from './extensions/CustomImage';
-import { useState, useEffect } from 'react';
-import PollCreator from '../poll/PollCreater';
-import { Theme } from '../../types/darkModeTypes';
-import { dark } from '../../utils/darkModeUtils';
+import { CustomImage } from "./extensions/CustomImage";
+import { useState, useEffect } from "react";
+import PollCreator from "../poll/PollCreater";
+import { Theme } from "../../types/darkModeTypes";
+import { dark } from "../../utils/darkModeUtils";
 
 interface Props {
   onChange: (html: string) => void;
@@ -15,7 +15,7 @@ interface Props {
   showPollButton?: boolean;
   showCodeButton?: boolean;
   disableMinHeight?: boolean;
-  initialContent: string; // 추가된 부분
+  initialContent: string;
   theme: Theme;
 }
 
@@ -26,12 +26,12 @@ export default function Editor({
   showPollButton = false,
   showCodeButton = false,
   disableMinHeight = false,
-  initialContent, // 추가된 부분
+  initialContent,
   theme,
 }: Props) {
   const editor = useEditor({
     extensions: [StarterKit, CustomImage],
-    content: '', // 빈 문자열로 시작
+    content: "",
     onUpdate({ editor }) {
       onChange(editor.getHTML());
     },
@@ -49,7 +49,7 @@ export default function Editor({
   return (
     <div
       className={
-        'editor-box px-4 py-2 rounded-lg min-h-[100px] mb-4 h-[calc(100%-170px)]'
+        "editor-box px-4 py-2 rounded-lg min-h-[100px] mb-4 h-[calc(100%-170px)]"
       }
     >
       <EditorToolbar
@@ -62,14 +62,14 @@ export default function Editor({
       />
       <div
         className={`editor-box-text max-w-full overflow-y-auto h-[calc(100%-41px)] pr-1  ${
-          showPollCreator && onPollCreate && 'edit-vote-box-text'
+          showPollCreator && onPollCreate && "edit-vote-box-text"
         }`}
       >
         <EditorContent
           editor={editor}
           className={`
           prose max-w-none [&_.ProseMirror]:outline-none
-          ${disableMinHeight ? '' : '[&_.ProseMirror]:min-h-full'}
+          ${disableMinHeight ? "" : "[&_.ProseMirror]:min-h-full"}
           [&_.ProseMirror]:h-full
 
           [&_.ProseMirror_pre]:p-4
@@ -82,8 +82,8 @@ export default function Editor({
 
           ${
             dark(theme)
-              ? '[&_.ProseMirror_pre]:bg-[#1e1e1e] [&_.ProseMirror_pre]:text-[#ffffff]'
-              : '[&_.ProseMirror_pre]:bg-[#ececec] [&_.ProseMirror_pre]:text-[#111111]'
+              ? "[&_.ProseMirror_pre]:bg-[#1e1e1e] [&_.ProseMirror_pre]:text-[#ffffff]"
+              : "[&_.ProseMirror_pre]:bg-[#ececec] [&_.ProseMirror_pre]:text-[#111111]"
           }
         `}
         />
