@@ -18,8 +18,7 @@
 
 | **박서영** | **한유빈** | **조소정** | **김태연** | **유강민** |
 | :------: | :------: | :------: | :------: | :------: | 
-| <img src="https://github.com/user-attachments/assets/944342e5-da1b-40aa-8cb6-ac9239d9f122" height=150 width=150> | :------: | <img src="https://github.com/user-attachments/assets/dc138edb-f9a9-4bf7-a0b9-d6e4394752b9" height=150 width=150> |  ![1234](https://github.com/user-attachments/assets/e2117f41-b503-4d9e-9ff7-637dbaa78b0e)
-|
+| <img src="https://github.com/user-attachments/assets/944342e5-da1b-40aa-8cb6-ac9239d9f122" height=150 width=150> | :------: | <img src="https://github.com/user-attachments/assets/dc138edb-f9a9-4bf7-a0b9-d6e4394752b9" height=150 width=150> |<img src="https://github.com/user-attachments/assets/e2117f41-b503-4d9e-9ff7-637dbaa78b0e" height=150 width=150>|
 | 팀장 | 팀원 | 팀원 | 팀원 | 팀원 |
 
 <br>
