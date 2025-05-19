@@ -84,20 +84,12 @@
     /* 사이드바 */
     .side-bar {
       transition: margin 0.5s;
-      /* @apply fixed -left-100 top-[70px] pt-[30px] bottom-0 z-10 px-[30px] w-[351px] overflow-hidden h-auto!; */
       @apply -ml-[291px]!;
     }
     .side-bar.open {
-      @apply ml-0!
-      /* @apply left-0; */;
+      @apply ml-0!;
     }
-    /* .side-bar::after {
-      content: '';
-      display: block;
-      width: 100dvw;
-      height: 100dvh;
-      @apply bg-gradient-to-b from-white/60 to-[#c0cfe7]/50 backdrop-blur-md absolute left-0 bottom-0 -z-1;
-    } */
+
     .side-bar .ml-7 {
       @apply ml-[25px]!;
     }
