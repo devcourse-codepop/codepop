@@ -21,21 +21,6 @@ export default function MainLayout({
   const sideBarButtonRef = useRef<HTMLButtonElement>(null);
   const sideBarRef = useRef<HTMLElement>(null);
 
-  // useEffect(() => {
-  //   const clickHandler = (e: MouseEvent) => {
-  //     if (
-  //       sideBarRef.current &&
-  //       sideBarButtonRef.current &&
-  //       !sideBarRef.current.contains(e.target as Node) &&
-  //       !sideBarButtonRef.current.contains(e.target as Node)
-  //     ) {
-  //       setMobileSide(false);
-  //     }
-  //   };
-  //   window.addEventListener('mousedown', clickHandler);
-  //   return () => window.removeEventListener('mousedown', clickHandler);
-  // }, [sideBarRef, sideBarButtonRef]);
-
   return (
     <>
       <div className='max-w-[1500px] mx-auto'>

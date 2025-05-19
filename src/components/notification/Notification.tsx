@@ -212,8 +212,12 @@ export default function Notification({ theme }: { theme: Theme }) {
             } notiList py-1 px-2 h-[200px] overflow-y-auto relative`}
           >
             {notifications.length === 0 ? (
-              <p className='absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm'>
-                알림이 없습니다
+              <p
+                className={`absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-sm ${
+                  dark(theme) ? 'text-[#acacaa]' : ''
+                }`}
+              >
+                알림이 없습니다.
               </p>
             ) : (
               notifications.map((notifi) => {
@@ -282,5 +286,3 @@ export default function Notification({ theme }: { theme: Theme }) {
     </>
   );
 }
-
-// ex) <Notification value={["[한유빈] 님이 당신의 게시물을 좋아합니다.", "두 번째 알림"]}/>

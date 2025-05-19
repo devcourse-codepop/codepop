@@ -5,10 +5,7 @@ interface User {
   fullName: string;
   email: string;
   image: string;
-  coverImage: string;
   role: string;
-  emailVerified: boolean;
-  banned: boolean;
   isOnline: boolean;
   followers: Follow[];
   following: Follow[];
@@ -49,10 +46,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
       fullName: userData.fullName,
       email: userData.email,
       image: userData.image,
-      coverImage: userData.coverImage,
       role: userData.role,
-      emailVerified: true,
-      banned: true,
       isOnline: true,
       followers: userData.followers,
       following: userData.following,
