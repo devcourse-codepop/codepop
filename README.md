@@ -36,151 +36,62 @@
 ## 2. 폴더 구조
 
 ```bash
-📦src
- ┣ 📂api
- ┃ ┣ 📂auth
- ┃ ┃ ┣ 📜login.ts
- ┃ ┃ ┗ 📜signup.ts
- ┃ ┣ 📂follow
- ┃ ┃ ┗ 📜follow.ts
- ┃ ┣ 📂memberbox
- ┃ ┃ ┗ 📜member.ts
- ┃ ┣ 📂message
- ┃ ┃ ┗ 📜message.ts
- ┃ ┣ 📂notification
- ┃ ┃ ┗ 📜notification.ts
- ┃ ┣ 📂post
- ┃ ┃ ┗ 📜post.ts
- ┃ ┣ 📂profileInfo
- ┃ ┃ ┗ 📜profile.ts
- ┃ ┣ 📂write
- ┃ ┃ ┗ 📜write.ts
- ┃ ┗ 📜axios.ts
- ┣ 📂assets
- ┃ ┗ 📂images
- ┣ 📂components
- ┃ ┣ 📂avatar
- ┃ ┃ ┗ 📜Avatar.tsx
- ┃ ┣ 📂btn
- ┃ ┃ ┣ 📜PostBtn.tsx
- ┃ ┃ ┗ 📜VoteBtn.tsx
- ┃ ┣ 📂channel
- ┃ ┃ ┗ 📜ChannelName.tsx
- ┃ ┣ 📂common
- ┃ ┃ ┣ 📜Button.tsx
- ┃ ┃ ┗ 📜Input.tsx
- ┃ ┣ 📂editor
- ┃ ┃ ┣ 📂extensions
- ┃ ┃ ┃ ┗ 📜CustomImage.ts
- ┃ ┃ ┣ 📜CommentEditor.tsx
- ┃ ┃ ┣ 📜CommentEditorToolbar.tsx
- ┃ ┃ ┣ 📜Editor.tsx
- ┃ ┃ ┗ 📜EditorToolbar.tsx
- ┃ ┣ 📂header
- ┃ ┃ ┗ 📜Header.tsx
- ┃ ┣ 📂icon
- ┃ ┃ ┣ 📜BoldIcon.tsx
- ┃ ┃ ┣ 📜CodeEditIcon.tsx
- ┃ ┃ ┣ 📜ImageIcon.tsx
- ┃ ┃ ┣ 📜ItalicIcon.tsx
- ┃ ┃ ┗ 📜VoteIcon.tsx
- ┃ ┣ 📂main-content
- ┃ ┃ ┣ 📜Banner.tsx
- ┃ ┃ ┣ 📜PopularPost.tsx
- ┃ ┃ ┗ 📜PopularPostCkeleton.tsx
- ┃ ┣ 📂notification
- ┃ ┃ ┗ 📜Notification.tsx
- ┃ ┣ 📂poll
- ┃ ┃ ┣ 📜PollCreater.tsx
- ┃ ┃ ┣ 📜PollOptionsView.tsx
- ┃ ┃ ┗ 📜PollOptionsVoteView.tsx
- ┃ ┣ 📂post
- ┃ ┃ ┣ 📜CheckDeleteModal.tsx
- ┃ ┃ ┣ 📜CommentListItem.tsx
- ┃ ┃ ┣ 📜DeletedUserModal.tsx
- ┃ ┃ ┣ 📜DropSort.tsx
- ┃ ┃ ┣ 📜NotLoginModal.tsx
- ┃ ┃ ┣ 📜PostDetailItem.tsx
- ┃ ┃ ┣ 📜PostDetailSkeleton.tsx
- ┃ ┃ ┣ 📜PostListItem.tsx
- ┃ ┃ ┣ 📜PostSkeleton.tsx
- ┃ ┃ ┣ 📜SearchPost.tsx
- ┃ ┃ ┗ 📜WriteCommentItem.tsx
- ┃ ┣ 📂reaction
- ┃ ┃ ┗ 📜LikeComment.tsx
- ┃ ┣ 📂sidebar
- ┃ ┃ ┣ 📜ChannelBox.tsx
- ┃ ┃ ┗ 📜MemberBox.tsx
- ┃ ┗ 📂toggle
- ┃ ┃ ┗ 📜DarkMode.tsx
- ┣ 📂css
- ┃ ┣ 📂layout
- ┃ ┃ ┗ 📜layout.css
- ┃ ┣ 📂main-content
- ┃ ┃ ┗ 📜main-content.css
- ┃ ┣ 📜editor.css
- ┃ ┣ 📜index.css
- ┃ ┗ 📜tailwind.css
- ┣ 📂layout
- ┃ ┗ 📜MainLayout.tsx
- ┣ 📂pages
- ┃ ┣ 📂login
- ┃ ┃ ┗ 📜Login.tsx
- ┃ ┣ 📂message
- ┃ ┃ ┣ 📜ChatHeader.tsx
- ┃ ┃ ┣ 📜ChatModal.tsx
- ┃ ┃ ┣ 📜ChatRoom.tsx
- ┃ ┃ ┗ 📜ChatUserList.tsx
- ┃ ┣ 📂profile
- ┃ ┃ ┣ 📂profile-edit
- ┃ ┃ ┃ ┣ 📜EditMenu.tsx
- ┃ ┃ ┃ ┣ 📜EditProfile.tsx
- ┃ ┃ ┃ ┣ 📜EditProfilePage.tsx
- ┃ ┃ ┃ ┗ 📜PhotoUploadModal.tsx
- ┃ ┃ ┣ 📜FollowMember.tsx
- ┃ ┃ ┣ 📜FollowModal.tsx
- ┃ ┃ ┣ 📜Profile.tsx
- ┃ ┃ ┣ 📜ProfileLeft.tsx
- ┃ ┃ ┣ 📜ProfilePage.tsx
- ┃ ┃ ┗ 📜ProfileRight.tsx
- ┃ ┣ 📂signup
- ┃ ┃ ┗ 📜SignUp.tsx
- ┃ ┣ 📂update
- ┃ ┃ ┣ 📜UpdateCodePost.tsx
- ┃ ┃ ┣ 📜UpdateSetPost.tsx
- ┃ ┃ ┗ 📜UpdateVotePost.tsx
- ┃ ┣ 📂write
- ┃ ┃ ┣ 📜CreateCodePost.tsx
- ┃ ┃ ┣ 📜CreateSetPost.tsx
- ┃ ┃ ┗ 📜CreateVotePost.tsx
- ┃ ┣ 📜Error.tsx
- ┃ ┣ 📜MainContent.tsx
- ┃ ┣ 📜PostDetail.tsx
- ┃ ┗ 📜PostList.tsx
- ┣ 📂route
- ┃ ┣ 📜UpdatePostRouter.tsx
- ┃ ┗ 📜WritePostRouter.tsx
- ┣ 📂stores
- ┃ ┣ 📜authStore.ts
- ┃ ┣ 📜channelStore.ts
- ┃ ┣ 📜messageStore.ts
- ┃ ┗ 📜postStore.ts
- ┣ 📂types
- ┃ ┣ 📜channelItem.d.ts
- ┃ ┣ 📜darkModeTypes.d.ts
- ┃ ┣ 📜notification.d.ts
- ┃ ┗ 📜user.d.ts
- ┣ 📂utils
- ┃ ┣ 📜changeMessageIcon.ts
- ┃ ┣ 📜darkModeUtils.ts
- ┃ ┣ 📜followHandlers.ts
- ┃ ┣ 📜getDatetime.ts
- ┃ ┣ 📜updateNewMessageCount.ts
- ┃ ┗ 📜validators.ts
- ┣ 📜App.tsx
- ┣ 📜main.tsx
- ┣ 📜swiper.d.ts
- ┗ 📜vite-env.d.ts
+
+src
+├── api
+│   ├── auth
+│   ├── follow
+│   ├── memberbox
+│   ├── message
+│   ├── notification
+│   ├── post
+│   ├── profileInfo
+│   ├── write
+│   └── axios.ts
+├── assets
+│   └── images
+├── components
+│   ├── avatar
+│   ├── btn
+│   ├── channel
+│   ├── common
+│   ├── editor
+│   ├── header
+│   ├── icon
+│   ├── main-content
+│   ├── notification
+│   ├── poll
+│   ├── post
+│   ├── reaction
+│   ├── sidebar
+│   └── toggle
+├── css
+│   ├── layout
+│   ├── main-content
+│   ├── editor.css
+│   ├── index.css
+│   └── tailwind.css
+├── layout
+├── pages
+│   ├── login
+│   ├── message
+│   ├── profile
+│   │   └── profile-edit
+│   ├── signup
+│   ├── update
+│   ├── write
+│   ├── Error.tsx
+│   ├── MainContent.tsx
+│   ├── PostDetail.tsx
+│   └── PostList.tsx
+├── route
+├── stores
+├── types
+├── utils
+├── App.tsx
+├── main.tsx
+├── swiper.d.ts
+└── vite-env.d.ts
 
 ```
 
